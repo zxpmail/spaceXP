@@ -1,0 +1,18 @@
+server:
+  port: 8078
+spring:
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  application:
+    name: consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
+logging:
+  level:
+    cn.piesat: debug

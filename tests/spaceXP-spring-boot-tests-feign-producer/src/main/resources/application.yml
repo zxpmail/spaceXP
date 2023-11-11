@@ -1,0 +1,18 @@
+
+spring:
+  application:
+    name: producer
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/test?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  jackson:
+    time-zone: GMT+8
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://127.0.0.1:8848
