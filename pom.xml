@@ -9,6 +9,8 @@
     <modules>
         <module>spacexp-dependencies</module>
         <module>spaceXP-framework</module>
+        <module>spaceXP-tests</module>
+        <module>spaceXP-tools</module>
     </modules>
 
     <properties>
