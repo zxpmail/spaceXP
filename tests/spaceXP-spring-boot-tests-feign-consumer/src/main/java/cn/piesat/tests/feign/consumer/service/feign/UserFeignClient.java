@@ -7,6 +7,7 @@ import cn.piesat.framework.feign.annotation.HasApiResult;
 import cn.piesat.framework.feign.core.FeignRequestInterceptor;
 import cn.piesat.tests.feign.consumer.model.entity.UserDO;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import feign.Headers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

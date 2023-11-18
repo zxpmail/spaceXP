@@ -16,3 +16,13 @@ spring:
 logging:
   level:
     cn.piesat: debug
+feign:
+  okhttp:
+    enabled: false
+  httpclient:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000

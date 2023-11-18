@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -43,7 +44,7 @@ public class UserController {
      */
     @ApiOperation("分页查询")
     @PostMapping("/list")
-    public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO){
+    public PageResult list(@RequestParam(required = false) String parentaskid, PageBean pageBean, @RequestBody(required = false) UserDO userDO){
         return userService.list(pageBean,userDO);
 
     }
