@@ -5,7 +5,6 @@ import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import cn.piesat.framework.common.model.vo.ApiResult;
-import cn.piesat.framework.web.constants.WebConstant;
 import cn.piesat.framework.web.enums.WebResponseEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -14,6 +14,6 @@
     </properties>
     <modules>
         <module>spaceXP-common</module>
-        <module>spacexp-spring-boot-starter-web</module>
+        <module>spaceXP-spring-boot-starter-web</module>
     </modules>
 </project>
