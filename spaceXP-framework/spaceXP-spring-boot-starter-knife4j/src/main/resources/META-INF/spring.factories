@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.piesat.framework.knife4j.config.Knife4jConfig

@@ -16,5 +16,6 @@
         <module>spaceXP-common</module>
         <module>spaceXP-spring-boot-starter-web</module>
         <module>spaceXP-spring-boot-starter-mybatis-plus</module>
+        <module>spaceXP-spring-boot-starter-knife4j</module>
     </modules>
 </project>

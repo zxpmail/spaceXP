@@ -23,6 +23,7 @@ spaceXP-tools 工具集合
     日志类以及实体复制工具CopyBeanUtils、生成树工具、jwt工具、servlet工具类
 2.  spaceXP-spring-boot-starter-web包括：统一处理返回值、request域绑定登录信息、统计bean初始化时间、统一异常处理
 3.  spaceXP-spring-boot-starter-mybatis-plus包含：自动填入字段、动态表名
+4.  spaceXP-spring-boot-starter-knife4j knife4j包装工具组件
 
 #### 参与贡献
 
