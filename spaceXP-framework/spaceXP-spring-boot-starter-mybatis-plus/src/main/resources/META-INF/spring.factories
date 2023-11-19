@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.piesat.framework.mybatis.plus.config.MybatisPlusConfig,\
+  cn.piesat.framework.mybatis.plus.config.LocalDateTimeSerializerConfig

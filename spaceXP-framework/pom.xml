@@ -15,5 +15,6 @@
     <modules>
         <module>spaceXP-common</module>
         <module>spaceXP-spring-boot-starter-web</module>
+        <module>spaceXP-spring-boot-starter-mybatis-plus</module>
     </modules>
 </project>

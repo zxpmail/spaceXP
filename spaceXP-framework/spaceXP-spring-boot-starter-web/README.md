@@ -7,7 +7,7 @@
 处理并包装web统一返回及异常等
 
 #### 安装教程
-至今生成jar包
+直接生成jar包
 #### 使用说明
     <dependency>
         <groupId>cn.piesat</groupId>
