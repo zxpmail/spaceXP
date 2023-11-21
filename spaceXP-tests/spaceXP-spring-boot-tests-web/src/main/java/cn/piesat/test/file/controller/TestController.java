@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "测试信息")
 @RequestMapping("/test")
 public class TestController {
-
     /**
      * 测试根据配置文件修改枚举
      */
@@ -38,33 +37,7 @@ public class TestController {
         return "ok";
     }
 
-    @ApiOperation("测试脱敏")
-    @GetMapping("desensitize")
-    public DesensitizeDO desensitize() {
-        DesensitizeDO userInfo = new DesensitizeDO();
-        userInfo.setName("张三");
-        userInfo.setEmail("1859656863@qq.com");
-        userInfo.setPhone("15286535426");
-        userInfo.setCustom("12345678");
-        return userInfo;
-    }
 
-    @ApiOperation("测试加密")
-    @PostMapping("encrypt")
-    @EncryptMethod
-    public EncryptDO encrypt(@RequestBody EncryptDO encryptDO) {
-        return encryptDO;
-    }
-
-    @ApiOperation("测试解密")
-    @PostMapping("decrypt")
-    @DecryptMethod
-    public EncryptDO decrypt() {
-        EncryptDO encryptDO = new EncryptDO();
-        encryptDO.setAge(12);
-        encryptDO.setName("E7798C31C4A94F2C43DE78FE8D050D40");
-        return encryptDO;
-    }
     @GetMapping("get")
     @NoApiResult
     public String test(){
