@@ -26,5 +26,9 @@
             <groupId>cn.piesat</groupId>
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.piesat</groupId>
+            <artifactId>spaceXP-spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 </project>

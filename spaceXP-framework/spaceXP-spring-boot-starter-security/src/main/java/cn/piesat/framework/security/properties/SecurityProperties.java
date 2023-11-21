@@ -15,5 +15,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "space.security")
 public class SecurityProperties {
     private String secretKey = "123456";
-    private Boolean enableEncryptAspect = false;
+    private Boolean enable = false;
 }

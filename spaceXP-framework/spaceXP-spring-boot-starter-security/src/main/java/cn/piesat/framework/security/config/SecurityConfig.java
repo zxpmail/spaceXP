@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityConfig {
     @Bean
-    @ConditionalOnProperty(name = "space.security.enable-encrypt-aspect", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.security.enable", havingValue = "true",matchIfMissing = false)
     public EncryptAspect encryptAspect(SecurityProperties securityProperties){
         return new EncryptAspect(securityProperties.getSecretKey());
     }
