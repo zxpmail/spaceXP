@@ -7,3 +7,7 @@ spring:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
 
+space:
+  enum:
+    success-code: 0
+    success-value: hello

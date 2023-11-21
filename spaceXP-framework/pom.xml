@@ -19,4 +19,15 @@
         <module>spaceXP-spring-boot-starter-knife4j</module>
         <module>spaceXP-spring-boot-starter-security</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -1,6 +1,7 @@
 package cn.piesat.framework.common.model.enums;
 
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
+import cn.piesat.framework.common.properties.CommonEnumProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,24 +21,24 @@ public enum CommonResponseEnum implements IBaseResponse {
     /**
      * 操作成功时默认消息
      */
-    SUCCESS(200,"操作成功"),
+    SUCCESS(CommonEnumProperties.successCode,CommonEnumProperties.successValue),
     /**
      * 操作失败时默认消息
      */
-    ERROR(500, "操作失败"),
+    ERROR(CommonEnumProperties.errorCode, CommonEnumProperties.errorValue),
     /**
      * 系统错误时，默认消息
      */
-    SYS_ERROR(501, "服务器内部错误,请与管理员联系！"),
+    SYS_ERROR(CommonEnumProperties.sysErrorCode, CommonEnumProperties.sysErrorValue),
 
-    URL_LEN_INVALID(502, "uri长度无效"),
-    TOKEN_INVALID(510, "token无效"),
+    URL_LEN_INVALID(CommonEnumProperties.urlLenInvalidCode, CommonEnumProperties.urlLenInvalidValue),
+    TOKEN_INVALID(CommonEnumProperties.tokenInvalidCode, CommonEnumProperties.tokenInvalidValue),
 
-    TOKEN_EMPTY(511, "token为空"),
+    TOKEN_EMPTY(CommonEnumProperties.tokenEmptyCode, CommonEnumProperties.tokenEmptyValue),
 
-    TOKEN_KEY_EXPIRED(512,"密钥已过时"),
+    TOKEN_KEY_EXPIRED(CommonEnumProperties.tokenKeyExpiredCode,CommonEnumProperties.tokenKeyExpiredValue),
 
-    REFRESH_TOKEN_INVALID(513, "刷新Token无效"),
+    REFRESH_TOKEN_INVALID(CommonEnumProperties.refreshTokenInvalidCode, CommonEnumProperties.refreshTokenInvalidValue),
 
     ;
     /**
@@ -49,4 +50,17 @@ public enum CommonResponseEnum implements IBaseResponse {
      * 响应信息
      */
     private  String message;
+
+    /**
+     * 通过code获取message
+     */
+    public static String getMessage(Integer code) {
+        CommonResponseEnum[] types = CommonResponseEnum.values();
+        for (CommonResponseEnum type : types) {
+            if (type.getCode().equals(code)) {
+                return type.getMessage();
+            }
+        }
+        return null;
+    }
 }
