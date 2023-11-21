@@ -18,9 +18,9 @@ logging:
     cn.piesat: debug
 feign:
   okhttp:
-    enabled: false
-  httpclient:
     enabled: true
+  httpclient:
+    enabled: false
   client:
     config:
       default:

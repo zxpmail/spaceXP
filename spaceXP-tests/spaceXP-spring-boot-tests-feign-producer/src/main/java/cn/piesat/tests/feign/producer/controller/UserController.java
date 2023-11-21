@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * 
@@ -78,9 +79,9 @@ public class UserController {
      * 删除
      */
     @ApiOperation("批量删除信息")
-    @DeleteMapping("/delete")
-    public Boolean delete(@RequestBody Long[] ids){
-        return userService.delete(Arrays.asList(ids));
+    @PostMapping("/delete")
+    public Boolean delete(@RequestBody List<Long> ids){
+        return userService.delete(ids);
     }
     /**
      * 删除

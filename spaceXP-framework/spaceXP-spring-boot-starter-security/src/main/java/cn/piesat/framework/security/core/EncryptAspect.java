@@ -1,17 +1,27 @@
 package cn.piesat.framework.security.core;
 
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ObjUtil;
+import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.security.annotation.EncryptField;
+import cn.piesat.framework.security.annotation.EncryptMethod;
 import cn.piesat.framework.security.utils.AseUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.aspectj.lang.reflect.MethodSignature;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
@@ -22,7 +32,6 @@ import java.util.Objects;
  *
  * @author zhouxp
  */
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Aspect
 @Slf4j
 public class EncryptAspect {
@@ -34,18 +43,51 @@ public class EncryptAspect {
     }
 
     @Pointcut("@annotation(cn.piesat.framework.security.annotation.EncryptMethod)")
-    public void annotationPointCut() {
+    public void encryptPointCut() {
+    }
+    /***
+     * 定义controller切入点拦截规则，拦截OpLog注解的方法
+     */
+    @Pointcut("@annotation(cn.piesat.framework.security.annotation.DecryptMethod)")
+    public void decryptPointCut() {
+
     }
 
-    @Around("annotationPointCut()")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object responseObj = null;
-        Object requestObj = joinPoint.getArgs()[0];
-        encrypt(requestObj);
-        responseObj = joinPoint.proceed();
-        decrypt(responseObj);
-        return responseObj;
+    @Before("encryptPointCut()")
+    public void encryptBefore(JoinPoint jp) throws IllegalAccessException {
+        // 先拿到被增强的方法的签名对象
+        Signature signature = jp.getSignature();
+        // 判断被增强的目标是否是一个方法 如果是进行强转
+        assert signature instanceof MethodSignature;
+        MethodSignature ms = (MethodSignature) signature;
+
+        // 拿到目标方法
+        Method method = ms.getMethod();
+        // 获取method上的注解 并且拿到注解上的value值，AutoFill.class为自定义注解类
+        EncryptMethod annotation = method.getAnnotation(EncryptMethod.class);
+        // 如果注解为空，抛出自定义异常
+
+
+        // 获取注解的值
+        Integer pos = annotation.argsPos();
+
+        // 如果注解为空，抛出自定义异常
+        if (ObjUtil.isNull(jp.getArgs()) || ArrayUtil.isEmpty(jp.getArgs())) {
+            throw new BaseException(CommonResponseEnum.AOP_ADVICE_ERROR);
+        }
+
+        // 获取参数
+        Object arg = jp.getArgs()[pos];
+        encrypt(arg);
     }
+    /**
+     *最终处理
+     */
+    @AfterReturning(returning = "ret", pointcut = "decryptPointCut()")
+    public void decryptAfterReturning(Object ret) throws Exception {
+        decrypt(ret);
+    }
+
 
     /**
      * 加密

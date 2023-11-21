@@ -40,6 +40,7 @@ public enum CommonResponseEnum implements IBaseResponse {
 
     REFRESH_TOKEN_INVALID(CommonEnumProperties.refreshTokenInvalidCode, CommonEnumProperties.refreshTokenInvalidValue),
 
+    AOP_ADVICE_ERROR(514,"AOP通知错误！"),
     ;
     /**
      * 响应状态码

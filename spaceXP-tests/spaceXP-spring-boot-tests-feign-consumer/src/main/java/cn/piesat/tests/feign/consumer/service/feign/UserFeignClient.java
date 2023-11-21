@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * <p/>
@@ -34,4 +35,7 @@ public interface UserFeignClient {
     @GetMapping("/user/testDate")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     LocalDateTime testDate();
+
+    @PostMapping("/user/delete")
+    Boolean delete(@RequestBody List<Long> ids);
 }
