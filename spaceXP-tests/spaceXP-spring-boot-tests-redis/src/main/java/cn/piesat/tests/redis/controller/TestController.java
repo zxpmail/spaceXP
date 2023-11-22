@@ -2,17 +2,20 @@ package cn.piesat.tests.redis.controller;
 
 
 import cn.piesat.framework.redis.core.RedisService;
+import cn.piesat.framework.redis.model.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Serializable;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
@@ -26,6 +29,18 @@ public class TestController {
 
     private final RedisService redisService;
 
+
+    @PostMapping("/message")
+    public void sendMessage(@RequestParam String message) {
+        // 发布消息
+        MessageBody messageBody = new MessageBody();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        messageBody.setData(timeFormatter.format(now));
+        messageBody.setTitle("日常信息");
+        messageBody.setContent("hello world!");
+        redisService.convertAndSend("TOPIC",messageBody);
+    }
     /**
      * 信息
      */

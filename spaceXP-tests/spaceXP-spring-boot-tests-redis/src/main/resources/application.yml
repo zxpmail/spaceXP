@@ -12,3 +12,7 @@ spring:
 logging:
   level:
     cn.piesat.tests.redis: debug
+
+space:
+  redis:
+    message-enable: true

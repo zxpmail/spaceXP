@@ -1,12 +1,14 @@
 package cn.piesat.framework.redis.core;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 @SuppressWarnings(value = { "unchecked" })
 @RequiredArgsConstructor
+@Slf4j
 public class RedisService {
     public final RedisTemplate<String,Object> redisTemplate;
 
@@ -257,5 +260,22 @@ public class RedisService {
                 redisTemplate.opsForHash().delete(hashKey, entry.getKey().toString());
             }
         }
+    }
+    /**
+     * 向通道发布消息
+     */
+    public boolean convertAndSend(String channel, Object message) {
+        if (!StringUtils.hasText(channel)) {
+            return false;
+        }
+        try {
+            redisTemplate.convertAndSend(channel, message);
+            log.info("发送消息成功，channel：{}，message：{}", channel, message);
+            return true;
+        } catch (Exception e) {
+            log.info("发送消息失败，channel：{}，message：{}", channel, message);
+            e.printStackTrace();
+        }
+        return false;
     }
 }
