@@ -16,5 +16,10 @@
     </dependency>
 
     在Service中直接注入
-    RedisService redisService即可  
+    RedisService redisService即可 
+
+发布订阅消息
+在项目的配置文件中加入
+space.redis.message-enable=true 开启发布订阅消息模式，默认不开启
+space.redis.topics TOPIC名称
 
