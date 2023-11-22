@@ -6,13 +6,12 @@
 #### 软件架构
 spaceXP-dependencies 架构依赖组件
 spaceXP-framework 核心组件集合：包含url权限、数据权限、文件上传、数据访问等等组件
-1、spaceXP-common 公共功能
 spaceXP-tests 核心组件组件测试用例
 spaceXP-tools 工具集合
 
 #### 安装教程
 
-1.  xxxx
+1.  核心组件直接打包发布到私服上，项目就可以直接引用
 2.  xxxx
 3.  xxxx
 
@@ -24,11 +23,8 @@ spaceXP-tools 工具集合
 2.  spaceXP-spring-boot-starter-web包括：统一处理返回值、request域绑定登录信息、统计bean初始化时间、统一异常处理
 3.  spaceXP-spring-boot-starter-mybatis-plus包含：自动填入字段、动态表名
 4.  spaceXP-spring-boot-starter-knife4j knife4j包装工具组件
+5.  spaceXP-spring-boot-starter-security 包括数据拦截脱敏、数据加解密
+6.  spaceXP-spring-boot-starter-redis 包装redisTemplate常用功能
 
-#### 参与贡献
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
 

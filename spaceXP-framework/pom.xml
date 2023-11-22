@@ -18,6 +18,7 @@
         <module>spaceXP-spring-boot-starter-mybatis-plus</module>
         <module>spaceXP-spring-boot-starter-knife4j</module>
         <module>spaceXP-spring-boot-starter-security</module>
+        <module>spaceXP-spring-boot-starter-redis</module>
     </modules>
     <dependencies>
         <dependency>
