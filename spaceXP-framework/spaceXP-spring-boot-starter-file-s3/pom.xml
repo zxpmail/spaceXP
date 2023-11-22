@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>spaceXP-framework</artifactId>
+        <groupId>cn.piesat</groupId>
+        <version>2.0.0</version>
+    </parent>
+    <packaging>jar</packaging>
+    <artifactId>spaceXP-spring-boot-starter-file-s3</artifactId>
+    <name>${project.artifactId}</name>
+    <url>https://gitee.com/q4uryetsxzryjt</url>
+    <description>
+        基于 S3 协议的文件客户端，实现 MinIO、阿里云、腾讯云、七牛云、华为云等云服务
+    </description>
+    <dependencies>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.piesat</groupId>
+            <artifactId>spaceXP-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

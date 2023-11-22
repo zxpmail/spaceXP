@@ -25,6 +25,7 @@ spaceXP-tools 工具集合
 4.  spaceXP-spring-boot-starter-knife4j knife4j包装工具组件
 5.  spaceXP-spring-boot-starter-security 包括数据拦截脱敏、数据加解密
 6.  spaceXP-spring-boot-starter-redis 包装redisTemplate常用功能
+7.  spaceXP-spring-boot-starter-file-s3 基于 S3 协议的文件客户端，实现 MinIO、阿里云、腾讯云、七牛云、华为云等云服务
 
 
 
