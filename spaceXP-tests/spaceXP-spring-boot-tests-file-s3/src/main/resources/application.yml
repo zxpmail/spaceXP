@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: minio
+  servlet:
+    multipart:
+      max-file-size: 600GB
+      max-request-size: 600GB
+      enabled: true
+      file-size-threshold: 600GB
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+space:
+  oss:
+    endpoint: http://localhost:9999
+    region:
+    accessKey: admin
+    accessSecret: 12345678
+    bucketName: test-img
+    pathStyleAccess: true  # 改字段未具体实

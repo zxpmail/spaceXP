@@ -16,5 +16,6 @@
         <module>spaceXP-spring-boot-tests-feign-consumer</module>
         <module>spaceXP-spring-boot-tests-feign-producer</module>
         <module>spaceXP-spring-boot-tests-web</module>
+        <module>spaceXP-spring-boot-tests-file-s3</module>
     </modules>
 </project>
