@@ -18,5 +18,6 @@
         <module>spaceXP-spring-boot-tests-web</module>
         <module>spaceXP-spring-boot-tests-file-s3</module>
         <module>spaceXP-spring-boot-tests-log</module>
+        <module>spaceXP-spring-boot-tests-redis</module>
     </modules>
 </project>
