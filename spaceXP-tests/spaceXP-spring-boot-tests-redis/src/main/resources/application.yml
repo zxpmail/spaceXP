@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: redis
+  mvc:
+    servlet:
+      path: /redis
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+logging:
+  level:
+    cn.piesat.tests.redis: debug

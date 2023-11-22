@@ -30,9 +30,5 @@
             <groupId>cn.piesat</groupId>
             <artifactId>spaceXP-spring-boot-starter-security</artifactId>
         </dependency>
-        <dependency>
-            <groupId>cn.piesat</groupId>
-            <artifactId>spaceXP-spring-boot-starter-redis</artifactId>
-        </dependency>
     </dependencies>
 </project>

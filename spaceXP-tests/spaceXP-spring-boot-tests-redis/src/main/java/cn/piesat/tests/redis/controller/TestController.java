@@ -1,26 +1,28 @@
-package cn.piesat.test.file.controller;
+package cn.piesat.tests.redis.controller;
 
 
 import cn.piesat.framework.redis.core.RedisService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  * 测试信息
  */
-@Api(tags = "redis测试")
+@Api(tags = "测试")
 @RestController
-@RequestMapping("redis")
 @RequiredArgsConstructor
-public class RedisController {
+public class TestController {
 
     private final RedisService redisService;
 
