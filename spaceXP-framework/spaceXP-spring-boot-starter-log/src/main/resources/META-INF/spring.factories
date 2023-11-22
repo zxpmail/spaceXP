@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.piesat.framework.log.config.AsyncExecutorConfig,\
+  cn.piesat.framework.log.config.LogAutoConfiguration,\
+  cn.piesat.framework.log.config.RequestExecutorConfig
