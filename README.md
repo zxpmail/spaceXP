@@ -28,6 +28,7 @@ spaceXP-tools 工具集合
 7.  spaceXP-spring-boot-starter-file-s3 基于 S3 协议的文件客户端，实现 MinIO、阿里云、腾讯云、七牛云、华为云等云服务
 8.  spaceXP-spring-boot-starter-log 根据aop切面实现日志记录组件
 9.  spaceXP-spring-boot-starter-feign feign包装组件，自动解包ApiResult以及支持OkHttp和HttpClient
+10. spaceXP-spring-boot-starter-permission-url url权限拦截
 
 
 
