@@ -46,26 +46,7 @@ public class TestController {
         return userFeignClient.list(pageBean,userDO);
     }
 
-    @PostMapping(value = "/testDate",produces = MediaType.APPLICATION_JSON_VALUE)
-    @NoApiResult
-   // @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    public LocalDateTime testDate(){
-        return userFeignClient.testDate();
-    }
 
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    private final static class Person {
-        private String name;
-        private int age;
-    }
-
-    public static void main(String[] args) throws JsonProcessingException {
-        String receivedJsonString = "{\"name\":\"Alice\",\"age\":30,\"city\":\"New York\"}";
-        ObjectMapper objectMapper = new ObjectMapper();
-        Person receivedPerson = objectMapper.readValue(receivedJsonString, Person.class);
-        System.out.println(receivedPerson);
-    }
 
     @ApiOperation("根据id删除信息")
     @DeleteMapping("/delete")

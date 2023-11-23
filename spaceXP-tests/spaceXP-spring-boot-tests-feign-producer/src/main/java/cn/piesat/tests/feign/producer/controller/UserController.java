@@ -1,6 +1,7 @@
 package cn.piesat.tests.feign.producer.controller;
 
 
+import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
@@ -92,8 +93,4 @@ public class UserController {
         return userService.delete(id);
     }
 
-    @GetMapping("testDate")
-    public LocalDateTime testDate(){
-        return LocalDateTime.now();//"2023-07-04 16:36:19";
-    }
 }

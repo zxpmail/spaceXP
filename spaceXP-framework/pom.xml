@@ -21,6 +21,7 @@
         <module>spaceXP-spring-boot-starter-redis</module>
         <module>spaceXP-spring-boot-starter-file-s3</module>
         <module>spaceXP-spring-boot-starter-log</module>
+        <module>spaceXP-spring-boot-starter-feign</module>
     </modules>
     <dependencies>
         <dependency>

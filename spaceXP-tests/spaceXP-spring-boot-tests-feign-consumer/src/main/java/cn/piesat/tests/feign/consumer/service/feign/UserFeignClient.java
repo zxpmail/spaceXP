@@ -1,6 +1,7 @@
 package cn.piesat.tests.feign.consumer.service.feign;
 
 
+import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.feign.annotation.HasApiResult;
@@ -32,9 +33,6 @@ public interface UserFeignClient {
     @PostMapping("/user/list")
     PageResult list(@RequestParam(value = "pageBean") PageBean pageBean, @RequestBody UserDO userDO);
 
-    @GetMapping("/user/testDate")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    LocalDateTime testDate();
 
     @PostMapping("/user/delete")
     Boolean delete(@RequestBody List<Long> ids);

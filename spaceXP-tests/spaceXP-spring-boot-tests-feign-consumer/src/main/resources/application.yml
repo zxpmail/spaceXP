@@ -26,3 +26,6 @@ feign:
       default:
         connectTimeout: 10000
         readTimeout: 10000
+space:
+  web:
+    date-formatter-enable: true
