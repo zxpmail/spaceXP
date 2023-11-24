@@ -20,5 +20,6 @@
         <module>spaceXP-spring-boot-tests-log</module>
         <module>spaceXP-spring-boot-tests-redis</module>
         <module>spaceXP-spring-boot-tests-permission-url</module>
+        <module>spaceXP-spring-boot-tests-permission-data</module>
     </modules>
 </project>
