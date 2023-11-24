@@ -1,4 +1,4 @@
-package cn.piesat.test.permission.data.controller;
+package cn.piesat.permission.data.controller;
 
 
 import cn.piesat.framework.common.annotation.NoApiResult;
@@ -8,8 +8,8 @@ import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.mybatis.plus.annotation.DynamicTableName;
 
-import cn.piesat.test.permission.data.model.entity.UserDO;
-import cn.piesat.test.permission.data.service.UserService;
+import cn.piesat.permission.data.service.UserService;
+import cn.piesat.permission.data.model.entity.UserDO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -39,7 +39,6 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
-@NoApiResult
 public class UserController {
 
     private final UserService userService;
@@ -96,25 +95,4 @@ public class UserController {
         return userService.delete(id);
     }
 
-
-    @ApiOperation("获取Person")
-    @PostMapping("/getPerson")
-    public Person getPerson( @RequestBody Person person){
-        return person;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    private static class Person{
-        private Integer age;
-        private String name;
-    }
-    @ApiOperation("动态表名分页查询")
-    @PostMapping("/list/{tableName}")
-    @DynamicTableName
-    public PageResult list(@PathVariable("tableName") String tableName, PageBean pageBean, @RequestBody(required = false) UserDO userDO){
-        return userService.list(pageBean,userDO);
-
-    }
 }

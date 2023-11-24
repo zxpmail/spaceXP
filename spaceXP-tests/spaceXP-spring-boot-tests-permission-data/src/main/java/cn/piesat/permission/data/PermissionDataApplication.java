@@ -1,4 +1,4 @@
-package cn.piesat.test.permission.data;
+package cn.piesat.permission.data;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,10 +1,10 @@
 # spaceXP
 
 #### 介绍
-测试url权限
+测试数据权限
 
 #### 软件架构
-测试url权限
+测试数据权限
 
 #### 使用说明
 测试用户白名单：在header域中设置userName:admin userId:1

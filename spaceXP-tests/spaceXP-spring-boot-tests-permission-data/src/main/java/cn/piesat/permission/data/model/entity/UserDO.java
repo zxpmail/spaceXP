@@ -1,4 +1,4 @@
-package cn.piesat.test.permission.data.model.entity;
+package cn.piesat.permission.data.model.entity;
 
 
 

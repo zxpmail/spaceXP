@@ -1,8 +1,8 @@
-package cn.piesat.test.permission.data.dao.mapper;
+package cn.piesat.permission.data.dao.mapper;
 
 
 
-import cn.piesat.test.permission.data.model.entity.UserDO;
+import cn.piesat.permission.data.model.entity.UserDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

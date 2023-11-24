@@ -1,13 +1,13 @@
-package cn.piesat.test.permission.data.service.impl;
+package cn.piesat.permission.data.service.impl;
 
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 
-import cn.piesat.test.permission.data.dao.mapper.UserMapper;
-import cn.piesat.test.permission.data.model.entity.UserDO;
-import cn.piesat.test.permission.data.service.UserService;
+import cn.piesat.permission.data.service.UserService;
+import cn.piesat.permission.data.dao.mapper.UserMapper;
+import cn.piesat.permission.data.model.entity.UserDO;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

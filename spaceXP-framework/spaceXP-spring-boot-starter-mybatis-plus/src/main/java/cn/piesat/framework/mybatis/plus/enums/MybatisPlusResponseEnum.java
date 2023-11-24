@@ -17,6 +17,7 @@ public enum MybatisPlusResponseEnum implements IBaseResponse {
     BAD_SQL_GRAMMAR_ERROR(503,"不支持当前数据库"),
     RECORD_REPEAT(504,"数据库中已存在该记录"),
 
+    QUERY_DATA(505,"数据处理错误！"),
 
     ;
 

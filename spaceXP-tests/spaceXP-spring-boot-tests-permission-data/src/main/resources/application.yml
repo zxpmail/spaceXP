@@ -7,8 +7,14 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/test1?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: root
     password: 123456
+
 space:
   permission:
     data:
-      ignore-users: admin
-      ignore-sql:
+      #ignore-users:
+      #  - admin
+      ignore-conditions:
+        - UserMapper.selectById
+logging:
+  level:
+    cn.piesat.permission.data.dao.mapper: debug

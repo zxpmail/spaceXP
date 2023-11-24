@@ -1,7 +1,6 @@
 package cn.piesat.framework.permission.data.core;
 
 
-
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.permission.data.utils.DataPermissionContextHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -36,6 +35,9 @@ public class DataPermissionFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws IOException, ServletException {
         try {
             String userId = request.getParameter(CommonConstants.USER_ID);
+            if (!StringUtils.hasText(userId)) {
+                userId = request.getHeader(CommonConstants.USER_ID);
+            }
             if (StringUtils.hasText(userId)) {
                 DataPermissionContextHolder.setUserDataPermission(userDataPermissionService.getDataPermission(Long.valueOf(userId)));
             }

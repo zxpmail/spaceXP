@@ -1,9 +1,9 @@
-package cn.piesat.test.permission.data.service;
+package cn.piesat.permission.data.service;
 
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.test.permission.data.model.entity.UserDO;
+import cn.piesat.permission.data.model.entity.UserDO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 

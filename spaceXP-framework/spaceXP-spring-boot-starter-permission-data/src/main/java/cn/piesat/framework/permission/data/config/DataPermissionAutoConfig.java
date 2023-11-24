@@ -2,7 +2,7 @@ package cn.piesat.framework.permission.data.config;
 
 import cn.piesat.framework.mybatis.plus.config.MybatisPlusConfig;
 import cn.piesat.framework.permission.data.core.DataPermissionFilter;
-import cn.piesat.framework.permission.data.core.DataPermissionHandler;
+import cn.piesat.framework.permission.data.core.CustomDataPermissionHandler;
 import cn.piesat.framework.permission.data.properties.DataPermissionProperties;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -35,7 +35,7 @@ public class DataPermissionAutoConfig {
 
         List<InnerInterceptor> interceptors =new ArrayList<>();
         DataPermissionInterceptor dataPermissionInterceptor = new DataPermissionInterceptor();
-        DataPermissionHandler dataPermissionHandler = new DataPermissionHandler(dataPermissionProperties);
+        CustomDataPermissionHandler dataPermissionHandler = new CustomDataPermissionHandler(dataPermissionProperties);
         // 添加自定义的数据权限处理器
         dataPermissionInterceptor.setDataPermissionHandler(dataPermissionHandler);
         interceptors.add(dataPermissionInterceptor);

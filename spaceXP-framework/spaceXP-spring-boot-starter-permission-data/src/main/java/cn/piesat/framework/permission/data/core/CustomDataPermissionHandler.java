@@ -1,13 +1,15 @@
 package cn.piesat.framework.permission.data.core;
 
 
+import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.permission.data.model.DataPermissionEnum;
 import cn.piesat.framework.permission.data.model.UserDataPermission;
 import cn.piesat.framework.permission.data.properties.DataPermissionProperties;
 import cn.piesat.framework.permission.data.utils.DataPermissionContextHolder;
+import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
 import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
 import lombok.Data;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
@@ -20,6 +22,7 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,36 +37,42 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class DataPermissionHandler implements MultiDataPermissionHandler {
+public class CustomDataPermissionHandler implements DataPermissionHandler {
     private final DataPermissionProperties dataPermissionProperties;
 
-    public DataPermissionHandler(DataPermissionProperties dataPermissionProperties) {
+    public CustomDataPermissionHandler(DataPermissionProperties dataPermissionProperties) {
         this.dataPermissionProperties = dataPermissionProperties;
     }
 
     @Override
-    public Expression getSqlSegment(Table table, Expression where, String mid) {
-        // 1. 如果没有获取用户数据权限信息、包含忽略sql或用户直接返回不进行数据权限处理
+    public Expression getSqlSegment(Expression where, String mid) {
+
         UserDataPermission userDataScope = DataPermissionContextHolder.getUserDataPermission();
-        if (ObjectUtils.isEmpty(userDataScope) || ObjectUtils.isEmpty(dataPermissionProperties)) {
-            return where;
-        }
-        Set<String> ignoreUsers = dataPermissionProperties.getIgnoreUsers();
-        if (!CollectionUtils.isEmpty(ignoreUsers)) {
-            if (ignoreUsers.contains(userDataScope.getUsername())) {
-                return where;
-            }
-        }
-        Set<String> ignoreSql = dataPermissionProperties.getIgnoreConditions();
-        if (!CollectionUtils.isEmpty(ignoreSql)) {
-            for (String s : ignoreSql) {
-                if (mid.contains(s)) {
+
+        if (!ObjectUtils.isEmpty(dataPermissionProperties)) {
+            Set<String> ignoreUsers = dataPermissionProperties.getIgnoreUsers();
+            if (!CollectionUtils.isEmpty(ignoreUsers)) {
+                if ((!ObjectUtils.isEmpty(userDataScope)) && StringUtils.hasText(userDataScope.getUsername()) && ignoreUsers.contains(userDataScope.getUsername())) {
                     return where;
                 }
             }
+            Set<String> ignoreSql = dataPermissionProperties.getIgnoreConditions();
+            if (!CollectionUtils.isEmpty(ignoreSql)) {
+                for (String s : ignoreSql) {
+                    if (mid.contains(s)) {
+                        return where;
+                    }
+                }
+            }
+        }
+        if (ObjectUtils.isEmpty(userDataScope) ) {
+            throw new BaseException(CommonResponseEnum.NO_PERMISSION_DATA);
         }
         Expression expression = null;
-        DataPermissionEnum dataPermissionEnum = DataPermissionEnum.DEPT_SUB_SCOPE.getEnumByCode(userDataScope.getDataScope());
+        DataPermissionEnum dataPermissionEnum =DataPermissionEnum.SELF_SCOPE;
+        if (ObjectUtils.isEmpty(userDataScope.getDataScope())){
+            dataPermissionEnum = DataPermissionEnum.DEPT_SUB_SCOPE.getEnumByCode(userDataScope.getDataScope());
+        }
         // 2. 数据权限处理
         switch (dataPermissionEnum) {
             case ALL_SCOPE:
@@ -81,7 +90,8 @@ public class DataPermissionHandler implements MultiDataPermissionHandler {
                 expression = ObjectUtils.isEmpty(where) ? inExpression : new AndExpression(where, inExpression);
                 break;
             default:
-                throw new RuntimeException("权限错误！");
+                throw new BaseException(CommonResponseEnum.NO_PERMISSION_DATA);
+
         }
         return expression;
     }
