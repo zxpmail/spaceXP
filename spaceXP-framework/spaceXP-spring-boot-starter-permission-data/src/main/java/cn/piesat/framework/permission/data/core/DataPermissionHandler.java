@@ -5,6 +5,7 @@ import cn.piesat.framework.permission.data.model.DataPermissionEnum;
 import cn.piesat.framework.permission.data.model.UserDataPermission;
 import cn.piesat.framework.permission.data.properties.DataPermissionProperties;
 import cn.piesat.framework.permission.data.utils.DataPermissionContextHolder;
+import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
@@ -32,16 +34,15 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Data
-public class DataPermissionHandler implements com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler {
+public class DataPermissionHandler implements MultiDataPermissionHandler {
     private final DataPermissionProperties dataPermissionProperties;
 
     public DataPermissionHandler(DataPermissionProperties dataPermissionProperties) {
         this.dataPermissionProperties = dataPermissionProperties;
     }
 
-    @SneakyThrows
     @Override
-    public Expression getSqlSegment(Expression where, String mid) {
+    public Expression getSqlSegment(Table table, Expression where, String mid) {
         // 1. 如果没有获取用户数据权限信息、包含忽略sql或用户直接返回不进行数据权限处理
         UserDataPermission userDataScope = DataPermissionContextHolder.getUserDataPermission();
         if (ObjectUtils.isEmpty(userDataScope) || ObjectUtils.isEmpty(dataPermissionProperties)) {
@@ -53,7 +54,7 @@ public class DataPermissionHandler implements com.baomidou.mybatisplus.extension
                 return where;
             }
         }
-        Set<String> ignoreSql = dataPermissionProperties.getIgnoreSql();
+        Set<String> ignoreSql = dataPermissionProperties.getIgnoreConditions();
         if (!CollectionUtils.isEmpty(ignoreSql)) {
             for (String s : ignoreSql) {
                 if (mid.contains(s)) {

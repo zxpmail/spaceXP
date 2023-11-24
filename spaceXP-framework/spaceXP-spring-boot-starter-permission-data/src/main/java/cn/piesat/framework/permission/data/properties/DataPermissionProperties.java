@@ -18,9 +18,9 @@ import java.util.Set;
 @Data
 public class DataPermissionProperties {
     /**
-     * 配置那些表不执行权限控制
+     * 配置那些方法不执行权限控制 如mapper或者mapper中的方法
      */
-    private Set<String> ignoreSql = Collections.emptySet();
+    private Set<String> ignoreConditions = Collections.emptySet();
     /**
      * 指定那些sql不执行权限控制
      */
