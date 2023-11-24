@@ -7,6 +7,13 @@
 测试数据权限
 
 #### 使用说明
-测试用户白名单：在header域中设置userName:admin userId:1
-访问 /test/get1 /test/get2 /test/get3 都可以访问
-取消userName项 可以访问/test/get1(用户私有) /test/get2(白名单) /test/get3不可访问
+space.permission.data.ignore-conditions[0]=UserMapper.selectById
+对UserMapper.selectById就不进行数据权限拦截
+space.permission.data.ignore-conditions[0]=admin
+当header域或request域中根据userId调用项目实现类UserDataPermissionService中的
+getDataPermission方法中得到的实体UserDataPermission中的username与admin一致时候就进行忽略admin用户
+在不设置配置文件就根据UserDataPermission中的权限类别进行拦截 
+1、自身权限即：根据用户creator字段进行拦截
+2、部门权限：根据用户的部门id进行拦截
+3、部门及以下数据权限：根据用户的部门id以及子部门ID进行拦截
+4、全部数据权限：即不拦截用户数据权限

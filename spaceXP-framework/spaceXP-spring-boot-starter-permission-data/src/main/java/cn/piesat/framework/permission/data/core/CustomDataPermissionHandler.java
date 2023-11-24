@@ -19,7 +19,6 @@ import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.expression.operators.relational.ItemsList;
 import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Table;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -70,7 +69,7 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
         }
         Expression expression = null;
         DataPermissionEnum dataPermissionEnum =DataPermissionEnum.SELF_SCOPE;
-        if (ObjectUtils.isEmpty(userDataScope.getDataScope())){
+        if (!ObjectUtils.isEmpty(userDataScope.getDataScope())){
             dataPermissionEnum = DataPermissionEnum.DEPT_SUB_SCOPE.getEnumByCode(userDataScope.getDataScope());
         }
         // 2. 数据权限处理

@@ -11,8 +11,8 @@ spring:
 space:
   permission:
     data:
-      #ignore-users:
-      #  - admin
+      ignore-users:
+        - admin
       ignore-conditions:
         - UserMapper.selectById
 logging:
