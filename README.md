@@ -29,6 +29,7 @@ spaceXP-tools 工具集合
 8.  spaceXP-spring-boot-starter-log 根据aop切面实现日志记录组件
 9.  spaceXP-spring-boot-starter-feign feign包装组件，自动解包ApiResult以及支持OkHttp和HttpClient
 10. spaceXP-spring-boot-starter-permission-url url权限拦截
+11. spaceXP-spring-boot-starter-permission-data 数据权限
 
 
 

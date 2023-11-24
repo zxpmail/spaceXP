@@ -23,6 +23,7 @@
         <module>spaceXP-spring-boot-starter-log</module>
         <module>spaceXP-spring-boot-starter-feign</module>
         <module>spaceXP-spring-boot-starter-permission-url</module>
+        <module>spaceXP-spring-boot-starter-permission-data</module>
     </modules>
     <dependencies>
         <dependency>
