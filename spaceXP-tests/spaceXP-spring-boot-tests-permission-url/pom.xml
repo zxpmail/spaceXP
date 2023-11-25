@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spaceXP</artifactId>
-        <groupId>cn.piesat</groupId>
+        <artifactId>spaceXP-tests</artifactId>
+        <groupId>cn.piesat.space</groupId>
         <version>2.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,17 +13,14 @@
 
     <name>spaceXP-spring-boot-tests-permission-url</name>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>cn.piesat</groupId>
+            <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-permission-url</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.piesat</groupId>
+            <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
         </dependency>
 

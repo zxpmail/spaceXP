@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>spaceXP-framework</artifactId>
-        <groupId>cn.piesat</groupId>
+        <groupId>cn.piesat.space</groupId>
         <version>2.0.0</version>
     </parent>
     <packaging>jar</packaging>
@@ -18,7 +18,7 @@
         </dependency>
 
         <dependency>
-            <groupId>cn.piesat</groupId>
+            <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-common</artifactId>
         </dependency>
         <dependency>

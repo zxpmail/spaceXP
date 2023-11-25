@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>spaceXP-framework</artifactId>
-        <groupId>cn.piesat</groupId>
+        <groupId>cn.piesat.space</groupId>
         <version>2.0.0</version>
     </parent>
     <artifactId>spaceXP-common</artifactId>
@@ -16,13 +16,14 @@
     <description>定义基础 pojo 类、枚举、工具类等等</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
