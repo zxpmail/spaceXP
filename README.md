@@ -30,6 +30,7 @@ spaceXP-tools 工具集合
 9.  spaceXP-spring-boot-starter-feign feign包装组件，自动解包ApiResult以及支持OkHttp和HttpClient
 10. spaceXP-spring-boot-starter-permission-url url权限拦截
 11. spaceXP-spring-boot-starter-permission-data 数据权限
+12. spaceXP-spring-boot-starter-multi-tenant 多租户组件
 
 
 
