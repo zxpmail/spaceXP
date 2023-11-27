@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
 import net.sf.jsqlparser.expression.NullValue;
+import net.sf.jsqlparser.schema.Column;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +52,7 @@ public class MultiTenantConfig {
             @Override
             public Expression getTenantId() {
                 TwoDTO<Long, String> tenant = TenantContextHolder.getTenant();
-                if (!ObjectUtils.isEmpty(tenant) && ObjectUtils.isEmpty(tenant.getFirst())) {
+                if (!ObjectUtils.isEmpty(tenant) && !ObjectUtils.isEmpty(tenant.getFirst())) {
                     return new LongValue(TenantContextHolder.getTenant().getFirst());
                 }
                 return new NullValue();
@@ -77,6 +78,7 @@ public class MultiTenantConfig {
                         (e) -> e.equalsIgnoreCase(tableName)
                 );
             }
+
         };
     }
 
@@ -87,7 +89,7 @@ public class MultiTenantConfig {
         interceptors.add(tenantInterceptor);
         interceptors.addAll(plusInterceptor.getInterceptors());
         plusInterceptor.setInterceptors(interceptors);
-        return new TenantFilter(tenantProperties);
+        return new TenantFilter();
     }
 
 }

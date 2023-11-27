@@ -22,6 +22,7 @@
         <module>spaceXP-spring-boot-tests-redis</module>
         <module>spaceXP-spring-boot-tests-permission-url</module>
         <module>spaceXP-spring-boot-tests-permission-data</module>
+        <module>spaceXP-spring-boot-tests-multi-tenant</module>
     </modules>
     <dependencyManagement>
         <dependencies>

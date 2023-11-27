@@ -3,7 +3,7 @@ package cn.piesat.framework.multi.tenant.core;
 
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.model.dto.TwoDTO;
-import cn.piesat.framework.multi.tenant.properties.TenantProperties;
+
 import cn.piesat.framework.multi.tenant.utils.TenantContextHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.util.ObjectUtils;
@@ -27,12 +27,6 @@ import java.io.IOException;
  */
 @ConditionalOnClass(Filter.class)
 public class TenantFilter extends OncePerRequestFilter {
-    private TenantProperties tenantProperties;
-
-    public TenantFilter(TenantProperties tenantProperties) {
-        this.tenantProperties = tenantProperties;
-    }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {

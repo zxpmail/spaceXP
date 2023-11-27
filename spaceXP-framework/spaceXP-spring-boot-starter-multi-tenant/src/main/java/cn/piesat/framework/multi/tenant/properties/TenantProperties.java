@@ -29,10 +29,6 @@ public class TenantProperties {
      * 配置不进行多租户隔离的表名
      */
     private List<String> ignoreTables = new ArrayList<>();
-    /**
-     * 配置不进行多租户隔离的ID
-     */
-    private Long ignoreTenantId =0L;
 
     /**
      * 配置不进行多租户隔离的sql

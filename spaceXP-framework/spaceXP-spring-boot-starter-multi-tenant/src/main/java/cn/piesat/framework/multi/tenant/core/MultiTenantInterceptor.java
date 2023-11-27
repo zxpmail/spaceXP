@@ -10,7 +10,6 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
-import java.sql.SQLException;
 
 /**
  * <p/>
@@ -33,7 +32,7 @@ public class MultiTenantInterceptor extends TenantLineInnerInterceptor {
      * 2、判断是否忽略语句或不存在tenant_id
      */
     @Override
-    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    public void beforeQuery(Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
 
         if (isIgnoreMappedStatement(ms.getId())) {
             return;
@@ -45,5 +44,6 @@ public class MultiTenantInterceptor extends TenantLineInnerInterceptor {
     private boolean isIgnoreMappedStatement(String msId) {
         return tenantProperties.getIgnoreSql().stream().anyMatch((e) -> e.equalsIgnoreCase(msId));
     }
+
 
 }
