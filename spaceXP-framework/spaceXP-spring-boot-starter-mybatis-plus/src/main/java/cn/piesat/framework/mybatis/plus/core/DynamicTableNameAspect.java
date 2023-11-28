@@ -1,7 +1,6 @@
 package cn.piesat.framework.mybatis.plus.core;
 
 import cn.piesat.framework.common.exception.BaseException;
-import cn.piesat.framework.mybatis.plus.enums.MybatisPlusResponseEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import org.aspectj.lang.ProceedingJoinPoint;

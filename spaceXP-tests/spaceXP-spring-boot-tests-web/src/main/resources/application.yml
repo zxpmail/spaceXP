@@ -4,10 +4,10 @@ spring:
   mvc:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
-
 space:
-  enum:
-    success-code: 0
-    success-value: hello
-  security:
-    enable: true
+  common:
+    result:
+      message: msg
+    response-code:
+      success-code: 0
+

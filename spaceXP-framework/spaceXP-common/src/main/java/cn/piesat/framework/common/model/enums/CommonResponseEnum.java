@@ -1,7 +1,7 @@
 package cn.piesat.framework.common.model.enums;
 
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
-import cn.piesat.framework.common.properties.CommonEnumProperties;
+import cn.piesat.framework.common.properties.CommonProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,28 +21,33 @@ public enum CommonResponseEnum implements IBaseResponse {
     /**
      * 操作成功时默认消息
      */
-    SUCCESS(CommonEnumProperties.successCode,CommonEnumProperties.successValue),
+    SUCCESS(CommonProperties.ResponseCode.successCode,CommonProperties.ResponseCode.successValue),
     /**
      * 操作失败时默认消息
      */
-    ERROR(CommonEnumProperties.errorCode, CommonEnumProperties.errorValue),
+    ERROR(CommonProperties.ResponseCode.errorCode, CommonProperties.ResponseCode.errorValue),
     /**
      * 系统错误时，默认消息
      */
-    SYS_ERROR(CommonEnumProperties.sysErrorCode, CommonEnumProperties.sysErrorValue),
+    SYS_ERROR(CommonProperties.ResponseCode.sysErrorCode, CommonProperties.ResponseCode.sysErrorValue),
 
-    URL_LEN_INVALID(CommonEnumProperties.urlLenInvalidCode, CommonEnumProperties.urlLenInvalidValue),
-    TOKEN_INVALID(CommonEnumProperties.tokenInvalidCode, CommonEnumProperties.tokenInvalidValue),
+    URL_LEN_INVALID(CommonProperties.ResponseCode.urlLenInvalidCode, CommonProperties.ResponseCode.urlLenInvalidValue),
+    TOKEN_INVALID(CommonProperties.ResponseCode.tokenInvalidCode, CommonProperties.ResponseCode.tokenInvalidValue),
 
-    TOKEN_EMPTY(CommonEnumProperties.tokenEmptyCode, CommonEnumProperties.tokenEmptyValue),
+    TOKEN_EMPTY(CommonProperties.ResponseCode.tokenEmptyCode, CommonProperties.ResponseCode.tokenEmptyValue),
 
-    TOKEN_KEY_EXPIRED(CommonEnumProperties.tokenKeyExpiredCode,CommonEnumProperties.tokenKeyExpiredValue),
+    TOKEN_KEY_EXPIRED(CommonProperties.ResponseCode.tokenKeyExpiredCode,CommonProperties.ResponseCode.tokenKeyExpiredValue),
 
-    REFRESH_TOKEN_INVALID(CommonEnumProperties.refreshTokenInvalidCode, CommonEnumProperties.refreshTokenInvalidValue),
+    REFRESH_TOKEN_INVALID(CommonProperties.ResponseCode.refreshTokenInvalidCode, CommonProperties.ResponseCode.refreshTokenInvalidValue),
 
-    AOP_ADVICE_ERROR(514,"AOP通知错误！"),
+    AOP_ADVICE_ERROR(CommonProperties.ResponseCode.aopAdviceErrorCode,CommonProperties.ResponseCode.aopAdviceErrorValue),
 
-    NO_PERMISSION_DATA(515,"没有数据权限！")
+    NO_PERMISSION_DATA(CommonProperties.ResponseCode.noPermissionDataCode,CommonProperties.ResponseCode.noPermissionDataValue),
+
+    BAD_SQL_GRAMMAR_ERROR(CommonProperties.ResponseCode.badSqlGrammarErrorCode,CommonProperties.ResponseCode.badSqlGrammarErrorValue),
+    RECORD_REPEAT(CommonProperties.ResponseCode.recordRepeatCode,CommonProperties.ResponseCode.recordRepeatValue),
+
+    QUERY_DATA(CommonProperties.ResponseCode.queryDataErrorCode,CommonProperties.ResponseCode.queryDataErrorValue),
     ;
     /**
      * 响应状态码

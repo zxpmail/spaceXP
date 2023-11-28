@@ -3,9 +3,13 @@ package cn.piesat.framework.feign.core;
 
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.constants.CommonConstants;
+import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.feign.annotation.HasApiResult;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.Util;
 import feign.codec.Decoder;
@@ -38,7 +42,7 @@ import java.util.zip.GZIPInputStream;
 @Slf4j
 public class ResultDecoder implements Decoder {
     private final Decoder decoder;
-
+    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Object decode(Response response, Type type) throws IOException {
@@ -80,7 +84,20 @@ public class ResultDecoder implements Decoder {
             ParameterizedTypeImpl resultType = new ParameterizedTypeImpl(ApiResult.class, new Type[]{type});
             Object decode = this.decoder.decode(response, resultType);
             if (decode instanceof ApiResult) {
-                return ((ApiResult<?>) decode).getData();
+                if (!((ApiResult<?>) decode).get(CommonProperties.Result.code).equals(CommonResponseEnum.SUCCESS.getCode())) {
+                    throw new BaseException(CommonResponseEnum.ERROR);
+                }
+                if (Void.class == type || Void.TYPE == type) {
+                    return null;
+                }
+                Object o = ((ApiResult<?>) decode).get(CommonProperties.Result.data);
+                try {
+                    Class<?> aClass = Class.forName(type.getTypeName());
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    return objectMapper.convertValue(o, aClass);
+                } catch (ClassNotFoundException e) {
+                    throw new BaseException(CommonResponseEnum.ERROR);
+                }
             }
         }
         return this.decoder.decode(response, type);

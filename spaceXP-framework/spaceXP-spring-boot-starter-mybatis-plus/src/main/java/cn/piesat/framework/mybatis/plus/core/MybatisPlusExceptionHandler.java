@@ -5,7 +5,6 @@ import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import cn.piesat.framework.common.model.vo.ApiResult;
-import cn.piesat.framework.mybatis.plus.enums.MybatisPlusResponseEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -31,7 +30,7 @@ public class MybatisPlusExceptionHandler {
     public ApiResult<IBaseResponse> handleException(BadSqlGrammarException e) {
         e.printStackTrace();
         log.error(CommonConstants.MESSAGE,module,e.getMessage());
-        return ApiResult.fail(MybatisPlusResponseEnum.BAD_SQL_GRAMMAR_ERROR);
+        return ApiResult.fail(CommonResponseEnum.BAD_SQL_GRAMMAR_ERROR);
     }
 
 
@@ -39,7 +38,7 @@ public class MybatisPlusExceptionHandler {
     public ApiResult<IBaseResponse> handleDuplicateKeyException(DuplicateKeyException e) {
         e.printStackTrace();
         log.error(CommonConstants.MESSAGE,module,e.getMessage());
-        return ApiResult.fail(MybatisPlusResponseEnum.RECORD_REPEAT);
+        return ApiResult.fail(CommonResponseEnum.RECORD_REPEAT);
     }
 
     @ExceptionHandler(PersistenceException.class)
@@ -50,7 +49,7 @@ public class MybatisPlusExceptionHandler {
         if(message.contains(CommonResponseEnum.NO_PERMISSION_DATA.getMessage())){
             return ApiResult.fail(CommonResponseEnum.NO_PERMISSION_DATA);
         }else{
-            return ApiResult.fail(MybatisPlusResponseEnum.QUERY_DATA);
+            return ApiResult.fail(CommonResponseEnum.QUERY_DATA);
         }
     }
 }

@@ -15,9 +15,12 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: http://127.0.0.1:8848
+        server-addr: http://192.168.2.67:38848
 server:
   compression:
     enabled: true
     mime-types: application/json
     min-response-size: 1
+space:
+  web:
+    date-formatter-enable: true
