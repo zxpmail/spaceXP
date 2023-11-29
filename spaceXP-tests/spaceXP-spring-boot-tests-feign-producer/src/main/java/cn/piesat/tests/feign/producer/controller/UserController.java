@@ -50,6 +50,16 @@ public class UserController {
         return userService.list(pageBean,userDO);
 
     }
+
+    /**
+     * 列表
+     */
+    @ApiOperation("所有记录")
+    @GetMapping("/all")
+    public List<UserDO> all(){
+        return  userService.list();
+
+    }
     /**
      * 信息
      */

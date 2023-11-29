@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p/>
@@ -41,7 +42,6 @@ public class TestController {
 
     @ApiOperation("分页查询")
     @PostMapping("/list")
-    @NoApiResult
     public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO){
         return userFeignClient.list(pageBean,userDO);
     }
@@ -53,5 +53,11 @@ public class TestController {
     public Boolean delete(@RequestParam String id){
         System.out.println(id);
         return userFeignClient.delete(new ArrayList<Long>(){{add(1L);add(2L);}});
+    }
+
+    @ApiOperation("所有记录")
+    @PostMapping("/all")
+    public List<UserDO> all(){
+        return userFeignClient.all();
     }
 }

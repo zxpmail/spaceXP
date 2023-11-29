@@ -36,4 +36,7 @@ public interface UserFeignClient {
 
     @PostMapping("/user/delete")
     Boolean delete(@RequestBody List<Long> ids);
+
+    @GetMapping("/user/all")
+    List<UserDO> all();
 }

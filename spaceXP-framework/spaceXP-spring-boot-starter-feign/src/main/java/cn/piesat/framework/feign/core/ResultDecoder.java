@@ -9,6 +9,8 @@ import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.feign.annotation.HasApiResult;
 
+
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.Util;
@@ -18,15 +20,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.encoding.HttpEncoding;
 import org.springframework.util.ObjectUtils;
 
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 
@@ -84,17 +89,18 @@ public class ResultDecoder implements Decoder {
             ParameterizedTypeImpl resultType = new ParameterizedTypeImpl(ApiResult.class, new Type[]{type});
             Object decode = this.decoder.decode(response, resultType);
             if (decode instanceof ApiResult) {
-                if (!((ApiResult<?>) decode).get(CommonProperties.Result.code).equals(CommonResponseEnum.SUCCESS.getCode())) {
-                    throw new BaseException(CommonResponseEnum.ERROR);
-                }
                 if (Void.class == type || Void.TYPE == type) {
                     return null;
                 }
                 Object o = ((ApiResult<?>) decode).get(CommonProperties.Result.data);
-                Class<?> aClass = (Class<?>) type;
-                ObjectMapper objectMapper = new ObjectMapper();
-                return objectMapper.convertValue(o, aClass);
-
+                if(o==null){
+                    return null;
+                }
+                if(type instanceof Class){
+                    Class<?> clazz = (Class<?>) type;
+                    return objectMapper.convertValue(o, clazz) ;
+                }
+                return objectMapper.convertValue(o, Object.class) ;
             }
         }
         return this.decoder.decode(response, type);
