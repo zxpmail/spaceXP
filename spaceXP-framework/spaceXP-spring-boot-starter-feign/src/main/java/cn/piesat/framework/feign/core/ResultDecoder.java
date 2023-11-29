@@ -91,13 +91,10 @@ public class ResultDecoder implements Decoder {
                     return null;
                 }
                 Object o = ((ApiResult<?>) decode).get(CommonProperties.Result.data);
-                try {
-                    Class<?> aClass = Class.forName(type.getTypeName());
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    return objectMapper.convertValue(o, aClass);
-                } catch (ClassNotFoundException e) {
-                    throw new BaseException(CommonResponseEnum.ERROR);
-                }
+                Class<?> aClass = (Class<?>) type;
+                ObjectMapper objectMapper = new ObjectMapper();
+                return objectMapper.convertValue(o, aClass);
+
             }
         }
         return this.decoder.decode(response, type);
