@@ -32,7 +32,9 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -100,7 +102,17 @@ public class ResultDecoder implements Decoder {
                     Class<?> clazz = (Class<?>) type;
                     return objectMapper.convertValue(o, clazz) ;
                 }
-                return objectMapper.convertValue(o, Object.class) ;
+                String typeName = type.getTypeName();
+                //todo 这里有些不灵活，后面修改
+                if(typeName.contains("List")){
+                    return objectMapper.convertValue(o, List.class) ;
+                }else if(typeName.contains("Map")){
+                    return objectMapper.convertValue(o, Map.class) ;
+                }else if(typeName.contains("Set")){
+                    return objectMapper.convertValue(o, Set.class) ;
+                }else{
+                    return objectMapper.convertValue(o, Object.class) ;
+                }
             }
         }
         return this.decoder.decode(response, type);

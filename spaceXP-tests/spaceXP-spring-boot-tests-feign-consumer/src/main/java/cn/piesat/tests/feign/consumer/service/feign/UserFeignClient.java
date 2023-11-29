@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p/>
@@ -39,4 +40,7 @@ public interface UserFeignClient {
 
     @GetMapping("/user/all")
     List<UserDO> all();
+
+    @PostMapping ("/user/map")
+    Map<String,UserDO> map();
 }

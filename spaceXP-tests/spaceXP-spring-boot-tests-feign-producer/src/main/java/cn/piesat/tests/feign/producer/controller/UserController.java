@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -40,7 +42,17 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
+    @ApiOperation("map")
+    @PostMapping("/map")
+    public Map<String,UserDO> map(){
+        Map<String,UserDO> map =new HashMap<>();
+        UserDO userDO =new UserDO();
+        userDO.setId(1L);
+        userDO.setNickname("hello");
+        map.put("key1",userDO);
+        map.put("key2",userDO);
+        return map;
+    }
     /**
      * 列表
      */
