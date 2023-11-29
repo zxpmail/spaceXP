@@ -3,15 +3,12 @@ package cn.piesat.framework.feign.core;
 
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.constants.CommonConstants;
-import cn.piesat.framework.common.exception.BaseException;
-import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.feign.annotation.HasApiResult;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
 import feign.Response;
 import feign.Util;
 import feign.codec.Decoder;
@@ -26,15 +23,11 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -49,7 +42,6 @@ import java.util.zip.GZIPInputStream;
 @Slf4j
 public class ResultDecoder implements Decoder {
     private final Decoder decoder;
-    private final static ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public Object decode(Response response, Type type) throws IOException {
@@ -98,21 +90,8 @@ public class ResultDecoder implements Decoder {
                 if(o==null){
                     return null;
                 }
-                if(type instanceof Class){
-                    Class<?> clazz = (Class<?>) type;
-                    return objectMapper.convertValue(o, clazz) ;
-                }
-                String typeName = type.getTypeName();
-                //todo 这里有些不灵活，后面修改
-                if(typeName.contains("List")){
-                    return objectMapper.convertValue(o, List.class) ;
-                }else if(typeName.contains("Map")){
-                    return objectMapper.convertValue(o, Map.class) ;
-                }else if(typeName.contains("Set")){
-                    return objectMapper.convertValue(o, Set.class) ;
-                }else{
-                    return objectMapper.convertValue(o, Object.class) ;
-                }
+                String s = JSON.toJSONString(o);
+                return JSON.parseObject(s, type);
             }
         }
         return this.decoder.decode(response, type);
