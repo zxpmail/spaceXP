@@ -52,6 +52,7 @@
         <com.fasterxml.jackson.version>2.14.1</com.fasterxml.jackson.version>
         <javax.servlet.version>4.0.1</javax.servlet.version>
         <org.slf4j.version>1.7.30</org.slf4j.version>
+        <snappy-java.version>1.1.10.5</snappy-java.version>
     </properties>
 
     <dependencyManagement>
@@ -330,6 +331,11 @@
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-s3</artifactId>
                 <version>${oss.s3.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>${snappy-java.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

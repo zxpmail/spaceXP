@@ -19,7 +19,9 @@ import java.util.List;
 @ConfigurationProperties(prefix = "space.redis")
 public class RedisProperties {
 
-    private Boolean messageEnable=false;
+    private Boolean messageEnable = false;
 
-    private String topics= "TOPIC";
+    private String topics = "TOPIC";
+
+    private Boolean compressEnable = false;
 }

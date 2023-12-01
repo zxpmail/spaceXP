@@ -1,6 +1,7 @@
 package cn.piesat.framework.redis.config;
 
 
+import cn.piesat.framework.redis.core.CompressRedisSerializer;
 import cn.piesat.framework.redis.core.RedisMessageListener;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.model.MessageBody;
@@ -43,22 +44,33 @@ public class RedisConfig {
         return  new RedisService(redisTemplate);
     }
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory){
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory,RedisProperties redisProperties){
         //为了方便，一般直接使用<String,Object>
         RedisTemplate<String, Object>  redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
         // String的序列化
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        // json序列化配置
-        GenericFastJsonRedisSerializer jackson2JsonRedisSerializer = new GenericFastJsonRedisSerializer();
         //key采用String的序列化方式
         redisTemplate.setKeySerializer(stringRedisSerializer);
         //hash的key也采用String 的序列化方式
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
-        //value的序列化方式采用jackson的方式
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-        //hash的value序列化方式采用jackson
-        redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        if (redisProperties.getCompressEnable()){
+            CompressRedisSerializer<?> jsonSerializer = new CompressRedisSerializer<>(Object.class);
+            //value的序列化方式采用压缩的方式
+            redisTemplate.setValueSerializer(jsonSerializer);
+            //hash的value序列化方式采用压缩
+            redisTemplate.setHashValueSerializer(jsonSerializer);
+
+        }else{
+            // json序列化配置
+            GenericFastJsonRedisSerializer jackson2JsonRedisSerializer = new GenericFastJsonRedisSerializer();
+
+            //value的序列化方式采用jackson的方式
+            redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+            //hash的value序列化方式采用jackson
+            redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
+        }
+
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
