@@ -1,22 +1,20 @@
-package cn.piesat.tools.generator.model.entity;
+package cn.piesat.tools.generator.model.vo;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
 
 /**
  * <p/>
- * {@code @description}  :数据源实体类
+ * {@code @description}  :数据源VO实体类
  * <p/>
- * <b>@create:</b> 2023/12/4 9:32.
+ * <b>@create:</b> 2023/12/4 15:36.
  *
  * @author zhouxp
  */
 @Data
-@TableName("gen_datasource")
-public class DataSourceDO {
+public class DataSourceVO {
     /**
      * id
      */
@@ -55,13 +53,5 @@ public class DataSourceDO {
      * 用户名
      */
     private String username;
-    /**
-     * 密码
-     */
-    private String password;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
 }

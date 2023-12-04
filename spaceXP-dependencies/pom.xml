@@ -337,6 +337,11 @@
                 <artifactId>snappy-java</artifactId>
                 <version>${snappy-java.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>
