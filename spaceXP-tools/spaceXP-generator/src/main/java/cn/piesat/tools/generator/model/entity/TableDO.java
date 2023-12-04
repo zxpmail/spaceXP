@@ -1,6 +1,5 @@
 package cn.piesat.tools.generator.model.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @Data
 @TableName("gen_table")
-public class TableEntity {
+public class TableDO {
     @TableId
     private Long id;
     /**
@@ -48,5 +47,5 @@ public class TableEntity {
      * 字段列表
      */
     @TableField(exist = false)
-    private List<TableFieldEntity> fieldList;
+    private List<TableFieldDO> fieldList;
 }

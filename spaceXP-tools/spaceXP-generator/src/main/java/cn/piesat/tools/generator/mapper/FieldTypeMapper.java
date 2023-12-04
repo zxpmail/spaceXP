@@ -1,6 +1,6 @@
 package cn.piesat.tools.generator.mapper;
 
-import cn.piesat.tools.generator.model.entity.FieldTypeEntity;
+import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @author zhouxp
  */
 @Mapper
-public interface FieldTypeMapper extends BaseMapper<FieldTypeEntity> {
+public interface FieldTypeMapper extends BaseMapper<FieldTypeDO> {
 }

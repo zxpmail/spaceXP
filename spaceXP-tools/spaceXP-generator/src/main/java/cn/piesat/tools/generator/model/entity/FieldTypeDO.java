@@ -14,7 +14,7 @@ import java.util.Date;
  * @author zhouxp
  */
 @Data
-public class FieldTypeEntity {
+public class FieldTypeDO {
     /**
      * id
      */

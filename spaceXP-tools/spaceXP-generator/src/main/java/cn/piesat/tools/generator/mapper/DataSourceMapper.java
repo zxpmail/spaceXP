@@ -1,6 +1,6 @@
 package cn.piesat.tools.generator.mapper;
 
-import cn.piesat.tools.generator.model.entity.DataSourceEntity;
+import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +13,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @author zhouxp
  */
 @Mapper
-public interface DataSourceMapper extends BaseMapper<DataSourceEntity> {
+public interface DataSourceMapper extends BaseMapper<DataSourceDO> {
 }

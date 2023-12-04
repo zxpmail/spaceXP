@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @TableName("gen_table_field")
-public class TableFieldEntity {
+public class TableFieldDO {
     @TableId
     private Long id;
     /**
