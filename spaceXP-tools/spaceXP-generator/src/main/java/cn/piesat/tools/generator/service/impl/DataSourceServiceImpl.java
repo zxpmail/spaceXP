@@ -9,19 +9,25 @@ import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
 import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
+import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
+import cn.piesat.tools.generator.service.DatabaseService;
+import cn.piesat.tools.generator.utils.DbUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -33,6 +39,8 @@ import java.util.List;
  * @author zhouxp
  */
 @Service
+@AllArgsConstructor
+@Slf4j
 public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSourceDO> implements DataSourceService {
 
     /**
@@ -108,9 +116,21 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         return removeById(id);
     }
 
+    private final DatabaseService databaseService;
     @Override
     public String test(Long id) {
-        return null;
+        DataSourceDO byId = getById(id);
+        LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
+        wrapper.eq(DatabaseDO::getDbType,byId);
+        DatabaseDO one = databaseService.getOne(wrapper);
+        try {
+            DbUtils.getConnection(byId.getDbType(),one.getDriver(),byId.getConnUrl(),byId.getUsername(),byId.getPassword());
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new RuntimeException("连接失败，请检查配置信息");
+
+        }
+        return "连接成功";
     }
 
     /**
