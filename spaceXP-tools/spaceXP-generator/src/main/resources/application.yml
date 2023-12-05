@@ -10,3 +10,39 @@ spring:
     url: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
     username: root
     password: 123456
+
+#     Oracle
+#    driver-class-name: oracle.jdbc.OracleDriver
+#    url: jdbc:oracle:thin:@localhost:1521:xe
+#    username: root
+#    password: 123456
+#     SQLServer
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#    url: jdbc:sqlserver://localhost:1433;DatabaseName=xp_generator;encrypt=true;trustServerCertificate=true
+#    username: sa
+#    password: 123456
+#    postgresql
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/postgres
+#    username: postgres
+#    password: 123456
+#     达梦8
+#    driver-class-name: dm.jdbc.driver.DmDriver
+#    url: jdbc:dm://localhost:5236/xp_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+#    username: root
+#    password: 12345678
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
+  configuration-properties:
+    prefix:
+    blobType: BLOB
+    boolValue: TRUE

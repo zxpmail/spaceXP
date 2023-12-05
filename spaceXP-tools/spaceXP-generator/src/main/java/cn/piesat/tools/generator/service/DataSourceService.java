@@ -4,6 +4,7 @@ import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
+import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -33,4 +34,7 @@ public interface DataSourceService extends IService<DataSourceDO> {
     Boolean delete(Long id);
 
     String test(Long id);
+
+    List<TableDO> tableList(Long id);
+
 }

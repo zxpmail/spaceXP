@@ -18,7 +18,7 @@ public class DatabaseDO {
     /**
      * ID
      */
-    private Integer id;
+    private Long id;
     /**
      * 数据库类型
      */
