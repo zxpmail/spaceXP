@@ -108,6 +108,11 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         return removeById(id);
     }
 
+    @Override
+    public String test(Long id) {
+        return null;
+    }
+
     /**
      * 判断是否记录重复
      * @param dataSourceDTO  数据源DTO

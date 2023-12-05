@@ -31,4 +31,6 @@ public interface DataSourceService extends IService<DataSourceDO> {
     Boolean delete(List<Long> ids);
 
     Boolean delete(Long id);
+
+    String test(Long id);
 }

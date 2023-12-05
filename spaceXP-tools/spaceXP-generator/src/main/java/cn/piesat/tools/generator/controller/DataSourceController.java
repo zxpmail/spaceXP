@@ -100,4 +100,10 @@ public class DataSourceController {
         return dataSourceService.delete(id);
     }
 
+
+    @GetMapping("test/{id}")
+    public String test(@PathVariable("id") Long id) {
+        return dataSourceService.test(id);
+    }
+
 }
