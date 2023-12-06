@@ -1,7 +1,10 @@
 package cn.piesat.tools.generator.service;
 
 import cn.piesat.tools.generator.model.entity.TableDO;
+import cn.piesat.tools.generator.model.vo.TableVO;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p/>
@@ -12,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author zhouxp
  */
 public interface TableService extends IService<TableDO> {
+    void tableImport(Long datasourceId, List<TableVO> tableNameList);
 }

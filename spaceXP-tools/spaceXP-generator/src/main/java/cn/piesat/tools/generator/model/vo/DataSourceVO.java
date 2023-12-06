@@ -22,6 +22,10 @@ public class DataSourceVO {
     private Long id;
 
     /**
+     * 数据库信息ID
+     */
+    private Long databaseId;
+    /**
      * 是否是当前连接
      */
     private Integer isCurrent;

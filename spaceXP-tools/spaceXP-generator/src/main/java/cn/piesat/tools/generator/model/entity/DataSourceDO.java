@@ -31,6 +31,11 @@ public class DataSourceDO {
      * 数据库类型
      */
     private String dbType;
+
+    /**
+     * 数据库信息ID
+     */
+    private Long databaseId;
     /**
      * ip地址
      */

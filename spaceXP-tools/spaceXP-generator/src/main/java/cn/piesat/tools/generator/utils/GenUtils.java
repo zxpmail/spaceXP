@@ -2,10 +2,14 @@ package cn.piesat.tools.generator.utils;
 
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
+import cn.piesat.tools.generator.model.entity.TableFieldDO;
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.mysql.cj.AbstractQuery;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -48,5 +52,41 @@ public class GenUtils {
         }
 
         return tableList;
+    }
+
+    public static List<TableFieldDO> getTableFieldList(Connection connection, DatabaseDO databaseDO, Long tableId, String tableName) {
+        List<TableFieldDO> tableFieldList = new ArrayList<>();
+
+        try {
+            String tableFieldsSql = databaseDO.getTableFields();
+            if ("Oracle".equalsIgnoreCase(databaseDO.getDbType())) {
+                DatabaseMetaData md = connection.getMetaData();
+                tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
+            } else {
+                tableFieldsSql = String.format(tableFieldsSql, tableName);
+            }
+            PreparedStatement preparedStatement = connection.prepareStatement(tableFieldsSql);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                TableFieldDO field = new TableFieldDO();
+                field.setTableId(tableId);
+                field.setFieldName(rs.getString(databaseDO.getFieldName()));
+                String fieldType = rs.getString(databaseDO.getFieldType());
+                if (fieldType.contains(" ")) {
+                    fieldType = fieldType.substring(0, fieldType.indexOf(" "));
+                }
+                field.setFieldType(fieldType);
+                field.setFieldComment(rs.getString(databaseDO.getFieldComment()));
+                String key = rs.getString(databaseDO.getFieldKey());
+                field.setPrimaryPk(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
+
+                tableFieldList.add(field);
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return tableFieldList;
+
     }
 }
