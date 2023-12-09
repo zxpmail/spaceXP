@@ -1,13 +1,8 @@
 package cn.piesat.tools.generator.model.vo;
 
-import cn.piesat.tools.generator.model.entity.TableFieldDO;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
-import java.util.List;
+
 
 /**
  * <p/>
@@ -18,9 +13,7 @@ import java.util.List;
  * @author zhouxp
  */
 @Data
-@TableName("gen_table")
 public class TableVO {
-    @TableId
     private Long id;
     /**
      * 表名

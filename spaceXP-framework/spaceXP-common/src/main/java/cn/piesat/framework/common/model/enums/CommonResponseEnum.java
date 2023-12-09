@@ -48,6 +48,8 @@ public enum CommonResponseEnum implements IBaseResponse {
     RECORD_REPEAT(CommonProperties.ResponseCode.recordRepeatCode,CommonProperties.ResponseCode.recordRepeatValue),
 
     QUERY_DATA(CommonProperties.ResponseCode.queryDataErrorCode,CommonProperties.ResponseCode.queryDataErrorValue),
+
+    DATASOURCE_ERROR(CommonProperties.ResponseCode.datasourceErrorCode,CommonProperties.ResponseCode.datasourceErrorValue),
     ;
     /**
      * 响应状态码

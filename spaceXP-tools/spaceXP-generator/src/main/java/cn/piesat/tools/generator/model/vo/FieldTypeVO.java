@@ -1,4 +1,4 @@
-package cn.piesat.tools.generator.model.query;
+package cn.piesat.tools.generator.model.vo;
 
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;

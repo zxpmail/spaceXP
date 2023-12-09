@@ -26,6 +26,7 @@
         <module>spaceXP-spring-boot-starter-permission-url</module>
         <module>spaceXP-spring-boot-starter-permission-data</module>
         <module>spaceXP-spring-boot-starter-multi-tenant</module>
+        <module>spaceXP-spring-boot-starter-dynamic-datasource</module>
     </modules>
     <dependencies>
         <dependency>

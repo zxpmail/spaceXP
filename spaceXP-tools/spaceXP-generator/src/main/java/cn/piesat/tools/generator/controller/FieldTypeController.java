@@ -4,10 +4,9 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.dto.FieldTypeDTO;
 import cn.piesat.tools.generator.model.query.FieldTypeQuery;
-import cn.piesat.tools.generator.model.vo.DataSourceVO;
+import cn.piesat.tools.generator.model.vo.FieldTypeVO;
 import cn.piesat.tools.generator.service.FieldTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -52,7 +51,7 @@ public class FieldTypeController {
      * @return 字段类型实体
      */
     @GetMapping("/info/{id}")
-    public DataSourceVO info(@PathVariable("id") Long id){
+    public FieldTypeVO info(@PathVariable("id") Long id){
         return fieldTypeService.info(id);
     }
 

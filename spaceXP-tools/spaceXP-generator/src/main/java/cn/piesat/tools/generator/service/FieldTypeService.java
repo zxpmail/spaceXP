@@ -5,7 +5,7 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.tools.generator.model.dto.FieldTypeDTO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.query.FieldTypeQuery;
-import cn.piesat.tools.generator.model.query.FieldTypeVO;
+import cn.piesat.tools.generator.model.vo.FieldTypeVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

@@ -11,11 +11,7 @@
     <name>spaceXP-generator</name>
     <description>spaceXP-generator</description>
     <properties>
-        <oracle.version>11.2.0.3</oracle.version>
-        <dameng.version>8.1.2.192</dameng.version>
-        <clickhouse.version>0.5.0</clickhouse.version>
-        <postgres.version>42.6.0</postgres.version>
-        <sqlserver.version>12.4.2.jre8</sqlserver.version>
+
     </properties>
     <dependencies>
         <dependency>
@@ -25,7 +21,6 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
-            <version>${oracle.version}</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
@@ -34,22 +29,18 @@
         <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
-            <version>${sqlserver.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgres.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dameng</groupId>
             <artifactId>DmJdbcDriver18</artifactId>
-            <version>${dameng.version}</version>
         </dependency>
         <dependency>
             <groupId>com.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>
-            <version>${clickhouse.version}</version>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>

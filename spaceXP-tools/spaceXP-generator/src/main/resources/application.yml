@@ -4,6 +4,8 @@ server:
     context-path: gen
 
 spring:
+  jackson:
+    default-property-inclusion: non_null
   datasource:
     # MySQL
     driver-class-name: com.mysql.cj.jdbc.Driver

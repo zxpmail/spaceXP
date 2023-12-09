@@ -51,7 +51,7 @@ public class MybatisPlusConfig {
                     new DynamicTableNameHandler(dynamicTableNameProperties.getTablePrefix()));
             interceptor.addInnerInterceptor(dynamicTableNameInnerInterceptor);
         }
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.getDbType(mybatisPlusConfigProperties.getDbType())));
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return interceptor;
     }
     @Bean

@@ -102,6 +102,28 @@ public final class CommonProperties {
 
         public static Integer queryDataErrorCode =505;
         public static String queryDataErrorValue ="数据处理错误";
+
+        public static Integer datasourceErrorCode =516;
+
+        public  static String datasourceErrorValue ="数据源错误";
+
+        public  Integer getDatasourceErrorCode() {
+            return datasourceErrorCode;
+        }
+
+        public  void setDatasourceErrorCode(Integer datasourceErrorCode) {
+            ResponseCode.datasourceErrorCode = datasourceErrorCode;
+        }
+
+        public  String getDatasourceErrorValue() {
+            return datasourceErrorValue;
+        }
+
+        public  void setDatasourceErrorValue(String datasourceErrorValue) {
+            ResponseCode.datasourceErrorValue = datasourceErrorValue;
+        }
+
+
         public  Integer getSuccessCode() {
             return successCode;
         }

@@ -23,6 +23,7 @@
         <module>spaceXP-spring-boot-tests-permission-url</module>
         <module>spaceXP-spring-boot-tests-permission-data</module>
         <module>spaceXP-spring-boot-tests-multi-tenant</module>
+        <module>spaceXP-spring-boot-tests-dynamic-datasource</module>
     </modules>
     <dependencyManagement>
         <dependencies>

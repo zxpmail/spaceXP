@@ -10,7 +10,7 @@ import cn.piesat.tools.generator.mapper.FieldTypeMapper;
 import cn.piesat.tools.generator.model.dto.FieldTypeDTO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.query.FieldTypeQuery;
-import cn.piesat.tools.generator.model.query.FieldTypeVO;
+import cn.piesat.tools.generator.model.vo.FieldTypeVO;
 import cn.piesat.tools.generator.service.FieldTypeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
