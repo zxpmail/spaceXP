@@ -1,4 +1,4 @@
-package cn.piesat.framework.dynamic.annotation;
+package cn.piesat.framework.dynamic.datasource.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

@@ -1,6 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.core;
 
-import cn.piesat.framework.dynamic.annotation.DS;
+import cn.piesat.framework.dynamic.datasource.annotation.DS;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,7 +8,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
@@ -25,7 +24,7 @@ import java.util.Objects;
 @Slf4j
 public class DSAspect {
 
-    @Pointcut("@annotation(cn.piesat.framework.dynamic.annotation.DS)")
+    @Pointcut("@annotation(cn.piesat.framework.dynamic.datasource.annotation.DS)")
     public void dynamicDataSource(){}
 
     @Around("dynamicDataSource()")
@@ -35,6 +34,8 @@ public class DSAspect {
         DS ds = method.getAnnotation(DS.class);
         if (Objects.nonNull(ds)){
             DataSourceContextHolder.setDataSource(ds.value());
+        }else {
+            DataSourceContextHolder.setDataSource("__master");
         }
         try {
             return point.proceed();
