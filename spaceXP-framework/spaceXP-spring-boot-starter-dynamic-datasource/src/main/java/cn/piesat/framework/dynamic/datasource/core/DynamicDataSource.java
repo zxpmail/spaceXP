@@ -56,6 +56,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         DataSource test = test(dataSourceEntity);
         if (!existsDataSource(dataSourceEntity.getKey())) {
             targetDataSourceMap.put(dataSourceEntity.getKey(), test);
+            super.afterPropertiesSet();
             return true;
         }
         return false;

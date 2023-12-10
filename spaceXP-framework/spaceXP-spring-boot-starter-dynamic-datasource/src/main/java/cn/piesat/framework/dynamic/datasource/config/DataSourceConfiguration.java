@@ -1,5 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.config;
 
+import cn.piesat.framework.dynamic.datasource.core.DSAspect;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperties;
@@ -9,6 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.util.CollectionUtils;
 
 import javax.sql.DataSource;
@@ -33,13 +35,21 @@ public class DataSourceConfiguration {
     }
 
     @Bean(name = "dynamicDataSource")
+    @Primary
     public DynamicDataSource createDynamicDataSource(DataSource masterDataSource,DataSourceProperties dataSourceProperties){
         Map<Object,Object> dataSourceMap = new HashMap<>();
         dataSourceMap.put("__master",masterDataSource);
-        for (DataSourceEntity dss : dataSourceProperties.getDss()) {
-            DataSource test = DataSourceUtils.test(dss);
-            dataSourceMap.put(dss.getKey(),test);
+        if(!CollectionUtils.isEmpty(dataSourceProperties.getDss())){
+            for (Map.Entry<String, DataSourceEntity> entry : dataSourceProperties.getDss().entrySet()) {
+                DataSource test = DataSourceUtils.test(entry.getValue());
+                dataSourceMap.put(entry.getKey(),test);
+            }
+
         }
         return new DynamicDataSource(masterDataSource,dataSourceMap);
+    }
+    @Bean
+    public DSAspect dSAspect(){
+        return new DSAspect();
     }
 }

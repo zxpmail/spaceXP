@@ -8,10 +8,10 @@
     <modelVersion>4.0.0</modelVersion>
 
 
-    <artifactId>spaceXP-spring-boot-tests-permission-data</artifactId>
+    <artifactId>spaceXP-spring-boot-tests-dynamic-datasource</artifactId>
     <packaging>jar</packaging>
 
-    <name>spaceXP-spring-boot-tests-permission-data</name>
+    <name>spaceXP-spring-boot-tests-dynamic-datasource</name>
 
     <dependencies>
         <dependency>
@@ -24,11 +24,17 @@
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
-            <artifactId>spaceXP-spring-boot-starter-permission-data</artifactId>
+            <artifactId>spaceXP-spring-boot-starter-dynamic-datasource</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-spring-boot-starter-mybatis-plus</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
         </dependency>
+
     </dependencies>
 </project>

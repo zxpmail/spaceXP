@@ -1,0 +1,23 @@
+spring:
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/test1?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+space:
+  datasource:
+    dss:
+      master:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/test1?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+        key: master
+      slave:
+        driverClassName: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3307/test?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
