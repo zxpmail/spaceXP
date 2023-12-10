@@ -31,6 +31,7 @@ spaceXP-tools 工具集合
 10. spaceXP-spring-boot-starter-permission-url url权限拦截
 11. spaceXP-spring-boot-starter-permission-data 数据权限
 12. spaceXP-spring-boot-starter-multi-tenant 多租户组件
+13. spaceXP-spring-boot-starter-dynamic-datasource 动态增加数据源
 
 
 
