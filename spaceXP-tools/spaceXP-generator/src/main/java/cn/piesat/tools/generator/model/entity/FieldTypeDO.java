@@ -14,12 +14,8 @@ import java.util.Date;
  * @author zhouxp
  */
 @Data
-public class FieldTypeDO {
-    /**
-     * id
-     */
-    @TableId
-    private Long id;
+public class FieldTypeDO extends BaseDO{
+
     /**
      * 字段类型
      */
@@ -38,8 +34,5 @@ public class FieldTypeDO {
      */
     private Integer isList;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+
 }

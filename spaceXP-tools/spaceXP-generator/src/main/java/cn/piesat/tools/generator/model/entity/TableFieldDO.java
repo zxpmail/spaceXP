@@ -1,6 +1,5 @@
 package cn.piesat.tools.generator.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -14,9 +13,8 @@ import lombok.Data;
  */
 @Data
 @TableName("gen_table_field")
-public class TableFieldDO {
-    @TableId
-    private Long id;
+public class TableFieldDO extends BaseDO{
+
     /**
      * 表ID
      */

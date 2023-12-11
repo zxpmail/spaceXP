@@ -16,12 +16,7 @@ import java.util.Date;
  */
 @Data
 @TableName("gen_project")
-public class ProjectDO {
-    /**
-     * id
-     */
-    @TableId
-    private Long id;
+public class ProjectDO extends BaseDO{
 
     /**
      * 项目名
@@ -73,13 +68,4 @@ public class ProjectDO {
      */
     private Integer port;
 
-    /**
-     * 是否当前项目 1为当前 0为否
-     */
-    private Integer isCurrent;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 }

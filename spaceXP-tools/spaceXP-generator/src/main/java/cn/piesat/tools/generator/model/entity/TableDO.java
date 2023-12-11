@@ -18,9 +18,8 @@ import java.util.List;
  */
 @Data
 @TableName("gen_table")
-public class TableDO {
-    @TableId
-    private Long id;
+public class TableDO extends BaseDO{
+
     /**
      * 表名
      */
@@ -39,10 +38,6 @@ public class TableDO {
      */
     private Long datasourceId;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
     /**
      * 字段列表
      */

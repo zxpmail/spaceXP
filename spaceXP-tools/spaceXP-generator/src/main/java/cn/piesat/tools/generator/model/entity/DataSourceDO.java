@@ -16,17 +16,8 @@ import java.util.Date;
  */
 @Data
 @TableName("gen_datasource")
-public class DataSourceDO {
-    /**
-     * id
-     */
-    @TableId
-    private Long id;
+public class DataSourceDO extends BaseDO {
 
-    /**
-     * 是否是当前连接
-     */
-    private Integer isCurrent;
     /**
      * 数据库类型
      */
@@ -36,18 +27,7 @@ public class DataSourceDO {
      * 数据库信息ID
      */
     private Long databaseId;
-    /**
-     * ip地址
-     */
-    private String ipAddr;
-    /**
-     * 端口
-     */
-    private Integer port;
-    /**
-     * 数据库名称
-     */
-    private String databaseName;
+
     /**
      * 连接名
      */
@@ -64,9 +44,5 @@ public class DataSourceDO {
      * 密码
      */
     private String password;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
 }

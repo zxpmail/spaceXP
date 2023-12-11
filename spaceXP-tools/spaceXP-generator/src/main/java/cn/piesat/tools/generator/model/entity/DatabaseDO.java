@@ -14,11 +14,8 @@ import java.time.LocalDateTime;
  * @author zhouxp
  */
 @Data
-public class DatabaseDO {
-    /**
-     * ID
-     */
-    private Long id;
+public class DatabaseDO extends BaseDO{
+
     /**
      * 数据库类型
      */
@@ -70,19 +67,9 @@ public class DatabaseDO {
     /**
      * url前缀
      */
-    private String urlPrefix;
-    /**
-     * url中缀
-     */
-    private String urlInfix;
-    /**
-     * url后缀
-     */
-    private String urlSuffix;
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
+    private String url;
+
+
 
     public String tableSql(String tableName) {
         StringBuilder sql = new StringBuilder(getTableSql());
