@@ -62,6 +62,19 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return false;
     }
     /**
+     * 删除数据源
+     * @param key        数据源保存的key
+     * @return 返回结果，true：增加成功，false：存在
+     */
+    public Boolean delete(String key) {
+        if (!existsDataSource(key)) {
+            targetDataSourceMap.remove(key);
+            super.afterPropertiesSet();
+            return true;
+        }
+        return false;
+    }
+    /**
      * 增加数据源
      *
      * @param dataSource 数据源
@@ -71,6 +84,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     public Boolean add(DataSource dataSource, String key) {
         if (!existsDataSource(key)) {
             targetDataSourceMap.put(key, dataSource);
+            super.afterPropertiesSet();
             return true;
         }
         return false;
