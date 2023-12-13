@@ -70,14 +70,6 @@ public class DatabaseVO {
     /**
      * url前缀
      */
-    private String urlPrefix;
-    /**
-     * url中缀
-     */
-    private String urlInfix;
-    /**
-     * url后缀
-     */
-    private String urlSuffix;
+    private String url;
 
 }

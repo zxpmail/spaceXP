@@ -1,9 +1,8 @@
 package cn.piesat.tools.generator.model.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springframework.util.StringUtils;
-
-import java.time.LocalDateTime;
 
 /**
  * <p/>
@@ -14,6 +13,7 @@ import java.time.LocalDateTime;
  * @author zhouxp
  */
 @Data
+@TableName("gen_database")
 public class DatabaseDO extends BaseDO{
 
     /**

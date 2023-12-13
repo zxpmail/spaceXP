@@ -3,9 +3,7 @@ package cn.piesat.tools.generator.utils;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.mysql.cj.AbstractQuery;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 /**
  * <p/>
- * {@code @description}  :数据源Mapper
+ * {@code @description}  :数据库信息Mapper
  * <p/>
  * <b>@create:</b> 2023/12/4 11:29.
  *
