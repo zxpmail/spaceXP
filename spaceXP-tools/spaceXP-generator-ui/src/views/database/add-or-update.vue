@@ -98,10 +98,17 @@ const getDataSource = (id) => {
 
 const dataRules = ref({
 	dbType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	connName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	connUrl: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	username: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  driver: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	url: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  fieldName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  fieldType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  tableFields: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  fieldComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  fieldKey: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  tableSql: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  tableNameSql: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
