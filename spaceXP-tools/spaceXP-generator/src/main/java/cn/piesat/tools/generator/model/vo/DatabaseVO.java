@@ -1,5 +1,7 @@
 package cn.piesat.tools.generator.model.vo;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -18,7 +20,8 @@ public class DatabaseVO {
     /**
      * ID
      */
-    private Integer id;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
     /**
      * 数据库类型
      */

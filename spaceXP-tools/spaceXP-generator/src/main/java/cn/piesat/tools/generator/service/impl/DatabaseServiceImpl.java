@@ -33,7 +33,7 @@ public class DatabaseServiceImpl extends ServiceImpl<DatabaseMapper, DatabaseDO>
 
     @Override
     public List<DatabaseVO> all() {
-        List<DatabaseDO> list = list(Wrappers.<DatabaseDO>lambdaQuery().select(BaseDO::getId, DatabaseDO::getDbType, DatabaseDO::getDriver, DatabaseDO::getUrl));
+        List<DatabaseDO> list = list(Wrappers.<DatabaseDO>lambdaQuery().select(DatabaseDO::getId, DatabaseDO::getDbType, DatabaseDO::getDriver, DatabaseDO::getUrl));
         if(CollectionUtils.isEmpty(list)){
             return null;
         }

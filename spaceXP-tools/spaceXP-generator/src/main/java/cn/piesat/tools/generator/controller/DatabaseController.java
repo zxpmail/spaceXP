@@ -4,6 +4,8 @@ import cn.piesat.tools.generator.model.vo.DatabaseVO;
 import cn.piesat.tools.generator.service.DatabaseService;
 import lombok.AllArgsConstructor;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("database")
 @AllArgsConstructor
+@CrossOrigin
 public class DatabaseController {
     private final DatabaseService databaseService;
 
@@ -36,21 +39,21 @@ public class DatabaseController {
 
     @PostMapping("add")
     public Boolean add(@RequestBody DatabaseVO databaseVO){
-        return databaseService.add(databaseVO)
+        return databaseService.add(databaseVO);
     }
 
     @PutMapping("update")
     public Boolean update(@RequestBody DatabaseVO databaseVO){
-        return databaseService.update(databaseVO)
+        return databaseService.update(databaseVO);
     }
 
-    @PutMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     public Boolean delete(@PathVariable("id") Long id){
-        return databaseService.delete(id)
+        return databaseService.delete(id);
     }
 
-    @PutMapping("info/{id}")
-    public Boolean info(@PathVariable("id") Long id){
-        return databaseService.info(id)
+    @GetMapping("info/{id}")
+    public DatabaseVO info(@PathVariable("id") Long id){
+        return databaseService.info(id);
     }
 }

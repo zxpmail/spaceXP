@@ -18,6 +18,15 @@ export const menuRoutes = [
 				}
 			},
 			{
+				path: '/database',
+				name: 'Database',
+				component: () => import('../views/database/index.vue'),
+				meta: {
+					title: '数据库管理',
+					icon: 'icon-control'
+				}
+			},
+			{
 				path: '/gen/datasource',
 				name: 'DataSource',
 				component: () => import('../views/datasource/index.vue'),

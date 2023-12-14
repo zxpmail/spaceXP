@@ -1,7 +1,7 @@
 server:
   port: 8888
   servlet:
-    context-path: gen
+    context-path: /generator
 
 spring:
   jackson:

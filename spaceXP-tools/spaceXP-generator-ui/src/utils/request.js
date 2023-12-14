@@ -37,14 +37,14 @@ service.interceptors.response.use(
 
 		const res = response.data
 		// 响应成功
-		if (res.code === 0) {
+		if (res.code === 200) {
 			return res
 		}
 
 		// 错误提示
-		ElMessage.error(res.msg)
+		ElMessage.error(res.message)
 
-		return Promise.reject(new Error(res.msg || 'Error'))
+		return Promise.reject(new Error(res.message || 'Error'))
 	},
 	error => {
 		ElMessage.error(error.message)

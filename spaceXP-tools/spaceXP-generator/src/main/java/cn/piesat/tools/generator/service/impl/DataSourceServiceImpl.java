@@ -88,11 +88,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
         wrapper.eq(DatabaseDO::getDbType,dataSourceDTO.getDbType());
         DatabaseDO one = databaseService.getOne(wrapper);
-        return one.getUrlPrefix() + ":" +
-                dataSourceDTO.getPort() +
-                one.getUrlInfix() +
-                dataSourceDTO.getDatabaseName() +
-                one.getUrlSuffix();
+        return one.getUrl();
     }
     /**
      * 更新数据源

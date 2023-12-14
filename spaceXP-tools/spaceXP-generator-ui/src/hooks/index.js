@@ -44,7 +44,6 @@ export const useCrud = (options) => {
 		if (!state.dataListUrl) {
 			return
 		}
-
 		state.dataListLoading = true
 
 		service
@@ -111,6 +110,7 @@ export const useCrud = (options) => {
 			type: 'warning'
 		})
 			.then(() => {
+				debugger
 				service.delete(state.deleteUrl + '/' + key).then(() => {
 					ElMessage.success('删除成功')
 
