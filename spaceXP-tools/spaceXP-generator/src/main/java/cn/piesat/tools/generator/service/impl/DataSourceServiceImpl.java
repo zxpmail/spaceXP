@@ -7,7 +7,6 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
-import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
@@ -30,7 +29,9 @@ import org.springframework.util.StringUtils;
 
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p/>
@@ -57,7 +58,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
                 QueryUtils.getPage(pageBean),
                 getWrapper(dataSourceQuery)
         );
-        return new PageResult(page.getTotal(), page.getRecords());
+        if(CollectionUtils.isEmpty(page.getRecords())){
+            return new PageResult(page.getTotal(), new ArrayList<>());
+        }
+        return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(),DataSourceVO::new));
     }
 
     /**
@@ -68,38 +72,33 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
     @Override
     public DataSourceVO info(Long id) {
         DataSourceDO dataSourceDO = this.getById(id);
+        if(Objects.isNull(dataSourceDO)){
+            return null;
+        }
         return CopyBeanUtils.copy(dataSourceDO,DataSourceVO::new);
     }
 
     /**
      * 新增数据源
-     * @param dataSourceDTO 数据源DTO
+     * @param dataSourceVO 数据源DTO
      * @return 成功true 失败false
      */
     @Override
-    public Boolean add(DataSourceDTO dataSourceDTO) {
-        repeat(dataSourceDTO);
-        DataSourceDO copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceDO::new);
-        copy.setConnUrl(genConnUrl(dataSourceDTO));
+    public Boolean add(DataSourceVO dataSourceVO) {
+        repeat(dataSourceVO);
+        DataSourceDO copy = CopyBeanUtils.copy(dataSourceVO, DataSourceDO::new);
         return save(copy);
     }
 
-    private String genConnUrl(DataSourceDTO dataSourceDTO){
-        LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
-        wrapper.eq(DatabaseDO::getDbType,dataSourceDTO.getDbType());
-        DatabaseDO one = databaseService.getOne(wrapper);
-        return one.getUrl();
-    }
     /**
      * 更新数据源
-     * @param dataSourceDTO 数据源DTO
+     * @param dataSourceVO 数据源DTO
      * @return  成功true 失败false
      */
     @Override
-    public Boolean update(DataSourceDTO dataSourceDTO) {
-        DataSourceDO byId = getById(dataSourceDTO.getId());
-        BeanUtils.copyProperties(dataSourceDTO,byId,CopyBeanUtils.getNullPropertyNames(dataSourceDTO));
-        byId.setConnUrl(genConnUrl(dataSourceDTO));
+    public Boolean update(DataSourceVO dataSourceVO) {
+        DataSourceDO byId = getById(dataSourceVO.getId());
+        BeanUtils.copyProperties(dataSourceVO,byId,CopyBeanUtils.getNullPropertyNames(dataSourceVO));
         return save(byId);
     }
 
@@ -163,11 +162,11 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
 
     /**
      * 判断是否记录重复
-     * @param dataSourceDTO  数据源DTO
+     * @param dataSourceVO  数据源DTO
      */
-    private void repeat(DataSourceDTO dataSourceDTO){
+    private void repeat(DataSourceVO dataSourceVO){
         LambdaQueryWrapper<DataSourceDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataSourceDO::getConnName,dataSourceDTO.getConnName());
+        wrapper.eq(DataSourceDO::getConnName,dataSourceVO.getConnName());
         if (count(wrapper)>0){
             throw new BaseException(CommonResponseEnum.RECORD_REPEAT);
         }

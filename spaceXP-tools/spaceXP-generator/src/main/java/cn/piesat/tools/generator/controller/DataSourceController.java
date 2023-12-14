@@ -4,16 +4,15 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("datasource")
 @AllArgsConstructor
+@CrossOrigin
 public class DataSourceController {
     private final DataSourceService dataSourceService;
 
@@ -62,22 +62,22 @@ public class DataSourceController {
 
     /**
      * 新增数据源
-     * @param dataSourceDTO 数据源DTO
+     * @param dataSourceVO 数据源DTO
      * @return 成功true 失败false
      */
     @PostMapping("add")
-    public Boolean add(@Validated(AddGroup.class) @RequestBody DataSourceDTO dataSourceDTO) {
-        return dataSourceService.add(dataSourceDTO);
+    public Boolean add(@Validated(AddGroup.class) @RequestBody DataSourceVO dataSourceVO) {
+        return dataSourceService.add(dataSourceVO);
     }
 
     /**
      * 更新数据源
-     * @param dataSourceDTO 数据源DTO
+     * @param dataSourceVO 数据源DTO
      * @return  成功true 失败false
      */
     @PutMapping ("update")
-    public Boolean update(@Validated(UpdateGroup.class) @RequestBody DataSourceDTO dataSourceDTO) {
-        return dataSourceService.update(dataSourceDTO);
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody DataSourceVO dataSourceVO) {
+        return dataSourceService.update(dataSourceVO);
     }
 
     /**

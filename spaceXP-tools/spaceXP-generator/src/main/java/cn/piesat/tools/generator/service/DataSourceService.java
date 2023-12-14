@@ -2,7 +2,6 @@ package cn.piesat.tools.generator.service;
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
@@ -25,9 +24,9 @@ public interface DataSourceService extends IService<DataSourceDO> {
 
     DataSourceVO info(Long id);
 
-    Boolean add(DataSourceDTO dataSourceDTO);
+    Boolean add(DataSourceVO dataSourceVO);
 
-    Boolean update(DataSourceDTO dataSourceDTO);
+    Boolean update(DataSourceVO dataSourceVO);
 
     Boolean delete(List<Long> ids);
 
