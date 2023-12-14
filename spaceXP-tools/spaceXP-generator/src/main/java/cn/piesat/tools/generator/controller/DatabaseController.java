@@ -1,9 +1,12 @@
 package cn.piesat.tools.generator.controller;
 
+import cn.piesat.framework.common.annotation.validator.group.AddGroup;
+import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.tools.generator.model.vo.DatabaseVO;
 import cn.piesat.tools.generator.service.DatabaseService;
 import lombok.AllArgsConstructor;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,12 +41,12 @@ public class DatabaseController {
     }
 
     @PostMapping("add")
-    public Boolean add(@RequestBody DatabaseVO databaseVO){
+    public Boolean add(@Validated(AddGroup.class)  @RequestBody DatabaseVO databaseVO){
         return databaseService.add(databaseVO);
     }
 
     @PutMapping("update")
-    public Boolean update(@RequestBody DatabaseVO databaseVO){
+    public Boolean update(@Validated(UpdateGroup.class)  @RequestBody DatabaseVO databaseVO){
         return databaseService.update(databaseVO);
     }
 
