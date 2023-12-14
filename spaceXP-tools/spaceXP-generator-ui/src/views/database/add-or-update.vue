@@ -101,7 +101,7 @@ const dataRules = ref({
   driver: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	url: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-  tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   fieldName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   fieldType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   tableFields: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
