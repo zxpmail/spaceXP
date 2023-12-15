@@ -82,7 +82,6 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
 
     @Override
     public Boolean delete(List<Long> ids) {
-
         return removeBatchByIds(ids);
     }
 

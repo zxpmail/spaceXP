@@ -4,8 +4,8 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.tools.generator.model.query.FieldTypeQuery;
-import cn.piesat.tools.generator.model.vo.FieldTypeVO;
+import cn.piesat.tools.generator.model.query.ProjectQuery;
+import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.service.ProjectService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -36,12 +36,12 @@ public class ProjectController {
     /**
      * 分页查询
      * @param pageBean 分页实体类
-     * @param fieldTypeQuery 字段类型参数
+     * @param projectQuery 字段类型参数
      * @return 查询结果
      */
     @PostMapping("list")
-    public PageResult page(PageBean pageBean, @RequestBody FieldTypeQuery fieldTypeQuery) {
-        return projectService.list(pageBean,fieldTypeQuery);
+    public PageResult page(PageBean pageBean, @RequestBody ProjectQuery projectQuery) {
+        return projectService.list(pageBean,projectQuery);
     }
 
     /**
@@ -50,29 +50,29 @@ public class ProjectController {
      * @return 字段类型实体
      */
     @GetMapping("/info/{id}")
-    public FieldTypeVO info(@PathVariable("id") Long id){
+    public ProjectVO info(@PathVariable("id") Long id){
         return projectService.info(id);
     }
 
 
     /**
      * 新增字段类型
-     * @param fieldTypeVO 数据源DTO
+     * @param projectVO 数据源DTO
      * @return 成功true 失败false
      */
     @PostMapping("add")
-    public Boolean add(@Validated(AddGroup.class) @RequestBody FieldTypeVO fieldTypeVO) {
-        return projectService.add(fieldTypeVO);
+    public Boolean add(@Validated(AddGroup.class) @RequestBody ProjectVO projectVO) {
+        return projectService.add(projectVO);
     }
 
     /**
      * 更新字段类型
-     * @param fieldTypeVO 字段类型DTO
+     * @param projectVO 字段类型DTO
      * @return  成功true 失败false
      */
     @PutMapping("update")
-    public Boolean update(@Validated(UpdateGroup.class) @RequestBody FieldTypeVO fieldTypeVO) {
-        return projectService.update(fieldTypeVO);
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody  ProjectVO projectVO) {
+        return projectService.update(projectVO);
     }
 
     /**

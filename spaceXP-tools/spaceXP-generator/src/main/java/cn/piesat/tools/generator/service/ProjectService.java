@@ -3,8 +3,8 @@ package cn.piesat.tools.generator.service;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.tools.generator.model.entity.ProjectDO;
-import cn.piesat.tools.generator.model.query.FieldTypeQuery;
-import cn.piesat.tools.generator.model.vo.FieldTypeVO;
+import cn.piesat.tools.generator.model.query.ProjectQuery;
+import cn.piesat.tools.generator.model.vo.ProjectVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -18,13 +18,13 @@ import java.util.List;
  * @author zhouxp
  */
 public interface ProjectService extends IService<ProjectDO> {
-    PageResult list(PageBean pageBean, FieldTypeQuery fieldTypeQuery);
+    PageResult list(PageBean pageBean, ProjectQuery fieldTypeQuery);
 
-    FieldTypeVO info(Long id);
+    ProjectVO info(Long id);
 
-    Boolean add(FieldTypeVO fieldTypeVO);
+    Boolean add(ProjectVO fieldTypeVO);
 
-    Boolean update(FieldTypeVO fieldTypeVO);
+    Boolean update(ProjectVO fieldTypeVO);
 
     Boolean delete(List<Long> ids);
 

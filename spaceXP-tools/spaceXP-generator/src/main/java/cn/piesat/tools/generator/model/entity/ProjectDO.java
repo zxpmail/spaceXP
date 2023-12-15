@@ -24,14 +24,9 @@ public class ProjectDO extends BaseDO{
     private String name;
 
     /**
-     * 是否是项目 1是 0 否
-     */
-    private Integer isProject;
-
-    /**
      * 项目类型
      */
-    private String projectType;
+    private String type;
 
     /**
      * 组织机构ID

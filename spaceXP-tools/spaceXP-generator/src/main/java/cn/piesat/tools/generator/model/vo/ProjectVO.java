@@ -35,18 +35,14 @@ public class ProjectVO {
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String name;
 
-    /**
-     * 是否是项目 1是 0 否
-     */
-    @NotNull(message = "是否生成项目不能为空", groups ={AddGroup.class,UpdateGroup.class})
-    private Integer isProject;
+
 
     /**
      * 项目类型
      */
     @NotBlank(message = "项目类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
-    private String projectType;
+    private String type;
 
     /**
      * 组织机构ID
