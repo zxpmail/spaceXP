@@ -1,11 +1,11 @@
 import service from '@/utils/request'
 
-export const useDataSourceTestApi = (id) => {
-	return service.get('/datasource/test/' + id)
+export const useDataSourceTestApi = (data) => {
+	return service.post('/datasource/test' , data)
 }
 
 export const useDataSourceApi = (id) => {
-	return service.get('/datasource/' + id)
+	return service.get('/datasource/info/' + id)
 }
 
 export const useDataSourceListApi = () => {

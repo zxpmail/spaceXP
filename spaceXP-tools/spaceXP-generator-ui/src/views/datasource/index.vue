@@ -11,7 +11,7 @@
         >
           <el-option
             :label="item.dbType"
-            :value="item"
+            :value="item.dbType"
             v-for="(item) in state.database"
             :key="item.dbType"
             ></el-option>
@@ -36,7 +36,7 @@
 			<el-table-column prop="username" label="用户名" header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="170">
 				<template #default="scope">
-					<el-button type="primary" link @click="datasourceHandle(scope.row.id)">测试</el-button>
+					<el-button type="primary" link @click="datasourceHandle(scope.row)">测试</el-button>
 					<el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">编辑</el-button>
 					<el-button type="primary" link @click="deleteBatchHandle(scope.row.id)">删除</el-button>
 				</template>
@@ -68,7 +68,7 @@ import AddOrUpdate from './add-or-update.vue'
 
 const state = reactive({
 	dataListUrl: '/datasource/list',
-	deleteUrl: '/datasource/',
+	deleteUrl: '/datasource/delete',
 	queryForm: {
 		connName: '',
 		dbType: ''
@@ -76,9 +76,9 @@ const state = reactive({
   database:[]
 })
 
-const datasourceHandle = (id) => {
-	useDataSourceTestApi(id).then((res) => {
-		ElMessage.success(res.data)
+const datasourceHandle = (data) => {
+	useDataSourceTestApi(data).then((res) => {
+		ElMessage.success(res.message)
 	})
 }
 const databaseHandle = () => {

@@ -47,12 +47,12 @@ export const useCrud = (options) => {
 		state.dataListLoading = true
 
 		service
-			.post(state.dataListUrl, {
+			.post(state.dataListUrl, state.queryForm,{
 				params: {
 					page: state.isPage ? state.page : null,
 					limit: state.isPage ? state.size : null,
-				}
-			},state.queryForm)
+				},
+			})
 			.then((res) => {
 				state.dataList = state.isPage ? res.data.list : res.data
 				state.total = state.isPage ? res.data.total : 0

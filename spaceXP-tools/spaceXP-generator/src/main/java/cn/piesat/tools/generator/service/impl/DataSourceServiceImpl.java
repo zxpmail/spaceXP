@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 
@@ -105,7 +106,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         datasourceTest(dataSourceVO);
         DataSourceDO byId = getById(dataSourceVO.getId());
         BeanUtils.copyProperties(dataSourceVO,byId,CopyBeanUtils.getNullPropertyNames(dataSourceVO));
-        return save(byId);
+        return updateById(byId);
     }
 
     /**
@@ -116,10 +117,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
 
     @Override
     public Boolean delete(List<Long> ids) {
-        if(CollectionUtils.isEmpty(ids)){
-            return true;
+        for (Long id : ids) {
+            delete(id);
         }
-        return removeBatchByIds(ids);
+        return true;
     }
 
     /**
@@ -129,6 +130,11 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
      */
     @Override
     public Boolean delete(Long id) {
+        DataSourceDO byId = getById(id);
+        if(ObjectUtils.isEmpty(byId)){
+            return false;
+        }
+        dynamicDataSource.delete(byId.getConnName());
         return removeById(id);
     }
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class DataSourceController {
      * @return 查询结果
      */
     @PostMapping("list")
-    public PageResult page(PageBean pageBean, @RequestBody DataSourceQuery dataSourceQuery) {
+    public PageResult page( PageBean pageBean, @RequestBody DataSourceQuery dataSourceQuery) {
         return dataSourceService.list(pageBean,dataSourceQuery);
     }
 
@@ -102,7 +103,7 @@ public class DataSourceController {
     }
 
 
-    @PostMapping("test}")
+    @PostMapping("test")
     public Boolean test(@Validated(UpdateGroup.class) @RequestBody DataSourceVO dataSourceVO) {
         return dataSourceService.test(dataSourceVO);
     }
