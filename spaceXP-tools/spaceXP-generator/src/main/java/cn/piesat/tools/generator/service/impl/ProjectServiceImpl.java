@@ -3,7 +3,6 @@ package cn.piesat.tools.generator.service.impl;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.tools.generator.mapper.ProjectMapper;
-import cn.piesat.tools.generator.model.dto.FieldTypeDTO;
 import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.query.FieldTypeQuery;
 import cn.piesat.tools.generator.model.vo.FieldTypeVO;
@@ -34,12 +33,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     }
 
     @Override
-    public Boolean add(FieldTypeDTO fieldTypeDTO) {
+    public Boolean add(FieldTypeVO fieldTypeVO) {
         return null;
     }
 
     @Override
-    public Boolean update(FieldTypeDTO fieldTypeDTO) {
+    public Boolean update(FieldTypeVO fieldTypeVO) {
         return null;
     }
 

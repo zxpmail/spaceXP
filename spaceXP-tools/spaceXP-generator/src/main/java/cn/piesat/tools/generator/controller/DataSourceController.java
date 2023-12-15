@@ -34,7 +34,6 @@ import java.util.List;
 @RestController
 @RequestMapping("datasource")
 @AllArgsConstructor
-@CrossOrigin
 public class DataSourceController {
     private final DataSourceService dataSourceService;
 

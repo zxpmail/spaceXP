@@ -13,12 +13,11 @@ import cn.piesat.tools.generator.model.vo.FieldTypeVO;
 import cn.piesat.tools.generator.service.FieldTypeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -40,9 +39,6 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
                 QueryUtils.getPage(pageBean),
                 getWrapper(fieldTypeQuery)
         );
-        if(CollectionUtils.isEmpty(page.getRecords())){
-            return new PageResult(page.getTotal(), new ArrayList<>());
-        }
         return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(),FieldTypeVO::new));
 
     }
@@ -57,9 +53,6 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
     @Override
     public FieldTypeVO info(Long id) {
         FieldTypeDO byId = getById(id);
-        if(ObjectUtils.isEmpty(byId)){
-            return null;
-        }
         return CopyBeanUtils.copy(byId,FieldTypeVO::new);
     }
 
@@ -80,8 +73,11 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
     @Override
     public Boolean update(FieldTypeVO fieldTypeVO) {
         FieldTypeDO byId = getById(fieldTypeVO.getId());
+        if(ObjectUtils.isEmpty(byId)){
+            return false;
+        }
         BeanUtils.copyProperties(fieldTypeVO,byId,CopyBeanUtils.getNullPropertyNames(fieldTypeVO));
-        return save(byId);
+        return updateById(byId);
     }
 
     @Override

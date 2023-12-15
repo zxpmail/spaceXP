@@ -31,7 +31,6 @@ import java.util.List;
 @RestController
 @RequestMapping("database")
 @AllArgsConstructor
-@CrossOrigin
 public class DatabaseController {
     private final DatabaseService databaseService;
 
