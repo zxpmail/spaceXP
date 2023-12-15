@@ -7,19 +7,21 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.FieldTypeMapper;
-import cn.piesat.tools.generator.model.dto.FieldTypeDTO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.query.FieldTypeQuery;
 import cn.piesat.tools.generator.model.vo.FieldTypeVO;
 import cn.piesat.tools.generator.service.FieldTypeService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +40,10 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
                 QueryUtils.getPage(pageBean),
                 getWrapper(fieldTypeQuery)
         );
-        return new PageResult(page.getTotal(), page.getRecords());
+        if(CollectionUtils.isEmpty(page.getRecords())){
+            return new PageResult(page.getTotal(), new ArrayList<>());
+        }
+        return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(),FieldTypeVO::new));
 
     }
 
@@ -51,27 +56,31 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
 
     @Override
     public FieldTypeVO info(Long id) {
-        return CopyBeanUtils.copy(getById(id),FieldTypeVO::new);
+        FieldTypeDO byId = getById(id);
+        if(ObjectUtils.isEmpty(byId)){
+            return null;
+        }
+        return CopyBeanUtils.copy(byId,FieldTypeVO::new);
     }
 
     @Override
-    public Boolean add(FieldTypeDTO fieldTypeDTO) {
-        repeat(fieldTypeDTO);
-        return save(CopyBeanUtils.copy(fieldTypeDTO,FieldTypeDO::new));
+    public Boolean add(FieldTypeVO fieldTypeVO) {
+        repeat(fieldTypeVO);
+        return save(CopyBeanUtils.copy(fieldTypeVO,FieldTypeDO::new));
     }
 
-    private void repeat(FieldTypeDTO fieldTypeDTO){
+    private void repeat(FieldTypeVO fieldTypeVO){
         LambdaQueryWrapper<FieldTypeDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(FieldTypeDO::getColumnType,fieldTypeDTO.getColumnType());
+        wrapper.eq(FieldTypeDO::getColumnType,fieldTypeVO.getColumnType());
         if (count(wrapper)>0){
             throw new BaseException(CommonResponseEnum.RECORD_REPEAT);
         }
 
     }
     @Override
-    public Boolean update(FieldTypeDTO fieldTypeDTO) {
-        FieldTypeDO byId = getById(fieldTypeDTO.getId());
-        BeanUtils.copyProperties(fieldTypeDTO,byId,CopyBeanUtils.getNullPropertyNames(fieldTypeDTO));
+    public Boolean update(FieldTypeVO fieldTypeVO) {
+        FieldTypeDO byId = getById(fieldTypeVO.getId());
+        BeanUtils.copyProperties(fieldTypeVO,byId,CopyBeanUtils.getNullPropertyNames(fieldTypeVO));
         return save(byId);
     }
 

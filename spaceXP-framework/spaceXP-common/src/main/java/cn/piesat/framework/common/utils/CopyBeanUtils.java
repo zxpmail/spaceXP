@@ -4,7 +4,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +36,9 @@ public class CopyBeanUtils {
      * @return 返回目标bean
      */
     public static <T, S> T copy(S source, Supplier<T> target) {
-        Assert.notNull(source, "对象不能为空！");
+        if(ObjectUtils.isEmpty(source)){
+            return null;
+        }
         T t = target.get();
         BeanUtils.copyProperties(source, t, getNullPropertyNames(source));
         return t;
@@ -49,7 +54,9 @@ public class CopyBeanUtils {
      * @return 返回目标bean List集合
      */
     public static <T, S> List<T> copy(List<S> source, Supplier<T> target) {
-        Assert.noNullElements(source, "集合不能为空！");
+        if(CollectionUtils.isEmpty(source)){
+            return new ArrayList<>();
+        }
         return source.stream()
                 .map(u -> CopyBeanUtils.copy(u, target))
                 .collect(Collectors.toList());
