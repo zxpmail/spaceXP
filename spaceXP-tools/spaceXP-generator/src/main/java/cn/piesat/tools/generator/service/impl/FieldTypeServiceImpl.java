@@ -90,4 +90,16 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
     public Boolean delete(Long id) {
         return removeById(id);
     }
+
+    @Override
+    public Boolean updateIsList(Long id) {
+        FieldTypeDO byId = getById(id);
+        if (byId.getIsList()==1){
+            byId.setIsList(0);
+        }else {
+            byId.setIsList(1);
+        }
+        byId.setUpdateTime(null);
+        return updateById(byId);
+    }
 }

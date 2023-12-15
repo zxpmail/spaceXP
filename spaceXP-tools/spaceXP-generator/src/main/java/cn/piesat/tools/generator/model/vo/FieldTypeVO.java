@@ -41,7 +41,6 @@ public class FieldTypeVO {
     /**
      * 属性包名
      */
-    @NotBlank(message = "属性包名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String packageName;
 

@@ -96,4 +96,15 @@ public class FieldTypeController {
         return fieldTypeService.delete(id);
     }
 
+
+    /**
+     * 根据字段类型id修改列表显示
+     * @param id 数据源Id
+     * @return  成功true 失败false
+     */
+    @GetMapping("/updateIsList/{id}")
+    public Boolean updateIsList(@PathVariable Long id) {
+        return fieldTypeService.updateIsList(id);
+    }
+
 }

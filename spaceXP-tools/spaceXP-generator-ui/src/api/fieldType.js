@@ -1,17 +1,30 @@
 import service from '@/utils/request'
+import {ElMessage, ElMessageBox} from "element-plus";
 
 export const useFieldTypeApi = id => {
-    return service.get('/gen/fieldtype/' + id)
+    return service.get('/fieldType/info/' + id)
 }
-
+export const useFieldTypeIsListApi = id => {
+    ElMessageBox.confirm('确定进行修改列表显示操作?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    })
+        .then(() => {
+            service.get('/fieldType/updateIsList/' + id).then(() => {
+                ElMessage.success('修改成功')
+            })
+        })
+        .catch(() => {})
+}
 export const useFieldTypeListApi = () => {
-    return service.get('/gen/fieldtype/list')
+    return service.get('/fieldType/list')
 }
 
 export const useFieldTypeSubmitApi = dataForm => {
     if (dataForm.id) {
-        return service.put('/gen/fieldtype', dataForm)
+        return service.put('/fieldType/update', dataForm)
     } else {
-        return service.post('/gen/fieldtype', dataForm)
+        return service.post('/fieldType/add', dataForm)
     }
 }

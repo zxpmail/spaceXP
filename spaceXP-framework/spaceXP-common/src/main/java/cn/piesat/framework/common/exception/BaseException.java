@@ -1,5 +1,6 @@
 package cn.piesat.framework.common.exception;
 
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,7 +45,7 @@ public class BaseException extends RuntimeException{
         this.iBaseResponse = new IBaseResponse() {
             @Override
             public Integer getCode() {
-                return 500;
+                return CommonResponseEnum.SYS_ERROR.getCode();
             }
 
             @Override

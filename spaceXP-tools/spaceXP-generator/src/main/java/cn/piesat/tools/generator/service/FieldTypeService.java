@@ -29,4 +29,6 @@ public interface FieldTypeService extends IService<FieldTypeDO> {
     Boolean delete(List<Long> ids);
 
     Boolean delete(Long id);
+
+    Boolean updateIsList(Long id);
 }

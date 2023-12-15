@@ -50,7 +50,7 @@ export const useCrud = (options) => {
 			.post(state.dataListUrl, state.queryForm,{
 				params: {
 					page: state.isPage ? state.page : null,
-					limit: state.isPage ? state.size : null,
+					size: state.isPage ? state.size : null,
 				},
 			})
 			.then((res) => {

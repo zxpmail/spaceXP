@@ -18,7 +18,7 @@ export const menuRoutes = [
 				}
 			},
 			{
-				path: '/database',
+				path: '/gen/database',
 				name: 'Database',
 				component: () => import('../views/database/index.vue'),
 				meta: {
