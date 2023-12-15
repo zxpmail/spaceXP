@@ -5,17 +5,20 @@
 				<el-input v-model="dataForm.connName" placeholder="连接名"></el-input>
 			</el-form-item>
 			<el-form-item prop="dbType" label="数据库类型">
-				<el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%">
-					<el-option value="MySQL" label="MySQL"></el-option>
-					<el-option value="Oracle" label="Oracle"></el-option>
-					<el-option value="PostgreSQL" label="PostgreSQL"></el-option>
-					<el-option value="SQLServer" label="SQLServer"></el-option>
-					<el-option value="DM" label="达梦8"></el-option>
-					<el-option value="Clickhouse" label="Clickhouse"></el-option>
+				<el-select v-model="dataForm.dbType" clearable placeholder="数据库类型" style="width: 100%"
+                   @click="databaseHandle"
+                   @change="databaseChange"
+                   value-key="dbType">
+          <el-option
+              :label="item.dbType"
+              :value="item.dbType"
+              v-for="(item) in database"
+              :key="item.dbType"
+          ></el-option>
 				</el-select>
 			</el-form-item>
 			<el-form-item label="数据库URL" prop="connUrl">
-				<el-input v-model="dataForm.connUrl" placeholder="数据库URL"></el-input>
+				<el-input v-model="dataForm.url" placeholder="数据库URL"></el-input>
 			</el-form-item>
 			<el-form-item label="用户名" prop="username">
 				<el-input v-model="dataForm.username" placeholder="用户名"></el-input>
@@ -35,6 +38,7 @@
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
 import { useDataSourceApi, useDataSourceSubmitApi } from '@/api/datasource'
+import {useDatabaseListApi} from "@/api/database.js";
 
 const emit = defineEmits(['refreshDataList'])
 
@@ -45,11 +49,26 @@ const dataForm = reactive({
 	id: '',
 	dbType: '',
 	connName: '',
-	connUrl: '',
+	url: '',
+  driverClassName: '',
+  databaseId: '',
 	username: '',
-	password: ''
+	password: '',
 })
+const   database=ref([])
 
+
+const databaseHandle = () => {
+  useDatabaseListApi().then((res) => {
+    database.value=res.data
+  })
+}
+const databaseChange = (data) => {
+  let ds= database.value.filter(i=>i.dbType===data)[0]
+  dataForm.url=ds.url
+  dataForm.driverClassName =ds.driverClassName
+  dataForm.databaseId=ds.id
+}
 const init = (id) => {
 	visible.value = true
 	dataForm.id = ''
@@ -74,7 +93,7 @@ const getDataSource = (id) => {
 const dataRules = ref({
 	dbType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	connName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	connUrl: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	url: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	username: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
@@ -86,7 +105,7 @@ const submitHandle = () => {
 			return false
 		}
 
-		useDataSourceSubmitApi({ ...dataForm, password: encrypt(dataForm.password) }).then(() => {
+		useDataSourceSubmitApi({ ...dataForm}).then(() => {
 			ElMessage.success({
 				message: '操作成功',
 				duration: 500,

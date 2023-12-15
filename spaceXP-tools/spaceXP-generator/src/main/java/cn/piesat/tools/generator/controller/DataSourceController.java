@@ -102,9 +102,9 @@ public class DataSourceController {
     }
 
 
-    @GetMapping("test/{id}")
-    public String test(@PathVariable("id") Long id) {
-        return dataSourceService.test(id);
+    @PostMapping("test}")
+    public Boolean test(@Validated(UpdateGroup.class) @RequestBody DataSourceVO dataSourceVO) {
+        return dataSourceService.test(dataSourceVO);
     }
 
     @GetMapping("table/list/{id}")

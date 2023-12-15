@@ -47,15 +47,12 @@ export const useCrud = (options) => {
 		state.dataListLoading = true
 
 		service
-			.get(state.dataListUrl, {
+			.post(state.dataListUrl, {
 				params: {
-					order: state.order,
-					asc: state.asc,
 					page: state.isPage ? state.page : null,
-					limit: state.isPage ? state.limit : null,
-					...state.queryForm
+					limit: state.isPage ? state.size : null,
 				}
-			})
+			},state.queryForm)
 			.then((res) => {
 				state.dataList = state.isPage ? res.data.list : res.data
 				state.total = state.isPage ? res.data.total : 0
@@ -110,7 +107,6 @@ export const useCrud = (options) => {
 			type: 'warning'
 		})
 			.then(() => {
-				debugger
 				service.delete(state.deleteUrl + '/' + key).then(() => {
 					ElMessage.success('删除成功')
 

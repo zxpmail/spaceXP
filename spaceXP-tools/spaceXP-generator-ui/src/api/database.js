@@ -7,7 +7,7 @@ export const useDatabaseApi = id => {
 }
 
 export const useDatabaseListApi = () => {
-	return service.get('/database/list')
+	return service.post('/database/list')
 }
 
 export const useDatabaseSubmitApi = (dataForm) => {

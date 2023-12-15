@@ -23,7 +23,7 @@ public class DatabaseDO extends BaseDO{
     /**
      * 驱动类
      */
-    private String driver;
+    private String driverClassName;
     /**
      * 表名称
      */

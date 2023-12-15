@@ -7,7 +7,7 @@
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" @selection-change="selectionChangeHandle">
 			<el-table-column prop="dbType" label="数据库类型" header-align="center" align="center"></el-table-column>
-      <el-table-column prop="driver" label="数据库驱动" header-align="center" align="center"></el-table-column>
+      <el-table-column prop="driverClassName" label="数据库驱动" header-align="center" align="center"></el-table-column>
       <el-table-column prop="url" label="数据库URL" show-overflow-tooltip header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="170">
 				<template #default="scope">

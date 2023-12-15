@@ -29,13 +29,18 @@ public class DataSourceDO extends BaseDO {
     private Long databaseId;
 
     /**
+     * 驱动类
+     */
+    private String driverClassName;
+
+    /**
      * 连接名
      */
     private String connName;
     /**
      * URL
      */
-    private String connUrl;
+    private String url;
     /**
      * 用户名
      */

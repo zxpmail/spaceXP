@@ -61,7 +61,7 @@ const dataFormRef = ref()
 const dataForm = reactive({
 	id: '',
 	dbType: '',
-  driver: '',
+  driverClassName: '',
   url: '',
   tableName: '',
   tableComment: '',
@@ -98,7 +98,7 @@ const getDataSource = (id) => {
 
 const dataRules = ref({
 	dbType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-  driver: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  driverClassName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	url: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],

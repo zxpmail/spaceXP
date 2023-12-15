@@ -39,7 +39,7 @@ public class DatabaseVO {
      */
     @NotBlank(message = "驱动类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
-    private String driver;
+    private String driverClassName;
     /**
      * 表名称
      */

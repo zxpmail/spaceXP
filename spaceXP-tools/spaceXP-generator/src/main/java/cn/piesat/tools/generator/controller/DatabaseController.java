@@ -35,7 +35,7 @@ import java.util.List;
 public class DatabaseController {
     private final DatabaseService databaseService;
 
-    @GetMapping("list")
+    @PostMapping("list")
     public List<DatabaseVO> all(){
         return databaseService.all();
     }

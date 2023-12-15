@@ -5,6 +5,8 @@ import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
+import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
@@ -28,6 +30,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +89,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
      */
     @Override
     public Boolean add(DataSourceVO dataSourceVO) {
+        datasourceTest(dataSourceVO);
         repeat(dataSourceVO);
         DataSourceDO copy = CopyBeanUtils.copy(dataSourceVO, DataSourceDO::new);
         return save(copy);
@@ -97,6 +102,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
      */
     @Override
     public Boolean update(DataSourceVO dataSourceVO) {
+        datasourceTest(dataSourceVO);
         DataSourceDO byId = getById(dataSourceVO.getId());
         BeanUtils.copyProperties(dataSourceVO,byId,CopyBeanUtils.getNullPropertyNames(dataSourceVO));
         return save(byId);
@@ -126,26 +132,27 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         return removeById(id);
     }
 
-    private final DatabaseService databaseService;
-    @Override
-    public String test(Long id) {
-        DataSourceDO byId = getById(id);
-        LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
-        wrapper.eq(DatabaseDO::getDbType,byId);
-        DatabaseDO one = databaseService.getOne(wrapper);
-        try {
-            DbUtils.getConnection(byId.getDbType(),one.getDriver(),byId.getConnUrl(),byId.getUsername(),byId.getPassword());
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException("连接失败，请检查配置信息");
 
-        }
-        return "连接成功";
+    private final DynamicDataSource dynamicDataSource;
+
+
+    @Override
+    public Boolean test(DataSourceVO dataSourceVO) {
+        datasourceTest(dataSourceVO);
+        return true;
     }
 
+    private DataSource datasourceTest(DataSourceVO dataSourceVO) {
+        DataSourceEntity copy = CopyBeanUtils.copy(dataSourceVO, DataSourceEntity::new);
+        copy.setKey(dataSourceVO.getConnName());
+
+       return dynamicDataSource.test(copy);
+    }
+
+    private final DatabaseService databaseService;
     @Override
     public List<TableDO> tableList(Long id) {
-        DataSourceDO byId = getById(id);
+/*        DataSourceDO byId = getById(id);
         LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
         wrapper.eq(DatabaseDO::getDbType,byId);
         DatabaseDO one = databaseService.getOne(wrapper);
@@ -157,7 +164,8 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException("数据源配置错误，请检查数据源配置！");
-        }
+        }*/
+        return null;
     }
 
     /**

@@ -32,7 +32,7 @@ public interface DataSourceService extends IService<DataSourceDO> {
 
     Boolean delete(Long id);
 
-    String test(Long id);
+    Boolean test(DataSourceVO dataSourceVO);
 
     List<TableDO> tableList(Long id);
 
