@@ -45,20 +45,11 @@ export const menuRoutes = [
 				}
 			},
 			{
-				path: '/gen/base-class',
-				name: 'BaseClass',
-				component: () => import('../views/base-class/index.vue'),
-				meta: {
-					title: '基类管理',
-					icon: 'icon-cluster'
-				}
-			},
-			{
 				path: '/gen/project',
 				name: 'ProjectIndex',
 				component: () => import('../views/project/index.vue'),
 				meta: {
-					title: '项目名变更',
+					title: '项目信息',
 					icon: 'icon-edit-square'
 				}
 			}

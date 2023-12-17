@@ -16,10 +16,12 @@
 		</el-form>
 		<el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%" @selection-change="selectionChangeHandle">
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-			<el-table-column prop="projectName" label="项目名" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="projectCode" label="项目标识" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="projectPackage" label="项目包名" show-overflow-tooltip header-align="center" align="center"></el-table-column>
-			<el-table-column prop="projectPath" label="项目路径" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+			<el-table-column prop="artifactId" label="项目标识" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="groupId" label="项目包名" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+			<el-table-column prop="version" label="版本" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+      <el-table-column prop="type" label="类型" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+      <el-table-column prop="author" label="作者" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+      <el-table-column prop="email" label="Email" show-overflow-tooltip header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">
 				<template #default="scope">
 					<el-button type="primary" link @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
@@ -31,7 +33,7 @@
 		<el-pagination
 			:current-page="state.page"
 			:page-sizes="state.pageSizes"
-			:page-size="state.limit"
+			:page-size="state.size"
 			:total="state.total"
 			layout="total, sizes, prev, pager, next, jumper"
 			@size-change="sizeChangeHandle"
@@ -48,12 +50,13 @@
 
 <script setup >
 import { reactive, ref } from 'vue'
+import { useCrud } from '@/hooks/index.js'
 import AddOrUpdate from './add-or-update.vue'
 import Download from './download.vue'
 
 const state = reactive({
-	dataListUrl: '/gen/project/page',
-	deleteUrl: '/gen/project',
+	dataListUrl: '/project/list',
+	deleteUrl: '/project/delete',
 	queryForm: {
 		projectName: ''
 	}

@@ -1,18 +1,36 @@
 <template>
 	<el-dialog v-model="visible" :title="!dataForm.id ? '新增' : '修改'" :close-on-click-modal="false">
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="100px" @keyup.enter="submitHandle()">
-			<el-form-item label="项目名" prop="projectName">
-				<el-input v-model="dataForm.projectName" placeholder="项目名"></el-input>
+			<el-form-item label="项目标识" prop="artifactId">
+				<el-input v-model="dataForm.artifactId" placeholder="项目标识"></el-input>
 			</el-form-item>
-			<el-form-item label="项目标识" prop="projectCode">
-				<el-input v-model="dataForm.projectCode" placeholder="项目标识"></el-input>
+			<el-form-item label="项目包名" prop="groupId">
+				<el-input v-model="dataForm.groupId" placeholder="项目包名"></el-input>
 			</el-form-item>
-			<el-form-item label="项目包名" prop="projectPackage">
-				<el-input v-model="dataForm.projectPackage" placeholder="项目包名"></el-input>
+			<el-form-item label="版本号" prop="version">
+				<el-input v-model="dataForm.version" placeholder="版本号"></el-input>
 			</el-form-item>
-			<el-form-item label="项目路径" prop="projectPath">
-				<el-input v-model="dataForm.projectPath" placeholder="项目路径"></el-input>
-			</el-form-item>
+      <el-form-item label="项目类型" prop="type">
+        <el-select v-model="dataForm.type" clearable placeholder="项目类型" style="width: 100%">
+          <el-option value="单体" label="单体"></el-option>
+          <el-option value="EUREKA" label="EUREKA"></el-option>
+          <el-option value="NACOS" label="NACOS"></el-option>
+          <el-option value="NACOS CONFIG" label="NACOS CONFIG"></el-option>
+          <el-option value="代码" label="代码"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="作者" prop="author">
+        <el-input v-model="dataForm.author" placeholder="作者"></el-input>
+      </el-form-item>
+      <el-form-item label="EMail" prop="email">
+        <el-input v-model="dataForm.email" placeholder="EMail"></el-input>
+      </el-form-item>
+      <el-form-item label="项目端口" prop="port">
+        <el-input v-model="dataForm.port" placeholder="项目端口"></el-input>
+      </el-form-item>
+      <el-form-item label="项目描述" prop="port">
+        <el-input v-model="dataForm.description"  type="textarea" placeholder="项目描述"></el-input>
+      </el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -33,10 +51,15 @@ const dataFormRef = ref()
 
 const dataForm = reactive({
 	id: '',
-	projectName: '',
-	projectCode: '',
-	projectPackage: '',
-	projectPath: ''
+  artifactId: 'test',
+  groupId: 'cn.piesat',
+  version: '1.0.0',
+  type: '单体',
+  author: 'zhouxiaoping',
+  email: 'zhouxiaoping@piesat.cn',
+  description: '',
+  port: 8080
+
 })
 
 const init = (id) => {
@@ -60,10 +83,10 @@ const getProject = (id) => {
 }
 
 const dataRules = ref({
-	projectName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	projectCode: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	projectPackage: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	projectPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  artifactId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  groupId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  version: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交

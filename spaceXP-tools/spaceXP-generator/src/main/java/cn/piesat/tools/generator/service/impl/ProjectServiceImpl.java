@@ -46,7 +46,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
 
     private LambdaQueryWrapper<ProjectDO> getWrapper(ProjectQuery projectQuery) {
         LambdaQueryWrapper<ProjectDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(StringUtils.hasText(projectQuery.getName()),ProjectDO::getName,projectQuery.getName())
+        wrapper.like(StringUtils.hasText(projectQuery.getArtifactId()),ProjectDO::getArtifactId,projectQuery.getArtifactId())
                 .like(StringUtils.hasText(projectQuery.getAuthor()),ProjectDO::getAuthor,projectQuery.getAuthor())
                 .like(StringUtils.hasText(projectQuery.getVersion()),ProjectDO::getVersion,projectQuery.getVersion());
         return wrapper;
@@ -64,7 +64,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
 
     private void repeat(ProjectVO projectVO){
         LambdaQueryWrapper<ProjectDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(ProjectDO::getName,projectVO.getName())
+        wrapper.eq(ProjectDO::getArtifactId,projectVO.getArtifactId())
                 .eq(ProjectDO::getAuthor,projectVO.getAuthor())
                 .eq(ProjectDO::getVersion,projectVO.getVersion());
         if (count(wrapper)>0){

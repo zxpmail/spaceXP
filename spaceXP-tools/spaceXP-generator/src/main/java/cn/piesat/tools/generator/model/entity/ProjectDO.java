@@ -19,11 +19,6 @@ import java.util.Date;
 public class ProjectDO extends BaseDO{
 
     /**
-     * 项目名
-     */
-    private String name;
-
-    /**
      * 项目类型
      */
     private String type;

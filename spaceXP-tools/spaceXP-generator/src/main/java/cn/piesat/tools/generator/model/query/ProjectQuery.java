@@ -20,7 +20,7 @@ public class ProjectQuery {
     /**
      * 项目名
      */
-    private String name;
+    private String artifactId;
     /**
      * 版本
      */
