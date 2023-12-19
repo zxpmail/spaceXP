@@ -56,4 +56,6 @@ public interface CommonConstants {
     String SASS="space-sass";
 
     String  FEIGN_NATIVE="Response";
+
+    String CONNECTION_SYMBOL="_";
 }
