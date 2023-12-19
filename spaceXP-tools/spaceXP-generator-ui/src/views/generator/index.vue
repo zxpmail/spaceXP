@@ -59,8 +59,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useDownloadApi } from '@/api/generator'
 
 const state = reactive({
-	dataListUrl: '/gen/table/page',
-	deleteUrl: '/gen/table',
+	dataListUrl: '/table/list',
+	deleteUrl: '/table/delete',
 	queryForm: {
 		tableName: ''
 	}
