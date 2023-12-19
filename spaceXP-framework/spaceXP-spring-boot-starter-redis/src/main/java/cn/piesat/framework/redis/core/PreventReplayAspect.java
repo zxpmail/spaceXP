@@ -24,12 +24,14 @@ import java.util.concurrent.TimeUnit;
  * @author zhouxp
  */
 @Aspect
-public class PreventReplayAspect {
+public final class PreventReplayAspect {
 
     private final RedisService redisService;
+    private final String keyPrefix;
 
-    public PreventReplayAspect(RedisService redisService) {
+    public PreventReplayAspect(RedisService redisService, String keyPrefix) {
         this.redisService = redisService;
+        this.keyPrefix = keyPrefix;
     }
 
     /**
@@ -68,9 +70,9 @@ public class PreventReplayAspect {
     private void defaultHandle(String requestStr, PreventReplay preventReplay, String methodFullName) throws Exception {
         String base64Str = toBase64String(requestStr);
         long expire = preventReplay.value();
-        String resp = redisService.getObject(methodFullName + base64Str);
+        String resp = redisService.getObject(keyPrefix + "_" + methodFullName + base64Str);
         if (!StringUtils.hasText(resp)) {
-            redisService.setObject(methodFullName + base64Str, requestStr, expire, TimeUnit.SECONDS);
+            redisService.setObject(keyPrefix + "_" + methodFullName + base64Str, requestStr, expire, TimeUnit.SECONDS);
         } else {
             String message = StringUtils.hasText(preventReplay.message()) ? preventReplay.message() :
                     expire + "秒内不允许重复请求";
@@ -85,7 +87,7 @@ public class PreventReplayAspect {
      * @param obj 对象值
      * @return base64字符串
      */
-    private String toBase64String(String obj)  {
+    private String toBase64String(String obj) {
         if (StringUtils.hasText(obj)) {
             Base64.Encoder encoder = Base64.getEncoder();
             byte[] bytes = obj.getBytes(StandardCharsets.UTF_8);
