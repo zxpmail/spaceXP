@@ -19,11 +19,13 @@ import java.util.List;
 @ConfigurationProperties(prefix = "space.redis")
 public class RedisProperties {
 
-    private Boolean messageEnable = false;
+    private Boolean messageEnable = false; //消息机制是否开启
 
     private String topics = "TOPIC";
 
-    private Boolean compressEnable = false;
+    private Boolean compressEnable = false; //压缩是否开启
 
-    private Boolean preventReplayEnable = false; //防止重新刷新页面
+    private Boolean preventReplayEnable = false; //防止重新刷新页面是否开启
+
+    private Boolean accessLimitEnable = false; //限流拦截器是否开启
 }

@@ -71,9 +71,9 @@ public final class PreventReplayAspect {
     private void defaultHandle(String requestStr, PreventReplay preventReplay, String methodFullName) throws Exception {
         String base64Str = toBase64String(requestStr);
         long expire = preventReplay.value();
-        String resp = redisService.getObject(keyPrefix + CommonConstants.CONNECTION_SYMBOL + methodFullName + base64Str);
+        String resp = redisService.getObject(keyPrefix + CommonConstants.UNDERLINE + methodFullName + base64Str);
         if (!StringUtils.hasText(resp)) {
-            redisService.setObject(keyPrefix + CommonConstants.CONNECTION_SYMBOL + methodFullName + base64Str, requestStr, expire, TimeUnit.SECONDS);
+            redisService.setObject(keyPrefix + CommonConstants.UNDERLINE + methodFullName + base64Str, requestStr, expire, TimeUnit.SECONDS);
         } else {
             String message = StringUtils.hasText(preventReplay.message()) ? preventReplay.message() :
                     expire + "秒内不允许重复请求";

@@ -57,5 +57,7 @@ public interface CommonConstants {
 
     String  FEIGN_NATIVE="Response";
 
-    String CONNECTION_SYMBOL="_";
+    String UNDERLINE="_";
+
+    String COLON=":";
 }

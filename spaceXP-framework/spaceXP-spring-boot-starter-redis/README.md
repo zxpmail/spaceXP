@@ -23,4 +23,5 @@
 space.redis.message-enable=true 开启发布订阅消息模式，默认不开启
 space.redis.topics TOPIC名称
 space.redis.prevent-replay-enable: true 开启防止重刷功能
+space.redis.access-limit-enable: true 开启限流功能
 

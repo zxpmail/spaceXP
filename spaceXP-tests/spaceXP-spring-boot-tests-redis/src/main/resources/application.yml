@@ -17,4 +17,5 @@ space:
   redis:
     compress-enable: true #开启压缩功能
     prevent-replay-enable: true #开启重刷功能
+    access-limit-enable: true #开启限流功能
 

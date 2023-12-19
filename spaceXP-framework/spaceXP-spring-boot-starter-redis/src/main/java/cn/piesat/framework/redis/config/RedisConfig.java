@@ -2,6 +2,7 @@ package cn.piesat.framework.redis.config;
 
 
 import cn.piesat.framework.common.properties.ModuleProperties;
+import cn.piesat.framework.redis.core.AccessLimitInterceptor;
 import cn.piesat.framework.redis.core.CompressRedisSerializer;
 import cn.piesat.framework.redis.core.PreventReplayAspect;
 import cn.piesat.framework.redis.core.RedisMessageListener;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -52,16 +54,14 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(stringRedisSerializer);
         //hash的key也采用String 的序列化方式
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
+        GenericFastJsonRedisSerializer jackson2JsonRedisSerializer = new GenericFastJsonRedisSerializer();
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         if (redisProperties.getCompressEnable()){
             CompressRedisSerializer<?> jsonSerializer = new CompressRedisSerializer<>(Object.class);
-            //value的序列化方式采用压缩的方式
-            redisTemplate.setValueSerializer(jsonSerializer);
             //hash的value序列化方式采用压缩
             redisTemplate.setHashValueSerializer(jsonSerializer);
-
         }else{
             // json序列化配置
-            GenericFastJsonRedisSerializer jackson2JsonRedisSerializer = new GenericFastJsonRedisSerializer();
 
             //value的序列化方式采用jackson的方式
             redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
@@ -112,4 +112,15 @@ public class RedisConfig {
         return new PreventReplayAspect(redisService, moduleProperties.getModule());
     }
 
+    @Bean
+    @ConditionalOnProperty(name = "space.redis.access-limit-enable", havingValue = "true",matchIfMissing = false)
+    public AccessLimitInterceptor accessLimitInterceptor(RedisService redisService,ModuleProperties moduleProperties){
+        return new AccessLimitInterceptor(redisService,moduleProperties.getModule());
+    }
+
+    @Bean
+    @ConditionalOnBean(AccessLimitInterceptor.class)
+    public RedisWebConfiguration idempotentWebConfiguration(AccessLimitInterceptor accessLimitInterceptor){
+        return new RedisWebConfiguration(accessLimitInterceptor);
+    }
 }
