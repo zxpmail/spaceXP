@@ -2,6 +2,7 @@ package cn.piesat.framework.redis.config;
 
 
 import cn.piesat.framework.redis.core.CompressRedisSerializer;
+import cn.piesat.framework.redis.core.PreventReplayAspect;
 import cn.piesat.framework.redis.core.RedisMessageListener;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.model.MessageBody;
@@ -107,4 +108,11 @@ public class RedisConfig {
 
         return container;
     }
+
+    @Bean
+    @ConditionalOnProperty(name = "space.redis.prevent-replay-enable", havingValue = "true",matchIfMissing = false)
+    public PreventReplayAspect preventAspect(RedisService redisService){
+        return new PreventReplayAspect(redisService);
+    }
+
 }

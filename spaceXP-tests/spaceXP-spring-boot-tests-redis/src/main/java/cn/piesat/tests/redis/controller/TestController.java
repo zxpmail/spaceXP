@@ -1,6 +1,7 @@
 package cn.piesat.tests.redis.controller;
 
 
+import cn.piesat.framework.redis.annotation.PreventReplay;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.model.MessageBody;
 import io.swagger.annotations.Api;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -81,5 +83,12 @@ public class TestController {
     @GetMapping("deleteHash/{key}")
     public void deleteHash(@PathVariable("key") String key){
          redisService.deleteMapMatching("hello", key);
+    }
+
+    @ApiOperation("测试防止重刷")
+    @GetMapping("preventReplay/{key}")
+    @PreventReplay(value = 10)
+    public Object  preventReplay(@PathVariable("key") String key){
+        return new HashMap<String, Object>(){{put(key,"hello");}};
     }
 }

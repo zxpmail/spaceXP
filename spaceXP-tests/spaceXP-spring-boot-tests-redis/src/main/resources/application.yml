@@ -1,9 +1,10 @@
+server:
+  servlet:
+    context-path: /redis
 spring:
   application:
     name: redis
   mvc:
-    servlet:
-      path: /redis
     path-match:
       matching-strategy: ANT_PATH_MATCHER
   jackson:
@@ -14,4 +15,6 @@ logging:
     cn.piesat.tests.redis: debug
 space:
   redis:
-    compress-enable: true
+    compress-enable: true #开启压缩功能
+    prevent-replay-enable: true #开启重刷功能
+

@@ -24,4 +24,6 @@ public class RedisProperties {
     private String topics = "TOPIC";
 
     private Boolean compressEnable = false;
+
+    private Boolean preventReplayEnable = false; //防止重新刷新页面
 }
