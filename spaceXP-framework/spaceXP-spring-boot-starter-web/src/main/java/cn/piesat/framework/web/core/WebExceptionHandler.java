@@ -6,6 +6,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.framework.web.enums.WebResponseEnum;
+import cn.piesat.framework.web.utils.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -49,7 +50,7 @@ public class WebExceptionHandler {
      */
     @ExceptionHandler(value = BaseException.class)
     public Object handleBusinessException(BaseException e) {
-        e.printStackTrace();
+        log.error(ExceptionUtil.getMessage(e));
         if (e.getIBaseResponse() == null) {
             return ApiResult.fail(e.getMessage());
         }
@@ -64,8 +65,7 @@ public class WebExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     public ApiResult<IBaseResponse> handleException(Exception e) {
-        e.printStackTrace();
-        log.error(CommonConstants.MESSAGE, module, e.getMessage());
+        log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiResult.fail(CommonResponseEnum.SYS_ERROR);
     }
 
@@ -77,8 +77,7 @@ public class WebExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ApiResult<IBaseResponse> handleDateTimeParseException(HttpMessageNotReadableException e) {
-        log.error(CommonConstants.MESSAGE, module, e.getMessage());
-        e.printStackTrace();
+        log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiResult.fail( e.getMessage());
     }
 
@@ -89,8 +88,7 @@ public class WebExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult<IBaseResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        e.printStackTrace();
-        log.error(CommonConstants.MESSAGE, module, e.getMessage());
+        log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         BindingResult bindingResult = e.getBindingResult();
         if (bindingResult.hasErrors()){
             StringBuffer errors = new StringBuffer();
@@ -120,8 +118,7 @@ public class WebExceptionHandler {
             AsyncRequestTimeoutException.class
     })
     public ApiResult<IBaseResponse> handleServletException(Exception e) {
-        e.printStackTrace();
-        log.error(CommonConstants.MESSAGE, module, e.getMessage());
+        log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiResult.fail(WebResponseEnum.SERVLET_ERROR);
     }
 }

@@ -67,4 +67,12 @@ public class TestController {
     public void testService()  {
        testService.testService();
     }
+
+    @GetMapping(value = "/writeLog")
+    public void writeLog()  {
+        log.debug(".....debug....");
+        log.info(".....info.....");
+        log.warn("........warn.......");
+        log.error("........error.......");
+    }
 }
