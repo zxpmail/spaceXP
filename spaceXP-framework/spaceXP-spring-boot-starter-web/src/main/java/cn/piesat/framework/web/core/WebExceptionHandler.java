@@ -119,6 +119,6 @@ public class WebExceptionHandler {
     })
     public ApiResult<IBaseResponse> handleServletException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
-        return ApiResult.fail(WebResponseEnum.SERVLET_ERROR);
+        return ApiResult.fail(e.getMessage());
     }
 }
