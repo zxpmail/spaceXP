@@ -66,7 +66,7 @@ public class WebExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ApiResult<IBaseResponse> handleException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
-        return ApiResult.fail(CommonResponseEnum.SYS_ERROR);
+        return ApiResult.fail(e.getMessage());
     }
 
 
