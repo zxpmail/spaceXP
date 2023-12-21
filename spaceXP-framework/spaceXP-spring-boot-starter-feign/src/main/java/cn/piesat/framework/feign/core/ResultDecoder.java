@@ -3,6 +3,7 @@ package cn.piesat.framework.feign.core;
 
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.constants.CommonConstants;
+import cn.piesat.framework.common.model.vo.ApiMapResult;
 import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.feign.annotation.HasApiResult;
@@ -42,6 +43,7 @@ import java.util.zip.GZIPInputStream;
 @Slf4j
 public class ResultDecoder implements Decoder {
     private final Decoder decoder;
+    private final Boolean apiMapResultEnable ;
 
     @Override
     public Object decode(Response response, Type type) throws IOException {
@@ -80,18 +82,27 @@ public class ResultDecoder implements Decoder {
             }
         }
         if (!ObjectUtils.isEmpty(annotation)) {
-            ParameterizedTypeImpl resultType = new ParameterizedTypeImpl(ApiResult.class, new Type[]{type});
+            ParameterizedTypeImpl resultType;
+            if(apiMapResultEnable){
+                resultType = new ParameterizedTypeImpl(ApiMapResult.class, new Type[]{type});
+            }else{
+                resultType = new ParameterizedTypeImpl(ApiResult.class, new Type[]{type});
+            }
+
             Object decode = this.decoder.decode(response, resultType);
-            if (decode instanceof ApiResult) {
+            if (decode instanceof ApiMapResult) {
                 if (Void.class == type || Void.TYPE == type) {
                     return null;
                 }
-                Object o = ((ApiResult<?>) decode).get(CommonProperties.Result.data);
+                Object o = ((ApiMapResult<?>) decode).get(CommonProperties.Result.data);
                 if(o==null){
                     return null;
                 }
                 String s = JSON.toJSONString(o);
                 return JSON.parseObject(s, type);
+            }
+            if(decode instanceof ApiResult){
+                return ((ApiResult<?>) decode).getData();
             }
         }
         return this.decoder.decode(response, type);

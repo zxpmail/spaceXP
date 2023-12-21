@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UniformApiResultWrapper implements InitializingBean {
 
+    private final Boolean apiMapResultEnable;
     private final WebProperties webProperties;
 
     @Resource
@@ -35,7 +36,7 @@ public class UniformApiResultWrapper implements InitializingBean {
         List<HandlerMethodReturnValueHandler> list = new ArrayList<>(unmodifiableList.size());
         for (HandlerMethodReturnValueHandler returnValueHandler : unmodifiableList) {
             if (returnValueHandler instanceof RequestResponseBodyMethodProcessor) {
-                list.add(new ApiResponseHandlerMethodReturnValueHandler(returnValueHandler,webProperties.getIgnoreUrls()));
+                list.add(new ApiResponseHandlerMethodReturnValueHandler(returnValueHandler,apiMapResultEnable,webProperties.getIgnoreUrls()));
             } else {
                 list.add(returnValueHandler);
             }

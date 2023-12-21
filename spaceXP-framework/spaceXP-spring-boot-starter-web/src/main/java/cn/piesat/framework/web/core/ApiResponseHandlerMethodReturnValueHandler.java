@@ -1,8 +1,9 @@
 package cn.piesat.framework.web.core;
 
 import cn.piesat.framework.common.annotation.NoApiResult;
-import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.framework.common.model.vo.ApiMapResult;
 
+import cn.piesat.framework.common.model.vo.ApiResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.AntPathMatcher;
@@ -29,7 +30,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ApiResponseHandlerMethodReturnValueHandler implements HandlerMethodReturnValueHandler {
     private final HandlerMethodReturnValueHandler returnValueHandler;
-
+    private final Boolean apiMapResultEnable;
     private final List<String> ignoreUrls;
     PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -53,7 +54,7 @@ public class ApiResponseHandlerMethodReturnValueHandler implements HandlerMethod
         boolean ifHandleReturnValue = true;
         if (returnType.getContainingClass().getAnnotation((NoApiResult.class)) != null
                 || Objects.requireNonNull(returnType.getMethod()).getAnnotation(NoApiResult.class) != null
-                || returnValue instanceof ApiResult) {
+                || returnValue instanceof ApiMapResult) {
             ifHandleReturnValue = false;
         } else {
             assert nativeRequest != null;
@@ -69,6 +70,10 @@ public class ApiResponseHandlerMethodReturnValueHandler implements HandlerMethod
                 }
             }
         }
-        this.returnValueHandler.handleReturnValue(ifHandleReturnValue ? ApiResult.ok(returnValue) : returnValue, returnType, mavContainer, webRequest);
+        if(apiMapResultEnable){
+            this.returnValueHandler.handleReturnValue(ifHandleReturnValue ? ApiMapResult.ok(returnValue) : returnValue, returnType, mavContainer, webRequest);
+        }else{
+            this.returnValueHandler.handleReturnValue(ifHandleReturnValue ? ApiResult.ok(returnValue) : returnValue, returnType, mavContainer, webRequest);
+        }
     }
 }

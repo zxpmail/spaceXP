@@ -4,7 +4,8 @@ package cn.piesat.framework.mybatis.plus.core;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
-import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.framework.common.model.vo.ApiMapResult;
+import cn.piesat.framework.common.utils.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.exceptions.PersistenceException;
@@ -27,29 +28,26 @@ public class MybatisPlusExceptionHandler {
     private final String module;
 
     @ExceptionHandler(value = BadSqlGrammarException.class)
-    public ApiResult<IBaseResponse> handleException(BadSqlGrammarException e) {
-        e.printStackTrace();
-        log.error(CommonConstants.MESSAGE,module,e.getMessage());
-        return ApiResult.fail(CommonResponseEnum.BAD_SQL_GRAMMAR_ERROR);
+    public ApiMapResult<IBaseResponse> handleException(BadSqlGrammarException e) {
+        log.error(CommonConstants.MESSAGE,module, ExceptionUtil.getMessage(e));
+        return ApiMapResult.fail(CommonResponseEnum.BAD_SQL_GRAMMAR_ERROR);
     }
 
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public ApiResult<IBaseResponse> handleDuplicateKeyException(DuplicateKeyException e) {
-        e.printStackTrace();
-        log.error(CommonConstants.MESSAGE,module,e.getMessage());
-        return ApiResult.fail(CommonResponseEnum.RECORD_REPEAT);
+    public ApiMapResult<IBaseResponse> handleDuplicateKeyException(DuplicateKeyException e) {
+        log.error(CommonConstants.MESSAGE,module, ExceptionUtil.getMessage(e));
+        return ApiMapResult.fail(CommonResponseEnum.RECORD_REPEAT);
     }
 
     @ExceptionHandler(PersistenceException.class)
-    public ApiResult<IBaseResponse> handlePersistenceException(PersistenceException e) {
-        e.printStackTrace();
+    public ApiMapResult<IBaseResponse> handlePersistenceException(PersistenceException e) {
         String message = e.getMessage();
-        log.error(CommonConstants.MESSAGE,module,e.getMessage());
+        log.error(CommonConstants.MESSAGE,module,ExceptionUtil.getMessage(e));
         if(message.contains(CommonResponseEnum.NO_PERMISSION_DATA.getMessage())){
-            return ApiResult.fail(CommonResponseEnum.NO_PERMISSION_DATA);
+            return ApiMapResult.fail(CommonResponseEnum.NO_PERMISSION_DATA);
         }else{
-            return ApiResult.fail(CommonResponseEnum.QUERY_DATA);
+            return ApiMapResult.fail(CommonResponseEnum.QUERY_DATA);
         }
     }
 }

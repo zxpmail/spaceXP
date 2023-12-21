@@ -10,3 +10,6 @@ spring:
         prefix: consumer
         file-extension: yaml
         namespace: 1924abb2-b6ba-4648-8d75-6bf447129390
+space:
+  common:
+    api-map-result-enable: true

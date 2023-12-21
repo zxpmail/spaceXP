@@ -2,11 +2,10 @@ package cn.piesat.framework.web.core;
 
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.exception.BaseException;
-import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
-import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.framework.common.model.vo.ApiMapResult;
 import cn.piesat.framework.web.enums.WebResponseEnum;
-import cn.piesat.framework.web.utils.ExceptionUtil;
+import cn.piesat.framework.common.utils.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -52,10 +51,10 @@ public class WebExceptionHandler {
     public Object handleBusinessException(BaseException e) {
         log.error(ExceptionUtil.getMessage(e));
         if (e.getIBaseResponse() == null) {
-            return ApiResult.fail(e.getMessage());
+            return ApiMapResult.fail(e.getMessage());
         }
         log.error(CommonConstants.MESSAGE, module, e.getIBaseResponse().getMessage());
-        return ApiResult.fail(e.getIBaseResponse());
+        return ApiMapResult.fail(e.getIBaseResponse());
     }
 
     /**
@@ -64,9 +63,9 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(value = Exception.class)
-    public ApiResult<IBaseResponse> handleException(Exception e) {
+    public ApiMapResult<IBaseResponse> handleException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
-        return ApiResult.fail(e.getMessage());
+        return ApiMapResult.fail(e.getMessage());
     }
 
 
@@ -76,9 +75,9 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ApiResult<IBaseResponse> handleDateTimeParseException(HttpMessageNotReadableException e) {
+    public ApiMapResult<IBaseResponse> handleDateTimeParseException(HttpMessageNotReadableException e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
-        return ApiResult.fail( e.getMessage());
+        return ApiMapResult.fail( e.getMessage());
     }
 
     /**
@@ -87,7 +86,7 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiResult<IBaseResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ApiMapResult<IBaseResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         BindingResult bindingResult = e.getBindingResult();
         if (bindingResult.hasErrors()){
@@ -95,9 +94,9 @@ public class WebExceptionHandler {
             bindingResult.getAllErrors().forEach(error ->{
                 errors.append(error.getDefaultMessage()).append(";");
             });
-            return ApiResult.fail(errors.toString());
+            return ApiMapResult.fail(errors.toString());
         }
-        return ApiResult.fail(WebResponseEnum.INVALID_INPUT);
+        return ApiMapResult.fail(WebResponseEnum.INVALID_INPUT);
     }
 
     /**
@@ -117,8 +116,8 @@ public class WebExceptionHandler {
             MissingServletRequestPartException.class,
             AsyncRequestTimeoutException.class
     })
-    public ApiResult<IBaseResponse> handleServletException(Exception e) {
+    public ApiMapResult<IBaseResponse> handleServletException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
-        return ApiResult.fail(e.getMessage());
+        return ApiMapResult.fail(e.getMessage());
     }
 }

@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <p/>
  * {@code @description}  :测试
@@ -63,5 +66,10 @@ public class TestController {
             Thread.sleep(100000000);
         }
         return "Hello, World!";
+    }
+
+    @GetMapping("map")
+    public Map<String,Long> map(){
+        return new HashMap<String,Long>(){{put("k1",1L);put("k2",2L);}};
     }
 }

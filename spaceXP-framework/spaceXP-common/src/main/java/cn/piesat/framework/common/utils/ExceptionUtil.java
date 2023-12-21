@@ -1,4 +1,4 @@
-package cn.piesat.framework.web.utils;
+package cn.piesat.framework.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -13,6 +13,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "space.common")
 public final class CommonProperties {
 
+    private Boolean apiMapResultEnable = false;
+
+    public Boolean getApiMapResultEnable() {
+        return apiMapResultEnable;
+    }
+
+    public void setApiMapResultEnable(Boolean apiMapResultEnable) {
+        this.apiMapResultEnable = apiMapResultEnable;
+    }
+
     public static Result result;
 
     public  Result getResult() {

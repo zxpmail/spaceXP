@@ -1,5 +1,6 @@
 package cn.piesat.framework.web.config;
 
+import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.common.properties.ModuleProperties;
 import cn.piesat.framework.web.core.LoginUserHandlerMethodArgumentResolver;
 import cn.piesat.framework.web.core.UniformApiResultWrapper;
@@ -41,6 +42,7 @@ import java.time.temporal.ChronoField;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties({WebProperties.class, ModuleProperties.class})
 public class WebAutoConfiguration implements WebMvcConfigurer {
+
     @Bean
     @ConditionalOnProperty(name = "space.web.cost-enable", havingValue = "true",matchIfMissing = false)
     public TimeCostBeanPostProcessor timeCostBeanPostProcessor(){
@@ -54,8 +56,8 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
 
     @ConditionalOnProperty(name = "space.web.return-value-enable", havingValue = "true",matchIfMissing = true)
     @Bean
-    public UniformApiResultWrapper returnValueBean(WebProperties webProperties){
-        return new UniformApiResultWrapper(webProperties);
+    public UniformApiResultWrapper returnValueBean(WebProperties webProperties,CommonProperties commonProperties){
+        return new UniformApiResultWrapper(commonProperties.getApiMapResultEnable(),webProperties);
     }
 
     @ConditionalOnProperty(name = "space.web.login-user-enable", havingValue = "true",matchIfMissing = true)

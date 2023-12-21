@@ -1,6 +1,7 @@
 package cn.piesat.framework.feign.config;
 
 
+import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.feign.core.FeignExceptionHandler;
 import cn.piesat.framework.feign.core.FeignRequestInterceptor;
 import cn.piesat.framework.feign.core.ResultDecoder;
@@ -37,9 +38,9 @@ public class FeignAutoConfiguration{
     private final ObjectFactory<HttpMessageConverters> messageConverters;
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnClass(name = {"cn.piesat.framework.common.model.vo.ApiResult"})
-    public Decoder feignDecoder(ObjectProvider<HttpMessageConverterCustomizer> customizers) {
-        return new OptionalDecoder(new ResponseEntityDecoder(new ResultDecoder(new SpringDecoder(this.messageConverters, customizers))));
+    @ConditionalOnClass(name = {"cn.piesat.framework.common.model.vo.ApiMapResult"})
+    public Decoder feignDecoder(ObjectProvider<HttpMessageConverterCustomizer> customizers, CommonProperties commonProperties) {
+        return new OptionalDecoder(new ResponseEntityDecoder(new ResultDecoder(new SpringDecoder(this.messageConverters, customizers),commonProperties.getApiMapResultEnable())));
     }
 
     @Bean

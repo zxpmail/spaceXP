@@ -1,19 +1,15 @@
 package cn.piesat.framework.permission.url.core;
 
 import cn.piesat.framework.common.constants.CommonConstants;
-import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.framework.common.model.vo.ApiMapResult;
 import cn.piesat.framework.permission.url.enums.UrlPermissionResponseEnum;
 import cn.piesat.framework.permission.url.properties.UrlPermissionProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.WebUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.Filter;
@@ -87,7 +83,7 @@ public class UrlPermissionFilter implements Filter {
             }
         }
         if ((!StringUtils.hasText(id))) {
-            wrapperResponse(response, ApiResult.fail(UrlPermissionResponseEnum.TOKEN_NOT_VALID));
+            wrapperResponse(response, ApiMapResult.fail(UrlPermissionResponseEnum.TOKEN_NOT_VALID));
             return;
         }
         //判断忽略用户
@@ -114,7 +110,7 @@ public class UrlPermissionFilter implements Filter {
         }
         if (!pathCanVisit) {
             log.info("没有权限！");
-            wrapperResponse(response, ApiResult.fail(UrlPermissionResponseEnum.NO_PERMISSION));
+            wrapperResponse(response, ApiMapResult.fail(UrlPermissionResponseEnum.NO_PERMISSION));
 
             return;
         }
@@ -126,7 +122,7 @@ public class UrlPermissionFilter implements Filter {
 
     }
 
-    private static void wrapperResponse(HttpServletResponse response, ApiResult apiResult) throws IOException {
+    private static void wrapperResponse(HttpServletResponse response, ApiMapResult apiResult) throws IOException {
         response.setContentLength(-1);
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter jsonOut = response.getWriter();
