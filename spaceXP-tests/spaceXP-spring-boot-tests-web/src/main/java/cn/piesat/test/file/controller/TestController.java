@@ -35,23 +35,33 @@ public class TestController {
 
     @GetMapping("get")
     @NoApiResult
-    public String test(){
+    public String test() {
         return "hello";
     }
 
     @GetMapping("get1")
-    public String test1(){
+    public String test1() {
         throw new RuntimeException("hh");
     }
 
     @GetMapping("get2")
-    public JwtUser test2(@LoginUser JwtUser jwtUser){
+    public JwtUser test2(@LoginUser JwtUser jwtUser) {
         return jwtUser;
     }
 
     @GetMapping("assert")
-    public void testAssert(){
+    public void testAssert() {
         Assert.notNull(null, "Value must not be null");
+    }
 
+    private static int count = 0;
+
+    @GetMapping("hello")
+    public String hello() throws InterruptedException {
+        count ++;
+        if (count % 10 == 9) {
+            Thread.sleep(100000000);
+        }
+        return "Hello, World!";
     }
 }

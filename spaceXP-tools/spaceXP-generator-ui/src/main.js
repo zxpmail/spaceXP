@@ -1,4 +1,7 @@
-import { createApp } from 'vue'
+
+import {  createApp } from 'vue'
+import VXETable from 'vxe-table'
+import 'vxe-table/lib/style.css'
 import ElementPlus from 'element-plus'
 import App from './App.vue'
 import { router } from './router/index.js'
@@ -16,5 +19,6 @@ const app = createApp(App)
 app.use(router)
 app.use(SvgIcon)
 app.use(ElementPlus)
+app.use(VXETable)
 
 app.mount('#app')

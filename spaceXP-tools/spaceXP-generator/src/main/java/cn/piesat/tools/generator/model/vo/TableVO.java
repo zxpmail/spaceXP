@@ -1,7 +1,10 @@
 package cn.piesat.tools.generator.model.vo;
 
+import cn.piesat.tools.generator.model.entity.TableFieldDO;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.util.List;
 
 
 /**
@@ -14,6 +17,7 @@ import lombok.Data;
  */
 @Data
 public class TableVO {
+
     private Long id;
     /**
      * 表名
@@ -32,5 +36,11 @@ public class TableVO {
      * 数据源ID
      */
     private Long datasourceId;
+
+    /**
+     * 字段列表
+     */
+    @TableField(exist = false)
+    private List<FieldTypeVO> fieldList;
 
 }

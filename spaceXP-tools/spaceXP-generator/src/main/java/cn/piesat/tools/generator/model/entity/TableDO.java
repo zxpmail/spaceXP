@@ -38,9 +38,5 @@ public class TableDO extends BaseDO{
      */
     private Long datasourceId;
 
-    /**
-     * 字段列表
-     */
-    @TableField(exist = false)
-    private List<TableFieldDO> fieldList;
+
 }

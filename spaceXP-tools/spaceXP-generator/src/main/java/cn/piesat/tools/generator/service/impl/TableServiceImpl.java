@@ -1,10 +1,15 @@
 package cn.piesat.tools.generator.service.impl;
 
+import cn.piesat.framework.common.model.dto.PageBean;
+import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
+import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.TableMapper;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
+import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
+import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.DataSourceService;
@@ -13,7 +18,9 @@ import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.service.TableService;
 import cn.piesat.tools.generator.utils.GenUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.util.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -84,12 +91,27 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
         }
     }
 
+    @Override
+    public PageResult list(PageBean pageBean, TableQuery tableQuery) {
+        IPage<TableDO> page = this.page(
+                QueryUtils.getPage(pageBean),
+                getWrapper(tableQuery)
+        );
+        return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), TableVO::new));
+    }
+
+    private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
+        LambdaQueryWrapper<TableDO> wrapper = Wrappers.lambdaQuery();
+        wrapper.like(StringUtils.hasText(tableQuery.getTableName()),TableDO::getTableName,tableQuery.getTableName());
+        return wrapper;
+    }
+
     public void initFieldList(List<TableFieldDO> tableFieldList) {
         // 字段类型、属性类型映射
         Map<String, TableFieldDO> fieldTypeMap = null; //TableFieldDO.getMap();
         int index = 0;
         for (TableFieldDO field : tableFieldList) {
-            field.setAttrName(StringUtils.underlineToCamel(field.getFieldName()));
+            //field.setAttrName(StringUtils.underlineToCamel(field.getFieldName()));
             // 获取字段对应的类型
             TableFieldDO fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
             if (fieldTypeMapping == null) {

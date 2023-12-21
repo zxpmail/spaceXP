@@ -1,5 +1,8 @@
 package cn.piesat.tools.generator.controller;
 
+import cn.piesat.framework.common.model.dto.PageBean;
+import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.TableService;
 import lombok.AllArgsConstructor;
@@ -26,6 +29,17 @@ public class TableController {
     private final TableService tableService;
 
     /**
+     * 分页查询
+     * @param pageBean 分页实体类
+     * @param tableQuery 表查询参数
+     * @return 查询结果
+     */
+    @PostMapping("list")
+    public PageResult page(PageBean pageBean, @RequestBody TableQuery tableQuery) {
+        return tableService.list(pageBean,tableQuery);
+    }
+
+    /**
      * 导入数据源中的表
      *
      * @param datasourceId  数据源ID
@@ -35,5 +49,6 @@ public class TableController {
     public void tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<TableVO> tableNameList) {
         tableService.tableImport(datasourceId, tableNameList);
     }
+
 
 }
