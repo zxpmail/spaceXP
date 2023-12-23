@@ -45,7 +45,7 @@ public class DataSourceController {
      * @return 查询结果
      */
     @PostMapping("list")
-    public PageResult page( PageBean pageBean, @RequestBody DataSourceQuery dataSourceQuery) {
+    public PageResult page( PageBean pageBean, @RequestBody(required = false) DataSourceQuery dataSourceQuery) {
         return dataSourceService.list(pageBean,dataSourceQuery);
     }
 

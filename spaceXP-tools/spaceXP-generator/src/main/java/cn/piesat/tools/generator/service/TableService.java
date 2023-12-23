@@ -2,6 +2,7 @@ package cn.piesat.tools.generator.service;
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.TableVO;
@@ -21,4 +22,6 @@ public interface TableService extends IService<TableDO> {
     void tableImport(Long datasourceId, List<TableVO> tableNameList);
 
     PageResult list(PageBean pageBean, TableQuery tableQuery);
+
+    List<TableDO> getSqlByTable(String sql, DSEntity dsEntity);
 }

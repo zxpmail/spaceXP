@@ -6,6 +6,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
@@ -16,6 +17,7 @@ import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.DatabaseService;
+import cn.piesat.tools.generator.service.TableService;
 import cn.piesat.tools.generator.utils.DbUtils;
 import cn.piesat.tools.generator.utils.GenUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -47,7 +49,6 @@ import java.util.Objects;
  * @author zhouxp
  */
 @Service
-@AllArgsConstructor
 @Slf4j
 public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSourceDO> implements DataSourceService {
 
@@ -139,7 +140,8 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
     }
 
 
-    private final DynamicDataSource dynamicDataSource;
+    @Resource
+    private  DynamicDataSource dynamicDataSource;
 
 
     @Override
@@ -155,9 +157,18 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
        return dynamicDataSource.test(copy);
     }
 
-    private final DatabaseService databaseService;
+    @Resource
+    private  DatabaseService databaseService;
+    @Resource
+    private  TableService tableService;
     @Override
     public List<TableDO> tableList(Long id) {
+        DataSourceDO dataSourceDO = getById(id);
+        DatabaseDO databaseDO = databaseService.getById(dataSourceDO.getDatabaseId());
+        DSEntity dsEntity =new DSEntity();
+        dsEntity.setDSName__(dataSourceDO.getConnName());
+        List<TableDO> sqlByTable = tableService.getSqlByTable(databaseDO.getTableSql(), dsEntity);
+
 /*        DataSourceDO byId = getById(id);
         LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
         wrapper.eq(DatabaseDO::getDbType,byId);
@@ -171,7 +182,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
             log.error(e.getMessage(), e);
             throw new RuntimeException("数据源配置错误，请检查数据源配置！");
         }*/
-        return null;
+        return sqlByTable;
     }
 
     /**
@@ -194,8 +205,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
      */
     private LambdaQueryWrapper<DataSourceDO> getWrapper(DataSourceQuery dataSourceQuery){
         LambdaQueryWrapper<DataSourceDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(StringUtils.hasText(dataSourceQuery.getDbType()),DataSourceDO::getDbType,dataSourceQuery.getDbType())
-                .like(StringUtils.hasText(dataSourceQuery.getConnName()),DataSourceDO::getConnName,dataSourceQuery.getConnName());
+        if(!Objects.isNull(dataSourceQuery)){
+            wrapper.eq(StringUtils.hasText(dataSourceQuery.getDbType()),DataSourceDO::getDbType,dataSourceQuery.getDbType())
+                    .like(StringUtils.hasText(dataSourceQuery.getConnName()),DataSourceDO::getConnName,dataSourceQuery.getConnName());
+        }
         return wrapper;
     }
 

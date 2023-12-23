@@ -15,8 +15,8 @@ spring:
     jdbcUrl: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
     username: root
     password: 123456
-
-
+  main:
+    allow-circular-references: true
 
 #     Oracle
 #    driver-class-name: oracle.jdbc.OracleDriver

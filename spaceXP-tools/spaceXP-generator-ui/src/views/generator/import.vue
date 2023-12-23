@@ -64,7 +64,7 @@ const init = () => {
 
 const getDataSourceList = () => {
 	useDataSourceListApi().then(res => {
-		dataForm.datasourceList = res.data
+		dataForm.datasourceList = res.data.list
 	})
 }
 

@@ -3,6 +3,8 @@ package cn.piesat.tools.generator.service.impl;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
+import cn.piesat.framework.dynamic.datasource.annotation.DS;
+import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.TableMapper;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
@@ -26,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -40,11 +43,15 @@ import java.util.Map;
  * @author zhouxp
  */
 @Service
-@RequiredArgsConstructor
 public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> implements TableService {
-    private final TableFieldService tableFieldService;
-    private final DatabaseService databaseService;
-    private final DataSourceService dataSourceService;
+    @Resource
+    private  TableFieldService tableFieldService;
+
+    @Resource
+    private  DatabaseService databaseService;
+
+    @Resource
+    private  DataSourceService dataSourceService;
 
     private boolean repeat(Long datasourceId,String tableName){
         LambdaQueryWrapper<TableDO> wrapper =new LambdaQueryWrapper<>();
@@ -98,6 +105,12 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
                 getWrapper(tableQuery)
         );
         return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), TableVO::new));
+    }
+
+    @Override
+    @DS
+    public List<TableDO> getSqlByTable(String sql, DSEntity dsEntity) {
+        return baseMapper.getSqlByTable(sql);
     }
 
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
