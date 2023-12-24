@@ -46,8 +46,8 @@ public class TableController {
      * @param tableNameList 表名列表
      */
     @PostMapping("import/{datasourceId}")
-    public void tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<TableVO> tableNameList) {
-        tableService.tableImport(datasourceId, tableNameList);
+    public void tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<TableVO> tableList) {
+        tableService.tableImport(datasourceId, tableList);
     }
 
 

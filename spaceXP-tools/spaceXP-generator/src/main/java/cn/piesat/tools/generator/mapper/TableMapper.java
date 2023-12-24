@@ -21,5 +21,7 @@ import java.util.List;
 public interface TableMapper extends BaseMapper<TableDO> {
 
     @Select("${sql}")
-    List<TableDO> getSqlByTable(String sql);
+    List<TableDO> getTableBySql(String sql);
+
+
 }

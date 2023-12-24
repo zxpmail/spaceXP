@@ -1,7 +1,12 @@
 package cn.piesat.tools.generator.service;
 
+import cn.piesat.framework.dynamic.datasource.model.DSEntity;
+import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p/>
@@ -12,4 +17,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author zhouxp
  */
 public interface TableFieldService extends IService<TableFieldDO> {
+     Map<String, TableFieldDO> getMap();
+
+     List<TableFieldDO> getTableFieldList(String tableName,DatabaseDO databaseDO, DSEntity dsEntity);
+
 }

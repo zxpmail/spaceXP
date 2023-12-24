@@ -34,7 +34,7 @@ const dataFormRef = ref()
 
 const dataForm = reactive({
 	id: '',
-	tableNameListSelections: [],
+	tableListSelections: [],
 	datasourceId: '',
 	datasourceList: [],
 	tableList: [],
@@ -45,7 +45,7 @@ const dataForm = reactive({
 
 // 多选
 const selectionChangeHandle = (selections) => {
-	dataForm.tableNameListSelections = selections.map((item) => item['tableName'])
+	dataForm.tableListSelections = selections
 }
 
 const init = () => {
@@ -77,13 +77,13 @@ const getTableList = () => {
 
 // 表单提交
 const submitHandle = () => {
-	const tableNameList = dataForm.tableNameListSelections ? dataForm.tableNameListSelections : []
-	if (tableNameList.length === 0) {
+	const tableList = dataForm.tableListSelections ? dataForm.tableListSelections : []
+	if (tableList.length === 0) {
 		ElMessage.warning('请选择记录')
 		return
 	}
 
-	useTableImportSubmitApi(dataForm.datasourceId, tableNameList).then(() => {
+	useTableImportSubmitApi(dataForm.datasourceId, tableList).then(() => {
 		ElMessage.success({
 			message: '操作成功',
 			duration: 500,

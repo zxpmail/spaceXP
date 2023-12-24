@@ -167,22 +167,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         DatabaseDO databaseDO = databaseService.getById(dataSourceDO.getDatabaseId());
         DSEntity dsEntity =new DSEntity();
         dsEntity.setDSName__(dataSourceDO.getConnName());
-        List<TableDO> sqlByTable = tableService.getSqlByTable(databaseDO.getTableSql(), dsEntity);
-
-/*        DataSourceDO byId = getById(id);
-        LambdaQueryWrapper<DatabaseDO> wrapper  = new LambdaQueryWrapper<>();
-        wrapper.eq(DatabaseDO::getDbType,byId);
-        DatabaseDO one = databaseService.getOne(wrapper);
-        try {
-            Connection connection = DbUtils.getConnection(byId.getDbType(), one.getDriver(), byId.getConnUrl(), byId.getUsername(), byId.getPassword());
-            // 根据数据源，获取全部数据表
-            return GenUtils.getTableList(connection,one);
-
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException("数据源配置错误，请检查数据源配置！");
-        }*/
-        return sqlByTable;
+        return tableService.getSqlByTable(databaseDO.getTableSql(), dsEntity);
     }
 
     /**

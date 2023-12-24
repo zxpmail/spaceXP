@@ -53,6 +53,8 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
     @Resource
     private  DataSourceService dataSourceService;
 
+
+
     private boolean repeat(Long datasourceId,String tableName){
         LambdaQueryWrapper<TableDO> wrapper =new LambdaQueryWrapper<>();
         wrapper.eq(TableDO::getDatasourceId,datasourceId);
@@ -61,27 +63,23 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
     }
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void tableImport(Long datasourceId, List<TableVO> tableNameList) {
+    public void tableImport(Long datasourceId, List<TableVO> tableList) {
         DataSourceVO sourceVO = dataSourceService.info(datasourceId);
         DatabaseDO databaseDO = databaseService.getById(sourceVO.getDatabaseId());
-        Connection connection =null;
-        try {
-            //connection = DbUtils.getConnection(sourceVO.getDbType(), databaseDO.getDriver(), sourceVO.getConnUrl(), sourceVO.getUsername(), sourceVO.);
-
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new RuntimeException("数据源配置错误，请检查数据源配置！");
-        }
-        for (TableVO vo: tableNameList){
-            if(repeat(datasourceId,vo.getTableName())){
+        Map<String, TableFieldDO> map = tableFieldService.getMap();
+        DSEntity dsEntity =new DSEntity();
+        dsEntity.setDSName__(sourceVO.getConnName());
+        for (TableVO tableVO:tableList){
+            if(repeat(datasourceId,tableVO.getTableName())){
                 continue;
             }
-            TableDO tableDO = CopyBeanUtils.copy(vo, TableDO::new);
+            TableDO tableDO = CopyBeanUtils.copy(tableVO, TableDO::new);
+            tableDO.setDatasourceId(sourceVO.getId());
             save(tableDO);
-            // 获取原生字段数据
-            List<TableFieldDO> tableFieldList = GenUtils.getTableFieldList(connection,databaseDO, tableDO.getId(), tableDO.getTableName());
-
+            List<TableFieldDO> tableFieldList = tableFieldService.getTableFieldList(tableVO.getTableName(),databaseDO, dsEntity);
+            System.out.println(tableFieldList);
         }
+
 
         // 获取原生字段数据
         // 初始化字段数据
@@ -90,12 +88,6 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
         // 保存列数据
         //tableFieldList.forEach(tableFieldService::save);
 
-        try {
-            //释放数据源
-            connection.close();
-        } catch (SQLException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     @Override
@@ -110,7 +102,7 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
     @Override
     @DS
     public List<TableDO> getSqlByTable(String sql, DSEntity dsEntity) {
-        return baseMapper.getSqlByTable(sql);
+        return baseMapper.getTableBySql(sql);
     }
 
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
