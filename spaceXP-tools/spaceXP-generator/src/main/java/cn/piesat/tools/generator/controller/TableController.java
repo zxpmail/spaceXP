@@ -78,4 +78,14 @@ public class TableController {
         return tableService.sync(id);
     }
 
+    /**
+     * 根据id查询字段类型
+     * @param id 字段类型ID
+     * @return 字段类型实体
+     */
+    @GetMapping("/info/{id}")
+    public TableVO info(@PathVariable("id") Long id){
+        return tableService.info(id);
+    }
+
 }

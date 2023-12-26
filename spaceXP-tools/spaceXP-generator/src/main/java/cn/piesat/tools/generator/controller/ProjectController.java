@@ -33,6 +33,15 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
+
+    /**
+     * 查询所有项目
+     * @return 查询结果
+     */
+    @GetMapping("all")
+    public List<ProjectVO> all() {
+        return projectService.all();
+    }
     /**
      * 分页查询
      * @param pageBean 分页实体类

@@ -1,68 +1,38 @@
 <template>
 	<el-dialog v-model="visible" title="生成代码" :close-on-click-modal="false" draggable>
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
-			<el-row>
-				<el-col :span="12">
-					<el-form-item label="表名" prop="tableName">
-						<el-input v-model="dataForm.tableName" disabled placeholder="表名"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item label="说明" prop="tableComment">
-						<el-input v-model="dataForm.tableComment" placeholder="说明"></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="12">
-					<el-form-item label="类名" prop="className">
-						<el-input v-model="dataForm.className" placeholder="类名"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item prop="baseclassId" label="继承">
-						<el-select v-model="dataForm.baseclassId" placeholder="继承" style="width: 100%" clearable>
-							<el-option v-for="item in baseClassList" :key="item.id" :label="item.code" :value="item.id"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="12">
-					<el-form-item label="模块名" prop="moduleName">
-						<el-input v-model="dataForm.moduleName" placeholder="模块名"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item label="功能名" prop="functionName">
-						<el-input v-model="dataForm.functionName" placeholder="功能名"></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="12">
-					<el-form-item label="项目包名" prop="packageName">
-						<el-input v-model="dataForm.packageName" placeholder="项目包名"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item label="版本号" prop="version">
-						<el-input v-model="dataForm.version" placeholder="版本号"></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-row>
-				<el-col :span="12">
-					<el-form-item label="默认作者" prop="author">
-						<el-input v-model="dataForm.author" placeholder="默认作者"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12">
-					<el-form-item label="作者邮箱" prop="email">
-						<el-input v-model="dataForm.email" placeholder="作者邮箱"></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
+
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="表名" prop="tableName">
+            <el-input v-model="dataForm.tableName" disabled placeholder="表名"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="说明" prop="tableComment">
+            <el-input v-model="dataForm.tableComment" placeholder="说明"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item label="类名" prop="className">
+            <el-input v-model="dataForm.className" placeholder="类名"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-form-item prop="baseclassId" label="项目">
+            <el-select v-model="dataForm.project.artifactId" placeholder="项目" style="width: 100%" clearable @change="projectChange"
+                       value-key="projectId">
+              <el-option v-for="item in projectList" :key="item.id" :label="item.artifactId" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
 			<el-row>
 				<el-col :span="12">
 					<el-form-item label="生成方式" prop="generatorType">
@@ -99,7 +69,7 @@
 <script setup >
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus/es'
-import { useBaseClassListApi } from '@/api/baseClass.js'
+import { useProjectAllApi } from '@/api/project'
 import { useGeneratorApi, useDownloadApi } from '@/api/generator'
 import { useTableApi, useTableSubmitApi } from '@/api/table'
 
@@ -107,25 +77,36 @@ const emit = defineEmits(['refreshDataList'])
 
 const visible = ref(false)
 const dataFormRef = ref()
-const baseClassList = ref([])
+const projectList = ref([])
 const dataForm = reactive({
 	id: '',
-	baseclassId: '',
 	generatorType: 0,
 	formLayout: 1,
-	backendPath: '',
-	frontendPath: '',
-	packageName: '',
-	email: '',
-	author: '',
-	version: '',
-	moduleName: '',
+  project:{
+    projectId: '',
+    artifactId: '',
+    packageName: '',
+    email: '',
+    author: '',
+    version: '',
+    moduleName: '',
+  },
 	functionName: '',
 	className: '',
 	tableComment: '',
 	tableName: ''
 })
+const projectChange = (data) => {
+  let p= projectList.value.filter(i=>i.id===data)[0]
+  dataForm.project.projectId=p.projectId
+  dataForm.project.packageName=p.packageName
+  dataForm.project.email=p.email
+  dataForm.project.author=p.author
+  dataForm.project.version=p.version
+  dataForm.project.moduleName=p.moduleName
+  dataForm.project.artifactId=p.artifactId
 
+}
 const init = (id) => {
 	visible.value = true
 	dataForm.id = ''
@@ -140,8 +121,8 @@ const init = (id) => {
 }
 
 const getBaseClassList = () => {
-	useBaseClassListApi().then(res => {
-		baseClassList.value = res.data
+  useProjectAllApi().then(res => {
+    projectList.value = res.data
 	})
 }
 
@@ -155,11 +136,6 @@ const dataRules = ref({
 	tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	className: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	packageName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	author: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	moduleName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	functionName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	generatorType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	formLayout: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	backendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]

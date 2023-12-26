@@ -4,6 +4,9 @@ export const useProjectApi = id => {
     return service.get('/project/info/' + id)
 }
 
+export const useProjectAllApi = () => {
+    return service.get('/project/all')
+}
 export const useProjectSubmitApi = dataForm => {
     if (dataForm.id) {
         return service.put('/project/update', dataForm)

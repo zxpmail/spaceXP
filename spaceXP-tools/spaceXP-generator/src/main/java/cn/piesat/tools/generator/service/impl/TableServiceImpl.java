@@ -146,6 +146,13 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
         return true;
     }
 
+    @Override
+    public TableVO info(Long id) {
+        TableDO byId = getById(id);
+
+        return CopyBeanUtils.copy(byId,TableVO::new);
+    }
+
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
         LambdaQueryWrapper<TableDO> wrapper = Wrappers.lambdaQuery();
         wrapper.like(StringUtils.hasText(tableQuery.getTableName()), TableDO::getTableName, tableQuery.getTableName());

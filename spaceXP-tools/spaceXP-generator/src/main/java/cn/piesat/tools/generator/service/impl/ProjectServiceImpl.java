@@ -91,4 +91,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     public Boolean delete(Long id) {
         return removeById(id);
     }
+
+    @Override
+    public List<ProjectVO> all() {
+        return CopyBeanUtils.copy(list(),ProjectVO::new);
+    }
 }

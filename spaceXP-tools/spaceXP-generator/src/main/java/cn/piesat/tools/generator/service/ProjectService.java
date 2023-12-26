@@ -29,4 +29,6 @@ public interface ProjectService extends IService<ProjectDO> {
     Boolean delete(List<Long> ids);
 
     Boolean delete(Long id);
+
+    List<ProjectVO> all();
 }

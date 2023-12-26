@@ -32,4 +32,6 @@ public interface TableService extends IService<TableDO> {
     Boolean delete(Long id);
 
     Boolean sync(Long id);
+
+    TableVO info(Long id);
 }
