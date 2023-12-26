@@ -6,6 +6,7 @@ import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.TableService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,5 +51,19 @@ public class TableController {
         tableService.tableImport(datasourceId, tableList);
     }
 
+    @DeleteMapping("/delete")
+    public Boolean delete(@RequestBody List<Long> ids) {
+        return tableService.delete(ids);
+    }
+
+    /**
+     * 根据字段类型id删除记录
+     * @param id 数据源Id
+     * @return  成功true 失败false
+     */
+    @DeleteMapping("/delete/{id}")
+    public Boolean delete(@PathVariable Long id) {
+        return tableService.delete(id);
+    }
 
 }

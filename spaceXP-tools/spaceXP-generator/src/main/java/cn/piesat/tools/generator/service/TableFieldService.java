@@ -21,4 +21,8 @@ public interface TableFieldService extends IService<TableFieldDO> {
 
      void  importField(Map<String, FieldTypeDO> map, Long tableId, String tableName, DatabaseDO databaseDO, DSEntity dsEntity);
 
+     Boolean deleteByTableId(Long tableId);
+
+     Boolean deleteByTableId(List<Long> tableId);
+
 }

@@ -100,6 +100,20 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
         return baseMapper.getTableBySql(sql);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean delete(List<Long> ids) {
+        tableFieldService.deleteByTableId(ids);
+        return removeBatchByIds(ids);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean delete(Long id) {
+        tableFieldService.deleteByTableId(id);
+        return removeById(id);
+    }
+
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
         LambdaQueryWrapper<TableDO> wrapper = Wrappers.lambdaQuery();
         wrapper.like(StringUtils.hasText(tableQuery.getTableName()),TableDO::getTableName,tableQuery.getTableName());

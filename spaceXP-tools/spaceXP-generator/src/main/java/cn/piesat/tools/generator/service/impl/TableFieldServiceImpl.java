@@ -8,6 +8,7 @@ import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.service.TableFieldService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Functions;
@@ -76,5 +77,19 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
             return f;
         });
         this.saveBatch(query);
+    }
+
+    @Override
+    public Boolean deleteByTableId(Long tableId) {
+        LambdaQueryWrapper<TableFieldDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(TableFieldDO::getTableId,tableId);
+        return remove(wrapper);
+    }
+
+    @Override
+    public Boolean deleteByTableId(List<Long> tableId) {
+        LambdaQueryWrapper<TableFieldDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(TableFieldDO::getTableId,tableId);
+        return remove(wrapper);
     }
 }

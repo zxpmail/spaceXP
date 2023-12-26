@@ -24,4 +24,8 @@ public interface TableService extends IService<TableDO> {
     PageResult list(PageBean pageBean, TableQuery tableQuery);
 
     List<TableDO> getSqlByTable(String sql, DSEntity dsEntity);
+
+    Boolean delete(List<Long> ids);
+
+    Boolean delete(Long id);
 }
