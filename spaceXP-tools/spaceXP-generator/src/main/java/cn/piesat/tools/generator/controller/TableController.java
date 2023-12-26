@@ -7,6 +7,7 @@ import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.TableService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,6 +65,17 @@ public class TableController {
     @DeleteMapping("/delete/{id}")
     public Boolean delete(@PathVariable Long id) {
         return tableService.delete(id);
+    }
+
+
+    /**
+     * 同步表结构
+     *
+     * @param id 表ID
+     */
+    @PostMapping("sync/{id}")
+    public Boolean sync(@PathVariable("id") Long id) {
+        return tableService.sync(id);
     }
 
 }

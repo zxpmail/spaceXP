@@ -41,6 +41,11 @@ public class TableVO {
     private Long datasourceId;
 
     /**
+     * 数据源名称
+     */
+    private String datasourceName;
+
+    /**
      * 字段列表
      */
     @TableField(exist = false)

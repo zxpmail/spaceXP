@@ -21,7 +21,7 @@
 			<el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
 			<el-table-column prop="tableName" label="表名" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="tableComment" label="表说明" header-align="center" align="center"></el-table-column>
-			<el-table-column prop="className" label="类名" header-align="center" align="center"></el-table-column>
+			<el-table-column prop="datasourceName" label="数据源名称" header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="250">
 				<template #default="scope">
 					<el-button type="primary" link @click="editHandle(scope.row.id)">编辑</el-button>

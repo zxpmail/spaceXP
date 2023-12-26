@@ -20,8 +20,4 @@ import java.util.List;
 @Mapper
 public interface TableMapper extends BaseMapper<TableDO> {
 
-    @Select("${sql}")
-    List<TableDO> getTableBySql(String sql);
-
-
 }

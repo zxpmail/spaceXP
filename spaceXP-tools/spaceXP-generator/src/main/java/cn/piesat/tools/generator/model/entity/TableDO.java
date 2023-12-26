@@ -37,6 +37,9 @@ public class TableDO extends BaseDO{
      * 数据源ID
      */
     private Long datasourceId;
-
+    /**
+     * 数据源名称
+     */
+    private String datasourceName;
 
 }

@@ -18,13 +18,10 @@ import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.DatabaseService;
 import cn.piesat.tools.generator.service.TableService;
-import cn.piesat.tools.generator.utils.DbUtils;
-import cn.piesat.tools.generator.utils.GenUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -34,8 +31,6 @@ import org.springframework.util.StringUtils;
 
 
 import javax.annotation.Resource;
-import javax.sql.DataSource;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -150,11 +145,13 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         return true;
     }
 
-    private DataSource datasourceTest(DataSourceVO dataSourceVO) {
+    private void datasourceTest(DataSourceVO dataSourceVO) {
         DataSourceEntity copy = CopyBeanUtils.copy(dataSourceVO, DataSourceEntity::new);
+        if(Objects.isNull(copy)){
+            return;
+        }
         copy.setKey(dataSourceVO.getConnName());
-
-       return dynamicDataSource.test(copy);
+        dynamicDataSource.test(copy);
     }
 
     @Resource
@@ -167,7 +164,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         DatabaseDO databaseDO = databaseService.getById(dataSourceDO.getDatabaseId());
         DSEntity dsEntity =new DSEntity();
         dsEntity.setDSName__(dataSourceDO.getConnName());
-        return tableService.getSqlByTable(databaseDO.getTableSql(), dsEntity);
+        return tableService.getSqlByTable(databaseDO, dataSourceDO,dsEntity);
     }
 
     /**
@@ -180,7 +177,6 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         if (count(wrapper)>0){
             throw new BaseException(CommonResponseEnum.RECORD_REPEAT);
         }
-
     }
 
     /**
