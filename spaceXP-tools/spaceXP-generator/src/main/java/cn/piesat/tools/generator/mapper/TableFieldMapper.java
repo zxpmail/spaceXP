@@ -18,6 +18,5 @@ import java.util.List;
  */
 @Mapper
 public interface TableFieldMapper extends BaseMapper<TableFieldDO> {
-    @Select("${sql}")
-    List<TableFieldDO> getFieldBySql(String sql);
+
 }

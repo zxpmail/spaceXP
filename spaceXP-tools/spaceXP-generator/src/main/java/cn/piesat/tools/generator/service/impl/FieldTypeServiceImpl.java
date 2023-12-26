@@ -16,12 +16,15 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.base.Functions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p/>
@@ -100,5 +103,14 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
         }
         byId.setUpdateTime(null);
         return updateById(byId);
+    }
+
+    @Override
+    public Map<String, FieldTypeDO> getMap() {
+        List<FieldTypeDO> list = this.list();
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.stream().collect(Collectors.toMap(t -> t.getColumnType().toLowerCase(), Functions.identity(), (d1, d2) -> d1));
     }
 }

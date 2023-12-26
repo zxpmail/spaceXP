@@ -43,7 +43,7 @@ public class TableController {
      * 导入数据源中的表
      *
      * @param datasourceId  数据源ID
-     * @param tableNameList 表名列表
+     * @param tableList 表名列表
      */
     @PostMapping("import/{datasourceId}")
     public void tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<TableVO> tableList) {

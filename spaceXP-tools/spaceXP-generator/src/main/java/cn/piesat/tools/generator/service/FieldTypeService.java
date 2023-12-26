@@ -8,6 +8,7 @@ import cn.piesat.tools.generator.model.vo.FieldTypeVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p/>
@@ -31,4 +32,6 @@ public interface FieldTypeService extends IService<FieldTypeDO> {
     Boolean delete(Long id);
 
     Boolean updateIsList(Long id);
+
+    Map<String, FieldTypeDO> getMap();
 }

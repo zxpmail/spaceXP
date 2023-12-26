@@ -5,22 +5,22 @@ import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.tools.generator.mapper.TableFieldMapper;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
+import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.service.TableFieldService;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Functions;
 import lombok.SneakyThrows;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -36,28 +36,45 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
 
     @Resource
     private DynamicDataSource dynamicDataSource;
-    @Override
-    public Map<String, TableFieldDO> getMap() {
-        List<TableFieldDO> list = this.list();
-        if (CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        return list.stream().collect(Collectors.toMap(t -> t.getFieldName().toLowerCase(), Functions.identity(), (d1, d2) -> d1));
-    }
 
     @SneakyThrows
     @DS
     @Override
-    public List<TableFieldDO> getTableFieldList(String tableName,DatabaseDO databaseDO, DSEntity dsEntity) {
+    public void importField(Map<String, FieldTypeDO> map, Long tableId, String tableName, DatabaseDO databaseDO, DSEntity dsEntity) {
         String tableFieldsSql = databaseDO.getTableFields();
         if ("Oracle".equalsIgnoreCase(databaseDO.getDbType())) {
             DatabaseMetaData md = dynamicDataSource.getConnection().getMetaData();
 
-            tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()),tableName);
+            tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
         } else {
             tableFieldsSql = String.format(tableFieldsSql, tableName);
         }
-        return baseMapper.getFieldBySql(tableFieldsSql);
-
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dynamicDataSource);
+        List<TableFieldDO> query = jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
+            TableFieldDO f = new TableFieldDO();
+            f.setTableId(tableId);
+            f.setFieldName(rs.getString(databaseDO.getFieldName()));
+            f.setAttrName(StringUtils.underlineToCamel(f.getFieldName()));
+            String fieldType = rs.getString(databaseDO.getFieldType());
+            if (fieldType.contains(" ")) {
+                fieldType = fieldType.substring(0, fieldType.indexOf(" "));
+            }
+            f.setFieldType(fieldType);
+            f.setFieldComment(rs.getString(databaseDO.getFieldComment()));
+            String key = rs.getString(databaseDO.getFieldKey());
+            f.setPrimaryPk(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
+            // 获取字段对应的类型
+            FieldTypeDO fieldTypeDO = map.get(f.getFieldType().toLowerCase());
+            if (Objects.isNull(fieldTypeDO)) {
+                // 没找到对应的类型，则为Object类型
+                f.setAttrType("Object");
+            } else {
+                f.setAttrType(fieldTypeDO.getAttrType());
+                f.setPackageName(fieldTypeDO.getPackageName());
+            }
+            f.setSort(rowNum);
+            return f;
+        });
+        this.saveBatch(query);
     }
 }

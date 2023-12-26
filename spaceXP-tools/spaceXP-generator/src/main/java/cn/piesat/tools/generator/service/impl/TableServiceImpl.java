@@ -8,6 +8,7 @@ import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.TableMapper;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
+import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
@@ -16,23 +17,21 @@ import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.DatabaseService;
+import cn.piesat.tools.generator.service.FieldTypeService;
 import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.service.TableService;
-import cn.piesat.tools.generator.utils.GenUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p/>
@@ -53,6 +52,9 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
     @Resource
     private  DataSourceService dataSourceService;
 
+    @Resource
+    private FieldTypeService fieldTypeService;
+
 
 
     private boolean repeat(Long datasourceId,String tableName){
@@ -66,7 +68,7 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
     public void tableImport(Long datasourceId, List<TableVO> tableList) {
         DataSourceVO sourceVO = dataSourceService.info(datasourceId);
         DatabaseDO databaseDO = databaseService.getById(sourceVO.getDatabaseId());
-        Map<String, TableFieldDO> map = tableFieldService.getMap();
+        Map<String, FieldTypeDO> map = fieldTypeService.getMap();
         DSEntity dsEntity =new DSEntity();
         dsEntity.setDSName__(sourceVO.getConnName());
         for (TableVO tableVO:tableList){
@@ -74,20 +76,13 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
                 continue;
             }
             TableDO tableDO = CopyBeanUtils.copy(tableVO, TableDO::new);
+            if(Objects.isNull(tableDO)){
+                continue;
+            }
             tableDO.setDatasourceId(sourceVO.getId());
             save(tableDO);
-            List<TableFieldDO> tableFieldList = tableFieldService.getTableFieldList(tableVO.getTableName(),databaseDO, dsEntity);
-            System.out.println(tableFieldList);
+            tableFieldService.importField(map,tableDO.getId(),tableVO.getTableName(),databaseDO, dsEntity);
         }
-
-
-        // 获取原生字段数据
-        // 初始化字段数据
-        //tableFieldService.initFieldList(tableFieldList);
-
-        // 保存列数据
-        //tableFieldList.forEach(tableFieldService::save);
-
     }
 
     @Override
@@ -109,24 +104,5 @@ public class TableServiceImpl  extends ServiceImpl<TableMapper, TableDO> impleme
         LambdaQueryWrapper<TableDO> wrapper = Wrappers.lambdaQuery();
         wrapper.like(StringUtils.hasText(tableQuery.getTableName()),TableDO::getTableName,tableQuery.getTableName());
         return wrapper;
-    }
-
-    public void initFieldList(List<TableFieldDO> tableFieldList) {
-        // 字段类型、属性类型映射
-        Map<String, TableFieldDO> fieldTypeMap = null; //TableFieldDO.getMap();
-        int index = 0;
-        for (TableFieldDO field : tableFieldList) {
-            //field.setAttrName(StringUtils.underlineToCamel(field.getFieldName()));
-            // 获取字段对应的类型
-            TableFieldDO fieldTypeMapping = fieldTypeMap.get(field.getFieldType().toLowerCase());
-            if (fieldTypeMapping == null) {
-                // 没找到对应的类型，则为Object类型
-                field.setAttrType("Object");
-            } else {
-                field.setAttrType(fieldTypeMapping.getAttrType());
-                field.setPackageName(fieldTypeMapping.getPackageName());
-            }
-            field.setSort(index++);
-        }
     }
 }
