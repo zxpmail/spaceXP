@@ -21,3 +21,5 @@ space:
         url: jdbc:mysql://127.0.0.1:3307/test?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
         username: root
         password: 123456
+  table:
+    enable: true

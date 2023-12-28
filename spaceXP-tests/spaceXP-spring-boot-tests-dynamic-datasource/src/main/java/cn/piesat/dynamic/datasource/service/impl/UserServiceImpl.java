@@ -5,6 +5,8 @@ import cn.piesat.dynamic.datasource.model.entity.UserDO;
 import cn.piesat.dynamic.datasource.service.UserService;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.framework.dynamic.datasource.annotation.DS;
+import cn.piesat.framework.mybatis.plus.annotation.DynamicTableName;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,6 +30,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
 
     @Override
+    @DS("slave")
+    @DynamicTableName
     public UserDO info(Long id) {
         return getById(id);
     }

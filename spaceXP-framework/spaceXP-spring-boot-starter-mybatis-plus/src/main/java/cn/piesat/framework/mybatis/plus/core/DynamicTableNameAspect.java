@@ -1,6 +1,7 @@
 package cn.piesat.framework.mybatis.plus.core;
 
 import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.mybatis.plus.model.TableNameEntity;
 import lombok.extern.slf4j.Slf4j;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -8,7 +9,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
 import org.aspectj.lang.annotation.Pointcut;
-
 
 
 /**
@@ -38,18 +38,27 @@ public class DynamicTableNameAspect {
     @Around(value = "logAspect()")
     public Object changeTableName(ProceedingJoinPoint point) throws Throwable {
         Object[] args = point.getArgs();
-        Object result=null;
-        DynamicTableNameHandler.setData((String) args[0]);
+        String tableName = "";
+        boolean isSetDynamicTableName = false;
+        if (args != null) {
+            for (Object arg : args) {
+                if (arg instanceof TableNameEntity) {
+                    tableName = ((TableNameEntity) arg).getTableName();
+                    DynamicTableNameHandler.setData(tableName);
+                    isSetDynamicTableName =true;
+                    break;
+                }
+            }
+        }
         try {
-            result = point.proceed(args);
-        }catch (Exception e){
+            return point.proceed();
+        } catch (Exception e) {
             e.printStackTrace();
             throw new BaseException(e.getMessage());
-
-        }finally {
-            DynamicTableNameHandler.removeData();
+        } finally {
+            if(isSetDynamicTableName) {
+                DynamicTableNameHandler.removeData();
+            }
         }
-        return result;
     }
-
 }

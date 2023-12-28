@@ -52,7 +52,6 @@ public class UserController {
      */
     @ApiOperation("根据id查询")
     @GetMapping("/info/{id}")
-    @DS
     public UserDO info(@PathVariable("id") Long id){
         return userService.info(id);
     }
