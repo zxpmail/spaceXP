@@ -30,7 +30,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
 
     @Override
-    @DS("slave")
+    //@DS("slave")
     @DynamicTableName
     public UserDO info(Long id) {
         return getById(id);
