@@ -3,6 +3,7 @@ package cn.piesat.framework.dynamic.datasource.core;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
+import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -31,18 +32,7 @@ public class DSAspect {
 
     @Around("dynamicDataSource()")
     public Object datasourceAround(ProceedingJoinPoint point) throws Throwable {
-
-        Object[] args = point.getArgs();
-        String dsName="";
-        if(args!=null){
-            for (Object arg : args) {
-                if(arg instanceof DSEntity){
-                    dsName=((DSEntity) arg).getDSName__();
-                    DataSourceContextHolder.setDataSource(dsName);
-                    break;
-                }
-            }
-        }
+        String dsName = DataSourceUtils.getDsName(point);
         if(!StringUtils.hasText(dsName)) {
             MethodSignature signature = (MethodSignature) point.getSignature();
             Method method = signature.getMethod();
