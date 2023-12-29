@@ -4,16 +4,11 @@ package cn.piesat.framework.feign.core;
 import cn.piesat.framework.common.utils.ServletUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import feign.template.HeaderTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Map;
 
 /**
  * <p/>

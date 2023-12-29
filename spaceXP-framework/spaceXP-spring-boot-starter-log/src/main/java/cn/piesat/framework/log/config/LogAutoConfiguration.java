@@ -5,13 +5,10 @@ import cn.piesat.framework.log.core.OpLogAspect;
 import cn.piesat.framework.log.core.SwaggerLogAspect;
 import cn.piesat.framework.log.event.LogListener;
 import cn.piesat.framework.log.properties.LogProperties;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**

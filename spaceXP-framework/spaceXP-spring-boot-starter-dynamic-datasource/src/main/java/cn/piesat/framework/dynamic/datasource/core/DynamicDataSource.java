@@ -1,15 +1,11 @@
 package cn.piesat.framework.dynamic.datasource.core;
 
-import cn.piesat.framework.common.exception.BaseException;
-import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

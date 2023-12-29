@@ -8,7 +8,6 @@ import cn.piesat.framework.mybatis.plus.core.DynamicTableNameHandler;
 import cn.piesat.framework.mybatis.plus.core.MybatisPlusExceptionHandler;
 import cn.piesat.framework.mybatis.plus.properties.DynamicTableNameProperties;
 import cn.piesat.framework.mybatis.plus.properties.MybatisPlusConfigProperties;
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;

@@ -1,7 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.core;
 
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
-import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
 import lombok.extern.slf4j.Slf4j;
