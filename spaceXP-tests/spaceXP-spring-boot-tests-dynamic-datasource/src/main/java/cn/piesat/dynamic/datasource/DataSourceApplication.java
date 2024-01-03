@@ -2,7 +2,6 @@ package cn.piesat.dynamic.datasource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * <p/>
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * @author zhouxp
  */
 @SpringBootApplication
-@EnableAspectJAutoProxy(proxyTargetClass = false, exposeProxy = true)
 
 public class DataSourceApplication {
     public static void main(String[] args) {
