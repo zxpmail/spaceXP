@@ -1,6 +1,10 @@
 package cn.piesat.framework.dynamic.datasource.utils;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * <p/>
@@ -11,27 +15,57 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  * @author zhouxp
  */
 public class DataSourceContextHolder {
-    private static final ThreadLocal<String> DATASOURCE_HOLDER = new TransmittableThreadLocal<>();
-    /**
-     * 设置数据源
-     * @param dataSourceName 数据源名称
-     */
-    public static void setDataSource(String dataSourceName){
-        DATASOURCE_HOLDER.set(dataSourceName);
-    }
+    private static final ThreadLocal<Deque<String>> DATASOURCE_HOLDER = new TransmittableThreadLocal<Deque<String>>() {
+        @Override
+        protected Deque<String> initialValue() {
+            return new ArrayDeque<>();
+        }
+    };
 
     /**
-     * 获取当前线程的数据源
+     * 获得当前线程数据源
+     *
      * @return 数据源名称
      */
-    public static String getDataSource(){
-        return DATASOURCE_HOLDER.get();
+    public static String peek() {
+        return DATASOURCE_HOLDER.get().peek();
     }
 
     /**
-     * 删除当前数据源
+     * 设置当前线程数据源
+     * <p>
+     * 如非必要不要手动调用，调用后确保最终清除
+     * </p>
+     *
+     * @param ds 数据源名称
+     * @return 数据源名称
      */
-    public static void removeDataSource(){
+    public static String push(String ds) {
+        DATASOURCE_HOLDER.get().push(StringUtils.hasText(ds) ? ds : "");
+        return ds;
+    }
+
+    /**
+     * 清空当前线程数据源
+     * <p>
+     * 如果当前线程是连续切换数据源 只会移除掉当前线程的数据源名称
+     * </p>
+     */
+    public static void poll() {
+        Deque<String> deque = DATASOURCE_HOLDER.get();
+        deque.poll();
+        if (deque.isEmpty()) {
+            DATASOURCE_HOLDER.remove();
+        }
+    }
+
+    /**
+     * 强制清空本地线程
+     * <p>
+     * 防止内存泄漏，如手动调用了push可调用此方法确保清除
+     * </p>
+     */
+    public static void clear() {
         DATASOURCE_HOLDER.remove();
     }
 }

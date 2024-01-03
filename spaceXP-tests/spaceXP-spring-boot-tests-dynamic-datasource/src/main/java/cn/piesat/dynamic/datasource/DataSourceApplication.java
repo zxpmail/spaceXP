@@ -2,8 +2,7 @@ package cn.piesat.dynamic.datasource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
  * <p/>
@@ -13,7 +12,9 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
  *
  * @author zhouxp
  */
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class })
+@SpringBootApplication
+@EnableAspectJAutoProxy(proxyTargetClass = false, exposeProxy = true)
+
 public class DataSourceApplication {
     public static void main(String[] args) {
         SpringApplication.run(DataSourceApplication.class,args);

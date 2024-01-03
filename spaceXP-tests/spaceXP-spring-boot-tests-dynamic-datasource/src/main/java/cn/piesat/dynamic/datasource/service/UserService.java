@@ -4,6 +4,7 @@ package cn.piesat.dynamic.datasource.service;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.dynamic.datasource.model.entity.UserDO;
+import cn.piesat.framework.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
@@ -29,5 +30,6 @@ public interface UserService extends IService<UserDO> {
     Boolean delete(List<Long> asList);
 
     Boolean delete(Long id);
+
 }
 

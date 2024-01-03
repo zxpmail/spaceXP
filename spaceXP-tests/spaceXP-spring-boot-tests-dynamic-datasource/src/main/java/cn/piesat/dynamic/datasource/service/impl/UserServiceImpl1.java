@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("userService")
+@Service("userService1")
 @DS("slave")
-public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService  {
+public class UserServiceImpl1 extends ServiceImpl<UserMapper, UserDO> implements UserService  {
 
 
     @Override
@@ -31,7 +31,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
 
     @Override
-    @DS("master")
     @DynamicTableName
     public UserDO info(Long id) {
         return getById(id);

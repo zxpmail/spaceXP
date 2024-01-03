@@ -37,15 +37,15 @@ public class DSAspect {
             Method method = signature.getMethod();
             DS ds = method.getAnnotation(DS.class);
             if (Objects.nonNull(ds)) {
-                DataSourceContextHolder.setDataSource(ds.value());
+                DataSourceContextHolder.push(ds.value());
             } else {
-                DataSourceContextHolder.setDataSource("__master");
+                DataSourceContextHolder.push("__master");
             }
         }
         try {
             return point.proceed();
         } finally {
-            DataSourceContextHolder.removeDataSource();
+            DataSourceContextHolder.poll();
         }
     }
 }

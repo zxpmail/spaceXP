@@ -26,11 +26,6 @@ public class DynamicMethodInterceptor implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation point) throws Throwable {
 
-        // 如果DataSourceContextHolder.getDataSource()有值表示上层传来的数据源放行
-        if (StringUtils.hasText(DataSourceContextHolder.getDataSource())) {
-            return point.proceed();
-        }
-
         // 如果类上有DS注解 而方法上没有DS进行ds处理，方法上又DS就放行
         DS ds = getClassAnnotation(point, DS.class);
         if (!Objects.isNull(ds)) {
@@ -42,18 +37,18 @@ public class DynamicMethodInterceptor implements MethodInterceptor {
             String dsName = DataSourceUtils.getDsName(point);
             String dsValue = ds.value();
             if (StringUtils.hasText(dsName)) {
-                DataSourceContextHolder.setDataSource(dsName);
+                DataSourceContextHolder.push(dsName);
             } else if (StringUtils.hasText(dsValue)) {
-                DataSourceContextHolder.setDataSource(dsValue);
+                DataSourceContextHolder.push(dsValue);
             }
         } else {
             //默认数据源
-            DataSourceContextHolder.setDataSource("__master");
+            DataSourceContextHolder.push("__master");
         }
         try {
             return point.proceed();
         } finally {
-            DataSourceContextHolder.removeDataSource();
+            DataSourceContextHolder.poll();
         }
     }
 

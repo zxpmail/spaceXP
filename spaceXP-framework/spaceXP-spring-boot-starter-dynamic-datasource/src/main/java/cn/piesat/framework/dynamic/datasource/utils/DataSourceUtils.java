@@ -48,7 +48,7 @@ public class DataSourceUtils {
             for (Object arg : args) {
                 if(arg instanceof DSEntity){
                     dsName=((DSEntity) arg).getDSName__();
-                    DataSourceContextHolder.setDataSource(dsName);
+                    DataSourceContextHolder.push(dsName);
                     return dsName;
                 }
             }
@@ -62,7 +62,7 @@ public class DataSourceUtils {
         for (Object arg : args) {
             if(arg instanceof DSEntity){
                 dsName=((DSEntity) arg).getDSName__();
-                DataSourceContextHolder.setDataSource(dsName);
+                DataSourceContextHolder.push(dsName);
                 return dsName;
             }
         }
