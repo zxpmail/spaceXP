@@ -15,7 +15,6 @@ import org.springframework.context.annotation.ImportResource;
  * @author zhouxp
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class })
-@ImportResource("classpath:applicationContext.xml")
 public class DataSourceApplication {
     public static void main(String[] args) {
         SpringApplication.run(DataSourceApplication.class,args);

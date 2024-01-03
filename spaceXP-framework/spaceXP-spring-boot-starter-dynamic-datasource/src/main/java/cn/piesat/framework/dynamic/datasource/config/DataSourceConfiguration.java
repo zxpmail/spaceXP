@@ -2,9 +2,15 @@ package cn.piesat.framework.dynamic.datasource.config;
 
 import cn.piesat.framework.dynamic.datasource.core.DSAspect;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.core.DynamicMethodInterceptor;
+import cn.piesat.framework.dynamic.datasource.core.GenerallyAspect;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperties;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.aop.aspectj.AspectJExpressionPointcut;
+import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -12,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -52,4 +59,16 @@ public class DataSourceConfiguration {
     public DSAspect dSAspect(){
         return new DSAspect();
     }
+
+    @Bean
+    public AspectJExpressionPointcutAdvisor configurabledvisor(DataSourceProperties dataSourceProperties) {
+        if(StringUtils.hasText(dataSourceProperties.getPointcut())) {
+            AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
+            advisor.setExpression(dataSourceProperties.getPointcut());
+            advisor.setAdvice(new DynamicMethodInterceptor());
+            return advisor;
+        }
+        return null;
+    }
+
 }

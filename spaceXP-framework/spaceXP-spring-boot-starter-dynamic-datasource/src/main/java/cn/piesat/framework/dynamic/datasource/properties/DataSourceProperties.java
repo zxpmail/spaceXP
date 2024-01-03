@@ -19,4 +19,6 @@ import java.util.Map;
 @Data
 public class DataSourceProperties {
     private Map<String,DataSourceEntity> dss;
+
+    private String pointcut;
 }
