@@ -45,6 +45,7 @@ public class DataSourceRunner implements ApplicationRunner {
             }
             dynamicDataSource.add(ds);
         }
+        ConfigUtils.init();
     }
 }
 
