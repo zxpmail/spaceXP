@@ -7,6 +7,7 @@ import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperties;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
 import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -57,7 +58,8 @@ public class DataSourceConfiguration {
     }
 
     @Bean
-    public AspectJExpressionPointcutAdvisor configurabledvisor(DataSourceProperties dataSourceProperties) {
+    @ConfigurationProperties("spring.datasource.pointcut")
+    public AspectJExpressionPointcutAdvisor configurableAdvisor(DataSourceProperties dataSourceProperties) {
         if(StringUtils.hasText(dataSourceProperties.getPointcut())) {
             AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
             advisor.setExpression(dataSourceProperties.getPointcut());
