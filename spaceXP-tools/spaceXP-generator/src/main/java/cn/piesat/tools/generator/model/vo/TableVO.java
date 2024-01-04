@@ -1,11 +1,13 @@
 package cn.piesat.tools.generator.model.vo;
 
+import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -50,5 +52,16 @@ public class TableVO {
      */
     @TableField(exist = false)
     private List<FieldTypeVO> fieldList;
+
+    /**
+     * 项目ID
+     */
+    @NotNull(message = "项目ID不能为空", groups = UpdateGroup.class)
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long projectId;
+    /**
+     * 项目标识
+     */
+    private String artifactId;
 
 }

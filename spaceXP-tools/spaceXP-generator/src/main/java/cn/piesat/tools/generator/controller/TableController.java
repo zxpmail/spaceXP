@@ -1,15 +1,20 @@
 package cn.piesat.tools.generator.controller;
 
+import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.query.TableQuery;
+import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.TableService;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -86,6 +91,18 @@ public class TableController {
     @GetMapping("/info/{id}")
     public TableVO info(@PathVariable("id") Long id){
         return tableService.info(id);
+    }
+
+
+
+    /**
+     * 更新字段类型
+     * @param tableDTO 表DTO
+     * @return  成功true 失败false
+     */
+    @PutMapping("update")
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody TableDTO tableDTO) {
+        return tableService.update(tableDTO);
     }
 
 }

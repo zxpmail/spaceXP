@@ -15,6 +15,6 @@ import java.util.List;
  */
 @Data
 public class GeneratorInfo {
-    private ProjectVO  projectVO;
+    private ProjectVO  project;
     private List<TemplateInfo> templates;
 }

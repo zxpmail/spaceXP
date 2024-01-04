@@ -1,12 +1,10 @@
 package cn.piesat.tools.generator.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+
 import com.baomidou.mybatisplus.annotation.TableName;
+
 import lombok.Data;
 
-import java.util.Date;
-import java.util.List;
 
 /**
  * <p/>
@@ -42,4 +40,12 @@ public class TableDO extends BaseDO{
      */
     private String datasourceName;
 
+    /**
+     * 项目ID
+     */
+    private Long projectId;
+    /**
+     * 项目标识
+     */
+    private String artifactId;
 }

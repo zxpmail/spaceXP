@@ -4,7 +4,7 @@ export const useTableApi = id => {
 }
 
 export const useTableSubmitApi = dataForm => {
-    return service.put('/table', dataForm)
+    return service.put('/table/update', dataForm)
 }
 
 export const useTableImportSubmitApi = (datasourceId, tableNameList) => {

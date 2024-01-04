@@ -8,8 +8,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,6 +70,10 @@ public class TestController {
             Thread.sleep(100000000);
         }
         return "Hello, World!";
+    }
+    @ApiOperation(value = "导入")
+    @PostMapping("/import")
+    public void importFile(@RequestPart MultipartFile file){
     }
 
     @GetMapping("map")

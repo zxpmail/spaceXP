@@ -8,6 +8,7 @@ import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.TableMapper;
+import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
@@ -151,6 +152,17 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
         TableDO byId = getById(id);
 
         return CopyBeanUtils.copy(byId,TableVO::new);
+    }
+
+    @Override
+    public Boolean update(TableDTO tableDTO) {
+        TableDO byId = getById(tableDTO.getId());
+        if (Objects.isNull(byId)) {
+            return false;
+        } else {
+            TableDO tableDO = CopyBeanUtils.copy(tableDTO, TableDO::new);
+            return updateById(tableDO);
+        }
     }
 
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {

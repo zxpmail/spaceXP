@@ -25,7 +25,7 @@
       </el-row>
       <el-row>
         <el-col :span="24">
-          <el-form-item prop="baseclassId" label="项目">
+          <el-form-item prop="artifactId" label="项目">
             <el-select v-model="dataForm.project.artifactId" placeholder="项目" style="width: 100%" clearable @change="projectChange"
                        value-key="projectId">
               <el-option v-for="item in projectList" :key="item.id" :label="item.artifactId" :value="item.id"></el-option>
@@ -98,14 +98,13 @@ const dataForm = reactive({
 })
 const projectChange = (data) => {
   let p= projectList.value.filter(i=>i.id===data)[0]
-  dataForm.project.projectId=p.projectId
-  dataForm.project.packageName=p.packageName
-  dataForm.project.email=p.email
-  dataForm.project.author=p.author
-  dataForm.project.version=p.version
-  dataForm.project.moduleName=p.moduleName
+  if(!p){
+    ElMessage.error('项目不存在')
+    return
+  }
+  dataForm.project= p
+  dataForm.project.projectId=p.id
   dataForm.project.artifactId=p.artifactId
-
 }
 const init = (id) => {
 	visible.value = true
@@ -116,11 +115,12 @@ const init = (id) => {
 		dataFormRef.value.resetFields()
 	}
 
-	getBaseClassList()
+  getProjectList()
 	getTable(id)
+
 }
 
-const getBaseClassList = () => {
+const getProjectList = () => {
   useProjectAllApi().then(res => {
     projectList.value = res.data
 	})
@@ -129,10 +129,13 @@ const getBaseClassList = () => {
 const getTable = (id) => {
 	useTableApi(id).then(res => {
 		Object.assign(dataForm, res.data)
+    dataForm.project.artifactId=res.data.artifactId
+    dataForm.project.projectId=res.data.projectId
 	})
 }
 
 const dataRules = ref({
+  artifactId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	className: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
@@ -147,8 +150,13 @@ const submitHandle = () => {
 		if (!valid) {
 			return false
 		}
-
-		useTableSubmitApi(dataForm).then(() => {
+    const data = { 'projectId': dataForm.project.projectId,
+      'id': dataForm.id,
+      'artifactId': dataForm.project.artifactId,
+      'className': dataForm.className,
+      'tableComment': dataForm.tableComment
+    }
+		useTableSubmitApi(data).then(() => {
 			ElMessage.success({
 				message: '操作成功',
 				duration: 500,
@@ -167,9 +175,14 @@ const generatorHandle = () => {
 		if (!valid) {
 			return false
 		}
-
+    const data = { 'projectId': dataForm.project.projectId,
+      'id': dataForm.id,
+      'artifactId': dataForm.project.artifactId,
+      'className': dataForm.className,
+      'tableComment': dataForm.tableComment
+    }
 		// 先保存
-		await useTableSubmitApi(dataForm)
+		await useTableSubmitApi(data)
 
 		// 生成代码，zip压缩包
 		if (dataForm.generatorType === 0) {
