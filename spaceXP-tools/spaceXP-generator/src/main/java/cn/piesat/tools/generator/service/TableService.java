@@ -3,7 +3,6 @@ package cn.piesat.tools.generator.service;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
-import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
@@ -36,5 +35,5 @@ public interface TableService extends IService<TableDO> {
 
     TableVO info(Long id);
 
-    Boolean update(TableDTO tableDTO);
+    Boolean update(TableVO tableDTO);
 }

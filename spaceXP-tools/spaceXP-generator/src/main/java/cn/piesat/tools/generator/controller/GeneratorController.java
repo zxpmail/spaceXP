@@ -1,15 +1,17 @@
 package cn.piesat.tools.generator.controller;
 
 import cn.hutool.core.io.IoUtil;
+import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.service.GeneratorService;
-import cn.piesat.tools.generator.service.TableService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -50,5 +52,23 @@ public class GeneratorController {
         response.setContentType("application/octet-stream; charset=UTF-8");
 
         IoUtil.write(response.getOutputStream(), false, data);
+    }
+
+    @RequestMapping("/code")
+    public void code(@RequestBody TableDTO tableDTO, HttpServletResponse response) throws IOException {
+        try {
+            byte[] responseData = generatorService.generatorCode(tableDTO);
+
+            response.reset();
+            response.setHeader("Content-Disposition", "attachment; filename=\"piesat.zip\"");
+            response.addHeader("Content-Length", "" + responseData.length);
+            response.setContentType("application/octet-stream; charset=UTF-8");
+
+            IoUtil.write( response.getOutputStream(),false,responseData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

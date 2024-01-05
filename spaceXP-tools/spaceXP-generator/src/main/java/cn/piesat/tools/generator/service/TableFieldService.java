@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <p/>
@@ -25,4 +26,5 @@ public interface TableFieldService extends IService<TableFieldDO> {
 
      Boolean deleteByTableId(List<Long> tableId);
 
+    Set<String> getPackageByTableId(Long id);
 }

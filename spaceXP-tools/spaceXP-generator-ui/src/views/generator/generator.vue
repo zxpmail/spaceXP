@@ -183,10 +183,15 @@ const generatorHandle = () => {
     }
 		// 先保存
 		await useTableSubmitApi(data)
-
+    let p= projectList.value.filter(i=> {
+      return i.id === data.projectId;
+    })[0]
+    dataForm.project= p
+    dataForm.project.projectId=p.id
+    dataForm.project.artifactId=p.artifactId
 		// 生成代码，zip压缩包
 		if (dataForm.generatorType === 0) {
-			useDownloadApi([dataForm.id])
+			useDownloadApi(dataForm)
 			visible.value = false
 			return
 		}

@@ -3,9 +3,7 @@ package cn.piesat.tools.generator.controller;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.query.TableQuery;
-import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.TableService;
 import lombok.AllArgsConstructor;
@@ -97,12 +95,12 @@ public class TableController {
 
     /**
      * 更新字段类型
-     * @param tableDTO 表DTO
+     * @param tableVO 表vo
      * @return  成功true 失败false
      */
     @PutMapping("update")
-    public Boolean update(@Validated(UpdateGroup.class) @RequestBody TableDTO tableDTO) {
-        return tableService.update(tableDTO);
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody TableVO tableVO) {
+        return tableService.update(tableVO);
     }
 
 }

@@ -8,13 +8,10 @@ import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.TableMapper;
-import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
-import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
-import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
@@ -26,7 +23,6 @@ import cn.piesat.tools.generator.service.TableService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,9 +30,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -155,7 +151,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
     }
 
     @Override
-    public Boolean update(TableDTO tableDTO) {
+    public Boolean update(TableVO tableDTO) {
         TableDO byId = getById(tableDTO.getId());
         if (Objects.isNull(byId)) {
             return false;
@@ -170,4 +166,5 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
         wrapper.like(StringUtils.hasText(tableQuery.getTableName()), TableDO::getTableName, tableQuery.getTableName());
         return wrapper;
     }
+
 }

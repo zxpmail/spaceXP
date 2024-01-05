@@ -42,6 +42,13 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         return DataSourceUtils.test(dataSourceEntity);
     }
 
+    public DataSource getDataSource(String key) {
+        Object o = targetDataSourceMap.get(key);
+        if (Objects.isNull(o)) {
+            return null;
+        }
+        return (DataSource) o;
+    }
     /**
      * 增加数据源
      *
@@ -70,6 +77,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         }
         return false;
     }
+
     /**
      * 增加数据源
      *

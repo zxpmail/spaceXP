@@ -1,5 +1,7 @@
 package cn.piesat.tools.generator.service;
 
+import cn.piesat.tools.generator.model.dto.TableDTO;
+
 /**
  * <p/>
  * {@code @description}  :生成代码接口类
@@ -9,4 +11,5 @@ package cn.piesat.tools.generator.service;
  * @author zhouxp
  */
 public interface GeneratorService {
+    byte[] generatorCode(TableDTO tableDTO);
 }

@@ -11,18 +11,17 @@ import cn.piesat.tools.generator.service.TableFieldService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.base.Functions;
 import lombok.SneakyThrows;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * <p/>
@@ -43,14 +42,15 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
     @Override
     public void importField(Map<String, FieldTypeDO> map, Long tableId, String tableName, DatabaseDO databaseDO, DSEntity dsEntity) {
         String tableFieldsSql = databaseDO.getTableFields();
+        DataSource dataSource = dynamicDataSource.getDataSource(dsEntity.getDSName__());
         if ("Oracle".equalsIgnoreCase(databaseDO.getDbType())) {
-            DatabaseMetaData md = dynamicDataSource.getConnection().getMetaData();
+            DatabaseMetaData md = dataSource.getConnection().getMetaData();
 
             tableFieldsSql = String.format(tableFieldsSql.replace("#schema", md.getUserName()), tableName);
         } else {
             tableFieldsSql = String.format(tableFieldsSql, tableName);
         }
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dynamicDataSource);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         List<TableFieldDO> query = jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
             TableFieldDO f = new TableFieldDO();
             f.setTableId(tableId);
@@ -92,4 +92,17 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
         wrapper.in(TableFieldDO::getTableId,tableId);
         return remove(wrapper);
     }
+
+
+    /**
+     * 根据表ID获取对应的包集合
+     *
+     * @param id 表ID
+     * @return 包集合
+     */
+    @Override
+    public Set<String> getPackageByTableId(Long id) {
+        return this.baseMapper.getPackageByTableId(id);
+    }
+
 }
