@@ -64,4 +64,9 @@ public class TableVO {
      */
     private String artifactId;
 
+    /**
+     * 功能名
+     */
+    private String functionName;
+
 }

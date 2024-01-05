@@ -2,6 +2,9 @@ package cn.piesat.tools.generator.service;
 
 import cn.piesat.tools.generator.model.dto.TableDTO;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * <p/>
  * {@code @description}  :生成代码接口类
@@ -11,5 +14,5 @@ import cn.piesat.tools.generator.model.dto.TableDTO;
  * @author zhouxp
  */
 public interface GeneratorService {
-    byte[] generatorCode(TableDTO tableDTO);
+    public void generatorCode(TableDTO tableDTO, HttpServletResponse response);
 }

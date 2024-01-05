@@ -48,4 +48,9 @@ public class TableDO extends BaseDO{
      * 项目标识
      */
     private String artifactId;
+
+    /**
+     * 功能名
+     */
+    private String functionName;
 }

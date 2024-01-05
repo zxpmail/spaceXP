@@ -7,12 +7,12 @@ export const useDownloadApi = tableIds => {
     }
     const config = {
         method: 'post',
-        url: '/generator/code?piesat.zip',
+        url: '/generator/code',
         data:tableIds,
         responseType: 'blob'
     };
     service(config).then(response => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const url = window.URL.createObjectURL(new Blob([response]));
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', 'piesat.zip');

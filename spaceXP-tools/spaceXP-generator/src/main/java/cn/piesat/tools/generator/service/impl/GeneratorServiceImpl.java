@@ -1,9 +1,7 @@
 package cn.piesat.tools.generator.service.impl;
 
-import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.piesat.tools.generator.model.GeneratorInfo;
-import cn.piesat.tools.generator.model.TemplateInfo;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.service.GeneratorService;
@@ -12,11 +10,13 @@ import cn.piesat.tools.generator.utils.ConfigUtils;
 import cn.piesat.tools.generator.utils.DateUtils;
 import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.stereotype.Service;
 
+import org.apache.commons.io.IOUtils;
+import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,33 +38,52 @@ import java.util.zip.ZipOutputStream;
 @Service
 public class GeneratorServiceImpl implements GeneratorService {
     @Override
-    public byte[] generatorCode(TableDTO tableDTO) {
+    public void generatorCode(TableDTO tableDTO, HttpServletResponse response) {
         // 数据模型
         Map<String, Object> dataModel = getDataModel(tableDTO);
 
         // 代码生成器信息
         GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        ZipOutputStream zip = new ZipOutputStream(outputStream);
-        // 渲染模板并输出
-        for (TemplateInfo template : generator.getTemplates()) {
-            dataModel.put("templateName", template.getTemplateName());
-            String content = TemplateUtils.getContent(template.getTemplateContent(), dataModel);
-            String path = TemplateUtils.getContent(template.getGeneratorPath(), dataModel);
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+             ZipOutputStream zip = new ZipOutputStream(outputStream)) {
 
-            try {
-                // 添加到zip
-                zip.putNextEntry(new ZipEntry(path));
-                IoUtil.writeUtf8(zip, false, content);
-                zip.flush();
-                zip.closeEntry();
-            } catch (IOException e) {
-                throw new RuntimeException("模板写入失败：" + path, e);
-            }
+            // 渲染模板并输出
+            generator.getTemplates().forEach(template -> {
+                dataModel.put("templateName", template.getTemplateName());
+                String content = TemplateUtils.getContent(template.getTemplateContent(), dataModel);
+                String path = TemplateUtils.getContent(template.getGeneratorPath(), dataModel);
+
+                try {
+                    zip.putNextEntry(new ZipEntry(path));
+                    IOUtils.write(content, zip, "UTF-8");
+                    zip.closeEntry();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            });
+            writeZip(response, outputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        IOUtils.closeQuietly(zip);
-        return outputStream.toByteArray();
     }
+
+    private static void writeZip(HttpServletResponse response, ByteArrayOutputStream outputStream) throws IOException {
+        byte[] responseData = outputStream.toByteArray();
+        // 设置响应头部
+        response.reset();
+        String fileName = "template.zip"; // 假设为模板文件夹的名称
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+        response.setContentType("application/octet-stream"); // 或者根据实际情况设置更准确的MIME类型
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Cache-Control", "no-cache");
+
+        // 输出ZIP文件内容到响应体
+        response.getOutputStream().write(responseData);
+    }
+
+
     @Resource
     private TableFieldService tableFieldService;
     /**
@@ -84,6 +103,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         setFieldTypeList(dataModel,tableFieldDOS);
         // 项目信息
         dataModel.put("package", tableDTO.getProject().getGroupId());
+        dataModel.put("packagePath", tableDTO.getProject().getGroupId().replace(".", File.separator));
         dataModel.put("version", tableDTO.getProject().getVersion());
         dataModel.put("moduleName", tableDTO.getProject().getArtifactId());
         dataModel.put("ModuleName", StrUtil.upperFirst(tableDTO.getProject().getArtifactId()));
@@ -104,10 +124,13 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("tableName", tableDTO.getTableName());
         dataModel.put("tableComment", tableDTO.getTableComment());
         dataModel.put("className", StrUtil.lowerFirst(tableDTO.getClassName()));
+        dataModel.put("functionName", tableDTO.getFunctionName());
         dataModel.put("ClassName", tableDTO.getClassName());
         dataModel.put("fieldList", tableFieldDOS);
 
-
+        // 生成路径
+        dataModel.put("backendPath", tableDTO.getProject().getArtifactId());
+        dataModel.put("frontendPath",tableDTO.getProject().getArtifactId());
         return dataModel;
     }
     /**
@@ -117,11 +140,15 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS ) {
         // 主键列表 (支持多主键)
         List<TableFieldDO> primaryList = new ArrayList<>();
+        // 查询列表
+        List<TableFieldDO> queryList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.isPrimaryPk()) {
                 primaryList.add(field);
             }
+
         }
         dataModel.put("primaryList", primaryList);
+        dataModel.put("queryList", queryList);
     }
 }
