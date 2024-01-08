@@ -45,6 +45,7 @@
 		<import ref="importRef" @refresh-data-list="getDataList"></import>
 		<edit ref="editRef" @refresh-data-list="getDataList"></edit>
 		<generator ref="generatorRef" @refresh-data-list="getDataList"></generator>
+    <BatchGenerator ref="batchGeneratorRef"></BatchGenerator>
 	</el-card>
 </template>
 
@@ -54,9 +55,9 @@ import { useCrud } from '@/hooks/index.js'
 import Import from './import.vue'
 import Edit from './edit.vue'
 import Generator from './generator.vue'
+import BatchGenerator from './batch-generator.vue'
 import { useTableSyncApi } from '@/api/table'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useDownloadApi } from '@/api/generator'
 
 const state = reactive({
 	dataListUrl: '/table/list',
@@ -68,6 +69,7 @@ const state = reactive({
 
 const importRef = ref()
 const editRef = ref()
+const batchGeneratorRef= ref()
 const generatorRef = ref()
 
 const importHandle = (id) => {
@@ -83,14 +85,20 @@ const generatorHandle = (id) => {
 }
 
 const downloadBatchHandle = () => {
-	const tableIds = state.dataListSelections ? state.dataListSelections : []
+	const tables = state.dataListSelections ? state.dataListSelections : []
 
-	if (tableIds.length === 0) {
+	if (tables.length === 0) {
 		ElMessage.warning('请选择生成代码的表')
 		return
 	}
+  const data=state.dataList.filter(m=>tables.includes(m.id))
+  const uniqueArr = Array.from(new Set(data.map(({ datasourceName }) => datasourceName)));
 
-	useDownloadApi(tableIds)
+  if(uniqueArr.length>1){
+    ElMessage.warning('生成代码必须保证为相同的数据源名称')
+    return
+  }
+  batchGeneratorRef.value.init(data)
 }
 
 const syncHandle = (row) => {

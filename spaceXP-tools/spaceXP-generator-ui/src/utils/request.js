@@ -37,7 +37,7 @@ service.interceptors.response.use(
 
 		const res = response.data
 		if(toString.call(res) === '[object Blob]'){
-			return res
+			return response
 		}
 
 		// 响应成功

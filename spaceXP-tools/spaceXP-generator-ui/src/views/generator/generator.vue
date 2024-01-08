@@ -191,7 +191,7 @@ const generatorHandle = () => {
     dataForm.project.artifactId = p.artifactId
     // 生成代码，zip压缩包
     if (dataForm.generatorType === 0) {
-      useDownloadApi(dataForm)
+      useDownloadApi('/generator/code',dataForm)
       visible.value = false
       return
     }
