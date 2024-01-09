@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -74,11 +75,11 @@ public class TableController {
     /**
      * 同步表结构
      *
-     * @param id 表ID
+     * @param tableVO 表信息
      */
-    @PostMapping("sync/{id}")
-    public Boolean sync(@PathVariable("id") Long id) {
-        return tableService.sync(id);
+    @PostMapping("sync")
+    public Boolean sync(@RequestBody TableVO tableVO) {
+        return tableService.sync(tableVO);
     }
 
     /**

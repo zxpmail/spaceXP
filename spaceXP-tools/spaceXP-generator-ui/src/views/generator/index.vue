@@ -108,7 +108,7 @@ const syncHandle = (row) => {
 		type: 'warning'
 	})
 		.then(() => {
-			useTableSyncApi(row.id).then(() => {
+			useTableSyncApi(row).then(() => {
 				ElMessage.success('同步成功')
 			})
 		})

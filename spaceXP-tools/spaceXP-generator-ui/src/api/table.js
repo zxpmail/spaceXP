@@ -15,6 +15,6 @@ export const useTableFieldSubmitApi = (tableId, fieldList) => {
     return service.put('/table/field/' + tableId, fieldList)
 }
 
-export const useTableSyncApi = id => {
-    return service.post('/table/sync/' + id)
+export const useTableSyncApi = table => {
+    return service.post('/table/sync' , table)
 }

@@ -30,9 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -131,12 +129,12 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean sync(Long id) {
-        TableDO tableDO = getById(id);
+    public Boolean sync(TableVO tableVO) {
+        TableDO tableDO = getById(tableVO.getId());
         if (Objects.isNull(tableDO)) {
             return false;
         }
-        tableFieldService.deleteByTableId(id);
+        tableFieldService.deleteByTableId(tableVO.getId());
         tableImport(tableDO.getDatasourceId(), new ArrayList<TableVO>() {{
             add(CopyBeanUtils.copy(tableDO, TableVO::new));
         }});
