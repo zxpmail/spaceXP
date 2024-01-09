@@ -1,18 +1,18 @@
 <template>
   <el-dialog v-model="visible" title="生成代码" :close-on-click-modal="false" draggable>
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
+    <el-form ref="dataFormRef" :model="dataForm.project" :rules="dataRules" label-width="120px">
       <el-form-item label="表名前缀" prop="tablePrefix">
-        <el-input v-model="dataForm.tablePrefix" placeholder="表前缀"></el-input>
+        <el-input v-model="dataForm.project.tablePrefix" placeholder="表前缀"></el-input>
       </el-form-item>
       <el-form-item prop="artifactId" label="项目">
-        <el-select v-model="dataForm.artifactId" placeholder="项目名称" style="width: 100%" clearable
+        <el-select v-model="dataForm.project.artifactId" placeholder="项目名称" style="width: 100%" clearable
                    @change="projectChange"
                    value-key="projectId">
           <el-option v-for="item in projectList" :key="item.id" :label="item.artifactId" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="表单布局" prop="formLayout">
-        <el-radio-group v-model="dataForm.formLayout">
+        <el-radio-group v-model="dataForm.project.formLayout">
           <el-radio :label="1">一列</el-radio>
           <el-radio :label="2">两列</el-radio>
         </el-radio-group>
@@ -28,7 +28,7 @@
 <script setup>
 import {reactive, ref} from 'vue'
 import {ElMessage} from 'element-plus/es'
-import {useGeneratorApi, useDownloadApi} from '@/api/generator'
+import {useDownloadApi} from '@/api/generator'
 import {useProjectAllApi} from "@/api/project.js";
 
 const visible = ref(false)
@@ -36,15 +36,17 @@ const dataFormRef = ref()
 const projectList = ref([])
 const dataForm = reactive({
     tables:[],
-    tablePrefix: '',
-    projectId: '',
-    artifactId: '',
-    packageName: '',
-    email: '',
-    author: '',
-    version: '',
-    moduleName: '',
-    formLayout: 1
+    project:{
+      tablePrefix: '',
+      projectId: '',
+      artifactId: '',
+      packageName: '',
+      email: '',
+      author: '',
+      version: '',
+      moduleName: '',
+      formLayout: 1
+    }
 })
 const projectChange = (data) => {
   let p = projectList.value.filter(i => i.id === data)[0]

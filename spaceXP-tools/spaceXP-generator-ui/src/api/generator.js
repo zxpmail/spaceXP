@@ -1,7 +1,7 @@
 import service from '@/utils/request'
 
 // 生成代码（zip压缩包）
-export const useDownloadApi = (url,data) => {
+export const useDownloadApi = (url, data) => {
     if (!data || data.length === 0) {
         return
     }
@@ -12,7 +12,7 @@ export const useDownloadApi = (url,data) => {
         responseType: 'blob'
     };
     service(config).then(response => {
-        if(response.status===200) {
+        if (response.status === 200) {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -22,7 +22,6 @@ export const useDownloadApi = (url,data) => {
         }
     })
 }
-
 // 生成代码（自定义目录）
 export const useGeneratorApi = tableIds => {
     return service.post('/gen/generator/code', tableIds)

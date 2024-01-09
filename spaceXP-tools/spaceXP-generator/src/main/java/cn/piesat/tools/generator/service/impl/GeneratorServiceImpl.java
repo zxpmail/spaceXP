@@ -1,14 +1,19 @@
 package cn.piesat.tools.generator.service.impl;
 
+import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.tools.generator.model.GeneratorInfo;
+import cn.piesat.tools.generator.model.TemplateInfo;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.dto.TablesDTO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
+import cn.piesat.tools.generator.model.vo.ProjectVO;
+import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.GeneratorService;
 import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.utils.ConfigUtils;
 import cn.piesat.tools.generator.utils.DateUtils;
+import cn.piesat.tools.generator.utils.StrUtils;
 import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -17,6 +22,7 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -43,32 +49,19 @@ import java.util.zip.ZipOutputStream;
  */
 @Service
 public class GeneratorServiceImpl implements GeneratorService {
-    private final static ObjectMapper OBJECT_MAPPER =new ObjectMapper();
+    private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Override
     public void generatorCode(TableDTO tableDTO, HttpServletResponse response) {
         // 数据模型
-        Map<String, Object> dataModel = getDataModel(tableDTO);
+
 
         // 代码生成器信息
         GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
+        Map<String, Object> dataModel = new HashMap<>();
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-
-            // 渲染模板并输出
-            generator.getTemplates().forEach(template -> {
-                dataModel.put("templateName", template.getTemplateName());
-                String content = TemplateUtils.getContent(template.getTemplateContent(), dataModel);
-                String path = TemplateUtils.getContent(template.getGeneratorPath(), dataModel);
-
-                try {
-                    zip.putNextEntry(new ZipEntry(path));
-                    IOUtils.write(content, zip, "UTF-8");
-                    zip.closeEntry();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-
-            });
+            packWriteZip(tableDTO.getProject(), dataModel, zip, tableDTO.getTable());
             writeZip(response, outputStream);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -79,14 +72,44 @@ public class GeneratorServiceImpl implements GeneratorService {
     @Override
     public void generatorCode(TablesDTO tablesDTO, HttpServletResponse response) {
         // 代码生成器信息
-        GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
-        if(tablesDTO == null||tablesDTO.getTables()==null||tablesDTO.getTables().size()==0){
+        if (tablesDTO == null || tablesDTO.getTables() == null || tablesDTO.getTables().size() == 0) {
             writeJsonToResponse(response,OBJECT_MAPPER.writeValueAsString(ApiResult.fail("没有数据")));
-
+            return;
         }
-        ApiResult<String> test = ApiResult.fail("没有数据");
-        String s = OBJECT_MAPPER.writeValueAsString(test);
-        writeJsonToResponse(response,s);
+        Map<String, Object> dataModel = new HashMap<>();
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+             ZipOutputStream zip = new ZipOutputStream(outputStream)) {
+            for (TableVO table : tablesDTO.getTables()) {
+                packWriteZip(tablesDTO.getProject(), dataModel, zip, table);
+                dataModel.clear();
+            }
+            writeZip(response,outputStream);
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void packWriteZip(ProjectVO project, Map<String, Object> dataModel, ZipOutputStream zip, TableVO table) {
+        setDataModel(dataModel, project);
+        setDataModel(dataModel, table);
+        setDataModel(dataModel, table.getId());
+        writeZipByTemplate(dataModel, zip);
+    }
+
+    private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip) {
+        GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
+        for (TemplateInfo template : generator.getTemplates()) {
+            dataModel.put("templateName", template.getTemplateName());
+            String content = TemplateUtils.getContent(template.getTemplateContent(), dataModel);
+            String path = TemplateUtils.getContent(template.getGeneratorPath(), dataModel);
+            try {
+                zip.putNextEntry(new ZipEntry(path));
+                IOUtils.write(content, zip, "UTF-8");
+                zip.closeEntry();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
     }
 
@@ -112,60 +135,88 @@ public class GeneratorServiceImpl implements GeneratorService {
         response.getWriter().write(data);
     }
 
-    @Resource
-    private TableFieldService tableFieldService;
     /**
-     * 获取渲染的数据模型
+     * 通过项目信息设置数据模版
      *
-     * @param tableDTO 表ID
+     * @param dataModel 数据模版信息
+     * @param project   项目信息
      */
-    private Map<String, Object> getDataModel(TableDTO tableDTO) {
-
-        LambdaQueryWrapper< TableFieldDO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TableFieldDO::getTableId, tableDTO.getId()) ;
-        // 表信息
-        List<TableFieldDO> tableFieldDOS = tableFieldService.list(queryWrapper);
-
-        // 数据模型
-        Map<String, Object> dataModel = new HashMap<>();
-        setFieldTypeList(dataModel,tableFieldDOS);
-        // 项目信息
-        dataModel.put("package", tableDTO.getProject().getGroupId());
-        dataModel.put("packagePath", tableDTO.getProject().getGroupId().replace(".", File.separator));
-        dataModel.put("version", tableDTO.getProject().getVersion());
-        dataModel.put("moduleName", tableDTO.getProject().getArtifactId());
-        dataModel.put("ModuleName", StringUtils.capitalize(tableDTO.getProject().getArtifactId()));
-
-
+    private void setDataModel(Map<String, Object> dataModel, ProjectVO project) {
+        dataModel.put("package", project.getGroupId());
+        dataModel.put("packagePath", project.getGroupId().replace(".", File.separator));
+        dataModel.put("version", project.getVersion());
+        dataModel.put("moduleName", project.getArtifactId());
+        dataModel.put("ModuleName", StringUtils.capitalize(project.getArtifactId()));
 
         // 开发者信息
-        dataModel.put("author", tableDTO.getProject().getAuthor());
-        dataModel.put("email", tableDTO.getProject().getEmail());
+        dataModel.put("author", project.getAuthor());
+        dataModel.put("email", project.getEmail());
         dataModel.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
         dataModel.put("date", DateUtils.format(new Date(), DateUtils.DATE_PATTERN));
 
-        // 导入的包列表
-        Set<String> importList = tableFieldService.getPackageByTableId(tableDTO.getId());
-        dataModel.put("importList", importList);
-
-        // 表信息
-        dataModel.put("tableName", tableDTO.getTableName());
-        dataModel.put("tableComment", tableDTO.getTableComment());
-        dataModel.put("className", StringUtils.uncapitalize(tableDTO.getClassName()));
-        dataModel.put("functionName", tableDTO.getFunctionName());
-        dataModel.put("ClassName", tableDTO.getClassName());
-        dataModel.put("fieldList", tableFieldDOS);
-
         // 生成路径
-        dataModel.put("backendPath", tableDTO.getProject().getArtifactId());
-        dataModel.put("frontendPath",tableDTO.getProject().getArtifactId());
-        return dataModel;
+        dataModel.put("backendPath", project.getArtifactId());
+        dataModel.put("frontendPath", project.getArtifactId());
     }
+
+    /**
+     * 通过项目信息设置数据模版
+     *
+     * @param dataModel 数据模版信息
+     * @param table     表信息
+     */
+    private void setDataModel(Map<String, Object> dataModel, TableVO table) {
+        String tableName = table.getTableName();
+        dataModel.put("tableName", tableName);
+        if (StringUtils.hasText(table.getTablePrefix())) {
+            tableName = tableName.substring(table.getTablePrefix().length());
+        }
+        tableName = StrUtils.underlineToCamel(tableName);
+        if (StringUtils.hasText(table.getTableComment())) {
+            dataModel.put("tableComment", table.getTableComment());
+        } else {
+            dataModel.put("tableComment", tableName);
+        }
+        if (StringUtils.hasText(table.getClassName())) {
+            dataModel.put("ClassName", StringUtils.capitalize(table.getClassName()));
+            dataModel.put("className", table.getClassName());
+        } else {
+            dataModel.put("ClassName", StringUtils.capitalize(tableName));
+            dataModel.put("className", tableName);
+        }
+        if (StringUtils.hasText(table.getFunctionName())) {
+            dataModel.put("functionName", table.getFunctionName());
+        } else {
+            dataModel.put("functionName", StringUtils.uncapitalize(tableName));
+        }
+
+
+    }
+
+    /**
+     * 通过数据字段设置数据模版
+     *
+     * @param dataModel 数据模版信息
+     * @param tableId   表ID
+     */
+    private void setDataModel(Map<String, Object> dataModel, Long tableId) {
+        LambdaQueryWrapper<TableFieldDO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TableFieldDO::getTableId, tableId);
+        List<TableFieldDO> tableFieldDOS = tableFieldService.list(queryWrapper);
+        dataModel.put("fieldList", tableFieldDOS);
+        // 导入的包列表
+        Set<String> importList = tableFieldService.getPackageByTableId(tableId);
+        dataModel.put("importList", importList);
+        setFieldTypeList(dataModel, tableFieldDOS);
+    }
+
+    @Resource
+    private TableFieldService tableFieldService;
+
     /**
      * 设置字段分类信息
-     *
      */
-    private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS ) {
+    private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS) {
         // 主键列表 (支持多主键)
         List<TableFieldDO> primaryList = new ArrayList<>();
         // 查询列表
@@ -179,4 +230,5 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("primaryList", primaryList);
         dataModel.put("queryList", queryList);
     }
+
 }

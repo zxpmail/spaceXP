@@ -4,7 +4,6 @@ import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.dto.TablesDTO;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * <p/>

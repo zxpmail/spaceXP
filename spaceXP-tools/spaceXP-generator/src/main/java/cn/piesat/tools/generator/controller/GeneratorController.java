@@ -37,9 +37,8 @@ public class GeneratorController {
     /**
      * 批量生成代码（zip压缩包）
      */
-    @NoApiResult
     @PostMapping("/code/batch")
     public void batchGenerator(@RequestBody TablesDTO tablesDTO, HttpServletResponse response){
-        generatorService.generatorCode(tablesDTO,response);
+         generatorService.generatorCode(tablesDTO,response);
     }
 }

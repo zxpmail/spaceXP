@@ -1,0 +1,15 @@
+{
+  "project": {
+    "groupId": "cn.piesat",
+    "artifactId": "test",
+    "version": "1.0.0",
+    "author": "zhouxp",
+    "email": "zhouxiaoping@piesat.cn"
+  },
+  "templates": [
+    {
+      "templateName": "/template/java/Controller.java.ftl",
+      "generatorPath": "${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java"
+    }
+  ]
+}

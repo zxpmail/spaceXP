@@ -1,25 +1,25 @@
 <template>
   <el-dialog v-model="visible" title="生成代码" :close-on-click-modal="false" draggable>
-    <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
+    <el-form ref="dataFormRef" :model="dataForm.table" :rules="dataRules" label-width="120px">
 
       <el-form-item label="表名" prop="tableName">
-        <el-input v-model="dataForm.tableName" disabled placeholder="表名"></el-input>
+        <el-input v-model="dataForm.table.tableName" disabled placeholder="表名"></el-input>
       </el-form-item>
 
 
       <el-form-item label="说明" prop="tableComment">
-        <el-input v-model="dataForm.tableComment" placeholder="说明"></el-input>
+        <el-input v-model="dataForm.table.tableComment" placeholder="说明"></el-input>
       </el-form-item>
 
       <el-form-item label="类名" prop="className">
-        <el-input v-model="dataForm.className" placeholder="类名"></el-input>
+        <el-input v-model="dataForm.table.className" placeholder="类名"></el-input>
       </el-form-item>
       <el-form-item label="功能" prop="functionName">
-        <el-input v-model="dataForm.functionName" placeholder="功能名"></el-input>
+        <el-input v-model="dataForm.table.functionName" placeholder="功能名"></el-input>
       </el-form-item>
 
       <el-form-item prop="artifactId" label="项目">
-        <el-select v-model="dataForm.project.artifactId" placeholder="项目名" style="width: 100%" clearable
+        <el-select v-model="dataForm.table.artifactId" placeholder="项目名" style="width: 100%" clearable
                    @change="projectChange"
                    value-key="projectId">
           <el-option v-for="item in projectList" :key="item.id" :label="item.artifactId" :value="item.id"></el-option>
@@ -29,7 +29,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="生成方式" prop="generatorType">
-            <el-radio-group v-model="dataForm.generatorType">
+            <el-radio-group v-model="dataForm.table.generatorType">
               <el-radio :label="0">zip压缩包</el-radio>
               <el-radio :label="1">自定义路径</el-radio>
             </el-radio-group>
@@ -37,18 +37,18 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="表单布局" prop="formLayout">
-            <el-radio-group v-model="dataForm.formLayout">
+            <el-radio-group v-model="dataForm.table.formLayout">
               <el-radio :label="1">一列</el-radio>
               <el-radio :label="2">两列</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
-        <el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
+      <el-form-item v-if="dataForm.table.generatorType === 1" label="后端生成路径" prop="backendPath">
+        <el-input v-model="dataForm.table.backendPath" placeholder="后端生成路径"></el-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">
-        <el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
+      <el-form-item v-if="dataForm.table.generatorType === 1" label="前端生成路径" prop="frontendPath">
+        <el-input v-model="dataForm.table.frontendPath" placeholder="前端生成路径"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -72,10 +72,16 @@ const visible = ref(false)
 const dataFormRef = ref()
 const projectList = ref([])
 const dataForm = reactive({
-  id: '',
-  generatorType: 0,
-  formLayout: 1,
-  artifactId: '',
+  table:{
+    id: '',
+    generatorType: 0,
+    formLayout: 1,
+    artifactId: '',
+    functionName: '',
+    className: '',
+    tableComment: '',
+    tableName: ''
+  },
   project: {
     projectId: '',
     artifactId: '',
@@ -84,11 +90,7 @@ const dataForm = reactive({
     author: '',
     version: '',
     moduleName: '',
-  },
-  functionName: '',
-  className: '',
-  tableComment: '',
-  tableName: ''
+  }
 })
 const projectChange = (data) => {
   let p = projectList.value.filter(i => i.id === data)[0]
@@ -103,7 +105,7 @@ const projectChange = (data) => {
 }
 const init = (id) => {
   visible.value = true
-  dataForm.id = ''
+  dataForm.table.id = ''
 
   // 重置表单数据
   if (dataFormRef.value) {
@@ -123,7 +125,7 @@ const getProjectList = () => {
 
 const getTable = (id) => {
   useTableApi(id).then(res => {
-    Object.assign(dataForm, res.data)
+    Object.assign(dataForm.table, res.data)
     dataForm.project.artifactId = res.data.artifactId
     dataForm.project.projectId = res.data.projectId
   })
@@ -148,11 +150,11 @@ const submitHandle = () => {
     }
     const data = {
       'projectId': dataForm.project.projectId,
-      'id': dataForm.id,
+      'id': dataForm.table.id,
       'artifactId': dataForm.project.artifactId,
-      'className': dataForm.className,
-      'tableComment': dataForm.tableComment,
-      'functionName': dataForm.functionName
+      'className': dataForm.table.className,
+      'tableComment': dataForm.table.tableComment,
+      'functionName': dataForm.table.functionName
     }
     useTableSubmitApi(data).then(() => {
       ElMessage.success({
@@ -175,11 +177,11 @@ const generatorHandle = () => {
     }
     const data = {
       'projectId': dataForm.project.projectId,
-      'id': dataForm.id,
+      'id': dataForm.table.id,
       'artifactId': dataForm.project.artifactId,
-      'className': dataForm.className,
-      'tableComment': dataForm.tableComment,
-      'functionName': dataForm.functionName
+      'className': dataForm.table.className,
+      'tableComment': dataForm.table.tableComment,
+      'functionName': dataForm.table.functionName
     }
     // 先保存
     await useTableSubmitApi(data)
@@ -190,7 +192,7 @@ const generatorHandle = () => {
     dataForm.project.projectId = p.id
     dataForm.project.artifactId = p.artifactId
     // 生成代码，zip压缩包
-    if (dataForm.generatorType === 0) {
+    if (dataForm.table.generatorType === 0) {
       useDownloadApi('/generator/code',dataForm)
       visible.value = false
       return

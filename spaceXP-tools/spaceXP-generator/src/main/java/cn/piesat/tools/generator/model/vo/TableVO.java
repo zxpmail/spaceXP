@@ -48,12 +48,6 @@ public class TableVO {
     private String datasourceName;
 
     /**
-     * 字段列表
-     */
-    @TableField(exist = false)
-    private List<FieldTypeVO> fieldList;
-
-    /**
      * 项目ID
      */
     @NotNull(message = "项目ID不能为空", groups = UpdateGroup.class)
@@ -68,5 +62,8 @@ public class TableVO {
      * 功能名
      */
     private String functionName;
-
+    /**
+     * 表前缀
+     */
+    private String tablePrefix;
 }

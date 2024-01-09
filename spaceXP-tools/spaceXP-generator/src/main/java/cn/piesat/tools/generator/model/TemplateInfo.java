@@ -20,4 +20,6 @@ public class TemplateInfo {
      * 模板内容
      */
     private String templateContent;
+
+    private String generatorPath;
 }
