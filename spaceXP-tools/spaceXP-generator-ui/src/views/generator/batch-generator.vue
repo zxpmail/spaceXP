@@ -75,7 +75,7 @@ const generatorHandle = () => {
       return false
     }
     // 生成代码，zip压缩包
-    useDownloadApi(dataForm)
+    useDownloadApi('/generator/code/batch',dataForm)
     visible.value = false
   })
 }

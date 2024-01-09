@@ -1,6 +1,7 @@
 package cn.piesat.tools.generator.service;
 
 import cn.piesat.tools.generator.model.dto.TableDTO;
+import cn.piesat.tools.generator.model.dto.TablesDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -14,5 +15,7 @@ import java.io.IOException;
  * @author zhouxp
  */
 public interface GeneratorService {
-    public void generatorCode(TableDTO tableDTO, HttpServletResponse response);
+    void generatorCode(TableDTO tableDTO, HttpServletResponse response);
+
+    void generatorCode(TablesDTO tablesDTO, HttpServletResponse response);
 }

@@ -1,8 +1,9 @@
 package cn.piesat.tools.generator.service.impl;
 
-import cn.hutool.core.util.StrUtil;
+import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.tools.generator.model.GeneratorInfo;
 import cn.piesat.tools.generator.model.dto.TableDTO;
+import cn.piesat.tools.generator.model.dto.TablesDTO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.service.GeneratorService;
 import cn.piesat.tools.generator.service.TableFieldService;
@@ -11,8 +12,13 @@ import cn.piesat.tools.generator.utils.DateUtils;
 import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
@@ -37,6 +43,7 @@ import java.util.zip.ZipOutputStream;
  */
 @Service
 public class GeneratorServiceImpl implements GeneratorService {
+    private final static ObjectMapper OBJECT_MAPPER =new ObjectMapper();
     @Override
     public void generatorCode(TableDTO tableDTO, HttpServletResponse response) {
         // 数据模型
@@ -68,11 +75,26 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
     }
 
+    @SneakyThrows
+    @Override
+    public void generatorCode(TablesDTO tablesDTO, HttpServletResponse response) {
+        // 代码生成器信息
+        GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
+        if(tablesDTO == null||tablesDTO.getTables()==null||tablesDTO.getTables().size()==0){
+            writeJsonToResponse(response,OBJECT_MAPPER.writeValueAsString(ApiResult.fail("没有数据")));
+
+        }
+        ApiResult<String> test = ApiResult.fail("没有数据");
+        String s = OBJECT_MAPPER.writeValueAsString(test);
+        writeJsonToResponse(response,s);
+
+    }
+
     private static void writeZip(HttpServletResponse response, ByteArrayOutputStream outputStream) throws IOException {
         byte[] responseData = outputStream.toByteArray();
         // 设置响应头部
         response.reset();
-        String fileName = "template.zip"; // 假设为模板文件夹的名称
+        String fileName = "piesat.zip"; // 假设为模板文件夹的名称
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         response.setContentType("application/octet-stream"); // 或者根据实际情况设置更准确的MIME类型
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -83,6 +105,12 @@ public class GeneratorServiceImpl implements GeneratorService {
         response.getOutputStream().write(responseData);
     }
 
+    public void writeJsonToResponse(HttpServletResponse response, String data) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(data);
+    }
 
     @Resource
     private TableFieldService tableFieldService;
@@ -106,7 +134,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("packagePath", tableDTO.getProject().getGroupId().replace(".", File.separator));
         dataModel.put("version", tableDTO.getProject().getVersion());
         dataModel.put("moduleName", tableDTO.getProject().getArtifactId());
-        dataModel.put("ModuleName", StrUtil.upperFirst(tableDTO.getProject().getArtifactId()));
+        dataModel.put("ModuleName", StringUtils.capitalize(tableDTO.getProject().getArtifactId()));
 
 
 
@@ -123,7 +151,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 表信息
         dataModel.put("tableName", tableDTO.getTableName());
         dataModel.put("tableComment", tableDTO.getTableComment());
-        dataModel.put("className", StrUtil.lowerFirst(tableDTO.getClassName()));
+        dataModel.put("className", StringUtils.uncapitalize(tableDTO.getClassName()));
         dataModel.put("functionName", tableDTO.getFunctionName());
         dataModel.put("ClassName", tableDTO.getClassName());
         dataModel.put("fieldList", tableFieldDOS);
