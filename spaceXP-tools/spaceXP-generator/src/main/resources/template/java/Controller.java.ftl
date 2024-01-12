@@ -1,77 +1,80 @@
 package ${package}.${moduleName}.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
-import ${package}.framework.common.utils.PageResult;
-import ${package}.framework.common.utils.Result;
-import ${package}.${moduleName}.convert.${ClassName}Convert;
-import ${package}.${moduleName}.entity.${ClassName}Entity;
-import ${package}.${moduleName}.service.${ClassName}Service;
-import ${package}.${moduleName}.query.${ClassName}Query;
-import ${package}.${moduleName}.vo.${ClassName}VO;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 import java.util.List;
 
+import cn.piesat.framework.common.annotation.validator.group.AddGroup;
+import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
+import cn.piesat.framework.common.model.dto.PageBean;
+import cn.piesat.framework.common.model.vo.PageResult;
+import ${package}.${moduleName}.model.dto.${className?cap_first}DTO;
+import ${package}.${moduleName}.model.query.${className?cap_first}Query;
+import ${package}.${moduleName}.service.${className?cap_first}Service;
+import ${package}.${moduleName}.model.entity.${className?cap_first}VO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 /**
-* ${tableComment}
+* <p/>
+* {@code @description}  : ${tableComment}
+* <p/>
+* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@email:</b> ${email}
 *
-* @author ${author} ${email}
-* @since ${version} ${date}
+* @author    ${author}
+* @version   ${version}
 */
+
+@Api(tags = "${tableComment}")
 @RestController
-@RequestMapping("${moduleName}/${functionName}")
-@Tag(name="${tableComment}")
-@AllArgsConstructor
-public class ${ClassName}Controller {
-    private final ${ClassName}Service ${className}Service;
+@RequestMapping("${functionName}")
+@RequiredArgsConstructor
+public class ${className?cap_first}Controller {
 
-    @GetMapping("page")
-    @Operation(summary = "分页")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:page')")
-    public Result<PageResult<${ClassName}VO>> page(@ParameterObject @Valid ${ClassName}Query query){
-        PageResult<${ClassName}VO> page = ${className}Service.page(query);
+    private final ${className?cap_first}Service ${className}Service;
 
-        return Result.ok(page);
+    @ApiOperation("分页查询")
+    @PostMapping("/list")
+    public PageResult list(PageBean pageBean, @RequestBody(required = false) ${className?cap_first}Query ${className}Query){
+        return ${className}Service.list(pageBean,${className}Query);
     }
 
-    @GetMapping("{id}")
-    @Operation(summary = "信息")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:info')")
-    public Result<${ClassName}VO> get(@PathVariable("id") Long id){
-        ${ClassName}Entity entity = ${className}Service.getById(id);
-
-        return Result.ok(${ClassName}Convert.INSTANCE.convert(entity));
+    @ApiOperation("根据id查询")
+    @GetMapping("/info/{id}")
+    public ${className?cap_first}VO info(@PathVariable("id") Long id){
+        return ${className}Service.info(id);
     }
 
-    @PostMapping
-    @Operation(summary = "保存")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:save')")
-    public Result<String> save(@RequestBody ${ClassName}VO vo){
-        ${className}Service.save(vo);
-
-        return Result.ok();
+    @ApiOperation("保存信息")
+    @PostMapping("/save")
+    public Boolean save(@Validated(AddGroup.class) @RequestBody ${className?cap_first}DTO ${className}DTO){
+        return ${className}Service.save(${className}DTO);
     }
 
-    @PutMapping
-    @Operation(summary = "修改")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:update')")
-    public Result<String> update(@RequestBody @Valid ${ClassName}VO vo){
-        ${className}Service.update(vo);
-
-        return Result.ok();
+    @ApiOperation("修改信息")
+    @PutMapping("/update")
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody ${className?cap_first}DTO ${className}DTO){
+        return ${className}Service.update(${className}DTO);
     }
 
-    @DeleteMapping
-    @Operation(summary = "删除")
-    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:delete')")
-    public Result<String> delete(@RequestBody List<Long> idList){
-        ${className}Service.delete(idList);
+    @ApiOperation("批量删除信息")
+    @DeleteMapping("/delete")
+    public Boolean delete(@RequestBody List<Long> ids){
+        return ${className}Service.delete(ids);
+    }
 
-        return Result.ok();
+    @ApiOperation("根据id删除信息")
+    @DeleteMapping("/delete/{id}")
+    public Boolean delete(@PathVariable Long id){
+        return ${className}Service.delete(id);
     }
 }
