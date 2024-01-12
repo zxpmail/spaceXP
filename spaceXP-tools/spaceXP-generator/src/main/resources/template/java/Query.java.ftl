@@ -1,8 +1,9 @@
-package ${package}.${moduleName}.query;
+package ${package}.${moduleName}.model.query;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import ${package}.framework.common.query.Query;
 import org.springframework.format.annotation.DateTimeFormat;
 
 <#list importList as i>
@@ -10,24 +11,36 @@ import ${i!};
 </#list>
 
 /**
-* ${tableComment}查询
+* <p/>
+* {@code @description}  : ${tableComment}查询
+* <p/>
+* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@email:</b> ${email}
 *
-* @author ${author} ${email}
-* @since ${version} ${date}
+* @author    ${author}
+* @version   ${version}
 */
+
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class ${ClassName}Query extends Query {
+@ApiModel("${tableComment}查询对象")
+public class ${className?cap_first}Query  {
 <#list queryList as field>
     <#if field.fieldComment!?length gt 0>
-    @Schema(description = "${field.fieldComment}")
+    /**
+    * ${field.fieldComment}
+    */
+    @ApiModelProperty(description = "${field.fieldComment}")
     </#if>
-    <#if field.queryFormType == 'date'>
+    <#if field.queryFormType == 'LocalDate'>
     @DateTimeFormat(pattern="yyyy-MM-dd")
-    <#elseif field.queryFormType == 'datetime'>
+    <#elseif field.queryFormType == 'LocalDateTime'>
     @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
     </#if>
-    private ${field.attrType}<#if field.queryFormType == 'date' || field.queryFormType == 'datetime'>[]</#if> ${field.attrName};
-
+    <#if field.queryType == 'between'>
+    private ${field.attrType}   start${field.attrName?cap_first};
+    private ${field.attrType}   end${field.attrName?cap_first};
+    <#else>
+    private ${field.attrType}   ${field.attrName};
+    </#if>
 </#list>
 }
