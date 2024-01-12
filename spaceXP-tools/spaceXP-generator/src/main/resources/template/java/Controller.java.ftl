@@ -50,7 +50,7 @@ public class ${className?cap_first}Controller {
 
     @ApiOperation("根据id查询")
     @GetMapping("/info/{id}")
-    public ${className?cap_first}VO info(@PathVariable("id") Long id){
+    public ${className?cap_first}VO info(@PathVariable("id") ${pkType} id){
         return ${className}Service.info(id);
     }
 
@@ -68,13 +68,13 @@ public class ${className?cap_first}Controller {
 
     @ApiOperation("批量删除信息")
     @DeleteMapping("/delete")
-    public Boolean delete(@RequestBody List<Long> ids){
+    public Boolean delete(@RequestBody List<${pkType}> ids){
         return ${className}Service.delete(ids);
     }
 
     @ApiOperation("根据id删除信息")
     @DeleteMapping("/delete/{id}")
-    public Boolean delete(@PathVariable Long id){
+    public Boolean delete(@PathVariable ${pkType} id){
         return ${className}Service.delete(id);
     }
 }

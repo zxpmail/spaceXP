@@ -1,5 +1,4 @@
-package ${package}.${moduleName}.entity;
-
+package ${package}.${moduleName}.model.entity;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.*;
 <#list importList as i>
@@ -7,14 +6,19 @@ import ${i!};
 </#list>
 
 /**
- * ${tableComment}
- *
- * @author ${author} ${email}
- * @since ${version} ${date}
- */
+* <p/>
+* {@code @description}  : ${tableComment}
+* <p/>
+* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@email:</b> ${email}
+*
+* @author    ${author}
+* @version   ${version}
+*/
+
 @Data
 @TableName("${tableName}")
-public class ${ClassName}Entity {
+public class ${className?cap_first}DO {
 <#list fieldList as field>
 	<#if field.fieldComment!?length gt 0>
 	/**
