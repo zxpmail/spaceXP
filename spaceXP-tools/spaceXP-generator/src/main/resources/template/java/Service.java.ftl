@@ -1,26 +1,74 @@
 package ${package}.${moduleName}.service;
 
-import ${package}.framework.common.utils.PageResult;
-import ${package}.framework.mybatis.service.BaseService;
-import ${package}.${moduleName}.vo.${ClassName}VO;
-import ${package}.${moduleName}.query.${ClassName}Query;
-import ${package}.${moduleName}.entity.${ClassName}Entity;
+import com.baomidou.mybatisplus.extension.service.IService;
+import cn.piesat.framework.common.model.dto.PageBean;
+import cn.piesat.framework.common.model.vo.PageResult;
+import ${package}.${moduleName}.model.dto.${className?cap_first}DTO;
+import ${package}.${moduleName}.model.query.${className?cap_first}Query;
+import ${package}.${moduleName}.model.entity.${className?cap_first}DO;
+import ${package}.${moduleName}.model.vo.${className?cap_first}VO;
 
 import java.util.List;
 
 /**
- * ${tableComment}
- *
- * @author ${author} ${email}
- * @since ${version} ${date}
- */
-public interface ${ClassName}Service extends BaseService<${ClassName}Entity> {
+* <p/>
+* {@code @description}  : ${tableComment}Service接口
+* <p/>
+* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@email:</b> ${email}
+*
+* @author    ${author}
+* @version   ${version}
+*/
 
-    PageResult<${ClassName}VO> page(${ClassName}Query query);
+public interface ${className?cap_first}Service extends IService<${className?cap_first}DO> {
 
-    void save(${ClassName}VO vo);
+    /**
+    * 分页查询
+    *
+    * @param pageBean {@link PageBean} 分页对象
+    * @param ${className}Query {@link ${className?cap_first}Query} 用户信息表查询对象
+    * @return {@link PageResult} 查询结果
+    */
+    PageResult list(PageBean pageBean, ${className?cap_first}Query userQuery);
 
-    void update(${ClassName}VO vo);
+    /**
+    * 根据id查询
+    *
+    * @param id id
+    * @return {@link ${className?cap_first}VO}
+    */
+    ${className?cap_first}DO info(${pkType} id);
 
-    void delete(List<Long> idList);
+    /**
+    * 新增
+    *
+    * @param ${className}DTO {@link ${className?cap_first}DTO} 用户信息表DTO
+    * @return false or true
+    */
+    Boolean save(${className?cap_first}DTO userDTO);
+
+    /**
+    * 修改
+    *
+    * @param ${className}DTO {@link ${className?cap_first}DTO} 用户信息表DTO
+    * @return false or true
+    */
+    Boolean update(${className?cap_first}DTO userDTO);
+
+    /**
+    * 批量删除
+    *
+    * @param ids id集合
+    * @return false or true
+    */
+    Boolean delete(List<${pkType}> ids);
+
+    /**
+    * 根据id删除
+    *
+    * @param id id
+    * @return false or true
+    */
+    Boolean delete(${pkType} id);
 }

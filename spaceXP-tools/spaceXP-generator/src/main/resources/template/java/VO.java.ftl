@@ -1,31 +1,44 @@
-package ${package}.${moduleName}.vo;
+package ${package}.${moduleName}.model.vo;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import java.io.Serializable;
-import ${package}.framework.common.utils.DateUtils;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 <#list importList as i>
 import ${i!};
 </#list>
 
 /**
-* ${tableComment}
+* <p/>
+* {@code @description}  : ${tableComment}
+* <p/>
+* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@email:</b> ${email}
 *
-* @author ${author} ${email}
-* @since ${version} ${date}
+* @author    ${author}
+* @version   ${version}
 */
+
 @Data
-@Schema(description = "${tableComment}")
-public class ${ClassName}VO implements Serializable {
+@ApiModel("${tableComment}VO")
+public class ${className?cap_first}VO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 <#list fieldList as field>
 	<#if field.fieldComment!?length gt 0>
-	@Schema(description = "${field.fieldComment}")
+	/**
+	* ${field.fieldComment}
+	*/
+	@ApiModelProperty("${field.fieldComment}")
 	</#if>
-	<#if field.attrType == 'Date'>
-	@JsonFormat(pattern = DateUtils.DATE_TIME_PATTERN)
+	<#if field.attrType == 'LocalDate'>
+		@JsonFormat(pattern="yyyy-MM-dd")
+	<#elseif field.attrType == 'LocalDateTime'>
+		@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	</#if>
 	private ${field.attrType} ${field.attrName};
 
