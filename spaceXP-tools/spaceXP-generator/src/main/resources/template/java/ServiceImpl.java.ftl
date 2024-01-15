@@ -115,6 +115,16 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
                 </#if>
             </#if>
         </#list>
+        <#list orderList as field>
+            <#if field.orderType== 1>
+        wrapper.orderByAsc(${className?cap_first}DO::get${field.attrName?cap_first});
+            <#elseif field.orderType== 2>
+        wrapper.orderByDesc(${className?cap_first}DO::get${field.attrName?cap_first});
+            </#if>
+        </#list>
+        <#if notShow>
+        wrapper.select(${className?cap_first}DO.class,${notShow});
+        </#if>
         return wrapper;
     }
 
