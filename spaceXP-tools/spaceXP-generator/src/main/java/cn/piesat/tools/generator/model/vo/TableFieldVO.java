@@ -1,23 +1,31 @@
-package cn.piesat.tools.generator.model.entity;
+package cn.piesat.tools.generator.model.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <p/>
- * {@code @description}  :数据表字段实体类
+ * {@code @description}  :数据表字段vo类
  * <p/>
  * <b>@create:</b> 2023/11/27 17:53.
  *
  * @author zhouxp
  */
 @Data
-@TableName("gen_table_field")
-public class TableFieldDO extends BaseDO{
-
+public class TableFieldVO  {
+    /**
+     * id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
     /**
      * 表ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long tableId;
     /**
      * 字段名称

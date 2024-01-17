@@ -144,8 +144,11 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
     @Override
     public TableVO info(Long id) {
         TableDO byId = getById(id);
-
-        return CopyBeanUtils.copy(byId,TableVO::new);
+        assert byId != null;
+        TableVO copy = CopyBeanUtils.copy(byId, TableVO::new);
+        assert copy != null;
+        copy.setTableFields(tableFieldService.getTableFieldsByTableId(copy.getId()));
+        return copy;
     }
 
     @Override

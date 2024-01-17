@@ -4,6 +4,7 @@ import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
+import cn.piesat.tools.generator.model.vo.TableFieldVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface TableFieldService extends IService<TableFieldDO> {
      Boolean deleteByTableId(List<Long> tableId);
 
     Set<String> getPackageByTableId(Long id);
+
+    List<TableFieldVO> getTableFieldsByTableId(Long id);
 }

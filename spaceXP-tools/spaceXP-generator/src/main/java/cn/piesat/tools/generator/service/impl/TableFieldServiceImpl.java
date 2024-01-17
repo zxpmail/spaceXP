@@ -1,5 +1,6 @@
 package cn.piesat.tools.generator.service.impl;
 
+import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
@@ -7,8 +8,10 @@ import cn.piesat.tools.generator.mapper.TableFieldMapper;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
+import cn.piesat.tools.generator.model.vo.TableFieldVO;
 import cn.piesat.tools.generator.service.TableFieldService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.SneakyThrows;
@@ -63,7 +66,11 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
             f.setFieldType(fieldType);
             f.setFieldComment(rs.getString(databaseDO.getFieldComment()));
             String key = rs.getString(databaseDO.getFieldKey());
-            f.setPrimaryPk(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key));
+            if(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key)){
+                f.setPrimaryPk(1);
+            }else{
+                f.setPrimaryPk(0);
+            }
             // 获取字段对应的类型
             FieldTypeDO fieldTypeDO = map.get(f.getFieldType().toLowerCase());
             if (Objects.isNull(fieldTypeDO)) {
@@ -74,6 +81,13 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
                 f.setPackageName(fieldTypeDO.getPackageName());
             }
             f.setSort(rowNum);
+            f.setAutoFill("DEFAULT");
+            f.setFormItem(1);
+            f.setGridItem(1);
+            f.setQueryType("=");
+            f.setQueryFormType("text");
+            f.setFormType("text");
+            f.setSortType(0);
             return f;
         });
         this.saveBatch(query);
@@ -103,6 +117,14 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
     @Override
     public Set<String> getPackageByTableId(Long id) {
         return this.baseMapper.getPackageByTableId(id);
+    }
+
+    @Override
+    public List<TableFieldVO> getTableFieldsByTableId(Long id) {
+        LambdaQueryWrapper<TableFieldDO> wrapper =new LambdaQueryWrapper<>();
+        wrapper.eq(TableFieldDO::getTableId,id);
+        List<TableFieldDO> list = list(wrapper);
+        return CopyBeanUtils.copy(list,TableFieldVO::new);
     }
 
 }

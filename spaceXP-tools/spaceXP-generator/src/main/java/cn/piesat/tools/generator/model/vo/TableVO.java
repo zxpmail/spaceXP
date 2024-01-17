@@ -1,8 +1,6 @@
 package cn.piesat.tools.generator.model.vo;
 
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
-import cn.piesat.tools.generator.model.entity.TableFieldDO;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -66,4 +64,8 @@ public class TableVO {
      * 表前缀
      */
     private String tablePrefix;
+    /**
+     * 表字段
+     */
+    private List<TableFieldVO> tableFields;
 }
