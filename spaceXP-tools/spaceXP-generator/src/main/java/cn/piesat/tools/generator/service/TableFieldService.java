@@ -30,4 +30,6 @@ public interface TableFieldService extends IService<TableFieldDO> {
     Set<String> getPackageByTableId(Long id);
 
     List<TableFieldVO> getTableFieldsByTableId(Long id);
+
+    Boolean update(List<TableFieldVO> tableFields);
 }

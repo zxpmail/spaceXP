@@ -127,4 +127,12 @@ public class TableFieldServiceImpl extends ServiceImpl<TableFieldMapper, TableFi
         return CopyBeanUtils.copy(list,TableFieldVO::new);
     }
 
+    @Override
+    public Boolean update(List<TableFieldVO> tableFields) {
+        if(CollectionUtils.isEmpty(tableFields)){
+            return false;
+        }
+        return updateBatchById(CopyBeanUtils.copy(tableFields,TableFieldDO::new));
+    }
+
 }
