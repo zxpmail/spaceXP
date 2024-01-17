@@ -1,6 +1,5 @@
 package cn.piesat.tools.generator.controller;
 
-import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.dto.TablesDTO;
 import cn.piesat.tools.generator.service.GeneratorService;

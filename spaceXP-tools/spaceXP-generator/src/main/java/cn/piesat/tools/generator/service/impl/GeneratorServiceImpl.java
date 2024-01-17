@@ -1,6 +1,5 @@
 package cn.piesat.tools.generator.service.impl;
 
-import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.tools.generator.model.GeneratorInfo;
 import cn.piesat.tools.generator.model.TemplateInfo;
@@ -22,7 +21,6 @@ import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;

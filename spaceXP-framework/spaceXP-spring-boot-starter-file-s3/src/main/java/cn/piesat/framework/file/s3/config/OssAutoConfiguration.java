@@ -6,6 +6,7 @@ import cn.piesat.framework.file.s3.properties.OssProperties;
 
 import cn.piesat.framework.file.s3.service.OssService;
 import cn.piesat.framework.file.s3.service.impl.S3OssService;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -51,8 +52,12 @@ public class OssAutoConfiguration {
         }
         final BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(ossProperties.getAccessKey(), ossProperties.getAccessSecret());
         final AWSStaticCredentialsProvider awsStaticCredentialsProvider = new AWSStaticCredentialsProvider(basicAWSCredentials);
+        // 客户端配置，主要是全局的配置信息
+        ClientConfiguration clientConfiguration = new ClientConfiguration();
+        clientConfiguration.setMaxConnections(ossProperties.getMaxConnections());
         return AmazonS3Client.builder()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(ossProperties.getEndpoint(),ossProperties.getRegion()))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(ossProperties.getEndpoint(), ossProperties.getRegion()))
+                .withClientConfiguration(clientConfiguration)
                 .withCredentials(awsStaticCredentialsProvider)
                 .disableChunkedEncoding()
                 .withPathStyleAccessEnabled(ossProperties.isPathStyleAccess())

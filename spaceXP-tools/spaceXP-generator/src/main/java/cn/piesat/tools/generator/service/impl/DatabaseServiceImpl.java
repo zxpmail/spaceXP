@@ -5,7 +5,6 @@ import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.tools.generator.mapper.DatabaseMapper;
-import cn.piesat.tools.generator.model.entity.BaseDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.vo.DatabaseVO;
 import cn.piesat.tools.generator.service.DatabaseService;

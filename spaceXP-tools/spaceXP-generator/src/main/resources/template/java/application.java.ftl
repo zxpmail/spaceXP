@@ -3,7 +3,16 @@ package ${package}.${moduleName};
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
+/**
+* <p/>
+* {@code @description}  : ${projectComment}
+* <p/>
+* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@email:</b> ${email}
+*
+* @author    ${author}
+* @version   ${version}
+*/
 @SpringBootApplication
 public class ${moduleName?cap_first}Application {
 
