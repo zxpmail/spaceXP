@@ -6,7 +6,9 @@ import cn.piesat.tools.generator.model.GeneratorInfo;
 import cn.piesat.tools.generator.model.dto.ImportDataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
+import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
+import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.DatabaseService;
@@ -19,7 +21,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.sql.DatabaseMetaData;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p/>
@@ -41,6 +46,55 @@ public class ImportDataServiceImpl implements ImportDataService {
         DatabaseDO databaseDO = databaseService.getById(importDataSourceDTO.getDatabaseId());
         assert databaseDO != null;
         return getSqlByTable(databaseDO, importDataSourceDTO);
+    }
+
+    @Override
+    public List<TableFieldDO> getALlFieldsByDataSourceAndTables(Map<String, FieldTypeDO> map, TableVO table, DatabaseDO databaseDO, DataSourceDO dataSourceDO) {
+        String tableFieldsSql = databaseDO.getTableFields();
+        DataSource dataSource = dynamicDataSource.getDataSource(dataSourceDO.getConnName());
+        if ("Oracle".equalsIgnoreCase(databaseDO.getDbType())) {
+            tableFieldsSql = String.format(tableFieldsSql.replace("#schema", dataSourceDO.getUsername()), table.getTableName());
+        } else {
+            tableFieldsSql = String.format(tableFieldsSql,  table.getTableName());
+        }
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        List<TableFieldDO> fields = jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
+            TableFieldDO f = new TableFieldDO();
+            f.setTableId(table.getId());
+            f.setFieldName(rs.getString(databaseDO.getFieldName()));
+            f.setAttrName(StrUtils.underlineToCamel(f.getFieldName(),false));
+            String fieldType = rs.getString(databaseDO.getFieldType());
+            if (fieldType.contains(" ")) {
+                fieldType = fieldType.substring(0, fieldType.indexOf(" "));
+            }
+            f.setFieldType(fieldType);
+            f.setFieldComment(rs.getString(databaseDO.getFieldComment()));
+            String key = rs.getString(databaseDO.getFieldKey());
+            if(StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key)){
+                f.setPrimaryPk(1);
+            }else{
+                f.setPrimaryPk(0);
+            }
+            // 获取字段对应的类型
+            FieldTypeDO fieldTypeDO = map.get(f.getFieldType().toLowerCase());
+            if (Objects.isNull(fieldTypeDO)) {
+                // 没找到对应的类型，则为Object类型
+                f.setAttrType("Object");
+            } else {
+                f.setAttrType(fieldTypeDO.getAttrType());
+                f.setPackageName(fieldTypeDO.getPackageName());
+            }
+            f.setSort(rowNum);
+            f.setAutoFill("DEFAULT");
+            f.setFormItem(1);
+            f.setGridItem(1);
+            f.setQueryType("=");
+            f.setQueryFormType("text");
+            f.setFormType("text");
+            f.setSortType(0);
+            return f;
+        });
+        return fields;
     }
 
     private List<TableVO> getSqlByTable(DatabaseDO databaseDO, ImportDataSourceDTO importDataSourceDTO) {
