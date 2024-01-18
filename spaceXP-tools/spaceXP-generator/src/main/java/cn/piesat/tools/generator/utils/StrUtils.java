@@ -1,6 +1,6 @@
 package cn.piesat.tools.generator.utils;
 
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import cn.piesat.tools.generator.constants.Constants;
 import org.springframework.util.StringUtils;
 
 /**
@@ -12,19 +12,27 @@ import org.springframework.util.StringUtils;
  * @author zhouxp
  */
 public class StrUtils {
-    public static String underlineToCamel(String param) {
-        if (!StringUtils.hasText(param)) {
-            return StringPool.EMPTY;
+
+    /**
+     * 下划线字符串转成驼峰
+     * @param param 划线字符串
+     * @param capitalize true表示首字母为大写 false 表示首字母为小写
+     * @return 转换为驼峰字符串
+     */
+    public static String underlineToCamel(String param,boolean capitalize) {
+        if (param == null || param.trim().isEmpty()) {
+            return Constants.EMPTY;
         }
-        String temp = param.toLowerCase();
-        int len = temp.length();
-        StringBuilder sb = new StringBuilder(len);
-        for (int i = 0; i < len; i++) {
-            char c = temp.charAt(i);
-            if (c == '_') {
-                if (++i < len) {
-                    sb.append(Character.toUpperCase(temp.charAt(i)));
-                }
+        StringBuilder sb = new StringBuilder(param.length());
+        if(capitalize) {
+            sb.append(Character.toUpperCase(param.charAt(0)));
+        }else {
+            sb.append(param.charAt(0));
+        }
+        for (int i = 1; i < param.length(); i++) {
+            char c = param.charAt(i);
+            if (c == Constants.UNDERLINE_CHAR) {
+                sb.append(Character.toUpperCase(param.charAt(++i)));
             } else {
                 sb.append(c);
             }

@@ -19,9 +19,16 @@ import java.util.List;
  */
 @Data
 public class TableVO {
-
+    /**
+     * 功能名
+     */
+    private String version;
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
+    /**
+     * 项目ID
+     */
+    private Long projectId;
     /**
      * 表名
      */
@@ -41,29 +48,43 @@ public class TableVO {
     private Long datasourceId;
 
     /**
-     * 数据源名称
+     * 数据源连接名称
      */
-    private String datasourceName;
+    private String connName;
 
-    /**
-     * 项目ID
-     */
-    @NotNull(message = "项目ID不能为空", groups = UpdateGroup.class)
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long projectId;
     /**
      * 项目标识
      */
-    private String artifactId;
+    private String moduleName;
+    /**
+     * 项目包名
+     */
+    private String packageName;
 
     /**
      * 功能名
      */
     private String functionName;
+
+    /**
+     * 作者
+     */
+    private String author;
+    /**
+     * 邮箱
+     */
+    private String email;
+
     /**
      * 表前缀
      */
     private String tablePrefix;
+
+    /**
+     * 表单布局  1：一列   2：两列
+     */
+    private Integer formLayout;
+
     /**
      * 表字段
      */

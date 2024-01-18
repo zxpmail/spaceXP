@@ -108,7 +108,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
             tableDO.setTableName(rs.getString(databaseDO.getTableName()));
             tableDO.setTableComment(rs.getString(databaseDO.getTableComment()));
             tableDO.setDatasourceId(dataSourceDO.getId());
-            tableDO.setDatasourceName(dataSourceDO.getConnName());
+            tableDO.setConnName(dataSourceDO.getConnName());
             return tableDO;
         });
     }

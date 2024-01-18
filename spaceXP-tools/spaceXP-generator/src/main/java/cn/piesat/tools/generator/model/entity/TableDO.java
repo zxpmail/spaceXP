@@ -19,6 +19,10 @@ import lombok.Data;
 public class TableDO extends BaseDO{
 
     /**
+     * 项目ID
+     */
+    private Long projectId;
+    /**
      * 表名
      */
     private String tableName;
@@ -35,22 +39,41 @@ public class TableDO extends BaseDO{
      * 数据源ID
      */
     private Long datasourceId;
-    /**
-     * 数据源名称
-     */
-    private String datasourceName;
 
     /**
-     * 项目ID
+     * 数据源连接名称
      */
-    private Long projectId;
+    private String connName;
+
     /**
      * 项目标识
      */
-    private String artifactId;
+    private String moduleName;
+    /**
+     * 项目包名
+     */
+    private String packageName;
 
     /**
      * 功能名
      */
     private String functionName;
+
+    /**
+     * 作者
+     */
+    private String author;
+    /**
+     * 邮箱
+     */
+    private String email;
+    /**
+     * 功能名
+     */
+    private String version;
+
+    /**
+     * 表单布局  1：一列   2：两列
+     */
+    private Integer formLayout;
 }

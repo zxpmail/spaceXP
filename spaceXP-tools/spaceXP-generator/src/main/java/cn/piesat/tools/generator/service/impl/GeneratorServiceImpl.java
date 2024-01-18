@@ -169,7 +169,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         if (StringUtils.hasText(table.getTablePrefix())) {
             tableName = tableName.substring(table.getTablePrefix().length());
         }
-        tableName = StrUtils.underlineToCamel(tableName);
+        tableName = StrUtils.underlineToCamel(tableName,false);
         if (StringUtils.hasText(table.getTableComment())) {
             dataModel.put("tableComment", table.getTableComment());
         } else {
@@ -220,7 +220,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 查询列表
         List<TableFieldDO> queryList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
-            if (field.isPrimaryPk()) {
+            if (field.getPrimaryPk()==1) {
                 primaryList.add(field);
             }
 
