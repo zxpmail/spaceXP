@@ -21,7 +21,7 @@ import java.util.List;
  * @author zhouxp
  */
 public interface TableService extends IService<TableDO> {
-    void tableImport(Long datasourceId, List<TableVO> tableNameList);
+    Boolean tableImport(Long datasourceId, List<TableVO> tableNameList);
 
     PageResult list(PageBean pageBean, TableQuery tableQuery);
 
@@ -36,4 +36,6 @@ public interface TableService extends IService<TableDO> {
     TableVO info(Long id);
 
     Boolean update(TableVO tableDTO);
+
+    Boolean add(List<TableVO> tableList);
 }

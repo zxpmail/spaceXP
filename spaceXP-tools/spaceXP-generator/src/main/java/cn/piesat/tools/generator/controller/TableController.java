@@ -47,6 +47,15 @@ public class TableController {
     /**
      * 导入数据源中的表
      *
+     * @param tableList 表名列表
+     */
+    @PostMapping("add")
+    public Boolean add(@RequestBody List<TableVO> tableList) {
+        return tableService.add(tableList);
+    }
+    /**
+     * 导入数据源中的表
+     *
      * @param datasourceId  数据源ID
      * @param tableList 表名列表
      */

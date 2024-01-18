@@ -12,16 +12,20 @@ import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
+import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.DatabaseService;
 import cn.piesat.tools.generator.service.FieldTypeService;
+import cn.piesat.tools.generator.service.ImportDataService;
 import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.service.TableService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -44,6 +48,7 @@ import java.util.Objects;
  * @author zhouxp
  */
 @Service
+@RequiredArgsConstructor
 public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implements TableService {
     @Resource
     private TableFieldService tableFieldService;
@@ -70,7 +75,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void tableImport(Long datasourceId, List<TableVO> tableList) {
+    public Boolean tableImport(Long datasourceId, List<TableVO> tableList) {
         DataSourceVO sourceVO = dataSourceService.info(datasourceId);
         DatabaseDO databaseDO = databaseService.getById(sourceVO.getDatabaseId());
         Map<String, FieldTypeDO> map = fieldTypeService.getMap();
@@ -88,6 +93,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
             save(tableDO);
             tableFieldService.importField(map, tableDO.getId(), tableVO.getTableName(), databaseDO, dsEntity);
         }
+        return null;
     }
 
     @Override
@@ -160,6 +166,23 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
             TableDO tableDO = CopyBeanUtils.copy(tableDTO, TableDO::new);
             return updateById(tableDO);
         }
+    }
+
+    private final ImportDataService importDataService;
+    @Override
+    public Boolean add(List<TableVO> tableList) {
+        if(CollectionUtils.isEmpty(tableList)){
+            return false;
+        }
+        Long datasourceId = tableList.get(0).getDatasourceId();
+        DataSourceDO dataSourceDO = dataSourceService.getById(datasourceId);
+        DatabaseDO databaseDO = databaseService.getById(dataSourceDO.getDatabaseId());
+        Map<String, FieldTypeDO> map = fieldTypeService.getMap();
+        for (TableVO tableVO : tableList) {
+            List<TableFieldDO> aLlFieldsByDataSourceAndTables = importDataService.getALlFieldsByDataSourceAndTables(map, tableVO, databaseDO, dataSourceDO);
+            tableFieldService.saveBatch(aLlFieldsByDataSourceAndTables);
+        }
+        return true;
     }
 
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
