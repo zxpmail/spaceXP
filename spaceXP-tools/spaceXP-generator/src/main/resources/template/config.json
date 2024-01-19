@@ -9,7 +9,7 @@
   "templates": [
     {
       "templateName": "/template/java/Controller.java.ftl",
-      "generatorPath": "${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java"
+      "generatorPath": "${bizPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java"
     }
   ]
 }

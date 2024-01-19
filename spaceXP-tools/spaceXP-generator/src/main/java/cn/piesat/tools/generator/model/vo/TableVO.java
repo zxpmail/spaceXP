@@ -28,6 +28,7 @@ public class TableVO {
     /**
      * 项目ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long projectId;
     /**
      * 表名
@@ -45,6 +46,7 @@ public class TableVO {
     /**
      * 数据源ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long datasourceId;
 
     /**

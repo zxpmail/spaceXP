@@ -70,7 +70,8 @@ const getDataSourceList = () => {
 
 const getTableList = () => {
 	dataForm.table.tableName = ''
-	useDataSourceTableListApi(dataForm.datasourceId).then(res => {
+  const param= dataForm.datasourceList.filter(m=>m.id===dataForm.datasourceId)
+	useDataSourceTableListApi(param[0]).then(res => {
 		dataForm.tableList = res.data
 	})
 }
@@ -83,7 +84,7 @@ const submitHandle = () => {
 		return
 	}
 
-	useTableImportSubmitApi(dataForm.datasourceId, tableList).then(() => {
+	useTableImportSubmitApi(tableList).then(() => {
 		ElMessage.success({
 			message: '操作成功',
 			duration: 500,

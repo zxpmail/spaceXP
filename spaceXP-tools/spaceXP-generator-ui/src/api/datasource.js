@@ -20,6 +20,6 @@ export const useDataSourceSubmitApi = (dataForm) => {
 	}
 }
 
-export const useDataSourceTableListApi = (id) => {
-	return service.get('/datasource/table/list/' + id)
+export const useDataSourceTableListApi = (param) => {
+	return service.post('/import/all', param)
 }

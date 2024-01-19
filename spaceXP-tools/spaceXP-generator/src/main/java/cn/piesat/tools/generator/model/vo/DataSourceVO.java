@@ -37,6 +37,7 @@ public class DataSourceVO {
      * 数据库信息ID
      */
     @NotNull(message = "数据库信息ID不能为空", groups = {UpdateGroup.class, AddGroup.class})
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long databaseId;
     /**
      * 数据库类型

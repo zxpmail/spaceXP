@@ -7,8 +7,8 @@ export const useTableSubmitApi = dataForm => {
     return service.put('/table/update', dataForm)
 }
 
-export const useTableImportSubmitApi = (datasourceId, tableNameList) => {
-    return service.post('/table/import/' + datasourceId, tableNameList)
+export const useTableImportSubmitApi = (tableList) => {
+    return service.post('/table/add',  tableList)
 }
 
 export const useTableFieldSubmitApi = (tableId, fieldList) => {
