@@ -7,6 +7,7 @@
 测试数据权限
 
 #### 使用说明
+space.permission.data.conditions[0]=UserMapper 只对UserMapper进行数据权限拦截
 space.permission.data.ignore-conditions[0]=UserMapper.selectById
 对UserMapper.selectById就不进行数据权限拦截
 space.permission.data.ignore-conditions[0]=admin
