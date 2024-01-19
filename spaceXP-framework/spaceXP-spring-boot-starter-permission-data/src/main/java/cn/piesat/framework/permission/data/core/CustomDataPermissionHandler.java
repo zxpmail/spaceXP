@@ -54,21 +54,29 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
                     return where;
                 }
             }
-            Set<String> ignoreSql = dataPermissionProperties.getIgnoreConditions();
-            if (!CollectionUtils.isEmpty(ignoreSql)) {
-                for (String s : ignoreSql) {
-                    if (mid.contains(s)) {
+            //没在条件中直接返回
+            Set<String> sql = dataPermissionProperties.getConditions();
+            if (!CollectionUtils.isEmpty(sql)) {
+                for (String s : sql) {
+                    if (!mid.contains(s)) {
                         return where;
+                    }
+                }
+            } else {
+                Set<String> ignoreSql = dataPermissionProperties.getIgnoreConditions();
+                if (!CollectionUtils.isEmpty(ignoreSql)) {
+                    for (String s : ignoreSql) {
+                        if (mid.contains(s)) {
+                            return where;
+                        }
                     }
                 }
             }
         }
-        if (ObjectUtils.isEmpty(userDataScope) ) {
-            throw new BaseException(CommonResponseEnum.NO_PERMISSION_DATA);
-        }
+
         Expression expression = null;
-        DataPermissionEnum dataPermissionEnum =DataPermissionEnum.SELF_SCOPE;
-        if (!ObjectUtils.isEmpty(userDataScope.getDataScope())){
+        DataPermissionEnum dataPermissionEnum = DataPermissionEnum.SELF_SCOPE;
+        if (!ObjectUtils.isEmpty(userDataScope.getDataScope())) {
             dataPermissionEnum = DataPermissionEnum.DEPT_SUB_SCOPE.getEnumByCode(userDataScope.getDataScope());
         }
         // 2. 数据权限处理

@@ -28,7 +28,7 @@ import ${i!};
 public class ${className?cap_first}DTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-<#list fieldList as field>
+<#list dtoList as field>
 	<#if field.fieldComment!?length gt 0>
 	/**
 	* ${field.fieldComment}

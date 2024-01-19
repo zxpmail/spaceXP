@@ -17,6 +17,11 @@ import java.util.Set;
 @ConfigurationProperties(prefix = "space.permission.data")
 @Data
 public class DataPermissionProperties {
+
+    /**
+     * 优先查询条件，如果有条件则只对条件进行数据权限拦截，否则对全部数据进行拦截，配置那些方法执行权限控制 如mapper或者mapper中的方法
+     */
+    private Set<String> conditions = Collections.emptySet();
     /**
      * 配置那些方法不执行权限控制 如mapper或者mapper中的方法
      */

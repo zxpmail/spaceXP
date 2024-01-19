@@ -122,8 +122,8 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
         wrapper.orderByDesc(${className?cap_first}DO::get${field.attrName?cap_first});
             </#if>
         </#list>
-        <#if notShow>
-        wrapper.select(${className?cap_first}DO.class,${notShow});
+        <#if select??>
+        wrapper.select(${className?cap_first}DO.class,${select});
         </#if>
         return wrapper;
     }
