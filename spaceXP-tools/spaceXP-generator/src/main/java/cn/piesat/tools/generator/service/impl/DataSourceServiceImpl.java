@@ -13,8 +13,6 @@ import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
-import cn.piesat.tools.generator.service.DatabaseService;
-import cn.piesat.tools.generator.service.TableService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -150,12 +148,6 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         copy.setKey(dataSourceVO.getConnName());
         dynamicDataSource.test(copy);
     }
-
-    @Resource
-    private  DatabaseService databaseService;
-    @Resource
-    private  TableService tableService;
-
 
     /**
      * 判断是否记录重复
