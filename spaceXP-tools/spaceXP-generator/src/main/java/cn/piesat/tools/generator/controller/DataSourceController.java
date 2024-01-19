@@ -4,7 +4,6 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
@@ -105,8 +104,4 @@ public class DataSourceController {
         return dataSourceService.test(dataSourceVO);
     }
 
-    @GetMapping("table/list/{id}")
-    public List<TableDO> tableList(@PathVariable("id") Long id) {
-        return dataSourceService.tableList(id);
-    }
 }

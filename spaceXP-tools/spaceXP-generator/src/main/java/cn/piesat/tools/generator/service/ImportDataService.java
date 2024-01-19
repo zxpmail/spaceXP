@@ -4,6 +4,7 @@ import cn.piesat.tools.generator.model.dto.ImportDataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
+import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 
@@ -21,5 +22,5 @@ import java.util.Map;
 public interface ImportDataService {
     List<TableVO> getAllTablesByDataSource(ImportDataSourceDTO importDataSourceDTO);
 
-    List<TableFieldDO> getALlFieldsByDataSourceAndTables(Map<String, FieldTypeDO> map, TableVO table, DatabaseDO databaseDO, DataSourceDO dataSourceDO);
+    List<TableFieldDO> getALlFieldsByDataSourceAndTables(Map<String, FieldTypeDO> map, TableDO table, DatabaseDO databaseDO, DataSourceDO dataSourceDO);
 }

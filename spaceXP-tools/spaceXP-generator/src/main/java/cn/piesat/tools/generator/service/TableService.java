@@ -2,9 +2,7 @@ package cn.piesat.tools.generator.service;
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
-import cn.piesat.framework.dynamic.datasource.model.DSEntity;
-import cn.piesat.tools.generator.model.entity.DataSourceDO;
-import cn.piesat.tools.generator.model.entity.DatabaseDO;
+import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.TableVO;
@@ -21,21 +19,19 @@ import java.util.List;
  * @author zhouxp
  */
 public interface TableService extends IService<TableDO> {
-    Boolean tableImport(Long datasourceId, List<TableVO> tableNameList);
 
     PageResult list(PageBean pageBean, TableQuery tableQuery);
 
-    List<TableDO> getSqlByTable(DatabaseDO databaseDO , DataSourceDO dataSourceDO, DSEntity dsEntity);
 
     Boolean delete(List<Long> ids);
 
     Boolean delete(Long id);
 
-    Boolean sync(TableVO tableVO);
+    Boolean sync(TableDTO tableDTO);
 
     TableVO info(Long id);
 
-    Boolean update(TableVO tableDTO);
+    Boolean update(TableDTO tableDTO);
 
-    Boolean add(List<TableVO> tableList);
+    Boolean add(List<TableDTO> tableList);
 }

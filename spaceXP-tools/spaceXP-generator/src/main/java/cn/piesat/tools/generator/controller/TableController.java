@@ -3,6 +3,7 @@ package cn.piesat.tools.generator.controller;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.query.TableQuery;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.TableService;
@@ -50,18 +51,8 @@ public class TableController {
      * @param tableList 表名列表
      */
     @PostMapping("add")
-    public Boolean add(@RequestBody List<TableVO> tableList) {
+    public Boolean add(@RequestBody List<TableDTO> tableList) {
         return tableService.add(tableList);
-    }
-    /**
-     * 导入数据源中的表
-     *
-     * @param datasourceId  数据源ID
-     * @param tableList 表名列表
-     */
-    @PostMapping("import/{datasourceId}")
-    public void tableImport(@PathVariable("datasourceId") Long datasourceId, @RequestBody List<TableVO> tableList) {
-        tableService.tableImport(datasourceId, tableList);
     }
 
     @DeleteMapping("/delete")
@@ -83,11 +74,11 @@ public class TableController {
     /**
      * 同步表结构
      *
-     * @param tableVO 表信息
+     * @param tableDTO 表信息
      */
     @PostMapping("sync")
-    public Boolean sync(@RequestBody TableVO tableVO) {
-        return tableService.sync(tableVO);
+    public Boolean sync(@RequestBody TableDTO tableDTO) {
+        return tableService.sync(tableDTO);
     }
 
     /**
@@ -104,12 +95,12 @@ public class TableController {
 
     /**
      * 更新字段类型
-     * @param tableVO 表vo
+     * @param tableDTO 表dto
      * @return  成功true 失败false
      */
     @PutMapping("update")
-    public Boolean update(@Validated(UpdateGroup.class) @RequestBody TableVO tableVO) {
-        return tableService.update(tableVO);
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody TableDTO tableDTO ) {
+        return tableService.update(tableDTO);
     }
 
 }

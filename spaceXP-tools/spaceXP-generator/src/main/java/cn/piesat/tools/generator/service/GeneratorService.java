@@ -4,6 +4,7 @@ import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.dto.TablesDTO;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p/>
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author zhouxp
  */
 public interface GeneratorService {
-    void generatorCode(TableDTO tableDTO, HttpServletResponse response);
 
-    void generatorCode(TablesDTO tablesDTO, HttpServletResponse response);
+    void genCode(List<TableDTO> tables, HttpServletResponse response);
 }

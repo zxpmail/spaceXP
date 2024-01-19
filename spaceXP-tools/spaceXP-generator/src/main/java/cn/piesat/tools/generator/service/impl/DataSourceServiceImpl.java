@@ -6,13 +6,10 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
-import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
-import cn.piesat.tools.generator.model.entity.DatabaseDO;
-import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
@@ -158,14 +155,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
     private  DatabaseService databaseService;
     @Resource
     private  TableService tableService;
-    @Override
-    public List<TableDO> tableList(Long id) {
-        DataSourceDO dataSourceDO = getById(id);
-        DatabaseDO databaseDO = databaseService.getById(dataSourceDO.getDatabaseId());
-        DSEntity dsEntity =new DSEntity();
-        dsEntity.setDSName__(dataSourceDO.getConnName());
-        return tableService.getSqlByTable(databaseDO, dataSourceDO,dsEntity);
-    }
+
 
     /**
      * 判断是否记录重复

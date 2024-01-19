@@ -4,20 +4,15 @@ import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.tools.generator.model.GeneratorInfo;
 import cn.piesat.tools.generator.model.TemplateInfo;
 import cn.piesat.tools.generator.model.dto.TableDTO;
-import cn.piesat.tools.generator.model.dto.TablesDTO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
-import cn.piesat.tools.generator.model.vo.ProjectVO;
-import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.GeneratorService;
 import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.utils.ConfigUtils;
-import cn.piesat.tools.generator.utils.DateUtils;
 import cn.piesat.tools.generator.utils.StrUtils;
 import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -29,7 +24,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,51 +43,6 @@ import java.util.zip.ZipOutputStream;
 public class GeneratorServiceImpl implements GeneratorService {
     private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    @Override
-    public void generatorCode(TableDTO tableDTO, HttpServletResponse response) {
-        // 数据模型
-
-
-        // 代码生成器信息
-        GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
-        Map<String, Object> dataModel = new HashMap<>();
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-             ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            packWriteZip(tableDTO.getProject(), dataModel, zip, tableDTO.getTable());
-            writeZip(response, outputStream);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @SneakyThrows
-    @Override
-    public void generatorCode(TablesDTO tablesDTO, HttpServletResponse response) {
-        // 代码生成器信息
-        if (tablesDTO == null || tablesDTO.getTables() == null || tablesDTO.getTables().size() == 0) {
-            writeJsonToResponse(response,OBJECT_MAPPER.writeValueAsString(ApiResult.fail("没有数据")));
-            return;
-        }
-        Map<String, Object> dataModel = new HashMap<>();
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-             ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            for (TableVO table : tablesDTO.getTables()) {
-                packWriteZip(tablesDTO.getProject(), dataModel, zip, table);
-                dataModel.clear();
-            }
-            writeZip(response,outputStream);
-        }catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void packWriteZip(ProjectVO project, Map<String, Object> dataModel, ZipOutputStream zip, TableVO table) {
-        setDataModel(dataModel, project);
-        setDataModel(dataModel, table);
-        setDataModel(dataModel, table.getId());
-        writeZipByTemplate(dataModel, zip);
-    }
-
     private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip) {
         GeneratorInfo generator = ConfigUtils.getGeneratorInfo();
         for (TemplateInfo template : generator.getTemplates()) {
@@ -108,7 +57,6 @@ public class GeneratorServiceImpl implements GeneratorService {
                 throw new RuntimeException(e);
             }
         }
-
     }
 
     private static void writeZip(HttpServletResponse response, ByteArrayOutputStream outputStream) throws IOException {
@@ -121,7 +69,6 @@ public class GeneratorServiceImpl implements GeneratorService {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
-
         // 输出ZIP文件内容到响应体
         response.getOutputStream().write(responseData);
     }
@@ -133,63 +80,6 @@ public class GeneratorServiceImpl implements GeneratorService {
         response.getWriter().write(data);
     }
 
-    /**
-     * 通过项目信息设置数据模版
-     *
-     * @param dataModel 数据模版信息
-     * @param project   项目信息
-     */
-    private void setDataModel(Map<String, Object> dataModel, ProjectVO project) {
-        dataModel.put("package", project.getGroupId());
-        dataModel.put("packagePath", project.getGroupId().replace(".", File.separator));
-        dataModel.put("version", project.getVersion());
-        dataModel.put("moduleName", project.getArtifactId());
-        dataModel.put("ModuleName", StringUtils.capitalize(project.getArtifactId()));
-
-        // 开发者信息
-        dataModel.put("author", project.getAuthor());
-        dataModel.put("email", project.getEmail());
-        dataModel.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
-        dataModel.put("date", DateUtils.format(new Date(), DateUtils.DATE_PATTERN));
-
-        // 生成路径
-        dataModel.put("backendPath", project.getArtifactId());
-        dataModel.put("frontendPath", project.getArtifactId());
-    }
-
-    /**
-     * 通过项目信息设置数据模版
-     *
-     * @param dataModel 数据模版信息
-     * @param table     表信息
-     */
-    private void setDataModel(Map<String, Object> dataModel, TableVO table) {
-        String tableName = table.getTableName();
-        dataModel.put("tableName", tableName);
-        if (StringUtils.hasText(table.getTablePrefix())) {
-            tableName = tableName.substring(table.getTablePrefix().length());
-        }
-        tableName = StrUtils.underlineToCamel(tableName,false);
-        if (StringUtils.hasText(table.getTableComment())) {
-            dataModel.put("tableComment", table.getTableComment());
-        } else {
-            dataModel.put("tableComment", tableName);
-        }
-        if (StringUtils.hasText(table.getClassName())) {
-            dataModel.put("ClassName", StringUtils.capitalize(table.getClassName()));
-            dataModel.put("className", table.getClassName());
-        } else {
-            dataModel.put("ClassName", StringUtils.capitalize(tableName));
-            dataModel.put("className", tableName);
-        }
-        if (StringUtils.hasText(table.getFunctionName())) {
-            dataModel.put("functionName", table.getFunctionName());
-        } else {
-            dataModel.put("functionName", StringUtils.uncapitalize(tableName));
-        }
-
-
-    }
 
     /**
      * 通过数据字段设置数据模版
@@ -197,7 +87,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      * @param dataModel 数据模版信息
      * @param tableId   表ID
      */
-    private void setDataModel(Map<String, Object> dataModel, Long tableId) {
+    private void setDataModelByFields(Map<String, Object> dataModel, Long tableId) {
         LambdaQueryWrapper<TableFieldDO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(TableFieldDO::getTableId, tableId);
         List<TableFieldDO> tableFieldDOS = tableFieldService.list(queryWrapper);
@@ -215,18 +105,84 @@ public class GeneratorServiceImpl implements GeneratorService {
      * 设置字段分类信息
      */
     private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS) {
-        // 主键列表 (支持多主键)
         List<TableFieldDO> primaryList = new ArrayList<>();
-        // 查询列表
         List<TableFieldDO> queryList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk()==1) {
                 primaryList.add(field);
             }
-
         }
         dataModel.put("primaryList", primaryList);
         dataModel.put("queryList", queryList);
     }
 
+    @Override
+    public void genCode(List<TableDTO> tables, HttpServletResponse response) {
+        // 代码生成器信息
+        if (tables == null || tables.size() == 0) {
+            try {
+                writeJsonToResponse(response,OBJECT_MAPPER.writeValueAsString(ApiResult.fail("没有数据")));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            return;
+        }
+        Map<String, Object> dataModel = new HashMap<>();
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+             ZipOutputStream zip = new ZipOutputStream(outputStream)) {
+            for (TableDTO table : tables) {
+                packTablesWriteZip(table, dataModel, zip);
+                dataModel.clear();
+            }
+            writeZip(response, outputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void packTablesWriteZip(TableDTO table , Map<String, Object> dataModel, ZipOutputStream zip) {
+            setDataModelByTable(dataModel,table);
+            setDataModelByFields(dataModel,table.getId());
+            writeZipByTemplate(dataModel,zip);
+    }
+
+    private void setDataModelByTable(Map<String, Object> dataModel, TableDTO table) {
+        dataModel.put("package", table.getPackageName());
+        dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
+        dataModel.put("version", table.getVersion());
+        dataModel.put("moduleName", table.getModuleName());
+        dataModel.put("ModuleName", StringUtils.capitalize(table.getModuleName()));
+
+        // 开发者信息
+        dataModel.put("author", table.getAuthor());
+        dataModel.put("email", table.getEmail());
+
+        // 生成路径
+        dataModel.put("bizPath", table.getModuleName()+"-biz");
+        dataModel.put("apiPath", table.getModuleName()+"-api");
+        dataModel.put("frontendPath", table.getModuleName()+"-view");
+        String tableName = table.getTableName();
+        dataModel.put("tableName", tableName);
+        if (StringUtils.hasText(table.getTablePrefix())) {
+            tableName = tableName.substring(table.getTablePrefix().length());
+        }
+        tableName = StrUtils.underlineToCamel(tableName,false);
+        if (StringUtils.hasText(table.getTableComment())) {
+            dataModel.put("tableComment", table.getTableComment());
+        } else {
+            dataModel.put("tableComment", tableName);
+        }
+        if (StringUtils.hasText(table.getClassName())) {
+            dataModel.put("ClassName", StringUtils.uncapitalize(table.getClassName()));
+            dataModel.put("className", table.getClassName());
+        } else {
+            dataModel.put("ClassName", StringUtils.capitalize(tableName));
+            dataModel.put("className", tableName);
+        }
+        if (StringUtils.hasText(table.getFunctionName())) {
+            dataModel.put("functionName", table.getFunctionName());
+        } else {
+            dataModel.put("functionName", StringUtils.uncapitalize(tableName));
+        }
+    }
 }

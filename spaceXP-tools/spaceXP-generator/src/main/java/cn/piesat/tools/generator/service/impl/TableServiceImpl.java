@@ -3,18 +3,15 @@ package cn.piesat.tools.generator.service.impl;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
-import cn.piesat.framework.dynamic.datasource.annotation.DS;
-import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
-import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.TableMapper;
+import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.model.query.TableQuery;
-import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.DatabaseService;
@@ -26,14 +23,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -50,21 +45,15 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implements TableService {
-    @Resource
-    private TableFieldService tableFieldService;
+    private final TableFieldService tableFieldService;
 
-    @Resource
-    private DatabaseService databaseService;
+    private final DatabaseService databaseService;
 
-    @Resource
-    private DataSourceService dataSourceService;
-
-    @Resource
-    private FieldTypeService fieldTypeService;
+    private final DataSourceService dataSourceService;
 
 
-    @Resource
-    private DynamicDataSource dynamicDataSource;
+    private final FieldTypeService fieldTypeService;
+
 
     private boolean repeat(Long datasourceId, String tableName) {
         LambdaQueryWrapper<TableDO> wrapper = new LambdaQueryWrapper<>();
@@ -73,28 +62,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
         return count(wrapper) > 0;
     }
 
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Boolean tableImport(Long datasourceId, List<TableVO> tableList) {
-        DataSourceVO sourceVO = dataSourceService.info(datasourceId);
-        DatabaseDO databaseDO = databaseService.getById(sourceVO.getDatabaseId());
-        Map<String, FieldTypeDO> map = fieldTypeService.getMap();
-        DSEntity dsEntity = new DSEntity();
-        dsEntity.setDSName__(sourceVO.getConnName());
-        for (TableVO tableVO : tableList) {
-            if (repeat(datasourceId, tableVO.getTableName())) {
-                continue;
-            }
-            TableDO tableDO = CopyBeanUtils.copy(tableVO, TableDO::new);
-            if (Objects.isNull(tableDO)) {
-                continue;
-            }
-            tableDO.setDatasourceId(sourceVO.getId());
-            save(tableDO);
-            tableFieldService.importField(map, tableDO.getId(), tableVO.getTableName(), databaseDO, dsEntity);
-        }
-        return null;
-    }
+
 
     @Override
     public PageResult list(PageBean pageBean, TableQuery tableQuery) {
@@ -103,20 +71,6 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
                 getWrapper(tableQuery)
         );
         return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), TableVO::new));
-    }
-
-    @Override
-    @DS
-    public List<TableDO> getSqlByTable(DatabaseDO databaseDO, DataSourceDO dataSourceDO, DSEntity dsEntity) {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dynamicDataSource);
-        return jdbcTemplate.query(databaseDO.getTableSql(), (rs, rowNum) -> {
-            TableDO tableDO = new TableDO();
-            tableDO.setTableName(rs.getString(databaseDO.getTableName()));
-            tableDO.setTableComment(rs.getString(databaseDO.getTableComment()));
-            tableDO.setDatasourceId(dataSourceDO.getId());
-            tableDO.setConnName(dataSourceDO.getConnName());
-            return tableDO;
-        });
     }
 
     @Override
@@ -135,14 +89,11 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Boolean sync(TableVO tableVO) {
-        TableDO tableDO = getById(tableVO.getId());
-        if (Objects.isNull(tableDO)) {
-            return false;
-        }
-        tableFieldService.deleteByTableId(tableVO.getId());
-        tableImport(tableDO.getDatasourceId(), new ArrayList<TableVO>() {{
-            add(CopyBeanUtils.copy(tableDO, TableVO::new));
+    public Boolean sync(TableDTO tableDTO) {
+        tableFieldService.deleteByTableId(tableDTO.getId());
+        removeById(tableDTO.getId());
+        add(new ArrayList<TableDTO>() {{
+            add(tableDTO);
         }});
         return true;
     }
@@ -158,7 +109,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
     }
 
     @Override
-    public Boolean update(TableVO tableDTO) {
+    public Boolean update(TableDTO tableDTO) {
         TableDO byId = getById(tableDTO.getId());
         if (Objects.isNull(byId)) {
             return false;
@@ -170,7 +121,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
 
     private final ImportDataService importDataService;
     @Override
-    public Boolean add(List<TableVO> tableList) {
+    public Boolean add(List<TableDTO> tableList) {
         if(CollectionUtils.isEmpty(tableList)){
             return false;
         }
@@ -178,8 +129,16 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
         DataSourceDO dataSourceDO = dataSourceService.getById(datasourceId);
         DatabaseDO databaseDO = databaseService.getById(dataSourceDO.getDatabaseId());
         Map<String, FieldTypeDO> map = fieldTypeService.getMap();
-        for (TableVO tableVO : tableList) {
-            List<TableFieldDO> aLlFieldsByDataSourceAndTables = importDataService.getALlFieldsByDataSourceAndTables(map, tableVO, databaseDO, dataSourceDO);
+        for (TableDTO table : tableList) {
+            if (repeat(datasourceId, table.getTableName())) {
+                continue;
+            }
+            TableDO tableDO = CopyBeanUtils.copy(table, TableDO::new);
+            if (Objects.isNull(tableDO)) {
+                continue;
+            }
+            save(tableDO);
+            List<TableFieldDO> aLlFieldsByDataSourceAndTables = importDataService.getALlFieldsByDataSourceAndTables(map, tableDO, databaseDO, dataSourceDO);
             tableFieldService.saveBatch(aLlFieldsByDataSourceAndTables);
         }
         return true;

@@ -21,7 +21,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -49,7 +48,7 @@ public class ImportDataServiceImpl implements ImportDataService {
     }
 
     @Override
-    public List<TableFieldDO> getALlFieldsByDataSourceAndTables(Map<String, FieldTypeDO> map, TableVO table, DatabaseDO databaseDO, DataSourceDO dataSourceDO) {
+    public List<TableFieldDO> getALlFieldsByDataSourceAndTables(Map<String, FieldTypeDO> map, TableDO table, DatabaseDO databaseDO, DataSourceDO dataSourceDO) {
         String tableFieldsSql = databaseDO.getTableFields();
         DataSource dataSource = dynamicDataSource.getDataSource(dataSourceDO.getConnName());
         if ("Oracle".equalsIgnoreCase(databaseDO.getDbType())) {
@@ -58,7 +57,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             tableFieldsSql = String.format(tableFieldsSql,  table.getTableName());
         }
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        List<TableFieldDO> fields = jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
+        return jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
             TableFieldDO f = new TableFieldDO();
             f.setTableId(table.getId());
             f.setFieldName(rs.getString(databaseDO.getFieldName()));
@@ -94,7 +93,6 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setSortType(0);
             return f;
         });
-        return fields;
     }
 
     private List<TableVO> getSqlByTable(DatabaseDO databaseDO, ImportDataSourceDTO importDataSourceDTO) {
@@ -111,7 +109,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             table.setEmail(project.getEmail());
             table.setVersion(project.getVersion());
             table.setFunctionName(table.getTableName());
-            table.setModuleName(project.getGroupId());
+            table.setPackageName(project.getGroupId());
             table.setModuleName(project.getArtifactId());
             table.setClassName(StrUtils.underlineToCamel(table.getTableName(),true));
             table.setFormLayout(1);

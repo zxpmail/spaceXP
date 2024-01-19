@@ -1,23 +1,28 @@
-package cn.piesat.tools.generator.model.entity;
+package cn.piesat.tools.generator.model.dto;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 /**
  * <p/>
- * {@code @description}  :数据表字段实体类
+ * {@code @description}  :数据表字段vo类
  * <p/>
  * <b>@create:</b> 2023/11/27 17:53.
  *
  * @author zhouxp
  */
 @Data
-@TableName("gen_table_field")
-public class TableFieldDO extends BaseDO{
-
+public class TableFieldDTO {
+    /**
+     * id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
     /**
      * 表ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long tableId;
     /**
      * 字段名称
@@ -35,10 +40,6 @@ public class TableFieldDO extends BaseDO{
      * 字段说明
      */
     private String fieldComment;
-    /**
-     * 字段是否可重复 0不重复 1重复
-     */
-    private Integer fieldRepeat;
     /**
      * 属性名
      */
@@ -105,4 +106,9 @@ public class TableFieldDO extends BaseDO{
      * 查询表单类型
      */
     private String queryFormType;
+
+    /**
+     * 字段是否可重复 0不重复 1重复
+     */
+    private Integer fieldRepeat;
 }

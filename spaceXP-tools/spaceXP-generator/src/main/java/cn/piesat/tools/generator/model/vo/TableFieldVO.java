@@ -44,6 +44,10 @@ public class TableFieldVO  {
      */
     private String fieldComment;
     /**
+     * 字段是否可重复 0不重复 1重复
+     */
+    private Integer fieldRepeat;
+    /**
      * 属性名
      */
     private String attrName;

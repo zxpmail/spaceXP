@@ -1,7 +1,6 @@
 package cn.piesat.tools.generator.controller;
 
 import cn.piesat.tools.generator.model.dto.TableDTO;
-import cn.piesat.tools.generator.model.dto.TablesDTO;
 import cn.piesat.tools.generator.service.GeneratorService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * <p/>
@@ -28,16 +28,9 @@ public class GeneratorController {
     /**
      * 生成代码（zip压缩包）
      */
-    @PostMapping("/code")
-    public void code(@RequestBody TableDTO tableDTO, HttpServletResponse response){
-        generatorService.generatorCode(tableDTO,response);
+    @PostMapping("/genCode")
+    public void genCode(@RequestBody List<TableDTO > tables, HttpServletResponse response){
+        generatorService.genCode(tables,response);
     }
 
-    /**
-     * 批量生成代码（zip压缩包）
-     */
-    @PostMapping("/code/batch")
-    public void batchGenerator(@RequestBody TablesDTO tablesDTO, HttpServletResponse response){
-         generatorService.generatorCode(tablesDTO,response);
-    }
 }

@@ -34,6 +34,5 @@ public interface DataSourceService extends IService<DataSourceDO> {
 
     Boolean test(DataSourceVO dataSourceVO);
 
-    List<TableDO> tableList(Long id);
 
 }
