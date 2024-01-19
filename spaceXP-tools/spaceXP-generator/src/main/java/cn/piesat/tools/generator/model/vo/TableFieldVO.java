@@ -113,4 +113,19 @@ public class TableFieldVO  {
      * 查询表单类型
      */
     private String queryFormType;
+
+    /**
+     * VO 1 是 0 否
+     */
+    private Integer vo;
+
+    /**
+     * DTO 1 是 0 否
+     */
+    private Integer dto;
+
+    /**
+     * 列表可显示 1是 0否
+     */
+    private Integer gridList;
 }

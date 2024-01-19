@@ -111,4 +111,22 @@ public class TableFieldDTO {
      * 字段是否可重复 0不重复 1重复
      */
     private Integer fieldRepeat;
+
+
+    /**
+     * VO 1 是 0 否
+     */
+    private Integer vo;
+
+    /**
+     * DTO 1 是 0 否
+     */
+    private Integer dto;
+
+    /**
+     * 列表可显示 1是 0否
+     */
+    private Integer gridList;
+
+
 }

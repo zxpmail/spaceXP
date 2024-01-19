@@ -109,8 +109,10 @@ public class GeneratorServiceImpl implements GeneratorService {
         List<TableFieldDO> queryList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk()==1) {
+                dataModel.put("pkType",field.getAttrType());
                 primaryList.add(field);
             }
+
         }
         dataModel.put("primaryList", primaryList);
         dataModel.put("queryList", queryList);
