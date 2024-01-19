@@ -1,6 +1,7 @@
 package cn.piesat.tools.generator.service.impl;
 
 import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.model.GeneratorInfo;
 import cn.piesat.tools.generator.model.TemplateInfo;
 import cn.piesat.tools.generator.model.dto.TableDTO;
@@ -12,10 +13,12 @@ import cn.piesat.tools.generator.utils.StrUtils;
 import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
+import com.clickhouse.jdbc.Main;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -24,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,19 +109,50 @@ public class GeneratorServiceImpl implements GeneratorService {
      * 设置字段分类信息
      */
     private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS) {
-        List<TableFieldDO> primaryList = new ArrayList<>();
+        List<TableFieldDO> voList = new ArrayList<>();
+        List<TableFieldDO> dtoList = new ArrayList<>();
+        List<TableFieldDO> selectList = new ArrayList<>();
         List<TableFieldDO> queryList = new ArrayList<>();
+        List<TableFieldDO> repeatList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk()==1) {
                 dataModel.put("pkType",field.getAttrType());
-                primaryList.add(field);
+            }
+            if(field.getDto()==1){
+                dtoList.add(field);
+            }
+            if(field.getVo()==1){
+                voList.add(field);
+            }
+            if(field.getGridList()==1){
+                selectList.add(field);
+            }
+            if(field.getQueryItem()==1){
+                queryList.add(field);
+            }
+            if(field.getFieldRepeat()==1){
+                repeatList.add(field);
             }
 
         }
-        dataModel.put("primaryList", primaryList);
+        dataModel.put("voList", voList);
+        dataModel.put("dtoList", dtoList);
         dataModel.put("queryList", queryList);
+        dataModel.put("repeatList", repeatList);
+        dataModel.put("select", composeSelect(selectList));
     }
 
+    private String composeSelect(List<TableFieldDO> selectList) {
+        if (CollectionUtils.isEmpty(selectList)) {
+            return Constants.EMPTY;
+        }
+        StringBuilder result = new StringBuilder();
+        for (TableFieldDO tableFieldDO : selectList) {
+            String fieldExpression = String.format("fieldInfo->!fieldInfo.getColumn().equals(\"%s\")", tableFieldDO.getFieldName());
+            result.append(!StringUtils.hasText(result.toString()) ? fieldExpression : " && " + fieldExpression);
+        }
+        return result.toString();
+    }
     @Override
     public void genCode(List<TableDTO> tables, HttpServletResponse response) {
         // 代码生成器信息
