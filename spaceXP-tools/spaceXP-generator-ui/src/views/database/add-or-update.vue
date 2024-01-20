@@ -5,7 +5,7 @@
 				<el-input v-model="dataForm.dbType" placeholder="数据库类型"></el-input>
 			</el-form-item>
       <el-form-item label="数据库驱动" prop="driver">
-        <el-input v-model="dataForm.driver" placeholder="数据库驱动"></el-input>
+        <el-input v-model="dataForm.driverClassName" placeholder="数据库驱动"></el-input>
       </el-form-item>
 			<el-form-item label="数据库URL" prop="url">
 				<el-input v-model="dataForm.url" placeholder="数据库URL"></el-input>

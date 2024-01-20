@@ -134,7 +134,9 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
                 continue;
             }
             TableDO tableDO = CopyBeanUtils.copy(table, TableDO::new);
-            if (Objects.isNull(tableDO)) {
+            if (tableDO != null) {
+                tableDO.setId(null);
+            }else {
                 continue;
             }
             save(tableDO);

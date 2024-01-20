@@ -9,6 +9,7 @@ import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
+import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
@@ -76,14 +77,14 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
 
     /**
      * 新增数据源
-     * @param dataSourceVO 数据源DTO
+     * @param dataSourceDTO 数据源DTO
      * @return 成功true 失败false
      */
     @Override
-    public Boolean add(DataSourceVO dataSourceVO) {
-        datasourceTest(dataSourceVO);
-        repeat(dataSourceVO);
-        DataSourceDO copy = CopyBeanUtils.copy(dataSourceVO, DataSourceDO::new);
+    public Boolean add(DataSourceDTO dataSourceDTO) {
+        datasourceTest(dataSourceDTO);
+        repeat(dataSourceDTO);
+        DataSourceDO copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceDO::new);
         return save(copy);
     }
 
@@ -93,7 +94,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
      * @return  成功true 失败false
      */
     @Override
-    public Boolean update(DataSourceVO dataSourceVO) {
+    public Boolean update(DataSourceDTO dataSourceVO) {
         datasourceTest(dataSourceVO);
         DataSourceDO byId = getById(dataSourceVO.getId());
         BeanUtils.copyProperties(dataSourceVO,byId,CopyBeanUtils.getNullPropertyNames(dataSourceVO));
@@ -135,27 +136,27 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
 
 
     @Override
-    public Boolean test(DataSourceVO dataSourceVO) {
-        datasourceTest(dataSourceVO);
+    public Boolean test(DataSourceDTO dataSourceDTO) {
+        datasourceTest(dataSourceDTO);
         return true;
     }
 
-    private void datasourceTest(DataSourceVO dataSourceVO) {
-        DataSourceEntity copy = CopyBeanUtils.copy(dataSourceVO, DataSourceEntity::new);
+    private void datasourceTest(DataSourceDTO dataSourceDTO) {
+        DataSourceEntity copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceEntity::new);
         if(Objects.isNull(copy)){
             return;
         }
-        copy.setKey(dataSourceVO.getConnName());
+        copy.setKey(dataSourceDTO.getConnName());
         dynamicDataSource.test(copy);
     }
 
     /**
      * 判断是否记录重复
-     * @param dataSourceVO  数据源DTO
+     * @param dataSourceDTO  数据源DTO
      */
-    private void repeat(DataSourceVO dataSourceVO){
+    private void repeat(DataSourceDTO dataSourceDTO){
         LambdaQueryWrapper<DataSourceDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(DataSourceDO::getConnName,dataSourceVO.getConnName());
+        wrapper.eq(DataSourceDO::getConnName,dataSourceDTO.getConnName());
         if (count(wrapper)>0){
             throw new BaseException(CommonResponseEnum.RECORD_REPEAT);
         }

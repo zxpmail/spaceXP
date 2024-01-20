@@ -4,6 +4,7 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.query.DataSourceQuery;
 import cn.piesat.tools.generator.model.vo.DataSourceVO;
 import cn.piesat.tools.generator.service.DataSourceService;
@@ -59,22 +60,22 @@ public class DataSourceController {
 
     /**
      * 新增数据源
-     * @param dataSourceVO 数据源DTO
+     * @param dataSourceDTO 数据源DTO
      * @return 成功true 失败false
      */
     @PostMapping("add")
-    public Boolean add(@Validated(AddGroup.class) @RequestBody DataSourceVO dataSourceVO) {
-        return dataSourceService.add(dataSourceVO);
+    public Boolean add(@Validated(AddGroup.class) @RequestBody DataSourceDTO dataSourceDTO) {
+        return dataSourceService.add(dataSourceDTO);
     }
 
     /**
      * 更新数据源
-     * @param dataSourceVO 数据源DTO
+     * @param dataSourceDTO 数据源DTO
      * @return  成功true 失败false
      */
     @PutMapping ("update")
-    public Boolean update(@Validated(UpdateGroup.class) @RequestBody DataSourceVO dataSourceVO) {
-        return dataSourceService.update(dataSourceVO);
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody DataSourceDTO dataSourceDTO) {
+        return dataSourceService.update(dataSourceDTO);
     }
 
     /**
@@ -100,8 +101,8 @@ public class DataSourceController {
 
 
     @PostMapping("test")
-    public Boolean test(@Validated(UpdateGroup.class) @RequestBody DataSourceVO dataSourceVO) {
-        return dataSourceService.test(dataSourceVO);
+    public Boolean test(@Validated(UpdateGroup.class) @RequestBody DataSourceDTO dataSourceDTO) {
+        return dataSourceService.test(dataSourceDTO);
     }
 
 }
