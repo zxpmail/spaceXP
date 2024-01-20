@@ -14,7 +14,7 @@ import java.util.List;
 * <p/>
 * {@code @description}  : ${tableComment}Service接口
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}

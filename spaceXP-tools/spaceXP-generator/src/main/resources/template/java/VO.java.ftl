@@ -16,7 +16,7 @@ import ${i!};
 * <p/>
 * {@code @description}  : ${tableComment}
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}
@@ -36,9 +36,9 @@ public class ${className?cap_first}VO implements Serializable {
 	@ApiModelProperty("${field.fieldComment}")
 	</#if>
 	<#if field.attrType == 'LocalDate'>
-		@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonFormat(pattern="yyyy-MM-dd")
 	<#elseif field.attrType == 'LocalDateTime'>
-		@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	</#if>
 	private ${field.attrType} ${field.attrName};
 

@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 * <p/>
 * {@code @description}  : ${tableComment}Service实现类
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}

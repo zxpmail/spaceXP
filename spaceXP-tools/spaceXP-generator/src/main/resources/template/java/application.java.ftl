@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 * <p/>
 * {@code @description}  : ${projectComment}
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}

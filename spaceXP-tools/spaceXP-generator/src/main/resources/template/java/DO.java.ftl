@@ -9,7 +9,7 @@ import ${i!};
 * <p/>
 * {@code @description}  : ${tableComment}
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}
@@ -34,7 +34,7 @@ public class ${className?cap_first}DO {
 	<#if field.autoFill == "UPDATE">
 		@TableField(fill = FieldFill.UPDATE)
 	</#if>
-    <#if field.primaryPk>
+    <#if field.primaryPk??>
 	@TableId
 	</#if>
 	private ${field.attrType} ${field.attrName};

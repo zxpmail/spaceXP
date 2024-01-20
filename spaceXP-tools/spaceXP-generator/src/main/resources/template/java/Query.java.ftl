@@ -14,7 +14,7 @@ import ${i!};
 * <p/>
 * {@code @description}  : ${tableComment}查询
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}

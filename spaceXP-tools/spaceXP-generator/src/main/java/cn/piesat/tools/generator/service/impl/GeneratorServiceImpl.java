@@ -119,6 +119,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk()==1) {
                 dataModel.put("pkType",field.getAttrType());
+                dataModel.put("pk",field.getAttrName());
             }
             if(field.getDto()==1){
                 dtoList.add(field);
