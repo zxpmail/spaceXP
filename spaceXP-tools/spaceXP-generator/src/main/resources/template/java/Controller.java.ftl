@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 * <p/>
 * {@code @description}  : ${tableComment}
 * <p/>
-* <b>@create:</b> ${openingTime?string["yyyy-MM-dd hh:mm:ss a"]}
+* <b>@create:</b> ${openingTime}
 * <b>@email:</b> ${email}
 *
 * @author    ${author}

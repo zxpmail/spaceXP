@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -114,6 +115,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         List<TableFieldDO> selectList = new ArrayList<>();
         List<TableFieldDO> queryList = new ArrayList<>();
         List<TableFieldDO> repeatList = new ArrayList<>();
+        List<TableFieldDO> orderList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk()==1) {
                 dataModel.put("pkType",field.getAttrType());
@@ -124,7 +126,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             if(field.getVo()==1){
                 voList.add(field);
             }
-            if(field.getGridList()==1){
+            if(field.getGridList()==0){
                 selectList.add(field);
             }
             if(field.getQueryItem()==1){
@@ -133,12 +135,15 @@ public class GeneratorServiceImpl implements GeneratorService {
             if(field.getFieldRepeat()==1){
                 repeatList.add(field);
             }
-
+            if(field.getSortType()!=1){
+                repeatList.add(field);
+            }
         }
         dataModel.put("voList", voList);
         dataModel.put("dtoList", dtoList);
         dataModel.put("queryList", queryList);
         dataModel.put("repeatList", repeatList);
+        dataModel.put("orderList", orderList);
         dataModel.put("select", composeSelect(selectList));
     }
 
@@ -165,9 +170,11 @@ public class GeneratorServiceImpl implements GeneratorService {
             return;
         }
         Map<String, Object> dataModel = new HashMap<>();
+
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
             for (TableDTO table : tables) {
+                dataModel.put("openingTime", LocalDateTime.now());
                 packTablesWriteZip(table, dataModel, zip);
                 dataModel.clear();
             }
@@ -210,8 +217,8 @@ public class GeneratorServiceImpl implements GeneratorService {
             dataModel.put("tableComment", tableName);
         }
         if (StringUtils.hasText(table.getClassName())) {
-            dataModel.put("ClassName", StringUtils.uncapitalize(table.getClassName()));
-            dataModel.put("className", table.getClassName());
+            dataModel.put("className", StringUtils.uncapitalize(table.getClassName()));
+            dataModel.put("ClassName", table.getClassName());
         } else {
             dataModel.put("ClassName", StringUtils.capitalize(tableName));
             dataModel.put("className", tableName);
