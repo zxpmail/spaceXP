@@ -16,4 +16,9 @@ public class TableQuery {
      * 表名
      */
     private String tableName;
+
+    /**
+     * 数据源名称
+     */
+    private String connName;
 }

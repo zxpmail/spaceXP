@@ -32,5 +32,8 @@ public class GeneratorController {
     public void genCode(@RequestBody List<TableDTO > tables, HttpServletResponse response){
         generatorService.genCode(tables,response);
     }
-
+    @PostMapping("/genProjectCode")
+    public void genProjectCode(@RequestBody List<TableDTO > tables, HttpServletResponse response){
+        generatorService.genCode(tables,response);
+    }
 }

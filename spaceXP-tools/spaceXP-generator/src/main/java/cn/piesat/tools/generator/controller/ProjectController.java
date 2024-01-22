@@ -4,6 +4,7 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.query.ProjectQuery;
 import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.service.ProjectService;
@@ -66,22 +67,22 @@ public class ProjectController {
 
     /**
      * 新增字段类型
-     * @param projectVO 数据源DTO
+     * @param projectDTO 数据源DTO
      * @return 成功true 失败false
      */
     @PostMapping("add")
-    public Boolean add(@Validated(AddGroup.class) @RequestBody ProjectVO projectVO) {
-        return projectService.add(projectVO);
+    public Boolean add(@Validated(AddGroup.class) @RequestBody ProjectDTO projectDTO) {
+        return projectService.add(projectDTO);
     }
 
     /**
      * 更新字段类型
-     * @param projectVO 字段类型DTO
+     * @param projectDTO 字段类型DTO
      * @return  成功true 失败false
      */
     @PutMapping("update")
-    public Boolean update(@Validated(UpdateGroup.class) @RequestBody  ProjectVO projectVO) {
-        return projectService.update(projectVO);
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody  ProjectDTO projectDTO) {
+        return projectService.update(projectDTO);
     }
 
     /**

@@ -149,6 +149,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
         LambdaQueryWrapper<TableDO> wrapper = Wrappers.lambdaQuery();
         wrapper.like(StringUtils.hasText(tableQuery.getTableName()), TableDO::getTableName, tableQuery.getTableName());
+        wrapper.like(StringUtils.hasText(tableQuery.getConnName()), TableDO::getConnName, tableQuery.getConnName());
         return wrapper;
     }
 

@@ -2,6 +2,7 @@ package cn.piesat.tools.generator.service;
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.query.ProjectQuery;
 import cn.piesat.tools.generator.model.vo.ProjectVO;
@@ -22,9 +23,9 @@ public interface ProjectService extends IService<ProjectDO> {
 
     ProjectVO info(Long id);
 
-    Boolean add(ProjectVO fieldTypeVO);
+    Boolean add(ProjectDTO projectDTO);
 
-    Boolean update(ProjectVO fieldTypeVO);
+    Boolean update(ProjectDTO projectDTO);
 
     Boolean delete(List<Long> ids);
 

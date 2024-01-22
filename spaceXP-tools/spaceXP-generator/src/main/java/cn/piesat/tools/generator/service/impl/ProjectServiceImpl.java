@@ -7,6 +7,7 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.ProjectMapper;
+import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.query.ProjectQuery;
 import cn.piesat.tools.generator.model.vo.ProjectVO;
@@ -54,28 +55,28 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     }
 
     @Override
-    public Boolean add(ProjectVO projectVO) {
-        repeat(projectVO);
-        return save(CopyBeanUtils.copy(projectVO,ProjectDO::new));
+    public Boolean add(ProjectDTO projectDTO) {
+        repeat(projectDTO);
+        return save(CopyBeanUtils.copy(projectDTO,ProjectDO::new));
     }
 
-    private void repeat(ProjectVO projectVO){
+    private void repeat(ProjectDTO projectDTO){
         LambdaQueryWrapper<ProjectDO> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(ProjectDO::getArtifactId,projectVO.getArtifactId())
-                .eq(ProjectDO::getAuthor,projectVO.getAuthor())
-                .eq(ProjectDO::getVersion,projectVO.getVersion());
+        wrapper.eq(ProjectDO::getArtifactId,projectDTO.getArtifactId())
+                .eq(ProjectDO::getAuthor,projectDTO.getAuthor())
+                .eq(ProjectDO::getVersion,projectDTO.getVersion());
         if (count(wrapper)>0){
             throw new BaseException(CommonResponseEnum.RECORD_REPEAT);
         }
     }
 
     @Override
-    public Boolean update(ProjectVO projectVO) {
-        ProjectDO byId = getById(projectVO.getId());
+    public Boolean update(ProjectDTO projectDTO) {
+        ProjectDO byId = getById(projectDTO.getId());
         if(ObjectUtils.isEmpty(byId)){
             return false;
         }
-        BeanUtils.copyProperties(projectVO,byId,CopyBeanUtils.getNullPropertyNames(projectVO));
+        BeanUtils.copyProperties(projectDTO,byId,CopyBeanUtils.getNullPropertyNames(projectDTO));
         return updateById(byId);
     }
 
