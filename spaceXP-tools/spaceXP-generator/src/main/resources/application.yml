@@ -60,10 +60,3 @@ mybatis-plus:
 logging:
   level:
     cn.piesat.tools.generator.mapper: debug
-
-project:
-  groupId: cn.piesat
-  artifactId: test
-  version: 1.0.0
-  author: zhouxp
-  email: zhouxiaoping@piesat.cn

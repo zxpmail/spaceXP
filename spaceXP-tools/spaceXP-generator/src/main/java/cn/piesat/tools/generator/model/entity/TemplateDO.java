@@ -16,7 +16,8 @@ import lombok.Data;
 public class TemplateDO {
     private Integer id;
     private String type;
-    private String fileName;
-    private String fileContent;
+    private String name;
+    private String content;
     private String path;
+    private Integer isOnly;
 }

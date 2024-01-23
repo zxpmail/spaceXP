@@ -32,4 +32,7 @@ public interface ProjectService extends IService<ProjectDO> {
     Boolean delete(Long id);
 
     List<ProjectVO> all();
+
+    ProjectDO getDefaultProject();
+
 }

@@ -175,7 +175,7 @@ const generatorHandle = () => {
 
 		// 生成代码，zip压缩包
 		if (dataForm.generatorType === 0) {
-			useDownloadApi("generator/genCode",[dataForm])
+			useDownloadApi("generator/genTableCode",[dataForm])
 			visible.value = false
 			return
 		}

@@ -13,12 +13,15 @@ import cn.piesat.tools.generator.model.query.ProjectQuery;
 import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.service.ProjectService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -55,8 +58,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean add(ProjectDTO projectDTO) {
         repeat(projectDTO);
+        updateDefault(projectDTO);
         return save(CopyBeanUtils.copy(projectDTO,ProjectDO::new));
     }
 
@@ -70,14 +75,27 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
         }
     }
 
+
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean update(ProjectDTO projectDTO) {
         ProjectDO byId = getById(projectDTO.getId());
         if(ObjectUtils.isEmpty(byId)){
             return false;
         }
+        updateDefault(projectDTO);
         BeanUtils.copyProperties(projectDTO,byId,CopyBeanUtils.getNullPropertyNames(projectDTO));
         return updateById(byId);
+    }
+
+    private void updateDefault(ProjectDTO projectDTO) {
+        if(projectDTO.getIsDefault()!=1){
+            return;
+        }
+        LambdaUpdateWrapper<ProjectDO> wrapper =new LambdaUpdateWrapper<>();
+        wrapper.eq(ProjectDO::getIsDefault,1);
+        wrapper.set(ProjectDO::getIsDefault,0);
+        update(wrapper);
     }
 
     @Override
@@ -93,5 +111,26 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     @Override
     public List<ProjectVO> all() {
         return CopyBeanUtils.copy(list(),ProjectVO::new);
+    }
+
+    @Override
+    public ProjectDO getDefaultProject() {
+        LambdaQueryWrapper<ProjectDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ProjectDO::getIsDefault,1);
+        List<ProjectDO> list = list(wrapper);
+        if(CollectionUtils.isEmpty(list)){
+            ProjectDO projectDO = new ProjectDO();
+            projectDO.setAuthor("zhouxp");
+            projectDO.setPort(8080);
+            projectDO.setEmail("zhouxiaoping@piesat.cn");
+            projectDO.setDescription("test");
+            projectDO.setGroupId("cn.piesat");
+            projectDO.setArtifactId("test");
+            projectDO.setVersion("1.0.0");
+            projectDO.setIsDefault(1);
+            projectDO.setType("单体");
+            return projectDO;
+        }
+        return list.get(0);
     }
 }

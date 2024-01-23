@@ -1,20 +1,18 @@
 package cn.piesat.tools.generator.service.impl;
 
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
-import cn.piesat.framework.dynamic.datasource.model.DSEntity;
-import cn.piesat.tools.generator.model.GeneratorInfo;
 import cn.piesat.tools.generator.model.dto.ImportDataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
+import cn.piesat.tools.generator.model.entity.ProjectDO;
 import cn.piesat.tools.generator.model.entity.TableDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
-import cn.piesat.tools.generator.model.vo.ProjectVO;
 import cn.piesat.tools.generator.model.vo.TableVO;
 import cn.piesat.tools.generator.service.DatabaseService;
 import cn.piesat.tools.generator.service.ImportDataService;
-import cn.piesat.tools.generator.utils.ConfigUtils;
 import cn.piesat.tools.generator.utils.StrUtils;
+import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -96,7 +94,7 @@ public class ImportDataServiceImpl implements ImportDataService {
     }
 
     private List<TableVO> getSqlByTable(DatabaseDO databaseDO, ImportDataSourceDTO importDataSourceDTO) {
-        ProjectVO project = ConfigUtils.getGeneratorInfo().getProject();
+        ProjectDO project = TemplateUtils.project;
         DataSource dataSource = dynamicDataSource.getDataSource(importDataSourceDTO.getConnName());
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.query(databaseDO.getTableSql(), (rs, rowNum) -> {

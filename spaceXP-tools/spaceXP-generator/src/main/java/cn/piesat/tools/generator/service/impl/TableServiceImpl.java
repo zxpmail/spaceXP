@@ -146,6 +146,14 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
         return true;
     }
 
+    @Override
+    public Boolean batchUpdate(List<TableDTO> tables) {
+        if(tables==null|| tables.size() == 0){
+            return false;
+        }
+        return updateBatchById(CopyBeanUtils.copy(tables,TableDO::new));
+    }
+
     private LambdaQueryWrapper<TableDO> getWrapper(TableQuery tableQuery) {
         LambdaQueryWrapper<TableDO> wrapper = Wrappers.lambdaQuery();
         wrapper.like(StringUtils.hasText(tableQuery.getTableName()), TableDO::getTableName, tableQuery.getTableName());

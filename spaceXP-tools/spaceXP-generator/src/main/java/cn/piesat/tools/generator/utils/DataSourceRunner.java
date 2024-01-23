@@ -5,6 +5,8 @@ import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.service.DataSourceService;
+import cn.piesat.tools.generator.service.ProjectService;
+import cn.piesat.tools.generator.service.TemplateService;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -30,6 +32,11 @@ public class DataSourceRunner implements ApplicationRunner {
     @Resource
     private DataSourceService dataSourceService;
 
+    @Resource
+    private TemplateService templateService;
+
+    @Resource
+    private ProjectService projectService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -45,7 +52,8 @@ public class DataSourceRunner implements ApplicationRunner {
             }
             dynamicDataSource.add(ds);
         }
-        ConfigUtils.init();
+        TemplateUtils.templates = templateService.list();
+        TemplateUtils.project =projectService.getDefaultProject();
     }
 }
 

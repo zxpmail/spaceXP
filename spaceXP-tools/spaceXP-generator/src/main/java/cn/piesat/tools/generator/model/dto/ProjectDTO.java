@@ -79,5 +79,17 @@ public class ProjectDTO {
     /**
      * 端口
      */
-    private Integer port;
+    private Integer port=8080;
+
+    /**
+     * 是否是默认 0否 1是
+     */
+    @NotNull(message = "是否是默认", groups =  {AddGroup.class, UpdateGroup.class})
+    private Integer isDefault;
+    /**
+     * 表前缀
+     */
+    private String tablePrefix;
+
+    private List<TableDTO> tables;
 }

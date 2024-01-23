@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 
+
 /**
  * <p/>
  * {@code @description}  :项目实体类
@@ -59,6 +60,10 @@ public class ProjectVO {
     /**
      * 端口
      */
-    private Integer port;
+    private Integer port =8080;
 
+    /**
+     * 是否是默认 0否 1是
+     */
+    private Integer isDefault;
 }

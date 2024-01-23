@@ -49,8 +49,7 @@ const visible = ref(false)
 const dataFormRef = ref()
 
 const dataForm = reactive({
-  project: {},
-  tables: []
+  project:{}
 })
 
 const init = (data) => {
@@ -75,9 +74,9 @@ const submitHandle = () => {
     ElMessage.warning('生成代码必须保证为相同的数据源名称')
     return
   }
-  dataForm.tables = tables
+  dataForm.project.tables = data
   // 源码下载
-  useDownloadApi('',dataForm)
+  useDownloadApi('generator/genProjectCode',dataForm.project)
   visible.value = false
 }
 

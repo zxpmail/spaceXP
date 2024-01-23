@@ -34,4 +34,6 @@ public interface TableService extends IService<TableDO> {
     Boolean update(TableDTO tableDTO);
 
     Boolean add(List<TableDTO> tableList);
+
+    Boolean batchUpdate(List<TableDTO> tables);
 }

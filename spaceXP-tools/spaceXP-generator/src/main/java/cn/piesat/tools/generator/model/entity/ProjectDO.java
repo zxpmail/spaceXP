@@ -56,6 +56,11 @@ public class ProjectDO extends BaseDO{
     /**
      * 端口
      */
-    private Integer port;
+    private Integer port =8080;
+
+    /**
+     * 是否是默认 0否 1是
+     */
+    private Integer isDefault;
 
 }

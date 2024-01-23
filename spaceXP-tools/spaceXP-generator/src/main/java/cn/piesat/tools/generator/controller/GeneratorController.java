@@ -1,8 +1,10 @@
 package cn.piesat.tools.generator.controller;
 
+import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.service.GeneratorService;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,12 +30,12 @@ public class GeneratorController {
     /**
      * 生成代码（zip压缩包）
      */
-    @PostMapping("/genCode")
-    public void genCode(@RequestBody List<TableDTO > tables, HttpServletResponse response){
-        generatorService.genCode(tables,response);
+    @PostMapping("/genTableCode")
+    public void genTableCode(@Validated @RequestBody List<TableDTO > tables, HttpServletResponse response){
+        generatorService.genTableCode(tables,response);
     }
     @PostMapping("/genProjectCode")
-    public void genProjectCode(@RequestBody List<TableDTO > tables, HttpServletResponse response){
-        generatorService.genCode(tables,response);
+    public void genProjectCode(@Validated @RequestBody ProjectDTO projectDTO, HttpServletResponse response){
+        generatorService.genProjectCode(projectDTO,response);
     }
 }
