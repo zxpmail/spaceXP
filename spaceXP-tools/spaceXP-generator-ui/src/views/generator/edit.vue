@@ -35,6 +35,33 @@
 							</vxe-select>
 						</template>
 					</vxe-column>
+          <vxe-column field="dto" title="DTO">
+						<template #default="{ row }">
+              <vxe-switch size="mini" v-model="row.dto"  :open-value="1" :close-value="0"></vxe-switch>
+						</template>
+					</vxe-column>
+          <vxe-column field="vo" title="VO">
+						<template #default="{ row }">
+              <vxe-switch size="mini" v-model="row.vo"  :open-value="1" :close-value="0"></vxe-switch>
+						</template>
+					</vxe-column>
+          <vxe-column field="gridList" title="列表">
+						<template #default="{ row }">
+              <vxe-switch size="mini" v-model="row.gridList"  :open-value="1" :close-value="0"></vxe-switch>
+						</template>
+					</vxe-column>
+          <vxe-column field="fieldRepeat" title="判断唯一">
+						<template #default="{ row }">
+              <vxe-switch v-model="row.fieldRepeat" size="mini" :open-value="1" :close-value="0"></vxe-switch>
+						</template>
+					</vxe-column>
+          <vxe-column field="sortType" title="排序">
+						<template #default="{ row }">
+              <vxe-select v-model="row.sortType">
+								<vxe-option v-for="item in sortTypeList" :key="item.id" :value="item.id" :label="item.name"></vxe-option>
+							</vxe-select>
+						</template>
+					</vxe-column>
 					<vxe-column field="autoFill" title="自动填充">
 						<template #default="{ row }">
 							<vxe-select v-model="row.autoFill">
@@ -149,13 +176,15 @@ import { nextTick, reactive, ref } from 'vue'
 import Sortable from 'sortablejs'
 import { useTableFieldSubmitApi } from '@/api/table'
 import { useTableApi } from '@/api/table'
-import { useFieldTypeListApi } from '@/api/fieldType'
+import { useFieldTypeData } from '@/api/fieldType'
+import { ElMessage } from "element-plus";
 
 const activeName = ref()
 const fieldTable = ref()
 const formTable = ref()
 const gridTable = ref()
 const queryTable = ref()
+const sortTypeList = ref([{id:0,name:'不排序'},{id:1,name:'升序'},{id:2,name:'降序'}])
 
 const handleClick = (tab) => {
 	if (tab.paneName !== 'field') {
@@ -236,7 +265,7 @@ const rowDrop = () => {
 
 const getTable = (id) => {
 	useTableApi(id).then(res => {
-		fieldList.value = res.data.fieldList
+		fieldList.value = res.data.tableFields
 	})
 }
 
@@ -244,7 +273,7 @@ const getFieldTypeList = async () => {
 	typeList.value = []
 
 	// 获取数据
-	const { data } = await useFieldTypeListApi()
+	const { data } = await useFieldTypeData()
 	// 设置属性类型值
 	data.forEach((item) => typeList.value.push({ label: item, value: item }))
 	// 增加Object类型
@@ -253,7 +282,7 @@ const getFieldTypeList = async () => {
 
 // 表单提交
 const submitHandle = () => {
-	useTableFieldSubmitApi(tableId.value, fieldList.value).then(() => {
+	useTableFieldSubmitApi(fieldList.value).then(() => {
 		ElMessage.success({
 			message: '操作成功',
 			duration: 500,

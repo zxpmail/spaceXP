@@ -20,6 +20,9 @@ export const useFieldTypeIsListApi = id => {
 export const useFieldTypeListApi = () => {
     return service.get('/fieldType/list')
 }
+export const useFieldTypeData =()=>{
+  return service.get('/fieldType/fieldType')
+}
 
 export const useFieldTypeSubmitApi = dataForm => {
     if (dataForm.id) {

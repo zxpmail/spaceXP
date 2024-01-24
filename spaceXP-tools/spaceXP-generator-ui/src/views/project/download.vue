@@ -7,6 +7,9 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
+      <el-form-item>
+        <el-input v-model="downloadName" placeholder="下载表名称"></el-input>
+      </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"
               @selection-change="selectionChangeHandle">
@@ -47,7 +50,7 @@ const state = reactive({
 })
 const visible = ref(false)
 const dataFormRef = ref()
-
+const downloadName = ref('')
 const dataForm = reactive({
   project:{}
 })
@@ -67,6 +70,10 @@ const submitHandle = () => {
     ElMessage.warning('请选择生成代码的表')
     return
   }
+  if (!downloadName.value) {
+    ElMessage.warning('请输入下载表名称')
+    return
+  }
   const data = state.dataList.filter(m => tables.includes(m.id))
   const uniqueArr = Array.from(new Set(data.map(({datasourceName}) => datasourceName)));
 
@@ -75,6 +82,7 @@ const submitHandle = () => {
     return
   }
   dataForm.project.tables = data
+  dataForm.project.tablePrefix = downloadName.value
   // 源码下载
   useDownloadApi('generator/genProjectCode',dataForm.project)
   visible.value = false
