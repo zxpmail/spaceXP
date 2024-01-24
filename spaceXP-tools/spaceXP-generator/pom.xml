@@ -36,6 +36,11 @@
             <artifactId>commons-io</artifactId>
             <version>1.3.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
