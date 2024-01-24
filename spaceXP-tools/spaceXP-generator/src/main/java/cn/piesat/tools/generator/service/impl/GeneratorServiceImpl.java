@@ -265,6 +265,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());
         dataModel.put("ModuleName", StringUtils.capitalize(table.getModuleName()));
+        dataModel.put("dbType",table.getDbType());
 
         // 开发者信息
         dataModel.put("author", table.getAuthor());
@@ -272,8 +273,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
         // 生成路径
         dataModel.put("bizPath", table.getModuleName() + "-biz");
-        dataModel.put("apiPath", table.getModuleName() + "-api");
-        dataModel.put("frontendPath", table.getModuleName() + "-view");
+        dataModel.put("modelPath", table.getModuleName() + "-model");
+        dataModel.put("frontPath", table.getModuleName() + "-view");
         String tableName = table.getTableName();
         dataModel.put("tableName", tableName);
         if (StringUtils.hasText(table.getTablePrefix())) {

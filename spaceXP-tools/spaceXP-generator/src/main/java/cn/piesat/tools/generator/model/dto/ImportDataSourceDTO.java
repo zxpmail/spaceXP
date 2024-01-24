@@ -35,10 +35,17 @@ public class ImportDataSourceDTO {
     private Long databaseId;
 
     /**
-     * 连接名
+     * 数据库连接
+     */
+    @NotBlank(message = "数据库连接不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 50 , message = "长度必须小于等于50" ,groups ={UpdateGroup.class} )
+    private String connName;
+
+    /**
+     * 数据库类型
      */
     @NotBlank(message = "数据库类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={UpdateGroup.class} )
-    private String connName;
+    private String dbType;
 
 }

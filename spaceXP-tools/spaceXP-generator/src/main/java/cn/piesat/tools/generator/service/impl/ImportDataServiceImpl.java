@@ -101,6 +101,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             TableVO table = new TableVO();
             table.setTableName(rs.getString(databaseDO.getTableName()));
             table.setTableComment(rs.getString(databaseDO.getTableComment()));
+            table.setDbType(importDataSourceDTO.getDbType());
             table.setDatasourceId(importDataSourceDTO.getId());
             table.setConnName(importDataSourceDTO.getConnName());
             table.setAuthor(project.getAuthor());

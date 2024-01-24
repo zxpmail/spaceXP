@@ -66,6 +66,10 @@ public class TableDTO  {
     private String connName;
 
     /**
+     * 数据库类型
+     */
+    private String dbType;
+    /**
      * 项目标识
      */
     @NotBlank(message = "项目标识不能为空", groups = {AddGroup.class, UpdateGroup.class})

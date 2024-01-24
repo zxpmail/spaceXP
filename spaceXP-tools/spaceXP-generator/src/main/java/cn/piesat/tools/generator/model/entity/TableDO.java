@@ -46,6 +46,11 @@ public class TableDO extends BaseDO{
     private String connName;
 
     /**
+     * 数据库类型
+     */
+    private String dbType;
+
+    /**
      * 项目标识
      */
     private String moduleName;
