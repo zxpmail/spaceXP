@@ -121,6 +121,10 @@ public class GeneratorServiceImpl implements GeneratorService {
         List<TableFieldDO> queryList = new ArrayList<>();
         List<TableFieldDO> repeatList = new ArrayList<>();
         List<TableFieldDO> orderList = new ArrayList<>();
+        // 表单列表
+        List<TableFieldDO> formList = new ArrayList<>();
+        // 网格列表
+        List<TableFieldDO> gridList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk() == 1) {
                 dataModel.put("pkType", field.getAttrType());
@@ -141,8 +145,14 @@ public class GeneratorServiceImpl implements GeneratorService {
             if (field.getFieldRepeat() == 1) {
                 repeatList.add(field);
             }
-            if (field.getSortType() != 1) {
-                repeatList.add(field);
+            if (field.getSortType() != 0) {
+                orderList.add(field);
+            }
+            if (field.getFormItem()==1) {
+                formList.add(field);
+            }
+            if (field.getGridItem()==1) {
+                gridList.add(field);
             }
         }
         dataModel.put("voList", voList);
@@ -150,6 +160,8 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("queryList", queryList);
         dataModel.put("repeatList", repeatList);
         dataModel.put("orderList", orderList);
+        dataModel.put("formList", formList);
+        dataModel.put("gridList", gridList);
         dataModel.put("select", composeSelect(selectList));
     }
 
@@ -295,8 +307,12 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
         if (StringUtils.hasText(table.getFunctionName())) {
             dataModel.put("functionName", table.getFunctionName());
+            dataModel.put("FunctionName", StringUtils.capitalize(table.getFunctionName()));
         } else {
             dataModel.put("functionName", StringUtils.uncapitalize(tableName));
+            dataModel.put("FunctionName", tableName);
         }
+
+
     }
 }
