@@ -34,5 +34,6 @@ public interface DataSourceService extends IService<DataSourceDO> {
 
     Boolean test(DataSourceDTO dataSourceVO);
 
+    DataSourceDO getDataSourceDOByConnName(String connName);
 
 }

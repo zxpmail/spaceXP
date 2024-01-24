@@ -141,6 +141,20 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         return true;
     }
 
+    @Override
+    public DataSourceDO getDataSourceDOByConnName(String connName) {
+        if(StringUtils.hasText(connName)){
+            LambdaQueryWrapper<DataSourceDO> wrapper =new LambdaQueryWrapper<>();
+            wrapper.eq(DataSourceDO::getConnName,connName);
+            List<DataSourceDO> list = list(wrapper);
+            if(CollectionUtils.isEmpty(list)){
+                return null;
+            }
+            return list.get(0);
+        }
+        return null;
+    }
+
     private void datasourceTest(DataSourceDTO dataSourceDTO) {
         DataSourceEntity copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceEntity::new);
         if(Objects.isNull(copy)){

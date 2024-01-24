@@ -4,8 +4,10 @@ import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
+import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import cn.piesat.tools.generator.model.entity.TemplateDO;
+import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.GeneratorService;
 import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.service.TableService;
@@ -52,6 +54,8 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 
     private final TableService tableService;
+
+    private final DataSourceService dataSourceService;
 
 
     private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip,Integer isOnly) {
@@ -234,6 +238,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         packProjectWriteZip(projectDTO, dataModel, zip);
     }
 
+
     private void packProjectWriteZip(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
         dataModel.put("bizPath",projectDTO.getArtifactId()+"-biz");
         dataModel.put("modelPath",projectDTO.getArtifactId()+"-model");
@@ -243,11 +248,22 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("port", projectDTO.getPort());
         dataModel.put("description",projectDTO.getDescription());
         dataModel.put("package",projectDTO.getGroupId());
+        dataModel.put("packagePath", projectDTO.getGroupId().replace(".", File.separator));
 
+        setDataSourceInfo(dataModel,projectDTO.getTables().get(0));
         // 开发者信息
         dataModel.put("author", projectDTO.getAuthor());
         dataModel.put("email", projectDTO.getEmail());
         writeZipByTemplate(dataModel, zip,1);
+    }
+
+    private void setDataSourceInfo(Map<String, Object> dataModel, TableDTO tableDTO) {
+        DataSourceDO dataSourceDO = dataSourceService.getDataSourceDOByConnName(tableDTO.getConnName());
+        dataModel.put("dbType",dataSourceDO.getDbType());
+        dataModel.put("url",dataSourceDO.getUrl());
+        dataModel.put("username",dataSourceDO.getUsername());
+        dataModel.put("password",dataSourceDO.getPassword());
+        dataModel.put("driverClassName",dataSourceDO.getDriverClassName());
     }
 
     private void saveTableDTO(ProjectDTO projectDTO) {
@@ -312,7 +328,5 @@ public class GeneratorServiceImpl implements GeneratorService {
             dataModel.put("functionName", StringUtils.uncapitalize(tableName));
             dataModel.put("FunctionName", tableName);
         }
-
-
     }
 }
