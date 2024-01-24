@@ -57,10 +57,15 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
             //没在条件中直接返回
             Set<String> sql = dataPermissionProperties.getConditions();
             if (!CollectionUtils.isEmpty(sql)) {
+                boolean isExist = false ;
                 for (String s : sql) {
-                    if (!mid.contains(s)) {
-                        return where;
+                    if (mid.contains(s)) {
+                        isExist= true;
+                        break;
                     }
+                }
+                if(isExist){
+                    return where;
                 }
             } else {
                 Set<String> ignoreSql = dataPermissionProperties.getIgnoreConditions();

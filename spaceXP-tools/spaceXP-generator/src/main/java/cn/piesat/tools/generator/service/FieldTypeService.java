@@ -34,4 +34,6 @@ public interface FieldTypeService extends IService<FieldTypeDO> {
     Boolean updateIsList(Long id);
 
     Map<String, FieldTypeDO> getMap();
+
+    List<String> getFieldType();
 }

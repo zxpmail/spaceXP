@@ -113,4 +113,9 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
         }
         return list.stream().collect(Collectors.toMap(t -> t.getColumnType().toLowerCase(), Functions.identity(), (d1, d2) -> d1));
     }
+
+    @Override
+    public List<String> getFieldType() {
+        return list().stream().map(FieldTypeDO::getAttrType).distinct().collect(Collectors.toList());
+    }
 }

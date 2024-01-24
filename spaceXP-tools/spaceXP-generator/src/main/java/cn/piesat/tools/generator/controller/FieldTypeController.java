@@ -107,4 +107,8 @@ public class FieldTypeController {
         return fieldTypeService.updateIsList(id);
     }
 
+    @GetMapping("/fieldType")
+    public List<String> getFieldType(){
+       return fieldTypeService.getFieldType();
+    }
 }
