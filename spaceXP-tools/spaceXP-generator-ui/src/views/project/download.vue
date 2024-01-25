@@ -70,10 +70,6 @@ const submitHandle = () => {
     ElMessage.warning('请选择生成代码的表')
     return
   }
-  if (!downloadName.value) {
-    ElMessage.warning('请输入下载表名称')
-    return
-  }
   const data = state.dataList.filter(m => tables.includes(m.id))
   const uniqueArr = Array.from(new Set(data.map(({datasourceName}) => datasourceName)));
 

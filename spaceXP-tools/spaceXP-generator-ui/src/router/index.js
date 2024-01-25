@@ -2,59 +2,50 @@ import { createRouter, createWebHashHistory} from 'vue-router'
 
 export const menuRoutes = [
 	{
-		path: '/p/gen',
-		meta: {
-			title: '代码生成器',
-			icon: 'icon-appstore'
-		},
-		children: [
-			{
-				path: '/gen/generator',
-				name: 'Generator',
-				component: () => import('../views/generator/index.vue'),
-				meta: {
-					title: '代码生成',
-					icon: 'icon-fire'
-				}
-			},
-			{
-				path: '/gen/database',
-				name: 'Database',
-				component: () => import('../views/database/index.vue'),
-				meta: {
-					title: '数据库管理',
-					icon: 'icon-control'
-				}
-			},
-			{
-				path: '/gen/datasource',
-				name: 'DataSource',
-				component: () => import('../views/datasource/index.vue'),
-				meta: {
-					title: '数据源管理',
-					icon: 'icon-database-fill'
-				}
-			},
-			{
-				path: '/gen/field-type',
-				name: 'FieldType',
-				component: () => import('../views/field-type/index.vue'),
-				meta: {
-					title: '字段类型映射',
-					icon: 'icon-menu'
-				}
-			},
-			{
-				path: '/gen/project',
-				name: 'ProjectIndex',
-				component: () => import('../views/project/index.vue'),
-				meta: {
-					title: '项目信息',
-					icon: 'icon-edit-square'
-				}
-			}
-		]
-	}
+    path: '/generator',
+    name: 'Generator',
+    component: () => import('../views/generator/index.vue'),
+    meta: {
+      title: '代码生成',
+      icon: 'icon-fire'
+    }
+  },
+  {
+    path: '/database',
+    name: 'Database',
+    component: () => import('../views/database/index.vue'),
+    meta: {
+      title: '数据库管理',
+      icon: 'icon-control'
+    }
+  },
+  {
+    path: '/datasource',
+    name: 'DataSource',
+    component: () => import('../views/datasource/index.vue'),
+    meta: {
+      title: '数据源管理',
+      icon: 'icon-database-fill'
+    }
+  },
+  {
+    path: '/field-type',
+    name: 'FieldType',
+    component: () => import('../views/field-type/index.vue'),
+    meta: {
+      title: '字段类型映射',
+      icon: 'icon-menu'
+    }
+  },
+  {
+    path: '/project',
+    name: 'ProjectIndex',
+    component: () => import('../views/project/index.vue'),
+    meta: {
+      title: '项目信息',
+      icon: 'icon-edit-square'
+    }
+  }
 ]
 
 export const constantRoutes = [
@@ -71,7 +62,7 @@ export const constantRoutes = [
 	{
 		path: '/',
 		component: () => import('../layout/index.vue'),
-		redirect: '/gen/generator',
+		redirect: '/generator',
 		children: [...menuRoutes]
 	},
 	{
