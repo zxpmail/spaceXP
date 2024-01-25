@@ -274,10 +274,10 @@ public class GeneratorServiceImpl implements GeneratorService {
             table.setAuthor(projectDTO.getAuthor());
             table.setEmail(projectDTO.getEmail());
             table.setModuleName(projectDTO.getArtifactId());
-            table.setPackageName(projectDTO.getArtifactId());
+            table.setPackageName(projectDTO.getGroupId());
             table.setVersion(projectDTO.getVersion());
             if (StringUtils.hasText(projectDTO.getTablePrefix())) {
-                table.setTablePrefix(table.getTablePrefix());
+                table.setTablePrefix(projectDTO.getTablePrefix());
             }
         }
         tableService.batchUpdate(projectDTO.getTables());
@@ -309,6 +309,9 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("tableName", tableName);
         if (StringUtils.hasText(table.getTablePrefix())) {
             tableName = tableName.substring(table.getTablePrefix().length());
+            if(table.getFunctionName().equals(table.getTableName())){
+                table.setFunctionName(tableName);
+            }
         }
         tableName = StrUtils.underlineToCamel(tableName, false);
         if (StringUtils.hasText(table.getTableComment())) {
