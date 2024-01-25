@@ -193,6 +193,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
             writeTable(tables, dataModel, zip);
+            zip.finish();
             writeZip(response, outputStream);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -227,6 +228,7 @@ public class GeneratorServiceImpl implements GeneratorService {
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
             writeTable(projectDTO.getTables(), dataModel, zip);
             writeProject(projectDTO, dataModel, zip);
+            zip.finish();
             writeZip(response, outputStream);
         } catch (Exception e) {
             throw new RuntimeException(e);

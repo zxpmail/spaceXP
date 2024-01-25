@@ -64,7 +64,7 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
                         break;
                     }
                 }
-                if(isExist){
+                if(!isExist){
                     return where;
                 }
             } else {
