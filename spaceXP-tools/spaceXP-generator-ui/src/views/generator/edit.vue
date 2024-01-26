@@ -35,21 +35,6 @@
 							</vxe-select>
 						</template>
 					</vxe-column>
-          <vxe-column field="dto" title="DTO">
-						<template #default="{ row }">
-              <vxe-switch size="mini" v-model="row.dto"  :open-value="1" :close-value="0"></vxe-switch>
-						</template>
-					</vxe-column>
-          <vxe-column field="vo" title="VO">
-						<template #default="{ row }">
-              <vxe-switch size="mini" v-model="row.vo"  :open-value="1" :close-value="0"></vxe-switch>
-						</template>
-					</vxe-column>
-          <vxe-column field="gridList" title="列表">
-						<template #default="{ row }">
-              <vxe-switch size="mini" v-model="row.gridList"  :open-value="1" :close-value="0"></vxe-switch>
-						</template>
-					</vxe-column>
           <vxe-column field="fieldRepeat" title="判断唯一">
 						<template #default="{ row }">
               <vxe-switch v-model="row.fieldRepeat" size="mini" :open-value="1" :close-value="0"></vxe-switch>
