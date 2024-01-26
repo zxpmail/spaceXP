@@ -30,7 +30,7 @@
               :active-value="1"
               :inactive-value="0"
               v-model="scope.row.isList"
-              @change="updateIsList(scope.row.id)"
+              @change="updateIsList(scope.row)"
           />
         </template>
       </el-table-column>
@@ -77,8 +77,8 @@ const addOrUpdateHandle = (id) => {
 	addOrUpdateRef.value.init(id)
 }
 
-const updateIsList =(id) =>{
-  useFieldTypeIsListApi(id)
+const updateIsList =(row) =>{
+  useFieldTypeIsListApi(row)
 }
 const { getDataList, selectionChangeHandle, sizeChangeHandle, currentChangeHandle, deleteBatchHandle } = useCrud(state)
 </script>
