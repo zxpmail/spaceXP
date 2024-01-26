@@ -74,12 +74,12 @@
 					<vxe-column field="fieldComment" title="说明"></vxe-column>
 					<vxe-column field="formItem" title="表单显示">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.formItem"></vxe-checkbox>
+							<vxe-checkbox v-model="row.formItem" :unchecked-value=0 :checked-value=1></vxe-checkbox>
 						</template>
 					</vxe-column>
 					<vxe-column field="formRequired" title="表单必填">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
+							<vxe-checkbox v-model="row.formRequired" :unchecked-value=0 :checked-value=1></vxe-checkbox>
 						</template>
 					</vxe-column>
 					<vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
@@ -106,12 +106,12 @@
 					<vxe-column field="fieldComment" title="说明"></vxe-column>
 					<vxe-column field="gridItem" title="列表显示">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.gridItem"></vxe-checkbox>
+							<vxe-checkbox v-model="row.gridItem" :unchecked-value=0 :checked-value=1></vxe-checkbox>
 						</template>
 					</vxe-column>
 					<vxe-column field="gridSort" title="列表排序">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.gridSort"></vxe-checkbox>
+							<vxe-checkbox v-model="row.gridSort" :unchecked-value=0 :checked-value=1></vxe-checkbox>
 						</template>
 					</vxe-column>
 				</vxe-table>
@@ -129,7 +129,7 @@
 					<vxe-column field="fieldComment" title="说明"></vxe-column>
 					<vxe-column field="queryItem" title="查询显示">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
+							<vxe-checkbox v-model="row.queryItem" :unchecked-value=0 :checked-value=1></vxe-checkbox>
 						</template>
 					</vxe-column>
 					<vxe-column field="queryType" title="查询方式">
@@ -202,6 +202,7 @@ const queryList = reactive([
 	{ label: '>=', value: '>=' },
 	{ label: '<', value: '<' },
 	{ label: '<=', value: '<=' },
+  { label: 'between', value: 'between' },
 	{ label: 'like', value: 'like' },
 	{ label: 'left like', value: 'left like' },
 	{ label: 'right like', value: 'right like' }
