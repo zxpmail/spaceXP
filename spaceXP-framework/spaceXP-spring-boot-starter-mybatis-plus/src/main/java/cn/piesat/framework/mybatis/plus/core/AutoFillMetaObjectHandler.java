@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -27,6 +28,13 @@ import java.time.LocalDateTime;
 @Primary
 public class AutoFillMetaObjectHandler implements MetaObjectHandler {
 
+
+    /**
+     * @Autowired( required = false)当 没有实现AutoFillMetaObjectService时
+     * 自动注入不出错
+     */
+    @Autowired(required = false)
+    private  AutoFillMetaObjectService autoFillMetaObjectService;
     /**
      * 创建时间字段
      */
@@ -70,6 +78,9 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
         fillValue(metaObject,updateId, request,CommonConstants.USER_ID);
         fillValue(metaObject,deptId, request,CommonConstants.DEPT_ID);
         fillValue(metaObject,tenantId, request,CommonConstants.TENANT_ID);
+        if(!ObjectUtils.isEmpty(autoFillMetaObjectService)){
+            autoFillMetaObjectService.insertFill(this,metaObject);
+        }
 
     }
 
@@ -101,6 +112,13 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
         if (metaObject.hasGetter(updateId) && metaObject.hasSetter(updateId)) {
             metaObject.setValue(updateId, null);
             this.setFieldValByName(updateId, Long.parseLong(userId), metaObject);
+        }
+
+        /**
+         * 增加外部填充
+         */
+        if(!ObjectUtils.isEmpty(autoFillMetaObjectService)){
+            autoFillMetaObjectService.updateFill(this,metaObject);
         }
     }
 }
