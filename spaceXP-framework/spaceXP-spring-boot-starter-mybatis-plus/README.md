@@ -31,6 +31,8 @@ space.table.enable 动态表名是否开启，默认不开启
 space.table.table-prefix可以增加要处理的表名
 使用动态表名时必须在controller方法增加@DynamicTableName注解并且第一参数是动态表名的名称
 
+增加用户自定义填充功能用户必须实现AutoFillMetaObjectService接口服务 见spaceXP-spring-boot-tests-mybatis-plus
+
 
 
 
