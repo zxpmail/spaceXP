@@ -54,11 +54,6 @@
 							</vxe-select>
 						</template>
 					</vxe-column>
-					<vxe-column field="primaryPk" title="主键">
-						<template #default="{ row }">
-							<vxe-checkbox v-model="row.primaryPk"></vxe-checkbox>
-						</template>
-					</vxe-column>
 				</vxe-table>
 			</el-tab-pane>
 			<el-tab-pane label="表单配置" name="form">
