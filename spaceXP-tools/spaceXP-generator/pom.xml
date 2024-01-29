@@ -69,6 +69,8 @@
         <dependency>
             <groupId>com.clickhouse</groupId>
             <artifactId>clickhouse-jdbc</artifactId>
+            <!-- use uber jar with all dependencies included, change classifier to http for smaller jar -->
+            <classifier>all</classifier>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>

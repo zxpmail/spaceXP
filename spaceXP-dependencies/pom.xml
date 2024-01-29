@@ -54,7 +54,7 @@
         <snappy-java.version>1.1.10.5</snappy-java.version>
         <oracle.version>11.2.0.3</oracle.version>
         <dameng.version>8.1.2.192</dameng.version>
-        <clickhouse.version>0.5.0</clickhouse.version>
+        <clickhouse.version>0.6.0</clickhouse.version>
         <postgres.version>42.6.0</postgres.version>
         <sqlserver.version>12.4.2.jre8</sqlserver.version>
         <aws-java-sdk.version>1.12.610</aws-java-sdk.version>
@@ -386,6 +386,8 @@
                 <groupId>com.clickhouse</groupId>
                 <artifactId>clickhouse-jdbc</artifactId>
                 <version>${clickhouse.version}</version>
+                <!-- use uber jar with all dependencies included, change classifier to http for smaller jar -->
+                <classifier>all</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>
