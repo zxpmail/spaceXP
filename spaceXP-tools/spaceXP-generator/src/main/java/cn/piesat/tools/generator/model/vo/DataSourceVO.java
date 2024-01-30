@@ -26,6 +26,10 @@ public class DataSourceVO {
     private String driverClassName;
 
     /**
+     * 数据库名称
+     */
+    private String databaseName;
+    /**
      * 数据库信息ID
      */
     @JsonSerialize(using = ToStringSerializer.class)

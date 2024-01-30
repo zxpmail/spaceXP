@@ -30,8 +30,15 @@ public class DataSourceDTO {
      * 驱动类
      */
     @NotBlank(message = "驱动类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
-    @Length(max = 100 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
+    @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String driverClassName;
+
+    /**
+     * 数据库名称
+     */
+    @NotBlank(message = "数据库名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
+    private String databaseName;
 
     /**
      * 数据库信息ID
@@ -55,7 +62,7 @@ public class DataSourceDTO {
      * URL
      */
     @NotBlank(message = "url不能为空", groups = {AddGroup.class, UpdateGroup.class})
-    @Length(max = 256 , message = "长度必须小于等于200" ,groups ={AddGroup.class,UpdateGroup.class} )
+    @Length(max = 200 , message = "长度必须小于等于200" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String url;
     /**
      * 用户名
