@@ -123,6 +123,10 @@ public class TableFieldVO  {
      * DTO 1 是 0 否
      */
     private Integer dto;
+    /**
+     * 字段长度，为进行JSR303进行字符串验证，此字段只对字符串字段有用
+     */
+    private Integer len;
 
     /**
      * 列表可显示 1是 0否

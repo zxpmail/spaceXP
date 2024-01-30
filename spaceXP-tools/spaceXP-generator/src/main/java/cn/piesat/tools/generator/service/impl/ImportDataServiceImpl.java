@@ -99,8 +99,8 @@ public class ImportDataServiceImpl implements ImportDataService {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return jdbcTemplate.query(databaseDO.getTableSql(), (rs, rowNum) -> {
             TableVO table = new TableVO();
-            table.setTableName(rs.getString(databaseDO.getTableName()));
-            String comment =rs.getString(databaseDO.getTableComment());
+            table.setTableName(rs.getString("table_name"));
+            String comment =rs.getString("table_comment");
             if(StringUtils.isEmpty(comment)){
                 table.setTableComment(table.getTableName());
             }else {
