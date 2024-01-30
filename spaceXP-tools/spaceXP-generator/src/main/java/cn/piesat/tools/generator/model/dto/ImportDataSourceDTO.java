@@ -48,4 +48,11 @@ public class ImportDataSourceDTO {
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={UpdateGroup.class} )
     private String dbType;
 
+    /**
+     * 数据库类型
+     */
+    @NotBlank(message = "数据库名称不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 50 , message = "长度必须小于等于50" ,groups ={UpdateGroup.class} )
+    private String databaseName;
+
 }
