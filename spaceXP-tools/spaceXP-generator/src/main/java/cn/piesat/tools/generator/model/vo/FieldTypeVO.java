@@ -44,9 +44,4 @@ public class FieldTypeVO {
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String packageName;
 
-    /**
-     * 是否列表显示，针对blob等等大字段不建议列表显示 1显示 0不显现
-     */
-    @NotNull(message = "是否列表显示不能为空", groups = {AddGroup.class, UpdateGroup.class})
-    private Integer isList;
 }

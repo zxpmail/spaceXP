@@ -31,10 +31,4 @@ public class FieldTypeDO extends BaseDO{
      */
     private String packageName;
 
-    /**
-     * 是否列表显示，针对blob等等大字段不建议列表显示 1显示 0不显现
-     */
-    private Integer isList;
-
-
 }

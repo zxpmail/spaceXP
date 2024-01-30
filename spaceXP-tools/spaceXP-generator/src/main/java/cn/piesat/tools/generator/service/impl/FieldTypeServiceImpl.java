@@ -94,18 +94,6 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
     }
 
     @Override
-    public Boolean updateIsList(Long id) {
-        FieldTypeDO byId = getById(id);
-        if (byId.getIsList()==1){
-            byId.setIsList(0);
-        }else {
-            byId.setIsList(1);
-        }
-        byId.setUpdateTime(null);
-        return updateById(byId);
-    }
-
-    @Override
     public Map<String, FieldTypeDO> getMap() {
         List<FieldTypeDO> list = this.list();
         if (CollectionUtils.isEmpty(list)) {

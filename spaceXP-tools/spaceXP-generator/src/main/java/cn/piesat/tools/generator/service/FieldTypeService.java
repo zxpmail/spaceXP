@@ -31,8 +31,6 @@ public interface FieldTypeService extends IService<FieldTypeDO> {
 
     Boolean delete(Long id);
 
-    Boolean updateIsList(Long id);
-
     Map<String, FieldTypeDO> getMap();
 
     List<String> getFieldType();
