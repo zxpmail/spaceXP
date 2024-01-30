@@ -20,6 +20,11 @@ public class DatabaseDO extends BaseDO{
      * 数据库类型
      */
     private String dbType;
+
+    /**
+     * 是否拼接数据库名称 0否 1是 由于ck数据库直接连接要增加表名 默认ck为 其他数据库为0
+     */
+    private Integer addDatabaseName;
     /**
      * 驱动类
      */

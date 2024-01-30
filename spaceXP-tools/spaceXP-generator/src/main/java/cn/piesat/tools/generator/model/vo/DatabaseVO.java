@@ -28,9 +28,15 @@ public class DatabaseVO {
     @JsonSerialize(using = ToStringSerializer.class)
     @NotNull(message = "主键不能为空", groups = UpdateGroup.class)
     private Long id;
+
     /**
      * 数据库类型
      */
+    /**
+     * 是否拼接数据库名称 0否 1是 由于ck数据库直接连接要增加表名 默认ck为 其他数据库为0
+     */
+    private Integer addDatabaseName;
+
     @NotBlank(message = "数据库类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String dbType;

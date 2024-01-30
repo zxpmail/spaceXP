@@ -100,7 +100,12 @@ public class ImportDataServiceImpl implements ImportDataService {
         return jdbcTemplate.query(databaseDO.getTableSql(), (rs, rowNum) -> {
             TableVO table = new TableVO();
             table.setTableName(rs.getString(databaseDO.getTableName()));
-            table.setTableComment(rs.getString(databaseDO.getTableComment()));
+            String comment =rs.getString(databaseDO.getTableComment());
+            if(StringUtils.isEmpty(comment)){
+                table.setTableComment(table.getTableName());
+            }else {
+                table.setTableComment(rs.getString(comment));
+            }
             table.setDbType(importDataSourceDTO.getDbType());
             table.setDatasourceId(importDataSourceDTO.getId());
             table.setConnName(importDataSourceDTO.getConnName());
