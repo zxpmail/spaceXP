@@ -21,7 +21,7 @@ public class UserDataPermissionServiceImpl implements UserDataPermissionService 
     @Override
     public UserDataPermission getDataPermission(Long userid) {
         UserDataPermission userDataPermission = new UserDataPermission();
-        userDataPermission.setDataScope(DataPermissionEnum.ALL_SCOPE.getCode());
+        userDataPermission.setDataScope(DataPermissionEnum.SELF_SCOPE.getCode());
         userDataPermission.setUserId(4L);
         userDataPermission.setUsername("admin1");
         userDataPermission.setDeptIds(new HashSet<Long>(){{add(0L);}});

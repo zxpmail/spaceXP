@@ -22,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,12 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
     public Expression getSqlSegment(Expression where, String mid) {
 
         UserDataPermission userDataScope = DataPermissionContextHolder.getUserDataPermission();
-
+        /*
+          内部线程直接调用不进行数据权限拦截直接返回
+         */
+        if(Objects.isNull(userDataScope)){
+            return where;
+        }
         if (!ObjectUtils.isEmpty(dataPermissionProperties)) {
             Set<String> ignoreUsers = dataPermissionProperties.getIgnoreUsers();
             if (!CollectionUtils.isEmpty(ignoreUsers)) {
@@ -80,8 +86,8 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
         }
 
         Expression expression = null;
-        DataPermissionEnum dataPermissionEnum = DataPermissionEnum.SELF_SCOPE;
-        if (!ObjectUtils.isEmpty(userDataScope.getDataScope())) {
+        DataPermissionEnum dataPermissionEnum = DataPermissionEnum.NO_SCOPE;
+        if (!ObjectUtils.isEmpty(userDataScope) && !ObjectUtils.isEmpty(userDataScope.getDataScope())) {
             dataPermissionEnum = DataPermissionEnum.DEPT_SUB_SCOPE.getEnumByCode(userDataScope.getDataScope());
         }
         // 2. 数据权限处理

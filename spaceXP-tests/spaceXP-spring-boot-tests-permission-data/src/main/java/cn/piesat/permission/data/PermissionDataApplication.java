@@ -2,6 +2,7 @@ package cn.piesat.permission.data;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * <p/>
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zhouxp
  */
 @SpringBootApplication
+@EnableScheduling
 public class PermissionDataApplication {
     public static void main(String[] args) {
         SpringApplication.run(PermissionDataApplication.class,args);

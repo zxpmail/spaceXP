@@ -17,7 +17,9 @@ public enum DataPermissionEnum {
     SELF_SCOPE(1, "自身数据权限"),
     DEPT_SCOPE(2, "部门数据权限"),
     DEPT_SUB_SCOPE(3, "部门及以下数据权限"),
-    ALL_SCOPE(4, "全部数据权限");
+    ALL_SCOPE(4, "全部数据权限"),
+
+    NO_SCOPE(5, "没权限！");
     private final int code;
     private final String info;
 
