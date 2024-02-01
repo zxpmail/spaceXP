@@ -62,7 +62,7 @@ public class DatabaseVO {
      * url
      */
     @NotBlank(message = "url不能为空", groups = {AddGroup.class, UpdateGroup.class})
-    @Length(max = 128 , message = "长度必须小于等于128" ,groups ={AddGroup.class,UpdateGroup.class} )
+    @Length(max = 256 , message = "长度必须小于等于128" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String url;
 
 }

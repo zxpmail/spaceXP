@@ -3,6 +3,8 @@ package cn.piesat.tools.generator.model.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * <p/>
  * {@code @description}  :数据表字段实体类
@@ -13,7 +15,21 @@ import lombok.Data;
  */
 @Data
 @TableName("gen_table_field")
+
 public class TableFieldDO extends BaseDO{
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TableFieldDO that = (TableFieldDO) o;
+        return super.getId().equals(that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), super.getId());
+    }
 
     /**
      * 表ID

@@ -36,17 +36,10 @@
 						</template>
 					</vxe-column>
           <vxe-column field="fieldRepeat" title="判断唯一">
-						<template #default="{ row }">
-              <vxe-switch v-model="row.fieldRepeat" size="mini" :open-value="1" :close-value="0"></vxe-switch>
-						</template>
-					</vxe-column>
-          <vxe-column field="sortType" title="排序">
-						<template #default="{ row }">
-              <vxe-select v-model="row.sortType">
-								<vxe-option v-for="item in sortTypeList" :key="item.id" :value="item.id" :label="item.name"></vxe-option>
-							</vxe-select>
-						</template>
-					</vxe-column>
+            <template #default="{ row }">
+              <vxe-checkbox v-model="row.fieldRepeat" :unchecked-value=0 :checked-value=1></vxe-checkbox>
+            </template>
+          </vxe-column>
 					<vxe-column field="autoFill" title="自动填充">
 						<template #default="{ row }">
 							<vxe-select v-model="row.autoFill">
@@ -164,7 +157,7 @@ const fieldTable = ref()
 const formTable = ref()
 const gridTable = ref()
 const queryTable = ref()
-const sortTypeList = ref([{id:0,name:'不排序'},{id:1,name:'升序'},{id:2,name:'降序'}])
+
 
 const handleClick = (tab) => {
 	if (tab.paneName !== 'field') {

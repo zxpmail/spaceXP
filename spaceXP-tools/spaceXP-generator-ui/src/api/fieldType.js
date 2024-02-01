@@ -5,10 +5,6 @@ export const useFieldTypeApi = id => {
     return service.get('/fieldType/info/' + id)
 }
 export const useFieldTypeIsListApi = row => {
-    let tempStatus = 1
-    if (row.isList === 1) {
-        tempStatus = 0
-    }
     ElMessageBox.confirm('确定进行修改列表显示操作?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -19,7 +15,6 @@ export const useFieldTypeIsListApi = row => {
         })
     })
         .catch(() => {
-            row.isList = tempStatus
         })
 }
 export const useFieldTypeListApi = () => {

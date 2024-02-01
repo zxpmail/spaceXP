@@ -10,17 +10,7 @@
 			<el-form-item label="属性包名" prop="packageName">
 				<el-input v-model="dataForm.packageName" placeholder="属性包名"></el-input>
 			</el-form-item>
-      <el-form-item label="列表显示" prop="isList">
-        <el-switch
-            :active-value="1"
-            :inactive-value="0"
-            v-model="dataForm.isList"
-            inline-prompt
-            active-text="Y"
-            inactive-text="N"
-        />
-      </el-form-item>
-		</el-form>
+    </el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>

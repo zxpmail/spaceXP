@@ -10,37 +10,24 @@
 			<el-form-item label="数据库URL" prop="url">
 				<el-input v-model="dataForm.url" placeholder="数据库URL"></el-input>
 			</el-form-item>
-			<el-form-item label="数据表名称" prop="tableName">
-				<el-input v-model="dataForm.tableName" placeholder="数据表名称"></el-input>
-			</el-form-item>
-			<el-form-item label="数据表注释" prop="tableComment">
-				<el-input v-model="dataForm.tableComment"  placeholder="数据表注释"></el-input>
-			</el-form-item>
-      <el-form-item label="表字段名称" prop="fieldName">
-        <el-input v-model="dataForm.fieldName"  placeholder="表字段名称"></el-input>
-      </el-form-item>
-      <el-form-item label="表字段类型" prop="fieldType">
-        <el-input v-model="dataForm.fieldType"  placeholder="表字段类型"></el-input>
-      </el-form-item>
-      <el-form-item label="表字段注释" prop="fieldComment">
-        <el-input v-model="dataForm.fieldComment"  placeholder="表字段注释"></el-input>
-      </el-form-item>
-      <el-form-item label="表主键字段" prop="fieldKey">
-        <el-input v-model="dataForm.fieldKey"  placeholder="表主键字段"></el-input>
-      </el-form-item>
       <el-form-item label="字段信息SQL" prop="tableFields">
-        <el-input type="textarea"   v-model="dataForm.tableFields"  placeholder="字段信息SQL"></el-input>
+        <el-input type="textarea" autosize  v-model="dataForm.tableFields"  placeholder="字段信息SQL"></el-input>
       </el-form-item>
       <el-form-item label="表信息SQL" prop="tableSql">
-        <el-input type="textarea"   v-model="dataForm.tableSql"  placeholder="表信息SQL"></el-input>
+        <el-input type="textarea" autosize  v-model="dataForm.tableSql"  placeholder="表信息SQL"></el-input>
       </el-form-item>
-      <el-form-item label="表名SQL" prop="tableNameSql">
-        <el-input type="textarea"   v-model="dataForm.tableNameSql"  placeholder="表名SQL"></el-input>
+      <el-form-item label="拼接数据库" prop="addDatabaseName">
+        <el-switch
+            :active-value="1"
+            :inactive-value="0"
+            v-model="dataForm.addDatabaseName"
+            inline-prompt
+            active-text="Y"
+            inactive-text="N"
+        />
       </el-form-item>
-      <el-form-item label="表附加SQL" prop="tableAddSql">
-        <el-input type="textarea"   v-model="dataForm.tableAddSql"  placeholder="表附加SQL"></el-input>
-      </el-form-item>
-		</el-form>
+    </el-form>
+
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
 			<el-button type="primary" @click="submitHandle()">确定</el-button>
@@ -63,16 +50,9 @@ const dataForm = reactive({
 	dbType: '',
   driverClassName: '',
   url: '',
-  tableName: '',
-  tableComment: '',
-  fieldName: '',
-  fieldType: '',
-  fieldComment: '',
-  fieldKey: '',
   tableFields: '',
   tableSql: '',
-  tableNameSql: '',
-  tableAddSql: ''
+  addDatabaseName: 0
 })
 
 const init = (id) => {

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -119,8 +120,8 @@ public class GeneratorServiceImpl implements GeneratorService {
      * 设置字段分类信息
      */
     private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS) {
-        List<TableFieldDO> voList = new ArrayList<>();
-        List<TableFieldDO> dtoList = new ArrayList<>();
+        Set<TableFieldDO> voList = new HashSet<>();
+        Set<TableFieldDO> dtoList = new HashSet<>();
         List<TableFieldDO> selectList = new ArrayList<>();
         List<TableFieldDO> queryList = new ArrayList<>();
         List<TableFieldDO> repeatList = new ArrayList<>();
@@ -129,27 +130,38 @@ public class GeneratorServiceImpl implements GeneratorService {
         List<TableFieldDO> formList = new ArrayList<>();
         // 网格列表
         List<TableFieldDO> gridList = new ArrayList<>();
+        List<TableFieldDO> requiredList = new ArrayList<>();
         for (TableFieldDO field : tableFieldDOS) {
             if (field.getPrimaryPk() == 1) {
                 dataModel.put("pkType", field.getAttrType());
                 dataModel.put("pk", field.getAttrName());
                 dtoList.add(field);
                 voList.add(field);
-            }else if (field.getFormItem() == 1) {
+            }
+            if (field.getFormItem() == 1) {
                 dtoList.add(field);
                 formList.add(field);
-            }else if (field.getGridItem() == 1) {
+            }
+            if (field.getGridItem() == 1) {
                 voList.add(field);
                 gridList.add(field);
-            }else if (field.getGridItem() == 0) {
+            }
+            if (field.getGridItem() == 0) {
                 selectList.add(field);
-            }else if (field.getQueryItem() == 1) {
+            }
+            if (field.getQueryItem() == 1) {
                 queryList.add(field);
-            }else if (field.getFieldRepeat() == 1) {
+            }
+            if (field.getFieldRepeat() == 1) {
                 repeatList.add(field);
                 dtoList.add(field);
-            }else if (field.getGridSort() == 1) {
+            }
+            if (field.getGridSort() == 1) {
                 orderList.add(field);
+            }
+            if (field.getFormRequired() == 1) {
+                requiredList.add(field);
+                dtoList.add(field);
             }
         }
         dataModel.put("voList", voList);
@@ -159,6 +171,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("orderList", orderList);
         dataModel.put("formList", formList);
         dataModel.put("gridList", gridList);
+        dataModel.put("requiredList", requiredList);
         dataModel.put("select", composeSelect(selectList));
     }
 

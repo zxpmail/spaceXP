@@ -50,7 +50,7 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(value = BaseException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) 前端blob时有些问题，暂时取得此注释
     public Object handleBusinessException(BaseException e) {
         log.error(ExceptionUtil.getMessage(e));
         if (e.getIBaseResponse() == null) {
@@ -66,7 +66,6 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(value = Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiMapResult<IBaseResponse> handleException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail(e.getMessage());
@@ -79,7 +78,6 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiMapResult<IBaseResponse> handleDateTimeParseException(HttpMessageNotReadableException e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail( e.getMessage());
@@ -91,7 +89,6 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.PAYMENT_REQUIRED)
     public ApiMapResult<IBaseResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         BindingResult bindingResult = e.getBindingResult();
@@ -122,7 +119,6 @@ public class WebExceptionHandler {
             MissingServletRequestPartException.class,
             AsyncRequestTimeoutException.class
     })
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ApiMapResult<IBaseResponse> handleServletException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail(e.getMessage());

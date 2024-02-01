@@ -26,6 +26,9 @@
 			<el-form-item label="密码" prop="password">
 				<el-input v-model="dataForm.password" autocomplete="off" type="password" placeholder="密码"></el-input>
 			</el-form-item>
+      <el-form-item label="数据库" prop="databaseName">
+        <el-input v-model="dataForm.databaseName" placeholder="数据库"></el-input>
+      </el-form-item>
 		</el-form>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
@@ -54,6 +57,7 @@ const dataForm = reactive({
   databaseId: '',
 	username: '',
 	password: '',
+  databaseName:''
 })
 const   database=ref([])
 
@@ -95,7 +99,8 @@ const dataRules = ref({
 	connName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	url: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	username: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  password: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  databaseName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 表单提交
