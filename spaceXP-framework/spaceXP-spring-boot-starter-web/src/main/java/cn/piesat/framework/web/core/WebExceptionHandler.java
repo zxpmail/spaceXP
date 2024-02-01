@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
@@ -48,6 +50,7 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(value = BaseException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Object handleBusinessException(BaseException e) {
         log.error(ExceptionUtil.getMessage(e));
         if (e.getIBaseResponse() == null) {
@@ -63,6 +66,7 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(value = Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiMapResult<IBaseResponse> handleException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail(e.getMessage());
@@ -75,6 +79,7 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiMapResult<IBaseResponse> handleDateTimeParseException(HttpMessageNotReadableException e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail( e.getMessage());
@@ -86,6 +91,7 @@ public class WebExceptionHandler {
      * @return ApiResult包装异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.PAYMENT_REQUIRED)
     public ApiMapResult<IBaseResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         BindingResult bindingResult = e.getBindingResult();
@@ -116,6 +122,7 @@ public class WebExceptionHandler {
             MissingServletRequestPartException.class,
             AsyncRequestTimeoutException.class
     })
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ApiMapResult<IBaseResponse> handleServletException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail(e.getMessage());
