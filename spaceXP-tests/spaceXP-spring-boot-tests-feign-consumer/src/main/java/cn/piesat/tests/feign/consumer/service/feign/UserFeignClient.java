@@ -1,14 +1,11 @@
 package cn.piesat.tests.feign.consumer.service.feign;
 
 
-import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.feign.annotation.HasApiResult;
 import cn.piesat.framework.feign.core.FeignRequestInterceptor;
 import cn.piesat.tests.feign.consumer.model.entity.UserDO;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import feign.Headers;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 

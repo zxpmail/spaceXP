@@ -1,7 +1,6 @@
 package cn.piesat.tests.feign.producer.controller;
 
 
-import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +56,8 @@ public class UserController {
     @ApiOperation("分页查询")
     @PostMapping("/list")
     public PageResult list(@RequestParam(required = false) String parentaskid, PageBean pageBean, @RequestBody(required = false) UserDO userDO){
-        return userService.list(pageBean,userDO);
+        throw new RuntimeException("test");
+        //return userService.list(pageBean,userDO);
 
     }
 
