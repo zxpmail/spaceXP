@@ -45,10 +45,6 @@ public class TableFieldDO extends BaseDO{
     private String attrName;
 
     /**
-     * 排序类型 0不排序 1升序 2 降序
-     */
-    private Integer sortType;
-    /**
      * 属性类型
      */
     private String attrType;
@@ -107,20 +103,8 @@ public class TableFieldDO extends BaseDO{
     private String queryFormType;
 
     /**
-     * VO 1 是 0 否
-     */
-    private Integer vo;
-
-    /**
-     * DTO 1 是 0 否
-     */
-    private Integer dto;
-    /**
      * 字段长度，为进行JSR303进行字符串验证，此字段只对字符串字段有用
      */
     private Integer len;
-    /**
-     * 列表可显示 1是 0否
-     */
-    private Integer gridList;
+
 }

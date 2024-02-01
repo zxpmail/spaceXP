@@ -2,6 +2,7 @@ package cn.piesat.framework.permission.data.core;
 
 
 import cn.piesat.framework.common.constants.CommonConstants;
+import cn.piesat.framework.permission.data.model.DataPermissionEnum;
 import cn.piesat.framework.permission.data.model.UserDataPermission;
 import cn.piesat.framework.permission.data.utils.DataPermissionContextHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -37,12 +38,12 @@ public class DataPermissionFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws IOException, ServletException {
         try {
             String userId = request.getParameter(CommonConstants.USER_ID);
-            /**
-             * 默认用户权限，为了防止非法有直接调用url设置默认用户
+            /*
+              默认用户权限，为了防止非法有直接调用url设置默认用户
              */
             UserDataPermission userDataPermission = new UserDataPermission()
-                    .setUserId(-9999L)
-                    .setDataScope(5);
+                    .setUserId(CommonConstants.ILLEGAL_USER_ID)
+                    .setDataScope(DataPermissionEnum.NO_SCOPE.getCode());
             if (!StringUtils.hasText(userId)) {
                 userId = request.getHeader(CommonConstants.USER_ID);
             }

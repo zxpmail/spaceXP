@@ -133,30 +133,23 @@ public class GeneratorServiceImpl implements GeneratorService {
             if (field.getPrimaryPk() == 1) {
                 dataModel.put("pkType", field.getAttrType());
                 dataModel.put("pk", field.getAttrName());
-            }
-            if (field.getDto() == 1) {
                 dtoList.add(field);
-            }
-            if (field.getVo() == 1) {
                 voList.add(field);
-            }
-            if (field.getGridList() == 0) {
-                selectList.add(field);
-            }
-            if (field.getQueryItem() == 1) {
-                queryList.add(field);
-            }
-            if (field.getFieldRepeat() == 1) {
-                repeatList.add(field);
-            }
-            if (field.getSortType() != 0) {
-                orderList.add(field);
-            }
-            if (field.getFormItem()==1) {
+            }else if (field.getFormItem() == 1) {
+                dtoList.add(field);
                 formList.add(field);
-            }
-            if (field.getGridItem()==1) {
+            }else if (field.getGridItem() == 1) {
+                voList.add(field);
                 gridList.add(field);
+            }else if (field.getGridItem() == 0) {
+                selectList.add(field);
+            }else if (field.getQueryItem() == 1) {
+                queryList.add(field);
+            }else if (field.getFieldRepeat() == 1) {
+                repeatList.add(field);
+                dtoList.add(field);
+            }else if (field.getGridSort() == 1) {
+                orderList.add(field);
             }
         }
         dataModel.put("voList", voList);

@@ -104,7 +104,6 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setQueryType("=");
             f.setQueryFormType("text");
             f.setFormType("text");
-            f.setSortType(0);
             return f;
         });
     }

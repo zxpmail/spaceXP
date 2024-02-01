@@ -16,6 +16,7 @@ public interface CommonConstants {
 
     String USER_ID = "userId";
 
+    Long ILLEGAL_USER_ID = -9999L;
     /**
      * 传递部门ID
      */

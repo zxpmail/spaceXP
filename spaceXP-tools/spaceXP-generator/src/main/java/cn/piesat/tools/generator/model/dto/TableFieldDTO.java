@@ -44,11 +44,6 @@ public class TableFieldDTO {
      * 属性名
      */
     private String attrName;
-
-    /**
-     * 排序类型 0不排序 1升序 2 降序
-     */
-    private Integer sortType;
     /**
      * 属性类型
      */
@@ -111,22 +106,6 @@ public class TableFieldDTO {
      * 字段是否可重复 0不重复 1重复
      */
     private Integer fieldRepeat;
-
-
-    /**
-     * VO 1 是 0 否
-     */
-    private Integer vo;
-
-    /**
-     * DTO 1 是 0 否
-     */
-    private Integer dto;
-
-    /**
-     * 列表可显示 1是 0否
-     */
-    private Integer gridList;
 
     /**
      * 字段长度，为进行JSR303进行字符串验证，此字段只对字符串字段有用
