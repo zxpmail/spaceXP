@@ -124,7 +124,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             if (StringUtils.isEmpty(comment)) {
                 table.setTableComment(table.getTableName());
             } else {
-                table.setTableComment(rs.getString(comment));
+                table.setTableComment(comment);
             }
             table.setDbType(importDataSourceDTO.getDbType());
             table.setDatasourceId(importDataSourceDTO.getId());

@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 
 
 import javax.annotation.Resource;
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -161,7 +162,9 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
             return;
         }
         copy.setKey(dataSourceDTO.getConnName());
-        dynamicDataSource.test(copy);
+        DataSource test = dynamicDataSource.test(copy);
+        dynamicDataSource.add(test,dataSourceDTO.getConnName());
+
     }
 
     /**
