@@ -59,7 +59,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final DataSourceService dataSourceService;
 
 
-    private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip,Integer isOnly) {
+    private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer isOnly) {
         for (TemplateDO template : TemplateUtils.templates) {
             if (template.getIsOnly().equals(isOnly)) {
                 dataModel.put("templateName", template.getName());
@@ -140,13 +140,14 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
             if (field.getFormItem() == 1) {
                 dtoList.add(field);
+                voList.add(field);
                 formList.add(field);
             }
             if (field.getGridItem() == 1) {
                 voList.add(field);
                 gridList.add(field);
             }
-            if (field.getGridItem() == 0) {
+            if ((field.getPrimaryPk() == 0) && (field.getGridItem() == 0)) {
                 selectList.add(field);
             }
             if (field.getQueryItem() == 1) {
@@ -181,10 +182,11 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
         StringBuilder result = new StringBuilder();
         for (TableFieldDO tableFieldDO : selectList) {
-            String fieldExpression = String.format("fieldInfo->!fieldInfo.getColumn().equals(\"%s\")", tableFieldDO.getFieldName());
+            String fieldExpression = String.format("!fieldInfo.getColumn().equals(\"%s\")", tableFieldDO.getFieldName());
             result.append(!StringUtils.hasText(result.toString()) ? fieldExpression : " && " + fieldExpression);
         }
-        return result.toString();
+
+        return "fieldInfo->" + result;
     }
 
     @Override
@@ -248,30 +250,30 @@ public class GeneratorServiceImpl implements GeneratorService {
 
 
     private void packProjectWriteZip(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
-        dataModel.put("bizPath",projectDTO.getArtifactId()+"-biz");
-        dataModel.put("modelPath",projectDTO.getArtifactId()+"-model");
+        dataModel.put("bizPath", projectDTO.getArtifactId() + "-biz");
+        dataModel.put("modelPath", projectDTO.getArtifactId() + "-model");
         dataModel.put("version", projectDTO.getVersion());
         dataModel.put("moduleName", projectDTO.getArtifactId());
         dataModel.put("ModuleName", StringUtils.capitalize(projectDTO.getArtifactId()));
         dataModel.put("port", projectDTO.getPort());
-        dataModel.put("description",projectDTO.getDescription());
-        dataModel.put("package",projectDTO.getGroupId());
+        dataModel.put("description", projectDTO.getDescription());
+        dataModel.put("package", projectDTO.getGroupId());
         dataModel.put("packagePath", projectDTO.getGroupId().replace(".", File.separator));
 
-        setDataSourceInfo(dataModel,projectDTO.getTables().get(0));
+        setDataSourceInfo(dataModel, projectDTO.getTables().get(0));
         // 开发者信息
         dataModel.put("author", projectDTO.getAuthor());
         dataModel.put("email", projectDTO.getEmail());
-        writeZipByTemplate(dataModel, zip,1);
+        writeZipByTemplate(dataModel, zip, 1);
     }
 
     private void setDataSourceInfo(Map<String, Object> dataModel, TableDTO tableDTO) {
         DataSourceDO dataSourceDO = dataSourceService.getDataSourceDOByConnName(tableDTO.getConnName());
-        dataModel.put("dbType",dataSourceDO.getDbType());
-        dataModel.put("url",dataSourceDO.getUrl());
-        dataModel.put("username",dataSourceDO.getUsername());
-        dataModel.put("password",dataSourceDO.getPassword());
-        dataModel.put("driverClassName",dataSourceDO.getDriverClassName());
+        dataModel.put("dbType", dataSourceDO.getDbType());
+        dataModel.put("url", dataSourceDO.getUrl());
+        dataModel.put("username", dataSourceDO.getUsername());
+        dataModel.put("password", dataSourceDO.getPassword());
+        dataModel.put("driverClassName", dataSourceDO.getDriverClassName());
     }
 
     private void saveTableDTO(ProjectDTO projectDTO) {
@@ -292,7 +294,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void packTablesWriteZip(TableDTO table, Map<String, Object> dataModel, ZipOutputStream zip) {
         setDataModelByTable(dataModel, table);
         setDataModelByFields(dataModel, table.getId());
-        writeZipByTemplate(dataModel, zip,0);
+        writeZipByTemplate(dataModel, zip, 0);
     }
 
     private void setDataModelByTable(Map<String, Object> dataModel, TableDTO table) {
@@ -301,7 +303,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("version", table.getVersion());
         dataModel.put("moduleName", table.getModuleName());
         dataModel.put("ModuleName", StringUtils.capitalize(table.getModuleName()));
-        dataModel.put("dbType",table.getDbType());
+        dataModel.put("dbType", table.getDbType());
 
         // 开发者信息
         dataModel.put("author", table.getAuthor());
@@ -315,7 +317,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("tableName", tableName);
         if (StringUtils.hasText(table.getTablePrefix())) {
             tableName = tableName.substring(table.getTablePrefix().length());
-            if(table.getFunctionName().equals(table.getTableName())){
+            if (table.getFunctionName().equals(table.getTableName())) {
                 table.setFunctionName(tableName);
             }
         }
