@@ -19,6 +19,7 @@ import java.util.concurrent.Future;
  */
 
 
+@SuppressWarnings("deprecation")
 public class ContextAwarePoolExecutor extends ThreadPoolTaskScheduler {
     @Override
     public <T> Future<T> submit( Callable<T> task) {
