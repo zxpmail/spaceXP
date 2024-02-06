@@ -1,21 +1,26 @@
-server:
-  servlet:
-    context-path: /redis
 spring:
   application:
     name: redis
-  mvc:
-    path-match:
-      matching-strategy: ANT_PATH_MATCHER
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
-logging:
-  level:
-    cn.piesat.tests.redis: debug
 space:
   redis:
-    compress-enable: true #开启压缩功能
     prevent-replay-enable: true #开启重刷功能
     access-limit-enable: true #开启限流功能
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn

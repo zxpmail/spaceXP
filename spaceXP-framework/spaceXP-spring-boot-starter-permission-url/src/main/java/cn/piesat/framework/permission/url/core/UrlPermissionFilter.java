@@ -123,7 +123,7 @@ public class UrlPermissionFilter implements Filter {
 
     }
 
-    private static void wrapperResponse(HttpServletResponse response, ApiMapResult apiResult) throws IOException {
+    private static void wrapperResponse(HttpServletResponse response, ApiMapResult<?> apiResult) throws IOException {
         response.setContentLength(-1);
         response.setContentType("application/json;charset=UTF-8");
         PrintWriter jsonOut = response.getWriter();

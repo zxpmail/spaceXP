@@ -5,8 +5,7 @@ import cn.piesat.framework.redis.annotation.AccessLimit;
 import cn.piesat.framework.redis.annotation.PreventReplay;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.model.MessageBody;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 /**
  * 测试信息
  */
-@Api(tags = "测试")
 @RestController
 @RequiredArgsConstructor
 public class TestController {
@@ -46,7 +44,6 @@ public class TestController {
     /**
      * 信息
      */
-    @ApiOperation("根据key查询")
     @GetMapping("{key}")
     public Object info(@PathVariable("key") String key){
         return redisService.getObject(key);
@@ -55,7 +52,7 @@ public class TestController {
     /**
      * 信息
      */
-    @ApiOperation("设置")
+
     @GetMapping("{key}/{value}")
     public Object set(@PathVariable("key") String key,@PathVariable("value") String value){
          redisService.setObject(key,value);
@@ -64,7 +61,7 @@ public class TestController {
     /**
      * 信息
      */
-    @ApiOperation("设置hash")
+
     @GetMapping("setHash/{key}")
     public Object set(@PathVariable("key") String key){
         ArrayList<String> list = new ArrayList<>();
@@ -74,26 +71,26 @@ public class TestController {
         return "ok";
     }
 
-    @ApiOperation("设置hash")
+
     @GetMapping("getHash/{key}")
     public Object get(@PathVariable("key") String key){
          return redisService.getMapValue("hello", key);
     }
 
-    @ApiOperation("设置hash")
+
     @GetMapping("deleteHash/{key}")
     public void deleteHash(@PathVariable("key") String key){
          redisService.deleteMapMatching("hello", key);
     }
 
-    @ApiOperation("测试防止重刷")
+
     @GetMapping("preventReplay/{key}")
     @PreventReplay(value = 10)
     public Object  preventReplay(@PathVariable("key") String key){
         return new HashMap<String, Object>(){{put(key,"hello");}};
     }
 
-    @ApiOperation("限流")
+
     @GetMapping("accessLimit/{key}")
     @AccessLimit(maxCount = 4)
     public Object  accessLimit(@PathVariable("key") String key){

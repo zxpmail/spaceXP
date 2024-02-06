@@ -1,13 +1,12 @@
 spring:
   application:
     name: web
-  mvc:
-    path-match:
-      matching-strategy: ANT_PATH_MATCHER
 space:
   permission:
     url:
       white-list:
         - /test/get2
+        - '/**/doc.html'
+        - '/**/v3/**'
       user-list:
         - admin
