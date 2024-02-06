@@ -20,7 +20,6 @@ public class RequestExecutorConfig extends AsyncConfigurerSupport {
     @Override
     @Bean
     public Executor getAsyncExecutor() {
-        ContextAwarePoolExecutor contextAwarePoolExecutor = new ContextAwarePoolExecutor();
-        return contextAwarePoolExecutor;
+        return new ContextAwarePoolExecutor();
     }
 }
