@@ -25,4 +25,6 @@ public class SwaggerProperties {
     private String url="https://piesat.cn";
 
     private String email="zhouxiaoping@piesat.cn";
+
+    private String pathsToMatch ="/**";
 }

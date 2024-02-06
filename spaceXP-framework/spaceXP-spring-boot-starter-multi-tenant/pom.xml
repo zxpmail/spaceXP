@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spaceXP-framework</artifactId>
         <groupId>cn.piesat.space</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <packaging>jar</packaging>
     <artifactId>spaceXP-spring-boot-starter-multi-tenant</artifactId>

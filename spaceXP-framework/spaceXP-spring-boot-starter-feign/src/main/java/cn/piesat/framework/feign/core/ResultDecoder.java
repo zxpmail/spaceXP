@@ -9,7 +9,7 @@ import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.feign.annotation.HasApiResult;
 
 
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import feign.Response;
 import feign.Util;
 import feign.codec.Decoder;

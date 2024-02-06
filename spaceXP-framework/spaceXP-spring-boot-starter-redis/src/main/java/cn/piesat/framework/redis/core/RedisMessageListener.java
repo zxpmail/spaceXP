@@ -1,12 +1,13 @@
 package cn.piesat.framework.redis.core;
 
 import cn.piesat.framework.redis.model.MessageBody;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import javax.annotation.Resource;
+
 
 /**
  * <p/>

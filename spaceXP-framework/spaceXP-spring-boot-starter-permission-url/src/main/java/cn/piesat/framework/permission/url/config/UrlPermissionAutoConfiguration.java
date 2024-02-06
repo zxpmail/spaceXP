@@ -4,13 +4,14 @@ package cn.piesat.framework.permission.url.config;
 
 import cn.piesat.framework.permission.url.core.UrlPermissionFilter;
 import cn.piesat.framework.permission.url.properties.UrlPermissionProperties;
+import jakarta.servlet.Filter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import javax.servlet.Filter;
+
 
 /**
  * <p/>
@@ -25,7 +26,7 @@ import javax.servlet.Filter;
 @Primary
 public class UrlPermissionAutoConfiguration {
     @Bean
-    public FilterRegistrationBean<Filter> filterRegistration(Filter urlPermissionFilter,UrlPermissionProperties urlPermissionProperties) {
+    public FilterRegistrationBean<Filter> filterRegistration(Filter urlPermissionFilter, UrlPermissionProperties urlPermissionProperties) {
         FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(urlPermissionFilter);
         registrationBean.addUrlPatterns(urlPermissionProperties.getUrlPatterns());

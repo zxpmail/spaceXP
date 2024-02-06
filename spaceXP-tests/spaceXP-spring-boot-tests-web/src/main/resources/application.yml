@@ -1,9 +1,6 @@
 spring:
   application:
     name: web
-  mvc:
-    path-match:
-      matching-strategy: ANT_PATH_MATCHER
 space:
   common:
     result:

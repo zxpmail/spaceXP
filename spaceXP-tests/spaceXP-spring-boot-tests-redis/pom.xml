@@ -5,7 +5,7 @@
     <parent>
         <groupId>cn.piesat.space</groupId>
         <artifactId>spaceXP-tests</artifactId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <artifactId>spaceXP-spring-boot-tests-redis</artifactId>
 
@@ -13,26 +13,26 @@
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-web</artifactId>
-            <version>2.0.0</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-redis</artifactId>
-            <version>2.0.0</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
-            <version>2.0.0</version>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.17.7</version>
+            <version>3.21.1</version>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
         </dependency>
     </dependencies>
 

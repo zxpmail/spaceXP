@@ -1,11 +1,11 @@
 package cn.piesat.framework.common.model.entity;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonIgnore;

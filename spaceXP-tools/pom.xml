@@ -4,11 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spaceXP-tools</artifactId>
     <groupId>cn.piesat.space</groupId>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <packaging>pom</packaging>
     <properties>
-        <java.version>1.8</java.version>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,7 +20,7 @@
             <dependency>
                 <groupId>cn.piesat.space</groupId>
                 <artifactId>spaceXP-dependencies</artifactId>
-                <version>2.0.0</version>
+                <version>3.0.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

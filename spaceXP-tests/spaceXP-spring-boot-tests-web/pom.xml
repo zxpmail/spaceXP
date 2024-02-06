@@ -3,7 +3,7 @@
     <parent>
         <artifactId>spaceXP-tests</artifactId>
         <groupId>cn.piesat.space</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,14 +17,18 @@
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-web</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
+            <version>3.0.0</version>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-security</artifactId>
+            <version>3.0.0</version>
         </dependency>
+
     </dependencies>
 </project>

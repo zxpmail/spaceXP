@@ -1,8 +1,7 @@
 package cn.piesat.framework.security.core;
 
 
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ObjUtil;
+
 import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.security.annotation.EncryptField;
@@ -66,10 +65,10 @@ public class EncryptAspect {
 
 
         // 获取注解的值
-        Integer pos = annotation.argsPos();
+        int pos = annotation.argsPos();
 
         // 如果注解为空，抛出自定义异常
-        if (ObjUtil.isNull(jp.getArgs()) || ArrayUtil.isEmpty(jp.getArgs())) {
+        if (jp.getArgs()==null || jp.getArgs().length==0) {
             throw new BaseException(CommonResponseEnum.AOP_ADVICE_ERROR);
         }
 

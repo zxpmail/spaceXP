@@ -4,6 +4,7 @@ import cn.piesat.framework.common.constants.CommonConstants;
 
 import cn.piesat.framework.common.utils.ServletUtils;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -13,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**

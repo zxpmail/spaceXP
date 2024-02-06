@@ -5,7 +5,7 @@
     <groupId>cn.piesat.space</groupId>
     <artifactId>spaceXP</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.0</version>
+    <version>3.0.0</version>
     <modules>
         <module>spaceXP-dependencies</module>
         <module>spaceXP-framework</module>

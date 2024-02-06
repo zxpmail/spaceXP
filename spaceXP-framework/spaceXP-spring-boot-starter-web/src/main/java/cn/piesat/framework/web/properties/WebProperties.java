@@ -55,8 +55,8 @@ public class WebProperties {
      */
     private String datePattern = "yyyy-MM-dd";
     /**
-     * 忽略进行统一返回url
+     * 忽略进行统一返回包或类
      */
-    private List<String> ignoreUrls;
+    private List<String> ignorePackageOrClass;
 
 }

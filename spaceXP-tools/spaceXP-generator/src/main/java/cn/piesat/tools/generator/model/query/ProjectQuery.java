@@ -1,11 +1,10 @@
 package cn.piesat.tools.generator.model.query;
 
-import cn.piesat.framework.common.annotation.validator.group.AddGroup;
-import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
-import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
+import lombok.Data;
+
+
+
 
 /**
  * <p/>

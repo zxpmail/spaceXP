@@ -1,11 +1,11 @@
 package cn.piesat.tools.generator.model.vo;
 
-import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 

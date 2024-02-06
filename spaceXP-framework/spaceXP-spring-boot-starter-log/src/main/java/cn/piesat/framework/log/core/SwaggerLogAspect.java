@@ -4,6 +4,7 @@ import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.log.properties.LogProperties;
 import cn.piesat.framework.log.utils.LogUtil;
 import com.alibaba.ttl.TransmittableThreadLocal;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -13,9 +14,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.ApplicationContext;
-
-import javax.annotation.Resource;
-
 
 /**
  * <p/>

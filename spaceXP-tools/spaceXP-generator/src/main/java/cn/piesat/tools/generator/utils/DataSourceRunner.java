@@ -8,12 +8,13 @@ import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.ProjectService;
 import cn.piesat.tools.generator.service.TemplateService;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
+
 import java.util.ArrayList;
 import java.util.List;
 

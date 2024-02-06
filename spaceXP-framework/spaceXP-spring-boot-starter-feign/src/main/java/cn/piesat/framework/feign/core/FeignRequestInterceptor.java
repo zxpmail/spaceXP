@@ -4,10 +4,10 @@ package cn.piesat.framework.feign.core;
 import cn.piesat.framework.common.utils.ServletUtils;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
 
 /**

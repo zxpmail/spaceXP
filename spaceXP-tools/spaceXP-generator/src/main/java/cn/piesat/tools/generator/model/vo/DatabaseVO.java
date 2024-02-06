@@ -4,12 +4,12 @@ import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.util.StringUtils;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**

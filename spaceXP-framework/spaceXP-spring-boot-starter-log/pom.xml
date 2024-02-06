@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spaceXP-framework</artifactId>
         <groupId>cn.piesat.space</groupId>
-        <version>2.0.0</version>
+        <version>3.0.0</version>
     </parent>
     <packaging>jar</packaging>
     <artifactId>spaceXP-spring-boot-starter-log</artifactId>
@@ -29,8 +29,8 @@
             <artifactId>hutool-all</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

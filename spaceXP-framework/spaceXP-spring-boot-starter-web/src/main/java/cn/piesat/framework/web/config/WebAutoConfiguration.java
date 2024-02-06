@@ -3,9 +3,9 @@ package cn.piesat.framework.web.config;
 import cn.piesat.framework.common.properties.CommonProperties;
 import cn.piesat.framework.common.properties.ModuleProperties;
 import cn.piesat.framework.web.core.LoginUserHandlerMethodArgumentResolver;
-import cn.piesat.framework.web.core.UniformApiResultWrapper;
 
 import cn.piesat.framework.web.core.TimeCostBeanPostProcessor;
+import cn.piesat.framework.web.core.UniformReturnValueAdvice;
 import cn.piesat.framework.web.core.WebExceptionHandler;
 import cn.piesat.framework.web.properties.WebProperties;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -24,11 +24,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -56,8 +59,15 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
 
     @ConditionalOnProperty(name = "space.web.return-value-enable", havingValue = "true",matchIfMissing = true)
     @Bean
-    public UniformApiResultWrapper returnValueBean(WebProperties webProperties,CommonProperties commonProperties){
-        return new UniformApiResultWrapper(commonProperties.getApiMapResultEnable(),webProperties);
+    public UniformReturnValueAdvice returnValueBean(WebProperties webProperties, CommonProperties commonProperties){
+        List<String> ignorePackageOrClass = webProperties.getIgnorePackageOrClass();
+        if(CollectionUtils.isEmpty(ignorePackageOrClass)){
+            ignorePackageOrClass=new ArrayList<>();
+        }
+        ignorePackageOrClass.add("org.springframework");
+        ignorePackageOrClass.add("org.springdoc");
+        ignorePackageOrClass.add("springfox.documentation");
+        return new UniformReturnValueAdvice(ignorePackageOrClass,commonProperties.getApiMapResultEnable());
     }
 
     @ConditionalOnProperty(name = "space.web.login-user-enable", havingValue = "true",matchIfMissing = true)

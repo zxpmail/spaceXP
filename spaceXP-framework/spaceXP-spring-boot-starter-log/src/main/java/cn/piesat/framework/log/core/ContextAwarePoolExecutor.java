@@ -2,7 +2,7 @@
 
 package cn.piesat.framework.log.core;
 
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -19,7 +19,7 @@ import java.util.concurrent.Future;
  */
 
 
-public class ContextAwarePoolExecutor extends ThreadPoolTaskExecutor {
+public class ContextAwarePoolExecutor extends ThreadPoolTaskScheduler {
     @Override
     public <T> Future<T> submit( Callable<T> task) {
         return super.submit(new ContextAwareCallable<>(task, RequestContextHolder.currentRequestAttributes()));

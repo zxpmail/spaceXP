@@ -5,6 +5,7 @@ import cn.piesat.framework.common.annotation.LoginUser;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.model.dto.JwtUser;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -13,7 +14,6 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**

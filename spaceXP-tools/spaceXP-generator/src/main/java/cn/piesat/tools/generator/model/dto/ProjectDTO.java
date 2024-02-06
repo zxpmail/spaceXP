@@ -2,14 +2,13 @@ package cn.piesat.tools.generator.model.dto;
 
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
-import cn.piesat.tools.generator.model.vo.TableFieldVO;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 import java.util.List;
 
 /**

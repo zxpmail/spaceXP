@@ -4,8 +4,7 @@ import cn.piesat.framework.security.annotation.DecryptMethod;
 import cn.piesat.framework.security.annotation.EncryptMethod;
 import cn.piesat.test.file.model.entity.DesensitizeDO;
 import cn.piesat.test.file.model.entity.EncryptDO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author zhouxp
  */
-@Api(tags = "安全组件测试")
+
 @RestController
 @RequestMapping("security")
 @RequiredArgsConstructor
 public class SecurityController {
-    @ApiOperation("测试脱敏")
+
     @GetMapping("desensitize")
     public DesensitizeDO desensitize() {
         DesensitizeDO userInfo = new DesensitizeDO();
@@ -37,14 +36,14 @@ public class SecurityController {
         return userInfo;
     }
 
-    @ApiOperation("测试加密")
+
     @PostMapping("encrypt")
     @EncryptMethod
     public EncryptDO encrypt(@RequestBody EncryptDO encryptDO) {
         return encryptDO;
     }
 
-    @ApiOperation("测试解密")
+
     @PostMapping("decrypt")
     @DecryptMethod
     public EncryptDO decrypt() {

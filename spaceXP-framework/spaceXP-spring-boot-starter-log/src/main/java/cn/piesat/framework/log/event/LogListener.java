@@ -3,11 +3,11 @@ package cn.piesat.framework.log.event;
 
 import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.log.service.ExecuteLogService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 
-import javax.annotation.Resource;
 
 /**
  * <p/>

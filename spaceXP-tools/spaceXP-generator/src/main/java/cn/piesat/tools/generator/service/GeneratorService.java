@@ -2,8 +2,9 @@ package cn.piesat.tools.generator.service;
 
 import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
+import jakarta.servlet.http.HttpServletResponse;
 
-import javax.servlet.http.HttpServletResponse;
+
 import java.util.List;
 
 /**

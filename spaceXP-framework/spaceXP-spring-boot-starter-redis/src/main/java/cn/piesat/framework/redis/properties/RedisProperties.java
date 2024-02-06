@@ -21,8 +21,6 @@ public class RedisProperties {
 
     private String topics = "TOPIC";
 
-    private Boolean compressEnable = false; //压缩是否开启
-
     private Boolean preventReplayEnable = false; //防止重新刷新页面是否开启
 
     private Boolean accessLimitEnable = false; //限流拦截器是否开启

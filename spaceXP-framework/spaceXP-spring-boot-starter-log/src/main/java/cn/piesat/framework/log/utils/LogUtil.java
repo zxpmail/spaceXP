@@ -2,7 +2,6 @@ package cn.piesat.framework.log.utils;
 
 
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.log.annotation.OpLog;
@@ -11,8 +10,9 @@ import cn.piesat.framework.common.model.enums.BusinessEnum;
 import cn.piesat.framework.log.event.LogEvent;
 import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.log.properties.LogProperties;
-import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson2.JSON;
 import io.swagger.annotations.ApiOperation;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
@@ -22,7 +22,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -218,12 +217,12 @@ public class LogUtil {
         opLogEntity.setExDesc(e.getMessage());
     }
 
-    public static void doAfter(ThreadLocal<OpLogEntity> logThreadLocal, ApplicationContext applicationContext) throws Exception {
+    public static void doAfter(ThreadLocal<OpLogEntity> logThreadLocal, ApplicationContext applicationContext)  {
         OpLogEntity opLogEntity = logThreadLocal.get();
         HttpServletRequest request = opLogEntity.getRequest();
         String name = request.getHeader(CommonConstants.USERNAME);
         if (StringUtils.hasText(name)) {
-            opLogEntity.setUserName(URLDecoder.decode(name, StandardCharsets.UTF_8.toString()));
+            opLogEntity.setUserName(URLDecoder.decode(name, StandardCharsets.UTF_8));
         }
         String deptId = request.getHeader(CommonConstants.DEPT_ID);
         if (StringUtils.hasText(deptId)) {
@@ -231,7 +230,7 @@ public class LogUtil {
         }
         String deptName = request.getHeader(CommonConstants.DEPT_NAME);
         if (StringUtils.hasText(deptId)) {
-            opLogEntity.setDeptName(URLDecoder.decode(deptName, StandardCharsets.UTF_8.toString()));
+            opLogEntity.setDeptName(URLDecoder.decode(deptName, StandardCharsets.UTF_8));
         }
         // 发布事件
         applicationContext.publishEvent(new LogEvent(opLogEntity));
