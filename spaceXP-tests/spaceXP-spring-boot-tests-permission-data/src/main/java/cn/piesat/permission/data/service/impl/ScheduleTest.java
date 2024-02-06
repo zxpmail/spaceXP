@@ -1,11 +1,12 @@
 package cn.piesat.permission.data.service.impl;
 
 import cn.piesat.permission.data.service.UserService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+
 
 /**
  * <p/>

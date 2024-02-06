@@ -9,11 +9,10 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -25,17 +24,17 @@ import java.time.LocalDateTime;
  * @date 2023-01-16 08:52:49
  */
 @Data
-@ApiModel("用户信息实体类")
+
 @TableName("sys_user")
 public class UserDO implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonSerialize(using= ToStringSerializer.class)
     @TableId(type = IdType.AUTO)
     private Long id;
-    @NotBlank(message = "用户名不能为空！",groups = AddGroup.class)
+
     private String username;
     private String password;
-    @NotBlank(message = "别名不能为空！" ,groups = AddGroup.class)
+
 
     private String nickname;
     private String sex;
@@ -47,7 +46,7 @@ public class UserDO implements Serializable {
     /**
      * 部门ID
      */
-    @ApiModelProperty("部门ID")
+
     private Long deptId;
 
     @TableLogic

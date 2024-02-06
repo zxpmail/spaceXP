@@ -35,13 +35,8 @@ import java.util.stream.Collectors;
  * @author zhouxp
  */
 @Slf4j
-@Data
-public class CustomDataPermissionHandler implements DataPermissionHandler {
-    private final DataPermissionProperties dataPermissionProperties;
-
-    public CustomDataPermissionHandler(DataPermissionProperties dataPermissionProperties) {
-        this.dataPermissionProperties = dataPermissionProperties;
-    }
+public record CustomDataPermissionHandler(
+        DataPermissionProperties dataPermissionProperties) implements DataPermissionHandler {
 
     @Override
     public Expression getSqlSegment(Expression where, String mid) {
@@ -50,7 +45,7 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
         /*
           内部线程直接调用不进行数据权限拦截直接返回
          */
-        if(Objects.isNull(userDataScope)){
+        if (Objects.isNull(userDataScope)) {
             return where;
         }
         if (!ObjectUtils.isEmpty(dataPermissionProperties)) {
@@ -63,14 +58,14 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
             //没在条件中直接返回
             Set<String> sql = dataPermissionProperties.getConditions();
             if (!CollectionUtils.isEmpty(sql)) {
-                boolean isExist = false ;
+                boolean isExist = false;
                 for (String s : sql) {
                     if (mid.contains(s)) {
-                        isExist= true;
+                        isExist = true;
                         break;
                     }
                 }
-                if(!isExist){
+                if (!isExist) {
                     return where;
                 }
             } else {

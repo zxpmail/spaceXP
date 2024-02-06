@@ -23,7 +23,7 @@
         <spring.cloud.alibaba.version>2021.0.4.0</spring.cloud.alibaba.version>
 
         <ojdbc8-version>21.7.0.0</ojdbc8-version>
-        <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
 
         <lombok.version>1.18.24</lombok.version>
         <guava.version>33.0.0-jre</guava.version>
@@ -56,10 +56,16 @@
         <sqlserver.version>12.4.2.jre8</sqlserver.version>
         <aws-java-sdk.version>1.12.610</aws-java-sdk.version>
         <jakarta.validation.version>3.0.2</jakarta.validation.version>
+        <mybatis.version>3.0.3</mybatis.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis-spring</artifactId>
+                <version>${mybatis.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk</artifactId>
