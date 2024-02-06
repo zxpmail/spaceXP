@@ -10,17 +10,19 @@ import cn.piesat.dynamic.datasource.service.UserService;
 import cn.piesat.dynamic.datasource.model.entity.UserDO;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
 import cn.piesat.framework.dynamic.datasource.model.DSEntity;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
+
 import java.util.List;
 
 /**
@@ -30,28 +32,29 @@ import java.util.List;
  * @email zhouxiaoping@piesat.cn
  * @date 2023-01-16 08:52:49
  */
-@Api(tags = "用户信息")
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    @Qualifier("userService")
+    @Resource
+    private  UserService userService;
 
     /**
      * 列表
      */
-    @ApiOperation("分页查询")
+
     @PostMapping("/list")
     @DS
-    public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO, DSEntity dsEntity){
+    public PageResult list(@RequestParam("pageBean") PageBean pageBean, @RequestBody(required = false) UserDO userDO, @RequestParam("dsEntity")DSEntity dsEntity){
         return userService.list(pageBean,userDO);
 
     }
     /**
      * 信息
      */
-    @ApiOperation("根据id查询")
+
     @GetMapping("/info/{id}")
     public UserDO info(@PathVariable("id") Long id){
         return userService.info(id);
@@ -70,7 +73,7 @@ public class UserController {
     }
     @Resource
     private UserServiceTest userServiceTest;
-    @ApiOperation("组合查询")
+
     @GetMapping("/com")
     public Object com(){
         return userServiceTest.get();

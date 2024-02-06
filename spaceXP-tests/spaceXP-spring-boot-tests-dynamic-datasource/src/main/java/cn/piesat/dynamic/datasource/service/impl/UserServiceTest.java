@@ -4,12 +4,14 @@ package cn.piesat.dynamic.datasource.service.impl;
 import cn.piesat.dynamic.datasource.model.entity.UserDO;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+
 import java.util.HashMap;
-import java.util.Map;
+
 
 
 @Service("UserServiceTest")
@@ -17,8 +19,10 @@ import java.util.Map;
 public class UserServiceTest {
 
     @Resource
+    @Qualifier("userService1")
     private UserServiceImpl1 userServiceImpl1;
     @Resource
+    @Qualifier("userService")
     private UserServiceImpl userServiceImpl;
 
     public Object get() {
