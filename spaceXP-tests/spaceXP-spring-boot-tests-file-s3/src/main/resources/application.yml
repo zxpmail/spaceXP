@@ -7,9 +7,6 @@ spring:
       max-request-size: 600GB
       enabled: true
       file-size-threshold: 600GB
-  mvc:
-    path-match:
-      matching-strategy: ANT_PATH_MATCHER
 space:
   oss:
     endpoint: http://localhost:9999
