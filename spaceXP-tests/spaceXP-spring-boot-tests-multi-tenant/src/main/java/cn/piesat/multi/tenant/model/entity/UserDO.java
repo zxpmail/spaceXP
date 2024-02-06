@@ -9,11 +9,11 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
  * @date 2023-01-16 08:52:49
  */
 @Data
-@ApiModel("用户信息实体类")
+
 @TableName("sys_user")
 public class UserDO implements Serializable {
     @JsonSerialize(using= ToStringSerializer.class)
@@ -46,7 +46,6 @@ public class UserDO implements Serializable {
     /**
      * 部门ID
      */
-    @ApiModelProperty("部门ID")
     private Long deptId;
 
     @TableLogic

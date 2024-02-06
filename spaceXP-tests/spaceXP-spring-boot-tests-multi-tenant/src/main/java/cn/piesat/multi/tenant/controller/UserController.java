@@ -8,8 +8,7 @@ import cn.piesat.framework.common.model.vo.PageResult;
 
 import cn.piesat.multi.tenant.service.UserService;
 import cn.piesat.multi.tenant.model.entity.UserDO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +29,6 @@ import java.util.Arrays;
  * @email zhouxiaoping@piesat.cn
  * @date 2023-01-16 08:52:49
  */
-@Api(tags = "用户信息")
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -41,7 +39,7 @@ public class UserController {
     /**
      * 列表
      */
-    @ApiOperation("分页查询")
+
     @PostMapping("/list")
     public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO){
         return userService.list(pageBean,userDO);
@@ -50,7 +48,7 @@ public class UserController {
     /**
      * 信息
      */
-    @ApiOperation("根据id查询")
+
     @GetMapping("/info/{id}")
     public UserDO info(@PathVariable("id") Long id){
         return userService.info(id);
@@ -58,7 +56,7 @@ public class UserController {
     /**
      * 保存
      */
-    @ApiOperation("保存信息")
+
     @PostMapping("/save")
     public Boolean save(@Validated(AddGroup.class) @RequestBody UserDO userDO){
         return userService.add(userDO);
@@ -67,7 +65,7 @@ public class UserController {
     /**
      * 修改
      */
-    @ApiOperation("修改信息")
+
     @PutMapping("/update")
     public Boolean update(@Validated(UpdateGroup.class) @RequestBody UserDO userDO){
         return userService.update(userDO);
@@ -76,7 +74,7 @@ public class UserController {
     /**
      * 删除
      */
-    @ApiOperation("批量删除信息")
+
     @DeleteMapping("/delete")
     public Boolean delete(@RequestBody Long[] ids){
         return userService.delete(Arrays.asList(ids));
@@ -84,7 +82,7 @@ public class UserController {
     /**
      * 删除
      */
-    @ApiOperation("根据id删除信息")
+
     @DeleteMapping("/delete/{id}")
     public Boolean delete(@PathVariable Long id){
         return userService.delete(id);
