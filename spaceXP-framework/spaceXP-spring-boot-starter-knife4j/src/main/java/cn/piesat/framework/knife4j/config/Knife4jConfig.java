@@ -46,8 +46,7 @@ public class Knife4jConfig {
     public GroupedOpenApi publicApi(SwaggerProperties swaggerProperties) {
         return GroupedOpenApi.builder()
                 .group(appName)
-                .packagesToScan("cn.piesat")
-                //.pathsToMatch(swaggerProperties.getPathsToMatch())//API路径，不是类路径
+                .pathsToMatch(swaggerProperties.getPathsToMatch())//API路径，不是类路径
                 .build();
     }
 }
