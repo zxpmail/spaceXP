@@ -2,7 +2,7 @@ package cn.piesat.tests.feign.consumer.model.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,12 +16,10 @@ import java.time.LocalDateTime;
  * @date 2022-10-08 14:43:40
  */
 @Data
-@ApiModel("实体类")
-
+@Schema(description = "用户实体类")
 public class UserDO implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonSerialize(using= ToStringSerializer.class)
-
     private Long id;
     private String username;
     private String password;
