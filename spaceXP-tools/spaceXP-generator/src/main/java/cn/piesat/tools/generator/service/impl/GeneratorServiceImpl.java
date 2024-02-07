@@ -211,6 +211,7 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     private void writeTable(List<TableDTO> tables, Map<String, Object> dataModel, ZipOutputStream zip) {
         for (TableDTO table : tables) {
+            dataModel.put("springDoc", table.getSpringDoc());
             dataModel.put("openingTime", LocalDateTime.now());
             packTablesWriteZip(table, dataModel, zip);
             dataModel.clear();
@@ -285,6 +286,7 @@ public class GeneratorServiceImpl implements GeneratorService {
             table.setModuleName(projectDTO.getArtifactId());
             table.setPackageName(projectDTO.getGroupId());
             table.setVersion(projectDTO.getVersion());
+            table.setSpringDoc(projectDTO.getSpringDoc());
             if (StringUtils.hasText(projectDTO.getTablePrefix())) {
                 table.setTablePrefix(projectDTO.getTablePrefix());
             }

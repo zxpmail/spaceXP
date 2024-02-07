@@ -128,6 +128,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
             projectDO.setArtifactId("test");
             projectDO.setVersion("1.0.0");
             projectDO.setIsDefault(1);
+            projectDO.setSpringDoc(1);
             projectDO.setType("单体");
             return projectDO;
         }

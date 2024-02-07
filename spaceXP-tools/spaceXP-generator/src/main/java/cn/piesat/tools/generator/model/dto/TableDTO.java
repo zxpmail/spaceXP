@@ -112,4 +112,10 @@ public class TableDTO  {
      * 表单布局  1：一列   2：两列
      */
     private Integer formLayout;
+
+    /**
+     * 生成文档 1、springdoc 0、springfox
+     */
+    @NotNull(message = "生成文档不能为空",groups ={AddGroup.class,UpdateGroup.class})
+    private Integer springDoc;
 }

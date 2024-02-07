@@ -85,10 +85,19 @@ public class ProjectDTO {
      */
     @NotNull(message = "是否是默认", groups =  {AddGroup.class, UpdateGroup.class})
     private Integer isDefault;
+
+    /**
+     * 生成文档 1、springdoc 0、springfox
+     */
+    @NotNull(message = "生成文档", groups =  {AddGroup.class, UpdateGroup.class})
+    private Integer springDoc;
+
     /**
      * 表前缀
      */
     private String tablePrefix;
 
     private List<TableDTO> tables;
+
+
 }

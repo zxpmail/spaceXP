@@ -66,4 +66,9 @@ public class ProjectVO {
      * 是否是默认 0否 1是
      */
     private Integer isDefault;
+
+    /**
+     * 生成文档 1、springdoc 0、springfox
+     */
+    private Integer springDoc;
 }

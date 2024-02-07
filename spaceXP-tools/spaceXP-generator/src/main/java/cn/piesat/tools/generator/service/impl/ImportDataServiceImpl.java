@@ -136,6 +136,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             table.setPackageName(project.getGroupId());
             table.setModuleName(project.getArtifactId());
             table.setClassName(StrUtils.underlineToCamel(table.getTableName(), true));
+            table.setSpringDoc(1);
             table.setFormLayout(1);
             return table;
         });

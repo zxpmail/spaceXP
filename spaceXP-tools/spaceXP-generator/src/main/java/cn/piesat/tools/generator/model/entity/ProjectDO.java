@@ -63,4 +63,9 @@ public class ProjectDO extends BaseDO{
      */
     private Integer isDefault;
 
+    /**
+     * 生成文档 1、springdoc 0、springfox
+     */
+    private Integer springDoc;
+
 }

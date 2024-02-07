@@ -81,4 +81,9 @@ public class TableDO extends BaseDO{
      * 表单布局  1：一列   2：两列
      */
     private Integer formLayout;
+
+    /**
+     * 生成文档 1、springdoc 0、springfox
+     */
+    private Integer springDoc;
 }

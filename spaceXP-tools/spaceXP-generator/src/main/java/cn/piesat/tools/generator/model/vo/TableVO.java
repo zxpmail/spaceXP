@@ -92,6 +92,10 @@ public class TableVO {
     private Integer formLayout;
 
     /**
+     * 生成文档 1、springdoc 0、springfox
+     */
+    private Integer springDoc;
+    /**
      * 表字段
      */
     private List<TableFieldVO> tableFields;
