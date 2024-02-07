@@ -11,7 +11,7 @@ import cn.piesat.framework.log.event.LogEvent;
 import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.log.properties.LogProperties;
 import com.alibaba.fastjson2.JSON;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.context.ApplicationContext;
@@ -86,9 +86,9 @@ public class LogUtil {
     }
 
     private static void swaggerLog(Map<String, Object> map, Method method) {
-        ApiOperation annotation = method.getAnnotation(ApiOperation.class);
+        Operation annotation = method.getAnnotation(Operation.class);
         if (!ObjectUtils.isEmpty(annotation)) {
-            map.put(LogConstants.DESCRIPTION, annotation.value());
+            map.put(LogConstants.DESCRIPTION, annotation.description());
             map.put(LogConstants.OP, BusinessEnum.OTHER);
         }
     }
