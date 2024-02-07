@@ -8,19 +8,7 @@ space:
   redis:
     prevent-replay-enable: true #开启重刷功能
     access-limit-enable: true #开启限流功能
-
 springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
   api-docs:
-    path: /v3/api-docs
-  group-configs:
-    - group: 'default'
-      paths-to-match: '/**'
-
-knife4j:
-  enable: true
-  setting:
-    language: zh_cn
+    #是否开启文档功能，默认为true，可不配置
+    enabled: true

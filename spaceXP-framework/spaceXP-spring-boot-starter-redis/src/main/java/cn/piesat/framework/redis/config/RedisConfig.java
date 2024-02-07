@@ -56,8 +56,6 @@ public class RedisConfig {
         //hash的key也采用String 的序列化方式
         redisTemplate.setHashKeySerializer(stringRedisSerializer);
         GenericFastJsonRedisSerializer jackson2JsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-
         //value的序列化方式采用jackson的方式
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
         //hash的value序列化方式采用jackson
