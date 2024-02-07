@@ -19,6 +19,13 @@
           <el-option value="代码" label="代码"></el-option>
         </el-select>
       </el-form-item>
+
+      <el-form-item label="文档方式" prop="springDoc">
+        <el-select v-model="dataForm.springDoc" clearable placeholder="项目类型" style="width: 100%">
+          <el-option :value="1" label="springDoc"></el-option>
+          <el-option :value="0" label="springFox"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="作者" prop="author">
         <el-input v-model="dataForm.author" placeholder="作者"></el-input>
       </el-form-item>
@@ -55,6 +62,7 @@ const dataForm = reactive({
   groupId: 'cn.piesat',
   version: '1.0.0',
   type: '单体',
+  springDoc: 1,
   author: 'zhouxiaoping',
   email: 'zhouxiaoping@piesat.cn',
   description: '',
@@ -86,7 +94,8 @@ const dataRules = ref({
   artifactId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   groupId: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   version: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-  type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+  type: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  springDoc: [{ required: true, message: '必填项不能为空', trigger: 'change' }]
 })
 
 // 表单提交

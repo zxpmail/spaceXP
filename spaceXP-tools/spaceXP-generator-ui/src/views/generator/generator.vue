@@ -14,9 +14,17 @@
         </el-col>
 			</el-row>
 			<el-row>
-        <el-col :span="24">
+        <el-col :span="12">
           <el-form-item label="说明" prop="tableComment">
             <el-input v-model="dataForm.tableComment" placeholder="说明"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="文档" prop="springDoc">
+            <el-select v-model="dataForm.springDoc"  clearable placeholder="生成文档" style="width: 100%">
+              <el-option :value="1" label="springDoc"></el-option>
+              <el-option :value="0" label="springFox"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
 			</el-row>
@@ -100,6 +108,7 @@ const dataForm = reactive({
 	backendPath: '',
 	frontendPath: '',
 	packageName: '',
+  springDoc: 1,
 	email: '',
 	author: '',
 	version: '',
@@ -140,6 +149,7 @@ const dataRules = ref({
   email: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
   version: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	generatorType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  springDoc: [{ required: true, message: '必填项不能为空', trigger: 'change' }],
 	formLayout: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
