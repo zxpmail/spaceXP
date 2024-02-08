@@ -246,6 +246,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     private void writeProject(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
+        dataModel.put("bootVersion", projectDTO.getBootVersion());
         dataModel.put("openingTime", LocalDateTime.now());
         packProjectWriteZip(projectDTO, dataModel, zip);
     }

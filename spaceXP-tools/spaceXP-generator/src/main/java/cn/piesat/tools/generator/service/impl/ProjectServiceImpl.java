@@ -62,6 +62,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     public Boolean add(ProjectDTO projectDTO) {
         repeat(projectDTO);
         updateDefault(projectDTO);
+        if(projectDTO.getBootVersion()==1){
+            projectDTO.setSpringDoc(1);
+        }
         return save(CopyBeanUtils.copy(projectDTO,ProjectDO::new));
     }
 
@@ -84,6 +87,9 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
             return false;
         }
         updateDefault(projectDTO);
+        if(projectDTO.getBootVersion()==1){
+            projectDTO.setSpringDoc(1);
+        }
         BeanUtils.copyProperties(projectDTO,byId,CopyBeanUtils.getNullPropertyNames(projectDTO));
         return updateById(byId);
     }
@@ -129,6 +135,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
             projectDO.setVersion("1.0.0");
             projectDO.setIsDefault(1);
             projectDO.setSpringDoc(1);
+            projectDO.setBootVersion(1);
             projectDO.setType("单体");
             return projectDO;
         }

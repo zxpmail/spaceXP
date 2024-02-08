@@ -92,6 +92,13 @@ public class ProjectDTO {
     @NotNull(message = "生成文档", groups =  {AddGroup.class, UpdateGroup.class})
     private Integer springDoc;
 
+
+    /**
+     * 组件版本 1 为3.0.0 、0为2.0.0
+     */
+    @NotNull(message = "组件版本", groups =  {AddGroup.class, UpdateGroup.class})
+    private Integer bootVersion;
+
     /**
      * 表前缀
      */

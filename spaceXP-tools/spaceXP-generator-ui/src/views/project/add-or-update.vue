@@ -19,7 +19,12 @@
           <el-option value="代码" label="代码"></el-option>
         </el-select>
       </el-form-item>
-
+      <el-form-item label="组件版本" prop="bootVersion">
+        <el-select v-model="dataForm.bootVersion" clearable placeholder="组件版本" style="width: 100%">
+          <el-option :value="0" label="2.0.0"></el-option>
+          <el-option :value="1" label="3.0.0"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="文档方式" prop="springDoc">
         <el-select v-model="dataForm.springDoc" clearable placeholder="项目类型" style="width: 100%">
           <el-option :value="1" label="springDoc"></el-option>
@@ -63,6 +68,7 @@ const dataForm = reactive({
   version: '1.0.0',
   type: '单体',
   springDoc: 1,
+  bootVersion: 1,
   author: 'zhouxiaoping',
   email: 'zhouxiaoping@piesat.cn',
   description: '',

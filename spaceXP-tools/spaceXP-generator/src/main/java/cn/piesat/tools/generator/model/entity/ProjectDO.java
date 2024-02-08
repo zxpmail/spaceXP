@@ -1,10 +1,7 @@
 package cn.piesat.tools.generator.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
-import java.util.Date;
 
 /**
  * <p/>
@@ -67,5 +64,10 @@ public class ProjectDO extends BaseDO{
      * 生成文档 1、springdoc 0、springfox
      */
     private Integer springDoc;
+
+    /**
+     * 组件版本 1 为3.0.0 、0为2.0.0
+     */
+    private Integer bootVersion;
 
 }
