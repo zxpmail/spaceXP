@@ -34,4 +34,6 @@ spaceXP-tools 工具集合
 13. spaceXP-spring-boot-starter-dynamic-datasource 动态增加数据源
 
 
-
+#### 鸣谢
+本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
+非常感谢众多软件和作者
