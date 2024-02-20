@@ -1,7 +1,6 @@
 package cn.piesat.framework.mybatis.plus.config;
 
 
-import cn.piesat.framework.common.properties.ModuleProperties;
 import cn.piesat.framework.mybatis.plus.core.AutoFillMetaObjectHandler;
 import cn.piesat.framework.mybatis.plus.core.DynamicTableNameAspect;
 import cn.piesat.framework.mybatis.plus.core.DynamicTableNameHandler;
@@ -12,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DynamicTableNameInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,12 +30,13 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @EnableTransactionManagement
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({MybatisPlusConfigProperties.class, ModuleProperties.class, DynamicTableNameProperties.class})
+@EnableConfigurationProperties({MybatisPlusConfigProperties.class ,DynamicTableNameProperties.class})
 @RequiredArgsConstructor
 @Primary
 public class MybatisPlusConfig {
     private final MybatisPlusConfigProperties mybatisPlusConfigProperties;
-    private final ModuleProperties moduleProperties;
+    @Value("${spring.application.name:test}")
+    private String module;
 
     private final DynamicTableNameProperties dynamicTableNameProperties;
 
@@ -68,7 +69,7 @@ public class MybatisPlusConfig {
 
     @Bean
     public MybatisPlusExceptionHandler dbExceptionHandler(){
-        return new MybatisPlusExceptionHandler(moduleProperties.getModule());
+        return new MybatisPlusExceptionHandler(module);
     }
 
     @Bean

@@ -18,6 +18,10 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-common</artifactId>
         </dependency>

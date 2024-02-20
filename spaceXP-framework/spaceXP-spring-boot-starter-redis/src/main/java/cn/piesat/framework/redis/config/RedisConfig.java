@@ -1,7 +1,6 @@
 package cn.piesat.framework.redis.config;
 
 
-import cn.piesat.framework.common.properties.ModuleProperties;
 import cn.piesat.framework.redis.core.AccessLimitInterceptor;
 import cn.piesat.framework.redis.core.CompressRedisSerializer;
 import cn.piesat.framework.redis.core.PreventReplayAspect;
@@ -12,6 +11,7 @@ import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -35,10 +35,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  */
 @EnableCaching
 @AutoConfigureBefore(RedisAutoConfiguration.class)
-@EnableConfigurationProperties({RedisProperties.class, ModuleProperties.class})
+@EnableConfigurationProperties({RedisProperties.class})
 @Configuration(proxyBeanMethods = false)
 public class RedisConfig {
-
+    @Value("${spring.application.name:test}")
+    private String module;
     @Bean
     public RedisService redisService(RedisTemplate<String,Object> redisTemplate){
         return  new RedisService(redisTemplate);
@@ -108,14 +109,14 @@ public class RedisConfig {
 
     @Bean
     @ConditionalOnProperty(name = "space.redis.prevent-replay-enable", havingValue = "true",matchIfMissing = false)
-    public PreventReplayAspect preventAspect(RedisService redisService,ModuleProperties moduleProperties){
-        return new PreventReplayAspect(redisService, moduleProperties.getModule());
+    public PreventReplayAspect preventAspect(RedisService redisService){
+        return new PreventReplayAspect(redisService, module);
     }
 
     @Bean
     @ConditionalOnProperty(name = "space.redis.access-limit-enable", havingValue = "true",matchIfMissing = false)
-    public AccessLimitInterceptor accessLimitInterceptor(RedisService redisService,ModuleProperties moduleProperties){
-        return new AccessLimitInterceptor(redisService,moduleProperties.getModule());
+    public AccessLimitInterceptor accessLimitInterceptor(RedisService redisService){
+        return new AccessLimitInterceptor(redisService,module);
     }
 
     @Bean
