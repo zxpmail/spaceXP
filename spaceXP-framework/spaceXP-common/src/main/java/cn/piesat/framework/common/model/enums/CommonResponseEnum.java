@@ -50,6 +50,8 @@ public enum CommonResponseEnum implements IBaseResponse {
     QUERY_DATA(CommonProperties.ResponseCode.queryDataErrorCode,CommonProperties.ResponseCode.queryDataErrorValue),
 
     DATASOURCE_ERROR(CommonProperties.ResponseCode.datasourceErrorCode,CommonProperties.ResponseCode.datasourceErrorValue),
+
+    RPC_ERROR(CommonProperties.ResponseCode.rpcError,CommonProperties.ResponseCode.rpcErrorValue),
     ;
     /**
      * 响应状态码

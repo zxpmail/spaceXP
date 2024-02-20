@@ -1,11 +1,15 @@
 package cn.piesat.framework.web.core;
 
+import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import cn.piesat.framework.common.model.vo.ApiMapResult;
 import cn.piesat.framework.web.enums.WebResponseEnum;
 import cn.piesat.framework.common.utils.ExceptionUtil;
+import feign.FeignException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -24,9 +28,15 @@ import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import java.lang.reflect.Method;
+import java.util.Objects;
 
 
 /**
@@ -101,7 +111,15 @@ public class WebExceptionHandler {
         }
         return ApiMapResult.fail(WebResponseEnum.INVALID_INPUT);
     }
-
+    /**
+     * FeignException 类捕获
+     */
+    @ExceptionHandler(value = FeignException.class)
+    public ApiMapResult<IBaseResponse> handlerFeignException(FeignException e) throws Throwable {
+        errorDispose(e);
+        outPutError(FeignException.class, CommonResponseEnum.RPC_ERROR, e);
+        return ApiMapResult.fail(CommonResponseEnum.RPC_ERROR);
+    }
     /**
      * 处理Controller层相关异常
      */
@@ -122,5 +140,50 @@ public class WebExceptionHandler {
     public ApiMapResult<IBaseResponse> handleServletException(Exception e) {
         log.error(CommonConstants.MESSAGE, module, ExceptionUtil.getMessage(e));
         return ApiMapResult.fail(e.getMessage());
+    }
+
+
+    /**
+     * 校验是否进行异常处理
+     *
+     * @param e   异常
+     * @param <T> extends Throwable
+     * @throws Throwable 异常
+     */
+    private <T extends Throwable> void errorDispose(T e) throws Throwable {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        HandlerMethod handlerMethod = (HandlerMethod) request.getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingHandler");
+
+        // 获取异常 Controller
+        Class<?> beanType = handlerMethod.getBeanType();
+        // 获取异常方法
+        Method method = handlerMethod.getMethod();
+
+        // 判断方法是否存在 NoApiResult 注解
+        NoApiResult methodAnnotation = method.getAnnotation(NoApiResult.class);
+        if (methodAnnotation != null) {
+            // 是否使用异常处理
+            if (!methodAnnotation.value()) {
+                throw e;
+            } else {
+                return;
+            }
+        }
+        // 判类是否存在 NoApiResult 注解
+        NoApiResult classAnnotation = beanType.getAnnotation(NoApiResult.class);
+        if (classAnnotation != null) {
+            if (!classAnnotation.value()) {
+                throw e;
+            }
+        }
+    }
+
+    public void outPutError(Class<?> errorType, Enum<?> secondaryErrorType, Throwable throwable) {
+        log.error("[{}] {}: {}", errorType.getSimpleName(), secondaryErrorType, throwable.getMessage(),
+                throwable);
+    }
+
+    public void outPutErrorWarn(Class errorType, Enum secondaryErrorType, Throwable throwable) {
+        log.warn("[{}] {}: {}", errorType.getSimpleName(), secondaryErrorType, throwable.getMessage());
     }
 }

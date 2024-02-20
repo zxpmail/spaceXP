@@ -117,6 +117,26 @@ public final class CommonProperties {
 
         public  static String datasourceErrorValue ="数据源错误";
 
+        public static Integer rpcError =517;
+
+        public  static String rpcErrorValue ="网络异常";
+
+        public static Integer getRpcError() {
+            return rpcError;
+        }
+
+        public static void setRpcError(Integer rpcError) {
+            ResponseCode.rpcError = rpcError;
+        }
+
+        public static String getRpcErrorValue() {
+            return rpcErrorValue;
+        }
+
+        public static void setRpcErrorValue(String rpcErrorValue) {
+            ResponseCode.rpcErrorValue = rpcErrorValue;
+        }
+
         public  Integer getDatasourceErrorCode() {
             return datasourceErrorCode;
         }

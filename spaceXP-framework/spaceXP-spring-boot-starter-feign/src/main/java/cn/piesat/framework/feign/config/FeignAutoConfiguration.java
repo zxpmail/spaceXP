@@ -43,7 +43,7 @@ public class FeignAutoConfiguration{
         return new OptionalDecoder(new ResponseEntityDecoder(new ResultDecoder(new SpringDecoder(this.messageConverters, customizers),commonProperties.getApiMapResultEnable())));
     }
 
-    @Bean
+   // @Bean
     public FeignExceptionHandler feignExceptionHandler(){
         return  new FeignExceptionHandler();
     }
