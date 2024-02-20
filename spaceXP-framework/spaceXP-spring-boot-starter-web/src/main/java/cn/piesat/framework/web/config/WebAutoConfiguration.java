@@ -1,7 +1,7 @@
 package cn.piesat.framework.web.config;
 
 import cn.piesat.framework.common.properties.CommonProperties;
-import cn.piesat.framework.common.properties.ModuleProperties;
+
 import cn.piesat.framework.web.core.LoginUserHandlerMethodArgumentResolver;
 
 import cn.piesat.framework.web.core.TimeCostBeanPostProcessor;
@@ -16,6 +16,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -43,18 +44,20 @@ import java.util.List;
  * @author zhouxp
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties({WebProperties.class, ModuleProperties.class})
+@EnableConfigurationProperties({WebProperties.class})
 public class WebAutoConfiguration implements WebMvcConfigurer {
 
+    @Value("${spring.application.name:test}")
+    private String module;
     @Bean
-    @ConditionalOnProperty(name = "space.web.cost-enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.web.cost-enable", havingValue = "true")
     public TimeCostBeanPostProcessor timeCostBeanPostProcessor(){
         return new TimeCostBeanPostProcessor();
     }
     @ConditionalOnProperty(name = "space.web.web-exception-enable", havingValue = "true",matchIfMissing = true)
     @Bean
-    public WebExceptionHandler exceptionHandler(ModuleProperties module){
-        return new WebExceptionHandler(module.getModule());
+    public WebExceptionHandler exceptionHandler(){
+        return new WebExceptionHandler(module);
     }
 
     @ConditionalOnProperty(name = "space.web.return-value-enable", havingValue = "true",matchIfMissing = true)
@@ -83,7 +86,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "space.web.date-formatter-enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.web.date-formatter-enable", havingValue = "true")
     @ConditionalOnMissingBean
     public Jackson2ObjectMapperBuilder objectMapperBuilder(WebProperties webProperties) {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()

@@ -121,19 +121,89 @@ public final class CommonProperties {
 
         public  static String rpcErrorValue ="网络异常";
 
-        public static Integer getRpcError() {
+        public static Integer notFound =404;
+
+        public static Integer methodNotAllowed =405;
+
+        public static Integer unsupportedMediaType =415;
+
+        public static Integer paramErrorCode =100;
+
+        public  Integer getNotFound() {
+            return notFound;
+        }
+
+        public  void setNotFound(Integer notFound) {
+            ResponseCode.notFound = notFound;
+        }
+
+        public  Integer getMethodNotAllowed() {
+            return methodNotAllowed;
+        }
+
+        public  void setMethodNotAllowed(Integer methodNotAllowed) {
+            ResponseCode.methodNotAllowed = methodNotAllowed;
+        }
+
+        public  Integer getUnsupportedMediaType() {
+            return unsupportedMediaType;
+        }
+
+        public  void setUnsupportedMediaType(Integer unsupportedMediaType) {
+            ResponseCode.unsupportedMediaType = unsupportedMediaType;
+        }
+
+        public  Integer getParamErrorCode() {
+            return paramErrorCode;
+        }
+
+        public  void setParamErrorCode(Integer paramErrorCode) {
+            ResponseCode.paramErrorCode = paramErrorCode;
+        }
+
+        public  String getParamErrorValue() {
+            return paramErrorValue;
+        }
+
+        public  void setParamErrorValue(String paramErrorValue) {
+            ResponseCode.paramErrorValue = paramErrorValue;
+        }
+
+        public  Integer getBusinessErrorCode() {
+            return businessErrorCode;
+        }
+
+        public  void setBusinessErrorCode(Integer businessErrorCode) {
+            ResponseCode.businessErrorCode = businessErrorCode;
+        }
+
+        public  String getBusinessErrorValue() {
+            return businessErrorValue;
+        }
+
+        public  void setBusinessErrorValue(String businessErrorValue) {
+            ResponseCode.businessErrorValue = businessErrorValue;
+        }
+
+        public  static String paramErrorValue ="参数错误";
+
+        public static Integer businessErrorCode =400;
+
+        public  static String businessErrorValue ="业务异常";
+
+        public  Integer getRpcError() {
             return rpcError;
         }
 
-        public static void setRpcError(Integer rpcError) {
+        public  void setRpcError(Integer rpcError) {
             ResponseCode.rpcError = rpcError;
         }
 
-        public static String getRpcErrorValue() {
+        public  String getRpcErrorValue() {
             return rpcErrorValue;
         }
 
-        public static void setRpcErrorValue(String rpcErrorValue) {
+        public  void setRpcErrorValue(String rpcErrorValue) {
             ResponseCode.rpcErrorValue = rpcErrorValue;
         }
 
