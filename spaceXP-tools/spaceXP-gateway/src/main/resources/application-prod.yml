@@ -1,0 +1,47 @@
+server:
+  port: 8001
+spring:
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+    mvc:
+      pathmatch:
+        matching-strategy: ANT_PATH_MATCHER
+    redis:
+      host: 192.168.2.100
+      port: 36379
+      database: 1
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+          lower-case-service-id: true
+      routes:
+        - id: admin
+          uri: lb://yk-admin
+          predicates:
+            - Path=/*/admin/**
+          filters:
+            - StripPrefix=1
+            - SwaggerHeaderFilter
+        - id: log
+          uri: lb://yk-log
+          predicates:
+            - Path=/*/log/**
+          filters:
+            - StripPrefix=1
+            - SwaggerHeaderFilter
+login:
+  ignorePaths:
+    - "/admin/user/getLoginPageInfo"
+    - "/admin/user/login"
+    - "/admin/user/publicKey"
+    - "v3"
+    - "swagger-resources"
+    - "/doc.html"
+    - "/swagger-ui.html"
+    - "/log/log/add"
+    - "goview"
