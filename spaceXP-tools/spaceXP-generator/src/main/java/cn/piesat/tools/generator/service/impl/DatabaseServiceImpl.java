@@ -30,6 +30,7 @@ import java.util.Objects;
 public class DatabaseServiceImpl extends ServiceImpl<DatabaseMapper, DatabaseDO> implements DatabaseService {
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<DatabaseVO> all() {
         List<DatabaseDO> list = list(Wrappers.<DatabaseDO>lambdaQuery().select(DatabaseDO::getId, DatabaseDO::getDbType, DatabaseDO::getDriverClassName, DatabaseDO::getUrl));
