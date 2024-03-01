@@ -14,6 +14,7 @@
     </properties>
     <modules>
         <module>spaceXP-generator</module>
+        <module>spaceXP-gateway</module>
     </modules>
     <dependencyManagement>
         <dependencies>
