@@ -1,9 +1,9 @@
 package cn.piesat.dynamic.datasource.service;
 
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.annotation.Resource;
 
 /**
  * <p/>
