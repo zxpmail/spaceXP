@@ -11,6 +11,7 @@ spring:
       host: 192.168.2.100
       port: 36379
       database: 1
+    web-application-type: reactive
   application:
     name: gateway
   cloud:
