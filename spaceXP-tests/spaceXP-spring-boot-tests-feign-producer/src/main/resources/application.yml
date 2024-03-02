@@ -1,3 +1,4 @@
+
 spring:
   application:
     name: producer
@@ -20,6 +21,7 @@ server:
     enabled: true
     mime-types: application/json
     min-response-size: 1
+  port: 8081
 space:
   web:
     date-formatter-enable: true

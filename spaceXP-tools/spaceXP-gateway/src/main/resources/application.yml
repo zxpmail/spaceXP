@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: yk-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      # 网关路由
+      routes:
+        - id: 系统服务
+          uri: lb://producer
+          predicates:
+            - Path=/producer/**
+          filters:
+            - StripPrefix=1
+  main:
+    web-application-type: reactive
+# knife4j 网关聚合
+knife4j:
+  gateway:
+    enabled: true
+    # 指定服务发现的模式聚合微服务文档，并且是默认 default 分组
+    strategy: discover
+    discover:
+      # OpenAPI 3.0 规范
+      version: openapi3
+      enabled: true
+login:
+  ignorePaths:
+    - "v3"
+    - "/doc.html"
+
