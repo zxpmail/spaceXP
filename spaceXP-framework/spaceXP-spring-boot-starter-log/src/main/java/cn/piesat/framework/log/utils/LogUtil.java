@@ -35,6 +35,10 @@ import java.util.HashMap;
 
 import java.util.Map;
 
+import static cn.piesat.framework.common.constants.CommonConstants.BROWSER;
+import static cn.piesat.framework.common.constants.CommonConstants.IP;
+import static cn.piesat.framework.common.constants.CommonConstants.OS;
+
 /**
  * <p/>
  * {@code @description}  :日志工具类
@@ -145,17 +149,24 @@ public class LogUtil {
         }
 
         opLogEntity.setRequestInfo(JSON.toJSONString(request.getParameterMap()));
-
-        String ip = ServletUtil.getClientIP(request);
+        String os = request.getHeader(OS);
+        String browser = request.getHeader(BROWSER);
+        String ip = request.getHeader(IP);
+        if (!StringUtils.hasText(ip)) {
+            ip = ServletUtil.getClientIP(request);
+        }
         opLogEntity.setIp(ip);
         opLogEntity.setLocation(ip);
         opLogEntity.setRequestMethod(request.getMethod());
-        String uaStr = request.getHeader("user-agent");
-        if (StringUtils.hasText(uaStr)) {
-            opLogEntity.setBrowser(UserAgentUtil.parse(uaStr).getBrowser().toString());
-            opLogEntity.setOs(UserAgentUtil.parse(uaStr).getOs().toString());
+        if (!StringUtils.hasText(OS)) {
+            String uaStr = request.getHeader("user-agent");
+            if (StringUtils.hasText(uaStr)) {
+                browser = UserAgentUtil.parse(uaStr).getBrowser().toString();
+                os = UserAgentUtil.parse(uaStr).getOs().toString();
+            }
         }
-
+        opLogEntity.setBrowser(browser);
+        opLogEntity.setOs(os);
         //访问目标方法的参数 可动态改变参数值
         Object[] args = joinPoint.getArgs();
         //获取执行的方法名
@@ -197,7 +208,7 @@ public class LogUtil {
             opLogEntity.setType(LogConstants.success);
             try {
                 opLogEntity.setResponseData(JSON.toJSONString(ret));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 opLogEntity.setResponseData(JSON.toJSONString(LogConstants.INVALID_RET));
             }

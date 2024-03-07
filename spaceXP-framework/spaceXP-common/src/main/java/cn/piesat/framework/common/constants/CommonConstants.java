@@ -61,4 +61,10 @@ public interface CommonConstants {
     String UNDERLINE="_";
 
     String COLON=":";
+
+    String OS ="os";
+
+    String BROWSER="browser";
+
+    String IP="ip";
 }
