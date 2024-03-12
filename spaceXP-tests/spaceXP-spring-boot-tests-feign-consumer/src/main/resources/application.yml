@@ -1,5 +1,7 @@
 server:
   port: 8078
+  servlet:
+    context-path: /consumer
 spring:
   mvc:
     path-match:
@@ -26,6 +28,7 @@ feign:
       default:
         connectTimeout: 10000
         readTimeout: 10000
+        loggerLevel: full
 space:
   web:
     date-formatter-enable: true

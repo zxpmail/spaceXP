@@ -28,6 +28,21 @@ public class GatewayProperties {
     private List<String> ignorePaths;
 
     /**
+     * 重定向地址
+     */
+    private String redirectUrl;
+
+    /**
+     * 没有登录是否进行网页重定向
+     */
+    private Boolean isRedirect =false;
+
+    /**
+     * 是否鉴权
+     */
+    private Boolean isAuthentication = true ;
+
+    /**
      * token配置信息
      */
     private TokenProperties tokenProperties =new TokenProperties();

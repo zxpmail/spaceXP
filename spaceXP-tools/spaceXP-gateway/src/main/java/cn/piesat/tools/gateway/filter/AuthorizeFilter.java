@@ -17,9 +17,11 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -42,6 +44,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
     private final GatewayProperties gatewayProperties;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
     @Resource
     private RedisService redisService;
 
@@ -51,6 +54,9 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        if(gatewayProperties.getIsAuthentication()){
+            return chain.filter(exchange);
+        }
         ServerHttpRequest request = exchange.getRequest();
 
         ServerHttpResponse response = exchange.getResponse();
@@ -70,7 +76,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         //  检查白名单（配置）
         if (!CollectionUtils.isEmpty(gatewayProperties.getIgnorePaths())) {
             for (String ignorePath : gatewayProperties.getIgnorePaths()) {
-                if (uri.contains(ignorePath)) {
+                if (PATH_MATCHER.match(ignorePath,uri)) {
                     mutableReq = header
                             .header(CommonConstants.URI, path)
                             .header(CommonConstants.SASS, sass)
@@ -83,10 +89,17 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         if (!StringUtils.hasText(token)) {
             token = request.getQueryParams().getFirst(CommonConstants.TOKEN);
         }
-        if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            return getVoidMono(response);
+        if(gatewayProperties.getIsRedirect()){
+            if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
+               return gotoLoginPage(response);
+            }
+        }else {
+            if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                return getVoidMono(response);
+            }
         }
+
         Object userId =null;
         try {
             userId = JwtUtils.getValue(token, gatewayProperties.getTokenProperties().getTokenSignKey());
@@ -125,6 +138,13 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
         ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();
         return chain.filter(mutableExchange);
+    }
+
+    private Mono<Void>gotoLoginPage(ServerHttpResponse response){
+        response.getHeaders().set(HttpHeaders.LOCATION,gatewayProperties.getRedirectUrl() );
+        response.setStatusCode(HttpStatus.SEE_OTHER);
+        response.getHeaders().add("Content-Type", "text/plain;charset=UTF-8");
+        return response.setComplete();
     }
 
     private Mono<Void> getVoidMono(ServerHttpResponse response) {

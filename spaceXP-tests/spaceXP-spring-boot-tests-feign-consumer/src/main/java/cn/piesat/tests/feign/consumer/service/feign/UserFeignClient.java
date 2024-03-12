@@ -24,7 +24,7 @@ import java.util.Map;
  * <b>@create:</b> 2022/10/9 10:33.
  */
 @HasApiResult
-@FeignClient(name = "producer" ,configuration = FeignRequestInterceptor.class)
+@FeignClient(name = "producer" ,path ="producer", configuration = FeignRequestInterceptor.class)
 public interface UserFeignClient {
     @ApiOperation("分页查询")
     @PostMapping("/user/list")

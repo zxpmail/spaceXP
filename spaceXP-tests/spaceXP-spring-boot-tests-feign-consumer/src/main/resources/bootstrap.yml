@@ -1,15 +1,15 @@
-spring:
-  application:
-    name: consumer
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 127.0.0.1:8848
-      config:
-        server-addr: 127.0.0.1:8848
-        prefix: consumer
-        file-extension: yaml
-        namespace: 1924abb2-b6ba-4648-8d75-6bf447129390
-space:
-  common:
-    api-map-result-enable: true
+#spring:
+#  application:
+#    name: consumer
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 127.0.0.1:8848
+#      config:
+#        server-addr: 127.0.0.1:8848
+#        prefix: consumer
+#        file-extension: yaml
+#        namespace: 1924abb2-b6ba-4648-8d75-6bf447129390
+#space:
+#  common:
+#    api-map-result-enable: true

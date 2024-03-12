@@ -1,4 +1,7 @@
-
+server:
+  port: 8086
+  servlet:
+    context-path: /producer
 spring:
   application:
     name: producer
@@ -16,11 +19,6 @@ spring:
     nacos:
       discovery:
         server-addr: http://localhost:8848/
-server:
-  compression:
-    enabled: true
-    mime-types: application/json
-    min-response-size: 1
 space:
   web:
     date-formatter-enable: true
