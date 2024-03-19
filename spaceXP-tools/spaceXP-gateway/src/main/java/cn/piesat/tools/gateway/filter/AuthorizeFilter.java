@@ -4,10 +4,12 @@ package cn.piesat.tools.gateway.filter;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.model.dto.JwtUser;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
+import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.framework.common.utils.JwtUtils;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.tools.gateway.constant.GatewayConstant;
+import cn.piesat.tools.gateway.enums.GatewayResponseEnum;
 import cn.piesat.tools.gateway.properties.GatewayProperties;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -91,12 +93,11 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         }
         if(gatewayProperties.getIsRedirect()){
             if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
-               return gotoLoginPage(response);
+               return getVoidMono(response, GatewayResponseEnum.REDIRECT);
             }
         }else {
             if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
-                return getVoidMono(response);
+                return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
             }
         }
 
@@ -104,12 +105,12 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         try {
             userId = JwtUtils.getValue(token, gatewayProperties.getTokenProperties().getTokenSignKey());
         } catch (Exception ex) {
-            return getVoidMono(response);
+            return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
         }
         //保证同一用户登录在不同窗口登录一次
         Object checkToken = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + "_check_" + userId);
         if (ObjectUtils.isEmpty(checkToken) || !token.equalsIgnoreCase(checkToken.toString())) {
-            return getVoidMono(response);
+            return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
         }
 
         Object object = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + userId);
@@ -117,7 +118,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         try {
             user = JSON.parseObject(object.toString(), JwtUser.class);
         } catch (Exception ex) {
-            return getVoidMono(response);
+            return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
         }
 
 
@@ -140,19 +141,13 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         return chain.filter(mutableExchange);
     }
 
-    private Mono<Void>gotoLoginPage(ServerHttpResponse response){
-        response.getHeaders().set(HttpHeaders.LOCATION,gatewayProperties.getRedirectUrl() );
-        response.setStatusCode(HttpStatus.SEE_OTHER);
-        response.getHeaders().add("Content-Type", "text/plain;charset=UTF-8");
-        return response.setComplete();
-    }
-
-    private Mono<Void> getVoidMono(ServerHttpResponse response) {
+    private Mono<Void> getVoidMono(ServerHttpResponse response, IBaseResponse iBaseResponse) {
         response.getHeaders().add(GatewayConstant.HEADER_NAME, GatewayConstant.HEADER_VALUE);
         try {
             response.setStatusCode(HttpStatus.OK);
             DataBuffer dataBuffer = response.bufferFactory()
-                    .wrap(objectMapper.writeValueAsString(ApiResult.fail(CommonResponseEnum.TOKEN_INVALID)).getBytes());
+                    .wrap(objectMapper.writeValueAsString(ApiResult.fail(iBaseResponse.getCode(),iBaseResponse.getMessage())).getBytes());
+
             return response.writeWith(Flux.just(dataBuffer));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
