@@ -15,6 +15,7 @@ public enum GatewayResponseEnum implements IBaseResponse {
      * 没有菜单权限
      */
     NO_MENU_PERMISSION(1000,"没有权限"),
+    REDIRECT(50000,"重定向"),
     ;
     /**
     响应状态码

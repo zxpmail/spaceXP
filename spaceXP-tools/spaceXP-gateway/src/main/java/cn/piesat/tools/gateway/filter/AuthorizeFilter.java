@@ -9,7 +9,7 @@ import cn.piesat.framework.common.model.vo.ApiResult;
 import cn.piesat.framework.common.utils.JwtUtils;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.tools.gateway.constant.GatewayConstant;
-import cn.piesat.tools.gateway.enums.GatewayResponseEnum;
+import cn.piesat.tools.gateway.model.enums.GatewayResponseEnum;
 import cn.piesat.tools.gateway.properties.GatewayProperties;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
