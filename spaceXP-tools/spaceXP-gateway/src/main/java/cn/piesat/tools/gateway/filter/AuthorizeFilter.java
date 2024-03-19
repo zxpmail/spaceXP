@@ -18,8 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -143,18 +141,16 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
     private Mono<Void> getVoidMono(ServerHttpResponse response, IBaseResponse iBaseResponse) {
         response.getHeaders().add(GatewayConstant.HEADER_NAME, GatewayConstant.HEADER_VALUE);
+        response.setStatusCode(HttpStatus.OK);
         try {
-            response.setStatusCode(HttpStatus.OK);
-            DataBuffer dataBuffer = response.bufferFactory()
-                    .wrap(objectMapper.writeValueAsString(ApiResult.fail(iBaseResponse.getCode(),iBaseResponse.getMessage())).getBytes());
-
-            return response.writeWith(Flux.just(dataBuffer));
+            String responseString = objectMapper.writeValueAsString(ApiResult.fail(iBaseResponse.getCode(), iBaseResponse.getMessage()));
+            // 设置响应体，并确保资源管理
+            return response.writeWith(Flux.just(response.bufferFactory().wrap(responseString.getBytes())));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             log.error(CommonConstants.MESSAGE, GatewayConstant.MODULE, e.getMessage());
-            return null;
+            return Mono.error(e);
         }
-
     }
 
     @Override
