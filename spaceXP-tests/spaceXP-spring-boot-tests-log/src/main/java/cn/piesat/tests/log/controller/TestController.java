@@ -6,11 +6,15 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.common.model.enums.BusinessEnum;
 import cn.piesat.tests.log.service.TestService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -47,7 +51,7 @@ public class TestController {
 
     @OpLog(op = BusinessEnum.CLEAN,description = "测试")
     @PostMapping(value = "/upload")
-    public void upload(MultipartFile file)  {
+    public void upload(@RequestPart @RequestParam(value = "file" ) MultipartFile[] file)  {
         log.error("log 日志1");
         log.info("log 日志2 ");
         throw new BaseException(CommonResponseEnum.ERROR);

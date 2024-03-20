@@ -1,10 +1,18 @@
-
+spring:
+  application:
+    name: log
+  servlet:
+    multipart:
+      max-file-size: 600GB
+      max-request-size: 600GB
+      enabled: true
+      file-size-threshold: 600GB
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
 space:
   log:
     log-flag: 1
 logging:
   level:
     root: info
-spring:
-  profiles:
-    active: dev
