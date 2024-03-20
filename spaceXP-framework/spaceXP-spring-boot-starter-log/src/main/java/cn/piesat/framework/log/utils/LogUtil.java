@@ -163,13 +163,21 @@ public class LogUtil {
         opLogEntity.setClassPath(joinPoint.getTarget().getClass().getName());
         opLogEntity.setActionMethod(joinPoint.getSignature().getName());
 
-        //
-        if (args.length != 0) {
-            try {
-                opLogEntity.setParams(JSON.toJSONString(args));
-            } catch (Exception e) {
-                e.printStackTrace();
-                opLogEntity.setParams(JSON.toJSONString(LogConstants.INVALID_PARAMETER));
+        if (args != null && args.length != 0) {
+            boolean isFile = false;
+            for (Object arg : args) {
+                if (arg instanceof MultipartFile || arg instanceof MultipartFile[]) {
+                    isFile = true;
+                    break;
+                }
+            }
+            if (!isFile) {
+                try {
+                    opLogEntity.setParams(JSON.toJSONString(args));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    opLogEntity.setParams(JSON.toJSONString(LogConstants.INVALID_PARAMETER));
+                }
             }
 
         }
