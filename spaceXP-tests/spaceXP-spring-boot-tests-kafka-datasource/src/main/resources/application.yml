@@ -1,0 +1,36 @@
+spring:
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+space:
+  host: 192.168.2.114:9092
+  kafka:
+    server:
+      server1:
+        consumer: #kafka消费端核心配置
+          "[bootstrap.servers]": ${kafka.host}
+          "[auto.commit.interval.ms]": 1000
+        consumerExtra: #消费端工厂配置，可设置简单的参数，也可以直接设置工厂
+          one:  # 实例化到spring中的beanName
+            ackDiscarded: true
+            pollTimeout: 4000
+            factoryFilter:
+              serializerClass: com.suihao.entity.TestDto
+              filter:
+                name: zhangsan,lisi
+                msg: "今天,未来"
+          one22:  # 实例化到spring中的beanName
+            ackDiscarded: true
+            pollTimeout: 4000
+            factoryFilter:
+              strategy: com.suihao.config.kafkaconfig.factorystrategy.MyCustFacStrategy
+
+        producerConf:
+          "[bootstrap.servers]": ${kafka.host}
+          "[retries]": 2
+        producerBeanName: pro01  #生产端需要特别设置beanName
+      server2:
+        producer:
+          "[bootstrap.servers]": ${kafka.host}
+          "[retries]": 3
+        producerBeanName: pro02  #生产端需要特别设置beanName
