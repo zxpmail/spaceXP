@@ -14,6 +14,7 @@ import java.util.Map;
  *
  * @author zhouxp
  */
+@SuppressWarnings("rawtypes")
 @Data
 public class FactoryFilterEntity {
     /**
@@ -23,7 +24,7 @@ public class FactoryFilterEntity {
     /**
      * 指定自定义策略
      */
-    private Class<? extends RecordFilterStrategy<?,?>> strategy;
+    private Class<? extends RecordFilterStrategy > strategy;
     /**
      * 过滤的字段集合，key为要对比的字段，value为比较的值，支持逗号分隔
      */

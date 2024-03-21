@@ -1,8 +1,8 @@
 package cn.piesat.framework.kafka.datasource.model;
 
 import lombok.Data;
-import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.listener.GenericMessageListenerContainer;
 
 /**
  * <p/>
@@ -23,7 +23,7 @@ public class ExtraEntity {
     /**
      * 消费者自定义消费工厂
      */
-    private Class<? extends KafkaListenerContainerFactory<?>> consumerFactory;
+    private Class<? extends GenericMessageListenerContainer<?,?>> consumerFactory;
 
     /**
      * 消息拉取超时时间
