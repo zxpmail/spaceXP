@@ -27,6 +27,7 @@
         <module>spaceXP-spring-boot-starter-permission-data</module>
         <module>spaceXP-spring-boot-starter-multi-tenant</module>
         <module>spaceXP-spring-boot-starter-dynamic-datasource</module>
+        <module>spaceXP-spring-boot-starter-kafka-datasource</module>
     </modules>
     <dependencies>
         <dependency>
