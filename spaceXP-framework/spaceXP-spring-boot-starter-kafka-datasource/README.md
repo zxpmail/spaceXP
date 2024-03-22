@@ -1,23 +1,22 @@
 # spaceXP
 
 #### 介绍
-动态数据源组件：动态增加数据源组件
+动态kafka数据源组件：根据配置文件动态增加kafka数据源组件
 
 #### 软件架构
-动态数据源组件：动态增加数据源组件
+kafka动态数据源组件：根据配置文件动态增加kafka数据源组件
 
 #### 安装教程
 直接生成jar包
 #### 使用说明
     <dependency>
         <groupId>cn.piesat.space</groupId>
-        <artifactId>spaceXP-spring-boot-starter-dynamic-datasource</artifactId>
+        <artifactId>spaceXP-spring-boot-starter-kafka-datasource</artifactId>
         <version>2.0.0</version>
     </dependency>
 
 在项目的配置文件中加入
-space.datasource 为Map<String,DataSourceEntity> 类型配置数据源map，自动增加数据源用@DS进行注解分不同数据源
-例子参见spaceXP-spring-boot-tests-dynamic-datasource
+例子参见spaceXP-spring-boot-tests-kafka-datasource
 
 
 

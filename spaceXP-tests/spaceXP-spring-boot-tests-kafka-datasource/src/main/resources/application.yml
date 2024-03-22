@@ -10,7 +10,7 @@ space:
           "[bootstrap.servers]": 192.168.2.114:9092
           "[auto.commit.interval.ms]": 1000
         consumerExtra: #消费端工厂配置
-          consumer10:  # 消费者实例化到spring中的beanName
+          consumer10:  # 消费者实例化到spring中的beanName @KafkaListener(topics = {"test10"}, containerFactory = "consumer10", groupId = "group")
             ackDiscarded: true
             pollTimeout: 4000
             factoryFilter:

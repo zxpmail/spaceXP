@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  */
 @EnableKafka
 @Component
-@DependsOn("kafkaCreator")
+@DependsOn("kafkaCreator")//必须，不然出错
 public class TestConsumer {
 
     @KafkaListener(topics = {"test10"}, containerFactory = "consumer10", groupId = "group")
