@@ -6,8 +6,6 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.common.model.enums.BusinessEnum;
 import cn.piesat.tests.log.service.TestService;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
