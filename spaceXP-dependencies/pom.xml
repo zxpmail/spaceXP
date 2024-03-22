@@ -28,6 +28,7 @@
         <guava.version>33.0.0-jre</guava.version>
         <snakeyaml.version>2.2</snakeyaml.version>
         <fastjson2-version>2.0.46</fastjson2-version>
+        <fastjson-version>2.0.13</fastjson-version>
         <knife4j.version>4.4.0</knife4j.version>
         <jjwt-api.version>0.11.5</jjwt-api.version>
         <commons-logging-version>1.2</commons-logging-version>
@@ -68,6 +69,11 @@
                 <version>${spring.boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson-version}</version>
             </dependency>
             <dependency>
                 <groupId>io.swagger.core.v3</groupId>
@@ -218,6 +224,11 @@
             <dependency>
                 <groupId>cn.piesat.space</groupId>
                 <artifactId>spaceXP-spring-boot-starter-dynamic-datasource</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.piesat.space</groupId>
+                <artifactId>spaceXP-spring-boot-starter-kafka-datasource</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
