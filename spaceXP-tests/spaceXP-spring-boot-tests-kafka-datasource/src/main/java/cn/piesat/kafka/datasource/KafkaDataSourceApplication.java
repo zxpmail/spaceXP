@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zhouxp
  */
 @SpringBootApplication
-
 public class KafkaDataSourceApplication {
     public static void main(String[] args) {
         SpringApplication.run(KafkaDataSourceApplication.class,args);

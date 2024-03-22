@@ -1,10 +1,11 @@
 package cn.piesat.framework.kafka.datasource.config;
 
-import cn.piesat.framework.kafka.datasource.core.KafkaDatasourceCreator;
+import cn.piesat.framework.kafka.datasource.core.KafkaCreator;
 import cn.piesat.framework.kafka.datasource.properties.KafkaConfigProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 
 
 /**
@@ -19,8 +20,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({KafkaConfigProperties.class})
 public class KafkaDatasourceConfiguration {
     @Bean
-    public KafkaDatasourceCreator kafkaDatasourceCreator(KafkaConfigProperties kafkaConfigProperties){
-        return new KafkaDatasourceCreator(kafkaConfigProperties);
+    public KafkaCreator kafkaCreator(KafkaConfigProperties kafkaConfigProperties){
+        return new KafkaCreator(kafkaConfigProperties);
     }
 
 }

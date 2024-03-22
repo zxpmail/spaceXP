@@ -3,34 +3,40 @@ spring:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
 space:
-  host: 192.168.2.114:9092
   kafka:
-    server:
+    servers:
       server1:
         consumer: #kafka消费端核心配置
-          "[bootstrap.servers]": ${kafka.host}
+          "[bootstrap.servers]": 192.168.2.114:9092
           "[auto.commit.interval.ms]": 1000
-        consumerExtra: #消费端工厂配置，可设置简单的参数，也可以直接设置工厂
-          one:  # 实例化到spring中的beanName
+        consumerExtra: #消费端工厂配置
+          consumer10:  # 消费者实例化到spring中的beanName
             ackDiscarded: true
             pollTimeout: 4000
             factoryFilter:
-              serializerClass: com.suihao.entity.TestDto
+              serializerClass: cn.piesat.kafka.datasource.model.TestDTO
               filter:
-                name: zhangsan,lisi
-                msg: "今天,未来"
-          one22:  # 实例化到spring中的beanName
+                name: zhangSan,liSi
+                msg: "hello world"
+          consumer11:  # 消费者实例化到spring中的beanName
             ackDiscarded: true
             pollTimeout: 4000
             factoryFilter:
-              strategy: com.suihao.config.kafkaconfig.factorystrategy.MyCustFacStrategy
+              strategy: cn.piesat.kafka.datasource.strategy.MyStrategy
 
-        producerConf:
-          "[bootstrap.servers]": ${kafka.host}
+        producer:
+          "[bootstrap.servers]": 192.168.2.114:9092
           "[retries]": 2
-        producerBeanName: pro01  #生产端需要特别设置beanName
+        producerBeanName: producer10  #生产者实例化到spring中的beanName
       server2:
         producer:
-          "[bootstrap.servers]": ${kafka.host}
+          "[bootstrap.servers]": 192.168.2.114:9092
           "[retries]": 3
-        producerBeanName: pro02  #生产端需要特别设置beanName
+        producerBeanName: producer20  #生产者实例化到spring中的beanName
+        consumer: #kafka消费端核心配置
+          "[bootstrap.servers]": 192.168.2.114:9092
+          "[auto.commit.interval.ms]": 1000
+        consumerExtra: #消费端工厂配置
+          consumer20:  # 消费者实例化到spring中的beanName
+            ackDiscarded: true
+            pollTimeout: 4000
