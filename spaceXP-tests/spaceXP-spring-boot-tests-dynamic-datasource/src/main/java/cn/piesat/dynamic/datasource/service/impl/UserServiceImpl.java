@@ -31,10 +31,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
 
     @Override
-    @DS("master")
+    @DS
     @DynamicTableName
     public UserDO info(Long id) {
-        return getById(id);
+        throw new RuntimeException("测试！");
+        //return getById(id);
     }
     @Override
     public Boolean add(UserDO userDO) {
