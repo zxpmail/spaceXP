@@ -104,6 +104,9 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
         String userId = "-1";
         if (!ObjectUtils.isEmpty(request)) {
             userId = request.getHeader(CommonConstants.USER_ID);
+            if(!StringUtils.hasText(userId)){
+                userId = "-1";
+            }
         }
         if (metaObject.hasGetter(updateTime) && metaObject.hasSetter(updateTime)) {
             metaObject.setValue(updateTime, null);
