@@ -6,6 +6,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.common.model.enums.BusinessEnum;
 import cn.piesat.tests.log.service.TestService;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -33,7 +34,7 @@ public class TestController {
     @GetMapping(value = "/log")
     @OpLog(op = BusinessEnum.CLEAN,description = "测试")
     @Async
-    public void log() throws InterruptedException {
+    public void log()  {
         log.error("log 日志1");
         log.info("log 日志2 ");
         throw new BaseException(CommonResponseEnum.ERROR);
@@ -47,17 +48,18 @@ public class TestController {
         throw new BaseException(CommonResponseEnum.ERROR);
     }
 
-    @OpLog(op = BusinessEnum.CLEAN,description = "测试")
-    @PostMapping(value = "/upload")
-    public void upload(@RequestPart @RequestParam(value = "file" ) MultipartFile[] file)  {
+    @OpLog(op = BusinessEnum.CLEAN,description = "批量文件上传")
+    @PostMapping(value = "/multiFileUpload")
+    @ApiImplicitParam(name = "file", value = "上传的文件", dataType = "java.io.File", required = true)
+    public void multiFileUpload(@RequestPart("file" ) MultipartFile[] file)  {
         log.error("log 日志1");
         log.info("log 日志2 ");
         throw new BaseException(CommonResponseEnum.ERROR);
     }
 
-    @OpLog(op = BusinessEnum.CLEAN,description = "测试")
-    @PostMapping(value = "/multiFileUpload")
-    public void upload(HttpServletRequest request)  {
+    @OpLog(op = BusinessEnum.CLEAN,description = "文件上传")
+    @PostMapping(value = "/upload")
+    public void upload(@RequestPart @RequestParam(value = "file" ) MultipartFile file)  {
         log.error("log 日志1");
         log.info("log 日志2 ");
         throw new BaseException(CommonResponseEnum.ERROR);
