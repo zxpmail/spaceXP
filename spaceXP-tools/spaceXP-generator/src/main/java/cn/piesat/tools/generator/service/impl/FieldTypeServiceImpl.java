@@ -6,6 +6,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
+import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.mapper.FieldTypeMapper;
 import cn.piesat.tools.generator.model.entity.FieldTypeDO;
 import cn.piesat.tools.generator.model.query.FieldTypeQuery;
@@ -62,7 +63,10 @@ public class FieldTypeServiceImpl extends ServiceImpl<FieldTypeMapper, FieldType
     @Override
     public Boolean add(FieldTypeVO fieldTypeVO) {
         repeat(fieldTypeVO);
-        return save(CopyBeanUtils.copy(fieldTypeVO,FieldTypeDO::new));
+        FieldTypeDO copy = CopyBeanUtils.copy(fieldTypeVO, FieldTypeDO::new);
+        assert copy != null;
+        copy.setDeleted(Constants.DEFAULT_DELETE);
+        return save(copy);
     }
 
     private void repeat(FieldTypeVO fieldTypeVO){

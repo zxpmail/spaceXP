@@ -8,6 +8,7 @@ import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
+import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
 import cn.piesat.tools.generator.model.dto.DataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
@@ -86,6 +87,8 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         datasourceTest(dataSourceDTO);
         repeat(dataSourceDTO);
         DataSourceDO copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceDO::new);
+        assert copy != null;
+        copy.setDeleted(Constants.DEFAULT_DELETE);
         return save(copy);
     }
 

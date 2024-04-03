@@ -6,6 +6,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
+import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.mapper.ProjectMapper;
 import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.entity.ProjectDO;
@@ -65,7 +66,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
         if(projectDTO.getBootVersion()==1){
             projectDTO.setSpringDoc(1);
         }
-        return save(CopyBeanUtils.copy(projectDTO,ProjectDO::new));
+        ProjectDO copy = CopyBeanUtils.copy(projectDTO, ProjectDO::new);
+        assert copy != null;
+        copy.setDeleted(Constants.DEFAULT_DELETE);
+        return save(copy);
     }
 
     private void repeat(ProjectDTO projectDTO){

@@ -4,6 +4,7 @@ import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
+import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.mapper.TableMapper;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
@@ -139,6 +140,7 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
             }else {
                 continue;
             }
+            tableDO.setDeleted(Constants.DEFAULT_DELETE);
             save(tableDO);
             List<TableFieldDO> aLlFieldsByDataSourceAndTables = importDataService.getALlFieldsByDataSourceAndTables(map, tableDO, databaseDO, dataSourceDO);
             tableFieldService.saveBatch(aLlFieldsByDataSourceAndTables);

@@ -4,6 +4,7 @@ package cn.piesat.tools.generator.service.impl;
 import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
+import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.mapper.DatabaseMapper;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
 import cn.piesat.tools.generator.model.vo.DatabaseVO;
@@ -42,7 +43,10 @@ public class DatabaseServiceImpl extends ServiceImpl<DatabaseMapper, DatabaseDO>
     @Override
     public Boolean add(DatabaseVO databaseVO) {
         repeat(databaseVO);
-        return save(CopyBeanUtils.copy(databaseVO,DatabaseDO::new));
+        DatabaseDO copy = CopyBeanUtils.copy(databaseVO, DatabaseDO::new);
+        assert copy != null;
+        copy.setDeleted(Constants.DEFAULT_DELETE);
+        return save(copy);
     }
 
     private void repeat(DatabaseVO databaseVO){
