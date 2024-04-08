@@ -121,6 +121,8 @@ public class TableServiceImpl extends ServiceImpl<TableMapper, TableDO> implemen
     }
 
     private final ImportDataService importDataService;
+
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Boolean add(List<TableDTO> tableList) {
         if(CollectionUtils.isEmpty(tableList)){

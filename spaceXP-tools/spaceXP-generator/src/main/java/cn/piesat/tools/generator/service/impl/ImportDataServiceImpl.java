@@ -112,8 +112,8 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setQueryType("=");
             f.setQueryFormType("text");
             f.setFormType("text");
-            if(Objects.isNull(f.getPrimaryPk())){
-                f.setPrimaryPk(0);
+            if (Objects.isNull(f.getPrimaryPk()) || f.getPrimaryPk().equals(0)) {
+                throw new RuntimeException(table.getTableName() + " 表没有主键，必须设置主键！");
             }
             return f;
         });
