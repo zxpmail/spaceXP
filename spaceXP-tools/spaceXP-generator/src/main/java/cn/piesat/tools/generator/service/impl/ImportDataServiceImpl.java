@@ -97,6 +97,13 @@ public class ImportDataServiceImpl implements ImportDataService {
             } else {
                 f.setLen(0);
             }
+            f.setFormRequired(0);
+            f.setSortType(0);
+            f.setFieldRepeat(0);
+            f.setQueryItem(1);
+            f.setDto(1);
+            f.setVo(1);
+            f.setGridList(1);
             f.setSort(rowNum);
             f.setAutoFill("DEFAULT");
             f.setFormItem(1);
@@ -104,6 +111,9 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setQueryType("=");
             f.setQueryFormType("text");
             f.setFormType("text");
+            if(Objects.isNull(f.getPrimaryPk())){
+                f.setPrimaryPk(0);
+            }
             return f;
         });
     }
