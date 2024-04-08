@@ -109,6 +109,26 @@ public class TableFieldDO extends BaseDO{
      * 查询项 0：否  1：是
      */
     private Integer queryItem;
+
+    /**
+     * 0不排序 1升序 2 降序
+     */
+    private Integer sortType;
+
+    /**
+     * DTO 1是0否
+     */
+    private Integer dto;
+
+    /**
+     * VO 1是 0否
+     */
+    private Integer vo;
+
+    /**
+     * 列表可显示 1是 0否
+     */
+    private Integer gridList;
     /**
      * 查询方式
      */
