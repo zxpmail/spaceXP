@@ -62,7 +62,8 @@ public class MybatisPlusConfig {
                 mybatisPlusConfigProperties.getCreateId(),
                 mybatisPlusConfigProperties.getUpdateId(),
                 mybatisPlusConfigProperties.getDeptId(),
-                mybatisPlusConfigProperties.getTenantId()
+                mybatisPlusConfigProperties.getTenantId(),
+                mybatisPlusConfigProperties.getDeleted()
         );
 
     }

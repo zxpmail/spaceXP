@@ -8,7 +8,6 @@ import cn.piesat.framework.permission.data.model.UserDataPermission;
 import cn.piesat.framework.permission.data.properties.DataPermissionProperties;
 import cn.piesat.framework.permission.data.utils.DataPermissionContextHolder;
 import com.baomidou.mybatisplus.extension.plugins.handler.DataPermissionHandler;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;

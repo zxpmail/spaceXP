@@ -3,6 +3,8 @@ package cn.piesat.framework.redis.core;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.redis.annotation.AccessLimit;
+
+import org.springframework.lang.NonNull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +39,12 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)  {
 
-        if (handler instanceof HandlerMethod handlerMethod) {
+        if (handler instanceof HandlerMethod ) {
             // 强转
             // 获取方法
+            HandlerMethod handlerMethod  = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             // 是否有AccessLimit注解
             if (!method.isAnnotationPresent(AccessLimit.class)) {

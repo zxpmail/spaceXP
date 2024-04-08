@@ -11,6 +11,12 @@
     <artifactId>spaceXP-spring-boot-starter-permission-data</artifactId>
     <name>${project.artifactId}</name>
     <url>https://gitee.com/q4uryetsxzryjt</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>cn.piesat.space</groupId>
