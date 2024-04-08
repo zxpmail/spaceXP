@@ -86,6 +86,8 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         datasourceTest(dataSourceDTO);
         repeat(dataSourceDTO);
         DataSourceDO copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceDO::new);
+        assert copy != null;
+        copy.setDeleted(0);
         return save(copy);
     }
 
