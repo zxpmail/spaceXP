@@ -25,6 +25,7 @@ public class BaseDO {
      * 是否删除
      */
     @TableLogic(value = "0",delval = "1")
+    @TableField(fill = FieldFill.INSERT)
     private Integer deleted;
 
     /**
