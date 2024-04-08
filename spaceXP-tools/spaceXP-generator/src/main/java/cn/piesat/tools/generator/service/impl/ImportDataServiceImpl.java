@@ -101,6 +101,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setSortType(0);
             f.setFieldRepeat(0);
             f.setQueryItem(1);
+            f.setGridSort(0);
             f.setDto(1);
             f.setVo(1);
             f.setGridList(1);
