@@ -43,4 +43,7 @@ public class UserDO implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
+    @TableField(fill = FieldFill.INSERT)
+    private Integer deleted;
+
 }
