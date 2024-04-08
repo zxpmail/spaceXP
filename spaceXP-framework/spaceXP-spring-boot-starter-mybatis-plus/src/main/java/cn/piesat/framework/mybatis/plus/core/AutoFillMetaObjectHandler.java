@@ -130,8 +130,8 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
             this.setFieldValByName(updateId, Long.parseLong(userId), metaObject);
         }
 
-        /**
-         * 增加外部填充
+        /*
+          增加外部填充
          */
         if(!ObjectUtils.isEmpty(autoFillMetaObjectService)){
             autoFillMetaObjectService.updateFill(this,metaObject);
