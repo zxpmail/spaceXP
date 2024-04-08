@@ -43,7 +43,10 @@ public class DatabaseServiceImpl extends ServiceImpl<DatabaseMapper, DatabaseDO>
     @Override
     public Boolean add(DatabaseVO databaseVO) {
         repeat(databaseVO);
-        return save(CopyBeanUtils.copy(databaseVO,DatabaseDO::new));
+        DatabaseDO copy = CopyBeanUtils.copy(databaseVO, DatabaseDO::new);
+        assert copy != null;
+        copy.setDeleted(0);
+        return save(copy);
     }
 
     private void repeat(DatabaseVO databaseVO){
