@@ -25,6 +25,8 @@ public class MybatisPlusConfigProperties {
 
     private String deptId="deptId"; //表数据创建者所属部门ID字段
 
+    private String deleted = "deleted";  //表数据逻辑删除字段 默认值0 删除为1
+
     private String dbType="mysql"; //操作数据库类型 如mysql、postgres等
 
     private String tenantId="tenantId";//租户ID

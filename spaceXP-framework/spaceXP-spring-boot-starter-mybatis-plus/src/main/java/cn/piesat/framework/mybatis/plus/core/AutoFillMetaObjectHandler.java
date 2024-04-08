@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -65,6 +66,14 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
      */
     private final String tenantId;
 
+    /**
+     * 逻辑删除标志
+     */
+    private final String deleted;
+
+    @Value("${mybatis-plus.global-config.db-config.logic-not-delete-value:0}")
+    private Integer deleteInitValue;
+
     @Override
     public void insertFill(MetaObject metaObject) {
         if (metaObject.hasGetter(createTime) && metaObject.hasSetter(createTime)) {
@@ -72,6 +81,10 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
         }
         if (metaObject.hasGetter(updateTime) && metaObject.hasSetter(updateTime)) {
             this.strictInsertFill(metaObject, updateTime, LocalDateTime::now, LocalDateTime.class);
+        }
+
+        if (metaObject.hasGetter(deleted) && metaObject.hasSetter(deleted)) {
+            metaObject.setValue(deleted, deleteInitValue);
         }
         HttpServletRequest request = ServletUtils.getRequest();
         fillValue(metaObject,createId, request,CommonConstants.USER_ID);
