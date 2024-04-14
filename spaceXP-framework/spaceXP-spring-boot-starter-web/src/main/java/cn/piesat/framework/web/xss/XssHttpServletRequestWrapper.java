@@ -1,6 +1,7 @@
 
 package cn.piesat.framework.web.xss;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,13 +16,19 @@ public class XssHttpServletRequestWrapper extends HttpServletRequestWrapper {
     @Override
     public String getHeader(String name) {
         String value = super.getHeader(name);
-        return HtmlUtils.htmlEscape(value);
+        if(StringUtils.hasText(value)) {
+            return HtmlUtils.htmlEscape(value);
+        }
+        return super.getHeader(name);
     }
 
     @Override
     public String getParameter(String name) {
         String value = super.getParameter(name);
-        return HtmlUtils.htmlEscape(value);
+        if(StringUtils.hasText(value)) {
+            return HtmlUtils.htmlEscape(value);
+        }
+        return super.getParameter(name);
     }
 
     @Override

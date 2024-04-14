@@ -113,12 +113,7 @@ public class TestController {
     @Data
     static
     class UserEntity {
-        private Integer userId;
-
         private String username;
-
-        private String password;
-
         private String mobile;
     }
 }
