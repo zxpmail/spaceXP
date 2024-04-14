@@ -10,4 +10,6 @@ space:
       message: msg
     response-code:
       success-code: 0
+  web:
+    xssEnable: true
 
