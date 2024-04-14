@@ -8,7 +8,11 @@ import cn.piesat.framework.web.core.TimeCostBeanPostProcessor;
 import cn.piesat.framework.web.core.UniformReturnValueAdvice;
 import cn.piesat.framework.web.core.WebExceptionHandler;
 import cn.piesat.framework.web.properties.WebProperties;
+import cn.piesat.framework.web.xss.XssFilter;
+import cn.piesat.framework.web.xss.XssStringJsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -16,23 +20,30 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 
 /**
@@ -107,6 +118,40 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
                         new JavaTimeModule(),
                         new ParameterNamesModule(),
                         new Jdk8Module());
+    }
+
+
+    @Bean
+    @ConditionalOnProperty(value = "space.web.xss-enable", havingValue = "true")
+    public FilterRegistrationBean<Filter> xssFilterRegistration(WebProperties webProperties) {
+        FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<>();
+        registration.setDispatcherTypes(DispatcherType.REQUEST);
+        registration.setFilter(new XssFilter());
+        String patterns = Optional.ofNullable(webProperties.getUrlPatterns())
+                .filter(StringUtils::hasText)
+                .orElse("/*");
+        String[] split = patterns.split(",");
+        registration.addUrlPatterns(split);
+        registration.setName("xssFilter");
+        registration.setOrder(FilterRegistrationBean.HIGHEST_PRECEDENCE);
+        Map<String, String> initParameters = new HashMap<>();
+        if(StringUtils.hasText(webProperties.getExcludes())){
+            initParameters.put("excludes", webProperties.getExcludes());
+        }
+        registration.setInitParameters(initParameters);
+        return registration;
+    }
+    @Bean
+    @ConditionalOnProperty(value = "space.web.xss-enable", havingValue = "true")
+    public ObjectMapper xssObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        //解析器
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+        //注册xss解析器
+        SimpleModule xssModule = new SimpleModule("XssStringJsonSerializer");
+        xssModule.addSerializer(new XssStringJsonSerializer());
+        objectMapper.registerModule(xssModule);
+        //返回
+        return objectMapper;
     }
 
 }

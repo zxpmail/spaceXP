@@ -59,4 +59,19 @@ public class WebProperties {
      */
     private List<String> ignorePackageOrClass;
 
+
+    /**
+     * 过滤开关
+     */
+    private Boolean xssEnable = true;
+    /**
+     * 排除链接（多个用逗号分隔）
+     */
+    private String excludes;
+
+    /**
+     * 匹配链接(多个用逗号分隔）
+     */
+    private String urlPatterns = "/*";
+
 }
