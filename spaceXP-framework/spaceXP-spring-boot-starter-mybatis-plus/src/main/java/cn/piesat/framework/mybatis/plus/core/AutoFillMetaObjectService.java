@@ -13,6 +13,8 @@ import org.apache.ibatis.reflection.MetaObject;
  * @author zhouxp
  */
 public interface AutoFillMetaObjectService {
-    void insertFill(MetaObjectHandler metaObjectHandler,MetaObject metaObject);
-    void updateFill(MetaObjectHandler metaObjectHandler,MetaObject metaObject);
+
+    default void insertFill(MetaObjectHandler metaObjectHandler,MetaObject metaObject){}
+    default void updateFill(MetaObjectHandler metaObjectHandler,MetaObject metaObject) {
+    }
 }
