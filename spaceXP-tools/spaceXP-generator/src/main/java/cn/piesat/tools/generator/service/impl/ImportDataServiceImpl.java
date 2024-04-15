@@ -22,6 +22,7 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p/>
@@ -56,7 +57,8 @@ public class ImportDataServiceImpl implements ImportDataService {
         }
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        return jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
+        AtomicReference<Boolean> hasPK = new AtomicReference<>(false);
+        List<TableFieldDO> query = jdbcTemplate.query(tableFieldsSql, (rs, rowNum) -> {
             TableFieldDO f = new TableFieldDO();
             f.setTableId(table.getId());
             f.setFieldName(rs.getString("column_name"));
@@ -79,6 +81,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             String key = rs.getString("column_key");
             if (StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key)) {
                 f.setPrimaryPk(1);
+                hasPK.set(true);
             } else {
                 f.setPrimaryPk(0);
             }
@@ -112,11 +115,12 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setQueryType("=");
             f.setQueryFormType("text");
             f.setFormType("text");
-            if (Objects.isNull(f.getPrimaryPk()) || f.getPrimaryPk().equals(0)) {
-                throw new RuntimeException(table.getTableName() + " 表没有主键，必须设置主键！");
-            }
             return f;
         });
+        if (!hasPK.get()) {
+            throw new RuntimeException(table.getTableName() + " 表没有主键，必须设置主键！");
+        }
+        return query;
     }
 
     private List<TableVO> getSqlByTable(DatabaseDO databaseDO, ImportDataSourceDTO importDataSourceDTO) {
