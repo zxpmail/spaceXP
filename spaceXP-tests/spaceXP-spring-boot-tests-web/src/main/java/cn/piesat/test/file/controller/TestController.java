@@ -3,7 +3,10 @@ package cn.piesat.test.file.controller;
 
 import cn.piesat.framework.common.annotation.LoginUser;
 import cn.piesat.framework.common.annotation.NoApiResult;
+import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.dto.JwtUser;
+import cn.piesat.framework.common.model.enums.BusinessEnum;
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
@@ -115,5 +118,11 @@ public class TestController {
     class UserEntity {
         private String username;
         private String mobile;
+    }
+
+    @PostMapping(value = "/upload")
+    public void upload(@RequestPart @RequestParam(value = "file" ) MultipartFile file)  {
+        log.error("log 日志1");
+        log.info("log 日志2 ");
     }
 }
