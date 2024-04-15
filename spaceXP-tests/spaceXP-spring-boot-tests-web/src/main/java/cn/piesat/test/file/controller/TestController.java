@@ -116,6 +116,7 @@ public class TestController {
     @Data
     static
     class UserEntity {
+        private Long id;
         private String username;
         private String mobile;
     }
@@ -124,5 +125,10 @@ public class TestController {
     public void upload(@RequestPart @RequestParam(value = "file" ) MultipartFile file)  {
         log.error("log 日志1");
         log.info("log 日志2 ");
+    }
+
+    @PostMapping(value = "/long2string")
+    public UserEntity long2string(@RequestBody UserEntity user)  {
+       return user;
     }
 }

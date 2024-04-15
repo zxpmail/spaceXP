@@ -72,5 +72,9 @@ public class WebProperties {
      * 匹配链接(多个用逗号分隔）
      */
     private String urlPatterns = "/*";
+    /**
+     * Long bigInteger json转成String
+     */
+    private boolean long2stringEnable = true;
 
 }
