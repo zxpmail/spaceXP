@@ -111,4 +111,9 @@ public class TableDTO  {
      * 表单布局  1：一列   2：两列
      */
     private Integer formLayout;
+
+    /**
+     *  生成方式 1：单模块   2：多模块
+     */
+    private Integer generatorType;
 }

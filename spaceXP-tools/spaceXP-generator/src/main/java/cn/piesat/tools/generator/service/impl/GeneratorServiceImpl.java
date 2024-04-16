@@ -309,10 +309,16 @@ public class GeneratorServiceImpl implements GeneratorService {
         dataModel.put("author", table.getAuthor());
         dataModel.put("email", table.getEmail());
 
-        // 生成路径
-        dataModel.put("bizPath", table.getModuleName() + "-biz");
-        dataModel.put("modelPath", table.getModuleName() + "-model");
-        dataModel.put("frontPath", table.getModuleName() + "-view");
+        if (table.getGeneratorType() == 1) {
+            dataModel.put("bizPath", table.getModuleName());
+            dataModel.put("modelPath", table.getModuleName());
+            dataModel.put("frontPath", table.getModuleName());
+        } else {
+            // 生成路径
+            dataModel.put("bizPath", table.getModuleName() + "-biz");
+            dataModel.put("modelPath", table.getModuleName() + "-model");
+            dataModel.put("frontPath", table.getModuleName() + "-view");
+        }
         String tableName = table.getTableName();
         dataModel.put("tableName", tableName);
         if (StringUtils.hasText(table.getTablePrefix())) {
