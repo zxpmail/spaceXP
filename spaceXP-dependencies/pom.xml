@@ -58,15 +58,21 @@
         <sqlserver.version>12.4.2.jre8</sqlserver.version>
         <aws-java-sdk.version>1.12.610</aws-java-sdk.version>
         <spring-kafka.version>2.8.9</spring-kafka.version>
-        <redssion>3.26.0</redssion>
+        <redssion-version>3.17.7</redssion-version>
+        <commons-pool2-version>2.11.1</commons-pool2-version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson-spring-boot-starter</artifactId>
-                <version>${redssion}</version>
+                <version>${redssion-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.kafka</groupId>

@@ -13,6 +13,11 @@ spring:
   redis:
     redisson:
       file: classpath:redisson.yaml
+    lettuce:
+      pool:
+        enabled: true
+        min-idle: 0
+        max-active: 8
 logging:
   level:
     cn.piesat.tests.redis: debug
