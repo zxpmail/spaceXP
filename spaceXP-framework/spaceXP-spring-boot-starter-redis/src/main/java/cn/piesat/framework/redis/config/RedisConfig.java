@@ -117,7 +117,6 @@ public class RedisConfig {
     }
 
     @Bean
-    //@ConditionalOnBean(RedissonClient.class)
     @ConditionalOnProperty(name = "space.redis.distributed-lock-enable", havingValue = "true")
     public DistributedLockAspect DistributedLock(RedissonClient redissonClient){
         return new DistributedLockAspect(redissonClient);
