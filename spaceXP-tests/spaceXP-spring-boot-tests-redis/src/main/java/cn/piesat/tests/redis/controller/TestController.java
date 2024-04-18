@@ -2,13 +2,16 @@ package cn.piesat.tests.redis.controller;
 
 
 import cn.piesat.framework.redis.annotation.AccessLimit;
+import cn.piesat.framework.redis.annotation.DLock;
 import cn.piesat.framework.redis.annotation.PreventReplay;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.model.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +30,7 @@ import java.util.HashMap;
 @Api(tags = "测试")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class TestController {
 
     private final RedisService redisService;
@@ -99,4 +103,18 @@ public class TestController {
     public Object  accessLimit(@PathVariable("key") String key){
         return new HashMap<String, Object>(){{put(key,"hello");}};
     }
+
+    @GetMapping("testLock")
+    @DLock("'person:' + #person.id + ':' + #cateId")
+    public void testLock( Person person,Integer cateId) throws InterruptedException {
+        System.out.printf("当前执行线程: %s%n", Thread.currentThread().getName()) ;
+        log.info("id: {} , cateId:{}",person.getId(),cateId);
+        Thread.sleep(20000); ;
+    }
+
+    @Data
+    static  class Person{
+        Integer id;
+    }
+
 }

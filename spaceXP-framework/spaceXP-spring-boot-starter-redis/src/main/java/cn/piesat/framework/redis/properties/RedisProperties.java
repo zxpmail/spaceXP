@@ -26,4 +26,6 @@ public class RedisProperties {
     private Boolean preventReplayEnable = false; //防止重新刷新页面是否开启
 
     private Boolean accessLimitEnable = false; //限流拦截器是否开启
+
+    private Boolean distributedLockEnable = false; //是否开启分布式锁
 }
