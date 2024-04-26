@@ -11,6 +11,7 @@ import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,5 +57,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     public Boolean delete(Long id) {
         return removeById(id);
     }
+
+
+    @DS
+    @DynamicTableName
+    @Async
+    @Override
+    public void addTest1() {
+        UserDO userDO = new UserDO();
+        for (long i = 0; i < 100000; i++) {
+            userDO.setId(null);
+            userDO.setName(1+" :master");
+            save(userDO);
+        }
+    }
+
+    @DS("slave")
+    @DynamicTableName
+    @Async
+    @Override
+    public void addTest2() {
+        UserDO userDO = new UserDO();
+        for (long i = 0; i < 100000; i++) {
+            userDO.setId(null);
+            userDO.setName(1+" :slave");
+            save(userDO);
+        }
+    }
+
 
 }

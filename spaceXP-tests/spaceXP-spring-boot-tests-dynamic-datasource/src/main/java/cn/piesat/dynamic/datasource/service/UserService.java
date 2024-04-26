@@ -31,5 +31,8 @@ public interface UserService extends IService<UserDO> {
 
     Boolean delete(Long id);
 
+
+    void addTest1();
+    void addTest2();
 }
 

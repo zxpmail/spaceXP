@@ -2,7 +2,6 @@ package cn.piesat.dynamic.datasource.controller;
 
 
 import cn.piesat.dynamic.datasource.dao.mapper.UserMapper;
-import cn.piesat.dynamic.datasource.service.impl.UserServiceTest;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 
@@ -68,11 +67,17 @@ public class UserController {
             return userMapper.queryAllWithSlave();
         }
     }
-    @Resource
-    private UserServiceTest userServiceTest;
-    @ApiOperation("组合查询")
-    @GetMapping("/com")
-    public Object com(){
-        return userServiceTest.get();
+
+
+    @GetMapping("/add1")
+    public String add1(){
+        userService.addTest1();
+        return "add1";
+    }
+
+    @GetMapping("/add2")
+    public String add2(){
+        userService.addTest2();
+        return "add2";
     }
 }

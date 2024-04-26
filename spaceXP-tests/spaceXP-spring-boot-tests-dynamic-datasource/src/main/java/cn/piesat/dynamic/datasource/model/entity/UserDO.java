@@ -17,7 +17,7 @@ import lombok.Data;
 @TableName("user")
 public class UserDO {
     @TableId(value = "id", type = IdType.AUTO)
-    private String id;
+    private Long id;
 
     private String name;
 }

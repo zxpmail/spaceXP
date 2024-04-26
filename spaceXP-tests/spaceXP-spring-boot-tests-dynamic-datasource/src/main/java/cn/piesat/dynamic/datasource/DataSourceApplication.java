@@ -2,6 +2,7 @@ package cn.piesat.dynamic.datasource;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * <p/>
@@ -12,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zhouxp
  */
 @SpringBootApplication
-
+@EnableAsync
 public class DataSourceApplication {
     public static void main(String[] args) {
         SpringApplication.run(DataSourceApplication.class,args);
