@@ -80,4 +80,11 @@ public class UserController {
         userService.addTest2();
         return "add2";
     }
+
+    @GetMapping("/addThread")
+    public String addThread(){
+        new Thread(userService::addTest2).start();
+        new Thread(userService::addTest1).start();
+        return "add2";
+    }
 }
