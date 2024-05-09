@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * <p>自定义字段自动填充处理类 - 实体类中使用 @TableField注解</p>
@@ -105,9 +107,10 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
             }
         }
         if (metaObject.hasGetter(field) && metaObject.hasSetter(field)) {
-            this.strictInsertFill(metaObject, field, Long.class, Long.parseLong(id));
+            this.fillStrategy(metaObject, field, id);
         }
     }
+
 
 
     @Override
@@ -126,7 +129,7 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
         }
         if (metaObject.hasGetter(updateId) && metaObject.hasSetter(updateId)) {
             metaObject.setValue(updateId, null);
-            this.setFieldValByName(updateId, Long.parseLong(userId), metaObject);
+            this.setFieldValByName(updateId, userId, metaObject);
         }
 
         /**
