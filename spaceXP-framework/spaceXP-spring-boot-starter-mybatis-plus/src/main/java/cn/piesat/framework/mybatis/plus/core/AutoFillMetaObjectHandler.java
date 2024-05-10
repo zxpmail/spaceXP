@@ -38,7 +38,7 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
      * 自动注入不出错
      */
     @Autowired(required = false)
-    private  AutoFillMetaObjectService autoFillMetaObjectService;
+    private AutoFillMetaObjectService autoFillMetaObjectService;
     /**
      * 创建时间字段
      */
@@ -89,62 +89,71 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
             metaObject.setValue(deleted, deleteInitValue);
         }
         HttpServletRequest request = ServletUtils.getRequest();
-        fillValue(metaObject,createId, request,CommonConstants.USER_ID);
-        fillValue(metaObject,updateId, request,CommonConstants.USER_ID);
-        fillValue(metaObject,deptId, request,CommonConstants.DEPT_ID);
-        fillValue(metaObject,tenantId, request,CommonConstants.TENANT_ID);
-        if(!ObjectUtils.isEmpty(autoFillMetaObjectService)){
-            autoFillMetaObjectService.insertFill(this,metaObject);
+        fillValue(metaObject, createId, request, CommonConstants.USER_ID);
+        fillValue(metaObject, updateId, request, CommonConstants.USER_ID);
+        fillValue(metaObject, deptId, request, CommonConstants.DEPT_ID);
+        fillValue(metaObject, tenantId, request, CommonConstants.TENANT_ID);
+        if (!ObjectUtils.isEmpty(autoFillMetaObjectService)) {
+            autoFillMetaObjectService.insertFill(this, metaObject);
         }
 
     }
 
-    private void fillValue(MetaObject metaObject, String field,HttpServletRequest request,String constantValue) {
+    private void fillValue(MetaObject metaObject, String field, HttpServletRequest request, String constantValue) {
         String id = "-1";
         if (!ObjectUtils.isEmpty(request)) {
             id = request.getHeader(constantValue);
-            if(!StringUtils.hasText(id)){
+            if (!StringUtils.hasText(id)) {
                 id = "-1";
             }
         }
         if (metaObject.hasGetter(field) && metaObject.hasSetter(field)) {
             Field field1 = ReflectionUtils.findField(metaObject.getOriginalObject().getClass(), field);
-            if(field1!=null){
-                if(field1.getType().equals(Long.class) ){
+            if (field1 != null) {
+                if (field1.getType().equals(Long.class)) {
                     this.fillStrategy(metaObject, field, Long.parseLong(id));
-                }else if (field1.getType().equals(Integer.class)){
+                } else if (field1.getType().equals(Integer.class)) {
                     this.fillStrategy(metaObject, field, Integer.parseInt(id));
-                }else{
+                } else {
                     this.fillStrategy(metaObject, field, id);
                 }
             }
         }
     }
 
-
-
+    /**
+     * 1、request中有中有userId值 则用用request中的userID值代替
+     * 2、否则 updateId是否有值，有则不处理 否则用-1代替
+     *
+     */
     @Override
     public void updateFill(MetaObject metaObject) {
-        HttpServletRequest request = ServletUtils.getRequest();
-        String userId = "-1";
-        if (!ObjectUtils.isEmpty(request)) {
-            userId = request.getHeader(CommonConstants.USER_ID);
-            if(!StringUtils.hasText(userId)){
-                userId = "-1";
-            }
-        }
+
         if (metaObject.hasGetter(updateTime) && metaObject.hasSetter(updateTime)) {
             metaObject.setValue(updateTime, null);
             this.strictUpdateFill(metaObject, updateTime, LocalDateTime::now, LocalDateTime.class);
         }
         if (metaObject.hasGetter(updateId) && metaObject.hasSetter(updateId)) {
-            metaObject.setValue(updateId, null);
-            this.setFieldValByName(updateId, Long.parseLong(userId), metaObject);
+            HttpServletRequest request = ServletUtils.getRequest();
+            long updater = -1L;
+            if (!ObjectUtils.isEmpty(request)) {
+                String userId = request.getHeader(CommonConstants.USER_ID);
+                if (StringUtils.hasText(userId)) {
+                    updater = Long.parseLong(userId);
+                }
+            }
+            if (updater == -1L) {
+                Object value = metaObject.getValue(updateId);
+                if (value == null) {
+                    metaObject.setValue(updateId, null);
+                    this.setFieldValByName(updateId, updater, metaObject);
+                }
+            }
         }
 
         // 增加外部填充
-        if(!ObjectUtils.isEmpty(autoFillMetaObjectService)){
-            autoFillMetaObjectService.updateFill(this,metaObject);
+        if (!ObjectUtils.isEmpty(autoFillMetaObjectService)) {
+            autoFillMetaObjectService.updateFill(this, metaObject);
         }
     }
 }
