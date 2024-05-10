@@ -35,7 +35,8 @@ public class UserDO implements Serializable {
     private Long state;
     private Long deptId;
     private String changePasswordFlag;
-
+    @TableField(fill = FieldFill.INSERT_UPDATE,exist = false)
+    private Long updateId;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime passwordUpdateTime;
     @TableField(fill = FieldFill.INSERT)

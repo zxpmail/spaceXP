@@ -124,7 +124,6 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
     /**
      * 1、request中有中有userId值 则用用request中的userID值代替
      * 2、否则 updateId是否有值，有则不处理 否则用-1代替
-     *
      */
     @Override
     public void updateFill(MetaObject metaObject) {
@@ -145,9 +144,11 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
             if (updater == -1L) {
                 Object value = metaObject.getValue(updateId);
                 if (value == null) {
-                    metaObject.setValue(updateId, null);
                     this.setFieldValByName(updateId, updater, metaObject);
                 }
+            } else {
+                metaObject.setValue(updateId, null);
+                this.setFieldValByName(updateId, updater, metaObject);
             }
         }
 
