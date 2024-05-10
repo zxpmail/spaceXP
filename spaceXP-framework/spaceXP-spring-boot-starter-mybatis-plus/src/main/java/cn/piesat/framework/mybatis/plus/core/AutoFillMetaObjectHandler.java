@@ -16,8 +16,9 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
-import java.util.Objects;
+
 
 /**
  * <p>自定义字段自动填充处理类 - 实体类中使用 @TableField注解</p>
@@ -107,7 +108,16 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
             }
         }
         if (metaObject.hasGetter(field) && metaObject.hasSetter(field)) {
-            this.fillStrategy(metaObject, field, id);
+            Field field1 = ReflectionUtils.findField(metaObject.getOriginalObject().getClass(), field);
+            if(field1!=null){
+                if(field1.getType().equals(Long.class) ){
+                    this.fillStrategy(metaObject, field, Long.parseLong(id));
+                }else if (field1.getType().equals(Integer.class)){
+                    this.fillStrategy(metaObject, field, Integer.parseInt(id));
+                }else{
+                    this.fillStrategy(metaObject, field, id);
+                }
+            }
         }
     }
 
@@ -129,12 +139,10 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
         }
         if (metaObject.hasGetter(updateId) && metaObject.hasSetter(updateId)) {
             metaObject.setValue(updateId, null);
-            this.setFieldValByName(updateId, userId, metaObject);
+            this.setFieldValByName(updateId, Long.parseLong(userId), metaObject);
         }
 
-        /**
-         * 增加外部填充
-         */
+        // 增加外部填充
         if(!ObjectUtils.isEmpty(autoFillMetaObjectService)){
             autoFillMetaObjectService.updateFill(this,metaObject);
         }
