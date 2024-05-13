@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.StringValue;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
@@ -22,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +52,7 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
         /*
           内部线程直接调用不进行数据权限拦截直接返回
          */
-        if(Objects.isNull(userDataScope)){
+        if (Objects.isNull(userDataScope)) {
             return where;
         }
         if (!ObjectUtils.isEmpty(dataPermissionProperties)) {
@@ -63,14 +65,14 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
             //没在条件中直接返回
             Set<String> sql = dataPermissionProperties.getConditions();
             if (!CollectionUtils.isEmpty(sql)) {
-                boolean isExist = false ;
+                boolean isExist = false;
                 for (String s : sql) {
                     if (mid.contains(s)) {
-                        isExist= true;
+                        isExist = true;
                         break;
                     }
                 }
-                if(!isExist){
+                if (!isExist) {
                     return where;
                 }
             } else {
@@ -102,7 +104,15 @@ public class CustomDataPermissionHandler implements DataPermissionHandler {
                 break;
             case DEPT_SCOPE:
             case DEPT_SUB_SCOPE:
-                ItemsList itemsList = new ExpressionList(userDataScope.getDeptIds().stream().map(LongValue::new).collect(Collectors.toList()));
+                List<Expression> collect = userDataScope.getDeptIds().stream().map(m -> {
+                    if (m instanceof Long) {
+                        return new LongValue((Long) m);
+                    } else {
+                        return new StringValue((String) m);
+                    }
+                }).collect(Collectors.toList());
+
+                ItemsList itemsList = new ExpressionList(collect);
                 InExpression inExpression = new InExpression(new Column(dataPermissionProperties.getDeptIdColumnName()), itemsList);
                 expression = ObjectUtils.isEmpty(where) ? inExpression : new AndExpression(where, inExpression);
                 break;

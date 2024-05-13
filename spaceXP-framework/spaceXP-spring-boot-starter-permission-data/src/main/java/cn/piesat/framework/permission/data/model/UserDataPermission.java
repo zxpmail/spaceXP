@@ -36,7 +36,7 @@ public class UserDataPermission {
      */
     private Integer dataScope;
     /**
-     * 用户权限部门列表
+     * 用户权限部门列表 id 只能为Long类型或者String类型
      */
-    private Set<Long> deptIds ;
+    private Set<Object> deptIds ;
 }

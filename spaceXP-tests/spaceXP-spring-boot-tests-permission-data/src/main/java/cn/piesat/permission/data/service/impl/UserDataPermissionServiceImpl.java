@@ -24,7 +24,7 @@ public class UserDataPermissionServiceImpl implements UserDataPermissionService 
         userDataPermission.setDataScope(DataPermissionEnum.SELF_SCOPE.getCode());
         userDataPermission.setUserId(4L);
         userDataPermission.setUsername("admin1");
-        userDataPermission.setDeptIds(new HashSet<Long>(){{add(0L);}});
+        userDataPermission.setDeptIds(new HashSet<Object>(){{add(0L);}});
         return userDataPermission;
     }
 }
