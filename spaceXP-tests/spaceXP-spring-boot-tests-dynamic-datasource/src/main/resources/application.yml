@@ -24,5 +24,3 @@ space:
         username: root
         password: 123456
     pointcut: execution(* cn.piesat.dynamic.datasource.service..*.*(..))
-  table:
-    enable: true

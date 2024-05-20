@@ -6,6 +6,7 @@ import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 
+import cn.piesat.framework.mybatis.plus.model.TableNameEntity;
 import cn.piesat.tests.mybaits.plus.model.entity.UserDO;
 import cn.piesat.tests.mybaits.plus.service.UserService;
 import io.swagger.annotations.Api;
@@ -102,4 +103,10 @@ public class UserController {
         return userService.delete(id);
     }
 
+
+    @ApiOperation("根据id动态贴换表名查询")
+    @GetMapping("/dynamicInfo/{id}")
+    public UserDO dynamicInfo( TableNameEntity tableName, @PathVariable("id") Long id){
+        return userService.dynamicInfo(tableName,id);
+    }
 }

@@ -28,14 +28,14 @@ public class DynamicTableNameAspect {
      * 定义controller切入点拦截规则，拦截OpLog注解的方法
      */
     @Pointcut("@annotation(cn.piesat.framework.mybatis.plus.annotation.DynamicTableName)")
-    public void logAspect() {
+    public void dynamicAspect() {
 
     }
 
     /***
      * 拦截控制层的操作日志
      */
-    @Around(value = "logAspect()")
+    @Around(value = "dynamicAspect()")
     public Object changeTableName(ProceedingJoinPoint point) throws Throwable {
         Object[] args = point.getArgs();
         String tableName = "";

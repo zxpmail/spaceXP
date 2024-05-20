@@ -14,6 +14,8 @@ spring:
 space:
   web:
     date-formatter-enable: true
+  table:
+    enable: true
 mybatis-plus:
   global-config:
     db-config:

@@ -2,6 +2,8 @@ package cn.piesat.tests.mybaits.plus.service.impl;
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.framework.mybatis.plus.annotation.DynamicTableName;
+import cn.piesat.framework.mybatis.plus.model.TableNameEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tests.mybaits.plus.dao.mapper.UserMapper;
 import cn.piesat.tests.mybaits.plus.model.entity.UserDO;
@@ -50,5 +52,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public Boolean delete(Long id) {
         return removeById(id);
+    }
+
+    @DynamicTableName
+    @Override
+    public UserDO dynamicInfo(TableNameEntity tableName, Long id) {
+        return getById(id);
     }
 }

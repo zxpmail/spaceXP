@@ -60,7 +60,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
 
     @DS
-    @DynamicTableName
     @Async
     @Override
     public void addTest1() {
