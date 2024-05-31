@@ -16,6 +16,7 @@
     <modules>
         <module>spaceXP-generator</module>
         <module>spaceXP-gateway</module>
+        <module>spaceXP-websocket</module>
     </modules>
     <dependencyManagement>
         <dependencies>

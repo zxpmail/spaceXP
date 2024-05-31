@@ -1,0 +1,10 @@
+server:
+  port: 8001
+spring:
+  main:
+    allow-circular-references: true
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+    mvc:
+      pathmatch:
+        matching-strategy: ANT_PATH_MATCHER
