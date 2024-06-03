@@ -3,20 +3,19 @@ package cn.piesat.tools.websocket.handler;
 import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.tools.websocket.util.SessionManagerUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.lang.NonNullApi;
-import org.springframework.scheduling.annotation.Async;
+
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
-import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * <p/>
@@ -28,16 +27,21 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @Slf4j
-public class SpringWebSocketHandler extends TextWebSocketHandler {
+public class SpringWebSocketHandler extends AbstractWebSocketHandler {
     /**
      * socket 建立成功事件 @OnOpen
      */
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        super.afterConnectionEstablished(session);
-        String userId = (String) session.getAttributes().get(CommonConstants.USER_ID);
-        // 用户连接成功，放入在线用户缓存
-        SessionManagerUtils.add(userId, session);
+    public void afterConnectionEstablished(WebSocketSession session)  {
+        log.info("WebSocket connected 已经建立连接:sessionId={} address={}", session.getId(), session.getLocalAddress().toString());
+        try{
+            String uid = session.getAttributes().get(CommonConstants.USER_ID)  + "";
+            if(StringUtils.hasText(uid)){
+                SessionManagerUtils.add(uid, session);
+            }
+        }catch(Exception e){
+            log.info("WebSocket connected 已经建立连接异常",e);
+        }
     }
 
     /**
@@ -45,21 +49,38 @@ public class SpringWebSocketHandler extends TextWebSocketHandler {
      *
      */
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // 获得客户端传来的消息
-        String payload = message.getPayload();
-        log.info("server 接收到发送的 {}" , payload);
-        session.sendMessage(new TextMessage("server 发送消息 " + payload + " " + LocalDateTime.now()));
+    protected void handleTextMessage(WebSocketSession session, TextMessage message)  {
+        log.info("WebSocket handleTextMessage 处理文本消息:sessionId={}", session.getId());
+        try{
+            super.handleMessage(session, message);
+        }catch(Exception e){
+            log.info("WebSocket handleTextMessage 处理文本消息异常",e);
+        }
+    }
+
+    @Override
+    protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
+        try{
+            super.handleMessage(session, message);
+        }catch(Exception e){
+            log.info("WebSocket handleBinaryMessage异常",e);
+        }
+    }
+
+    @Override
+    public void handleTransportError(WebSocketSession session, Throwable exception)  {
+        afterConnectionClosed(session,CloseStatus.NORMAL);
     }
 
     /**
      * socket 断开连接时 @OnClose
      */
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        super.afterConnectionClosed(session, status);
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status)  {
         log.info("断开连接");
-        String userId = (String) session.getAttributes().get(CommonConstants.USER_ID);
-        SessionManagerUtils.removeAndClose(userId);
+        String uid = session.getAttributes().get(CommonConstants.USER_ID)  + "";
+        if(StringUtils.hasText(uid)){
+            SessionManagerUtils.removeAndClose(uid);
+        }
     }
 }
