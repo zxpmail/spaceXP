@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -308,7 +309,9 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 开发者信息
         dataModel.put("author", table.getAuthor());
         dataModel.put("email", table.getEmail());
-
+        if(ObjectUtils.isEmpty(table.getGeneratorType())){
+            table.setGeneratorType(1);
+        }
         if (table.getGeneratorType() == 1) {
             dataModel.put("bizPath", table.getModuleName());
             dataModel.put("modelPath", table.getModuleName());
