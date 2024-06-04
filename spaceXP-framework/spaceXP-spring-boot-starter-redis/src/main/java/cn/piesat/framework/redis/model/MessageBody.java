@@ -17,17 +17,24 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class MessageBody implements Serializable {
+public class MessageBody<T> implements Serializable {
+    /**
+     * 来源ID
+     */
+    private T fromId;
+
+    /**
+     * 发送ID
+     */
+    private T toId;
+
+    /**
+     * 类型
+     */
+    private Integer type;
     /**
      * 数据
      */
-    private String data;
-    /**
-     * 标题
-     */
-    private String title;
-    /**
-     * 内容
-     */
-    private String content;
+    private Object data;
+
 }

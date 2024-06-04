@@ -17,6 +17,7 @@ import javax.annotation.Resource;
  * @author zhouxp
  */
 @Slf4j
+@SuppressWarnings({"unchecked","rawtypes"})
 public class RedisMessageListener implements MessageListener {
 
     @Resource
@@ -28,9 +29,8 @@ public class RedisMessageListener implements MessageListener {
 
 
     @Override
+
     public void onMessage(Message message, byte[] pattern) {
-        // 接收的topic
-        log.info("channel:" + new String(pattern));
 
         //序列化对象（特别注意：发布的时候需要设置序列化；订阅方也需要设置序列化）
         MessageBody messageBody = (MessageBody) redisTemplate.getValueSerializer().deserialize(message.getBody());

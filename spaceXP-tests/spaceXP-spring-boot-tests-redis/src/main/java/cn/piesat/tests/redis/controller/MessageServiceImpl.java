@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class MessageServiceImpl implements MessageService {
+public class MessageServiceImpl implements MessageService <Integer>{
     @Override
-    public void handle(MessageBody messageBody) {
-        log.info(messageBody.getData()+","+messageBody.getContent());
+    public void handle(MessageBody<Integer> messageBody) {
+        log.info("收到消息: {}, 类型: {} ",messageBody.getData(),messageBody.getType());
     }
 }

@@ -27,5 +27,6 @@ space:
     prevent-replay-enable: true #开启重刷功能
     access-limit-enable: true #开启限流功能
     distributed-lock-enable: true
+    message-enable: true
 
 #https://github.com/redisson/redisson/wiki/2.-Configuration#26-single-instance-mode

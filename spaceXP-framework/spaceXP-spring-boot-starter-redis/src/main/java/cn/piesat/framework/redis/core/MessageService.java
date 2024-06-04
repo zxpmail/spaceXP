@@ -10,7 +10,7 @@ import cn.piesat.framework.redis.model.MessageBody;
  *
  * @author zhouxp
  */
-public interface MessageService {
-    default void handle(MessageBody messageBody) {
+public interface MessageService<T> {
+    default void handle(MessageBody<T> messageBody) {
     }
 }

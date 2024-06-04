@@ -39,12 +39,14 @@ public class TestController {
     @PostMapping("/message")
     public void sendMessage(@RequestParam String message) {
         // 发布消息
-        MessageBody messageBody = new MessageBody();
+        MessageBody<Integer> messageBody = new MessageBody<>();
+
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        messageBody.setData(timeFormatter.format(now));
-        messageBody.setTitle("日常信息");
-        messageBody.setContent("hello world!");
+        messageBody.setData(message +","+ timeFormatter.format(now));
+        messageBody.setToId(1);
+        messageBody.setFromId(2);
+        messageBody.setType(0);
         redisService.convertAndSend("TOPIC",messageBody);
     }
     /**

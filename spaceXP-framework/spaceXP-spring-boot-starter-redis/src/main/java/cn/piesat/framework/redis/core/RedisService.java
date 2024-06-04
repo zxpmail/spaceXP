@@ -1,7 +1,9 @@
 package cn.piesat.framework.redis.core;
 
 import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.HashOperations;
@@ -260,6 +262,11 @@ public class RedisService {
                 redisTemplate.opsForHash().delete(hashKey, entry.getKey().toString());
             }
         }
+    }
+    @Value("${space.redis.topics:TOPIC}")
+    private String channel;
+    private  boolean send(Object message){
+        return convertAndSend(channel,message);
     }
     /**
      * 向通道发布消息
