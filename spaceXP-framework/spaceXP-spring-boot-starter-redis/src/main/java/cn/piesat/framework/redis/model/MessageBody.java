@@ -26,12 +26,12 @@ public class MessageBody<T> implements Serializable {
     /**
      * 发送ID
      */
-    private T toId;
+    private T toId ;
 
     /**
      * 类型
      */
-    private Integer type;
+    private Integer type = MessageEnum.USER.getType();
     /**
      * 数据
      */

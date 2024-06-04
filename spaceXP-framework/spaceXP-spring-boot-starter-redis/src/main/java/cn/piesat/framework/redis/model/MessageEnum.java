@@ -1,4 +1,4 @@
-package cn.piesat.framework.redis.enums;
+package cn.piesat.framework.redis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
