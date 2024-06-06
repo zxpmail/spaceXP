@@ -2,9 +2,9 @@ package cn.piesat.tests.redis.controller;
 
 
 import cn.piesat.framework.redis.annotation.AccessLimit;
-import cn.piesat.framework.redis.annotation.DLock;
 import cn.piesat.framework.redis.annotation.PreventReplay;
 import cn.piesat.framework.redis.core.RedisService;
+import cn.piesat.framework.redis.external.annotation.DLock;
 import cn.piesat.framework.redis.model.MessageBody;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

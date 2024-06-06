@@ -192,6 +192,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.piesat.space</groupId>
+                <artifactId>spaceXP-spring-boot-starter-redis-external</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.piesat.space</groupId>
                 <artifactId>spaceXP-spring-boot-starter-file-s3</artifactId>
                 <version>${revision}</version>
             </dependency>

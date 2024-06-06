@@ -1,7 +1,8 @@
-package cn.piesat.framework.redis.core;
+package cn.piesat.framework.redis.external.core;
 
-import cn.piesat.framework.redis.annotation.DLock;
 
+
+import cn.piesat.framework.redis.external.annotation.DLock;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -46,7 +47,7 @@ public class DistributedLockAspect {
         this.redissonClient = redissonClient;
     }
 
-    @Pointcut("@annotation(cn.piesat.framework.redis.annotation.DLock)")
+    @Pointcut("@annotation(cn.piesat.framework.redis.external.annotation.DLock)")
     public void pointcut() {
     }
 

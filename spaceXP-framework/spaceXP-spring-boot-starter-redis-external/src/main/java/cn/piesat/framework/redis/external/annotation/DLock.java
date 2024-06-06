@@ -1,4 +1,4 @@
-package cn.piesat.framework.redis.annotation;
+package cn.piesat.framework.redis.external.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
