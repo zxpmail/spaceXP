@@ -56,8 +56,8 @@ public class UserController {
     @ApiOperation("分页查询")
     @PostMapping("/list")
     public PageResult list(@RequestParam(required = false) String parentaskid, PageBean pageBean, @RequestBody(required = false) UserDO userDO){
-        throw new RuntimeException("test");
-        //return userService.list(pageBean,userDO);
+       // throw new RuntimeException("test");
+        return userService.list(pageBean,userDO);
 
     }
 

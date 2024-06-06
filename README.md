@@ -35,7 +35,7 @@ spaceXP-tools 工具集合
 12. spaceXP-spring-boot-starter-multi-tenant 多租户组件
 13. spaceXP-spring-boot-starter-dynamic-datasource 动态增加数据源
 14. spaceXP-spring-boot-starter-kafka-datasource 动态增加kafka数据源
-
+15. spaceXP-spring-boot-starter-mybatis-plus-external mybatis-plus额外组件 支持发号功能
 #### 鸣谢
 本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 非常感谢众多软件和作者

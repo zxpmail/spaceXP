@@ -227,6 +227,11 @@
             </dependency>
             <dependency>
                 <groupId>cn.piesat.space</groupId>
+                <artifactId>spaceXP-spring-boot-starter-mybatis-plus-external</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.piesat.space</groupId>
                 <artifactId>spaceXP-spring-boot-starter-kafka-datasource</artifactId>
                 <version>${revision}</version>
             </dependency>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -118,5 +119,14 @@ public class TestController {
     static  class Person{
         Integer id;
     }
+    @Resource
+    private IdGeneratorService idGeneratorService;
+
+    @GetMapping("generateId")
+    void generateIdTest() {
+        String code = idGeneratorService.generateId("orderId", 6);
+        System.out.println(code);
+    }
+
 
 }

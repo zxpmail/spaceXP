@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 public class UserDO implements Serializable {
     private static final long serialVersionUID = 1L;
     @JsonSerialize(using= ToStringSerializer.class)
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     private String username;
     private String password;
