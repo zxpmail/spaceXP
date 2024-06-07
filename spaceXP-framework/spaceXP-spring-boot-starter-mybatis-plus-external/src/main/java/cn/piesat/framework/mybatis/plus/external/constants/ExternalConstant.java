@@ -15,7 +15,7 @@ public interface ExternalConstant {
 
     Integer WORK_ID_MIN = 1;
 
-    Integer KEY_MAX_LENGTH = 8;
+    Integer KEY_MAX_LENGTH = 9;
 
     Integer KEY_MIN_LENGTH = 6;
 }

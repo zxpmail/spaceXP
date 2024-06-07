@@ -40,8 +40,8 @@ public class CustomIdGenerator implements IdentifierGenerator {
     @Override
     public Number nextId(Object entity) {
         long num = redisService.increment(properties.getKeyPrefix() +":" + entity.getClass().getName(), getEndTime());
-        String id = String.format("1%02d%s%0" + properties.getLength() + "d", properties.getWorkId(),
-                LocalDate.now().format(DateTimeFormatter.ofPattern(ExternalConstant.FMT)), num);
+        String id = String.format("%s%02d%0" + properties.getLength() + "d",
+                LocalDate.now().format(DateTimeFormatter.ofPattern(ExternalConstant.FMT)),properties.getWorkId(), num);
         return Long.valueOf(id);
     }
 
