@@ -68,7 +68,7 @@ public final class PreventReplayAspect {
     /**
      * 默认处理方式
      */
-    private void defaultHandle(String requestStr, PreventReplay preventReplay, String methodFullName) throws Exception {
+    private void defaultHandle(String requestStr, PreventReplay preventReplay, String methodFullName)  {
         String base64Str = toBase64String(requestStr);
         long expire = preventReplay.value();
         String resp = redisService.getObject(keyPrefix + CommonConstants.UNDERLINE + methodFullName + base64Str);

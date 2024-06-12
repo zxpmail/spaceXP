@@ -74,12 +74,12 @@ public class RedisConfig {
         return redisTemplate;
     }
     @Bean
-    @ConditionalOnProperty(name = "space.redis.message-enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.redis.message-enable", havingValue = "true")
     public RedisMessageListener redisMessageListener(){
         return new RedisMessageListener();
     }
     @Bean
-    @ConditionalOnProperty(name = "space.redis.message-enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.redis.message-enable", havingValue = "true")
     public RedisMessageListenerContainer container(RedisProperties redisProperties,RedisConnectionFactory redisConnectionFactory,
                                                    RedisMessageListener listener) {
 
@@ -92,7 +92,7 @@ public class RedisConfig {
         //todo  目前支持一个,以后扩展
         container.addMessageListener(listener, new PatternTopic(redisProperties.getTopics()));
 
-        /**
+        /*
          * 设置序列化对象
          * 特别注意：1. 发布的时候需要设置序列化；订阅方也需要设置序列化
          *         2. 设置序列化对象必须放在[加入消息监听器]这一步后面，否则会导致接收器接收不到消息
@@ -108,13 +108,13 @@ public class RedisConfig {
     }
 
     @Bean
-    @ConditionalOnProperty(name = "space.redis.prevent-replay-enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.redis.prevent-replay-enable", havingValue = "true")
     public PreventReplayAspect preventAspect(RedisService redisService){
         return new PreventReplayAspect(redisService, module);
     }
 
     @Bean
-    @ConditionalOnProperty(name = "space.redis.access-limit-enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.redis.access-limit-enable", havingValue = "true")
     public AccessLimitInterceptor accessLimitInterceptor(RedisService redisService){
         return new AccessLimitInterceptor(redisService,module);
     }
