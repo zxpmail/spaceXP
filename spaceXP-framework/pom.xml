@@ -30,6 +30,7 @@
         <module>spaceXP-spring-boot-starter-kafka-datasource</module>
         <module>spaceXP-spring-boot-starter-mybatis-plus-external</module>
         <module>spaceXP-spring-boot-starter-redis-external</module>
+        <module>spaceXP-spring-boot-starter-websocket</module>
     </modules>
     <dependencies>
         <dependency>

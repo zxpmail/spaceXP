@@ -38,6 +38,7 @@ import java.util.Set;
  * @author zhouxp
  */
 @Slf4j
+@SuppressWarnings({"rawtypes","unchecked"})
 public class KafkaCreator implements InitializingBean {
     private final KafkaConfigProperties kafkaConfigProperties;
 
@@ -154,7 +155,7 @@ public class KafkaCreator implements InitializingBean {
     /**
      * 设置工厂过滤策略
      */
-    @SuppressWarnings("rawtypes")
+
     private void setFilterFactory(ConcurrentKafkaListenerContainerFactory<Integer, String> kafkaListenerContainerFactory, KafkaConfigProperties.ConsumerFactoryFilter consumerFactoryFilter) {
         if (!ObjectUtils.isEmpty(consumerFactoryFilter)) {
             if (!ObjectUtils.isEmpty(consumerFactoryFilter.getStrategy())) {
