@@ -28,11 +28,11 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInterceptor {
-    private final  Pattern pattern = Pattern.compile("^-?\\d+$");
+    private final Pattern pattern = Pattern.compile("^-?\\d+$");
     private final WebSocketProperties webSocketProperties;
 
     @Autowired(required = false)
-    private GroupMemberService groupMemberService;
+    private MessageService messageService;
 
     public SpringWebSocketHandlerInterceptor(WebSocketProperties webSocketProperties) {
         this.webSocketProperties = webSocketProperties;
@@ -52,12 +52,15 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
                 }
                 String rAppId = request.getHeaders().getFirst(CommonConstants.APP_ID);
 
-                if (!StringUtils.hasText(rAppId)||pattern.matcher(rAppId).matches() ){
+                if (!StringUtils.hasText(rAppId) || pattern.matcher(rAppId).matches()) {
                     log.info("Attempted to get a Header with a null  or no number appId.");
                     return false;
                 }
-                appId =Integer.parseInt(rAppId);
-                groupMemberService.addUser2Group(userId);
+                appId = Integer.parseInt(rAppId);
+                if (messageService != null) {
+                    messageService.addUser2Group(userId);
+                }
+
             }
             HttpSession session = ((ServletServerHttpRequest) request).getServletRequest().getSession(true);
             if (session != null) {

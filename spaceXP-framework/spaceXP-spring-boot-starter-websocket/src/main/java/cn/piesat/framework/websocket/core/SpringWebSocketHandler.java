@@ -5,6 +5,7 @@ import cn.piesat.framework.websocket.model.MessagePack;
 import cn.piesat.framework.websocket.util.SessionSocketHolder;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
@@ -24,6 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class SpringWebSocketHandler extends AbstractWebSocketHandler {
+
+    @Autowired(required = false)
+    private MessageService messageService;
     /**
      * socket 建立成功事件 @OnOpen
      */
@@ -46,6 +50,20 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      */
     @Override
     public void handleTextMessage(@Nonnull WebSocketSession session, @Nonnull TextMessage message) {
+        String payload = message.getPayload();
+        try {
+            MessagePack messagePack = JSON.parseObject(payload, MessagePack.class);
+            if(messageService!=null){
+                messageService.handleTextMessage(messagePack);
+            }
+        }catch (Exception e){
+            log.error("处理websocket消息出错:{}",e.getMessage());
+        }
+
+
+    }
+
+    private static void sendTextMessage(WebSocketSession session, TextMessage message) {
         try {
             session.sendMessage(message);
         } catch (Exception e) {
@@ -101,7 +119,7 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
         TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
         map.forEach((k,v)->{
             v.forEach((k1,v1)->{
-                handleTextMessage(v1, textMessage);
+                sendTextMessage(v1, textMessage);
             });
         }) ;
     }
@@ -114,7 +132,7 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
         ConcurrentHashMap<Integer, WebSocketSession> map = SessionSocketHolder.get(messagePack.getToId());
         TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
         map.forEach((k,v)->{
-            handleTextMessage(v, textMessage);
+            sendTextMessage(v, textMessage);
         });
     }
 }
