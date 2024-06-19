@@ -22,11 +22,6 @@ public class WebSocketProperties {
     private Boolean debug = true;
 
     /**
-     * 延迟多长时间 单位秒
-     */
-    private Integer delay = 5;
-
-    /**
      * 处理路径
      */
     private String handlerPath;
