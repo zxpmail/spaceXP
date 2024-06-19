@@ -13,8 +13,21 @@
     <url>https://gitee.com/q4uryetsxzryjt</url>
     <dependencies>
         <dependency>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
         </dependency>
     </dependencies>
 

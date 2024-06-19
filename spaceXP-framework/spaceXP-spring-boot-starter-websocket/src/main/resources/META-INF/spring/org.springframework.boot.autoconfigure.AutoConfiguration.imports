@@ -1,1 +1,2 @@
-cn.piesat.framework.web.config.WebAutoConfiguration
+cn.piesat.framework.websocket.config.SpringWebSocketConfig
+cn.piesat.framework.websocket.config.WebsocketAutoConfig

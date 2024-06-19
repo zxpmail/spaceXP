@@ -67,4 +67,8 @@ public interface CommonConstants {
     String BROWSER="browser";
 
     String IP="ip";
+    /**
+     * 应用Id
+     */
+    String APP_ID="appId";
 }
