@@ -1,5 +1,6 @@
 package cn.piesat.framework.websocket.config;
 
+import cn.piesat.framework.websocket.core.MessageHandler;
 import cn.piesat.framework.websocket.core.SpringWebSocketHandler;
 import cn.piesat.framework.websocket.core.SpringWebSocketHandlerInterceptor;
 import cn.piesat.framework.websocket.properties.WebSocketProperties;
@@ -24,5 +25,10 @@ public class WebsocketAutoConfig {
     @Bean
     public SpringWebSocketHandler springWebSocketHandler(){
         return  new SpringWebSocketHandler();
+    }
+
+    @Bean
+    public MessageHandler messageHandler(){
+        return  new MessageHandler();
     }
 }

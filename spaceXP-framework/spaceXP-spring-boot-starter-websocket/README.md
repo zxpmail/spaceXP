@@ -11,7 +11,7 @@
 #### 使用说明
     <dependency>
         <groupId>cn.piesat.space</groupId>
-        <artifactId>spaceXP-spring-boot-starter-webscoket</artifactId>
+        <artifactId>spaceXP-spring-boot-starter-websocket</artifactId>
         <version>2.0.0</version>
     </dependency>
 
@@ -24,3 +24,4 @@
 
     space.websocket.domainNames #允许跨域的域名 默认 所有
 
+具体参照spaceXP-spring-boot-test-websocket

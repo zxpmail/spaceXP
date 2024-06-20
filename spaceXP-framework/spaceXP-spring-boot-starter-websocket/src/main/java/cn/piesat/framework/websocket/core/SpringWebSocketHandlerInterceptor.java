@@ -32,7 +32,7 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
     private final WebSocketProperties webSocketProperties;
 
     @Autowired(required = false)
-    private MessageService messageService;
+    private CallbackService callbackService;
 
     public SpringWebSocketHandlerInterceptor(WebSocketProperties webSocketProperties) {
         this.webSocketProperties = webSocketProperties;
@@ -57,8 +57,8 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
                     return false;
                 }
                 appId = Integer.parseInt(rAppId);
-                if (messageService != null) {
-                    messageService.addUser2Group(userId);
+                if (callbackService != null) {
+                    callbackService.addUser2Group(userId,appId);
                 }
 
             }

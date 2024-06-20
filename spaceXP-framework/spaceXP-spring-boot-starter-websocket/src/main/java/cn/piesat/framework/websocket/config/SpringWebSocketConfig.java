@@ -25,13 +25,13 @@ import java.util.List;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableWebSocket
-@DependsOn({"websocketAutoConfig"})
+@DependsOn({"springWebSocketHandler","springWebSocketHandlerInterceptor"})
 public class SpringWebSocketConfig implements WebSocketConfigurer {
 
     @Value("${space.websocket.allowedOrigin:false}")
     private Boolean allowedOrigin;
 
-    @Value("${space.websocket.domainNames}")
+    @Value("#{'space.websocket.domainNames'.split(',')}")
     private List<String> domainNames;
 
     @Value("${space.websocket.handlerPath:/ws}")

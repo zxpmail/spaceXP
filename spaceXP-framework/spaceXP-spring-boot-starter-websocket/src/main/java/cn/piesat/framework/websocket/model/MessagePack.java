@@ -1,7 +1,9 @@
 package cn.piesat.framework.websocket.model;
 
 import cn.piesat.framework.websocket.model.enums.MessageEnum;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * <p/>
@@ -11,7 +13,14 @@ import lombok.Data;
  * {@code @author}: zhouxp
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessagePack {
+    /**
+     * appid
+     */
+    private  Integer appId;
+
     /**
      * 来源ID
      */

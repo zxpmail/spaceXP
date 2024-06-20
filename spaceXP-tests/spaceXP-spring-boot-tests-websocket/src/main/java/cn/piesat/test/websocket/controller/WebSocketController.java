@@ -1,12 +1,16 @@
 package cn.piesat.test.websocket.controller;
 
-import cn.piesat.test.websocket.service.WebSocketServer;
-import org.springframework.beans.factory.annotation.Value;
+
+import cn.piesat.framework.websocket.core.MessageHandler;
+import cn.piesat.framework.websocket.model.MessagePack;
+import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.socket.TextMessage;
 
 import javax.annotation.Resource;
+
 
 /**
  * <p/>
@@ -20,22 +24,16 @@ import javax.annotation.Resource;
 @RequestMapping("/open/socket")
 public class WebSocketController {
 
-    @Value("${mySocket.pwd}")
-    public String password;
-
     @Resource
-    private WebSocketServer webSocketServer;
+    private MessageHandler messageHandler;
 
-    /**
-     * 手机客户端请求接口
-     * @param id    发生异常的设备ID
-     * @param pwd   密码（实际开发记得加密）
-     */
-    @PostMapping(value = "/onReceive")
-    public void onReceive(String id,String pwd)  {
-        if(password.equals(pwd)){  //密码校验一致（这里举例，实际开发还要有个密码加密的校验的），则进行群发
-            webSocketServer.broadCastInfo(id);
-        }
+
+
+    @PostMapping(value = "/send")
+    public void send()  {
+
+        MessagePack messagePack = new MessagePack(1,"1001","1001",1," hello world");
+        TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
+        messageHandler.sendMessage("1001",textMessage);
     }
-
 }

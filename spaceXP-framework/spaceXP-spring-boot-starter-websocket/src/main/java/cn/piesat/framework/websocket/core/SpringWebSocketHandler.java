@@ -1,9 +1,7 @@
 package cn.piesat.framework.websocket.core;
 
 import cn.piesat.framework.common.constants.CommonConstants;
-import cn.piesat.framework.websocket.model.MessagePack;
 import cn.piesat.framework.websocket.util.SessionSocketHolder;
-import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -12,9 +10,9 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
+
 import javax.annotation.Nonnull;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p/>
@@ -27,7 +25,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SpringWebSocketHandler extends AbstractWebSocketHandler {
 
     @Autowired(required = false)
+    private CallbackService callbackService;
+
+    @Autowired(required = false)
     private MessageService messageService;
+
     /**
      * socket 建立成功事件 @OnOpen
      */
@@ -50,35 +52,25 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      */
     @Override
     public void handleTextMessage(@Nonnull WebSocketSession session, @Nonnull TextMessage message) {
-        String payload = message.getPayload();
         try {
-            MessagePack messagePack = JSON.parseObject(payload, MessagePack.class);
-            if(messageService!=null){
-                messageService.handleTextMessage(messagePack);
+            if (messageService != null) {
+                messageService.recTextMessage(message);
             }
-        }catch (Exception e){
-            log.error("处理websocket消息出错:{}",e.getMessage());
-        }
-
-
-    }
-
-    private static void sendTextMessage(WebSocketSession session, TextMessage message) {
-        try {
-            session.sendMessage(message);
         } catch (Exception e) {
-            log.info("WebSocket handleTextMessage 处理文本消息异常: {}", e.getMessage());
-            close(session);
+            log.error("处理websocket消息出错:{}", e.getMessage());
         }
+
+
     }
 
     /**
      * 关闭session 并删除资源
      */
-    private static void close(WebSocketSession session) {
+    private  void close(WebSocketSession session) {
         try {
             String uid = (String) session.getAttributes().get(CommonConstants.USER_ID);
             Integer appId = (Integer) session.getAttributes().get(CommonConstants.APP_ID);
+            callbackService.sessionClose(uid,appId);
             if (StringUtils.hasText(uid) && appId != null) {
                 SessionSocketHolder.removeAndClose(uid, appId);
             }
@@ -112,27 +104,5 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionClosed(@Nonnull WebSocketSession session, @Nonnull CloseStatus status) {
         log.info("断开连接");
         close(session);
-    }
-
-    public void heartbeat(MessagePack messagePack ) {
-        ConcurrentHashMap<String, ConcurrentHashMap<Integer, WebSocketSession>> map = SessionSocketHolder.get();
-        TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
-        map.forEach((k,v)->{
-            v.forEach((k1,v1)->{
-                sendTextMessage(v1, textMessage);
-            });
-        }) ;
-    }
-
-    public void sendMessage(MessagePack messagePack ) {
-        if (messagePack == null || messagePack.getType() == null) {
-            log.info("消息或消息类型为空！");
-            return;
-        }
-        ConcurrentHashMap<Integer, WebSocketSession> map = SessionSocketHolder.get(messagePack.getToId());
-        TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
-        map.forEach((k,v)->{
-            sendTextMessage(v, textMessage);
-        });
     }
 }
