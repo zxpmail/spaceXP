@@ -20,7 +20,7 @@ space:
     external:
       work-id: 1
       length: 7
-      key-prefix: pie
+      key-prefix: zhou
 mybatis-plus:
   global-config:
     db-config:

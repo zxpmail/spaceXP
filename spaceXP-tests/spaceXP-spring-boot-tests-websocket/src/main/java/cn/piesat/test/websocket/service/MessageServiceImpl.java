@@ -5,7 +5,7 @@ package cn.piesat.test.websocket.service;
 import cn.piesat.framework.websocket.core.MessageHandler;
 import cn.piesat.framework.websocket.core.MessageService;
 
-import cn.piesat.framework.websocket.model.MessagePack;
+import cn.piesat.test.websocket.model.MessagePack;
 import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;

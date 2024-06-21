@@ -1,4 +1,4 @@
-package cn.piesat.framework.websocket.model.enums;
+package cn.piesat.test.websocket.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

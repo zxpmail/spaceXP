@@ -1,6 +1,6 @@
-package cn.piesat.framework.websocket.model;
+package cn.piesat.test.websocket.model;
 
-import cn.piesat.framework.websocket.model.enums.MessageEnum;
+import cn.piesat.test.websocket.model.enums.MessageEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

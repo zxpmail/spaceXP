@@ -2,7 +2,7 @@ package cn.piesat.test.websocket.controller;
 
 
 import cn.piesat.framework.websocket.core.MessageHandler;
-import cn.piesat.framework.websocket.model.MessagePack;
+import cn.piesat.test.websocket.model.MessagePack;
 import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
