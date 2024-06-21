@@ -1,7 +1,7 @@
 package cn.piesat.tests.redis.controller;
 
 import cn.piesat.framework.redis.core.MessageService;
-import cn.piesat.framework.redis.core.RedisService;
+
 import cn.piesat.framework.redis.model.MessageBody;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
