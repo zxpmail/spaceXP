@@ -4,6 +4,8 @@ import cn.piesat.framework.mybatis.plus.external.constants.ExternalConstant;
 import cn.piesat.framework.mybatis.plus.external.properties.MybatisPlusExternalProperties;
 import cn.piesat.framework.redis.core.RedisService;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.baomidou.mybatisplus.core.toolkit.Sequence;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 import java.time.Instant;
@@ -21,17 +23,21 @@ import java.time.format.DateTimeFormatter;
  *
  * @author zhouxp
  */
+@Slf4j
 public class CustomIdGenerator implements IdentifierGenerator {
     private final MybatisPlusExternalProperties properties;
+    private final Sequence sequence;
 
     public CustomIdGenerator(MybatisPlusExternalProperties properties) {
         this.properties = properties;
-        if (this.properties.getWorkId() > ExternalConstant.WORK_ID_MAX ||this.properties.getWorkId()<ExternalConstant.WORK_ID_MIN)  {
+        if (this.properties.getWorkId() > ExternalConstant.WORK_ID_MAX || this.properties.getWorkId() < ExternalConstant.WORK_ID_MIN) {
             this.properties.setWorkId(ExternalConstant.WORK_ID_MIN);
+
         }
         if (this.properties.getLength() < ExternalConstant.KEY_MIN_LENGTH || this.properties.getLength() > ExternalConstant.KEY_MAX_LENGTH) {
             this.properties.setLength(ExternalConstant.KEY_MIN_LENGTH);
         }
+        this.sequence = new Sequence(this.properties.getWorkId(), this.properties.getLength());
     }
 
     @Resource
@@ -39,10 +45,17 @@ public class CustomIdGenerator implements IdentifierGenerator {
 
     @Override
     public Number nextId(Object entity) {
-        long num = redisService.increment(properties.getKeyPrefix() +":" + entity.getClass().getName(), getEndTime());
-        String id = String.format("%s%02d%0" + properties.getLength() + "d",
-                LocalDate.now().format(DateTimeFormatter.ofPattern(ExternalConstant.FMT)),properties.getWorkId(), num);
-        return Long.valueOf(id);
+        Number id = 0;
+        try {
+            long num = redisService.increment(properties.getKeyPrefix() + ":" + entity.getClass().getName(), getEndTime());
+            String sid = String.format("%s%02d%0" + properties.getLength() + "d",
+                    LocalDate.now().format(DateTimeFormatter.ofPattern(ExternalConstant.FMT)), properties.getWorkId(), num);
+            id = Long.valueOf(sid);
+        } catch (Exception e) {
+            log.error("redis connect error!");
+            id = sequence.nextId();
+        }
+        return id;
     }
 
     /**
