@@ -52,8 +52,8 @@ public class CustomIdGenerator implements IdentifierGenerator {
                     LocalDate.now().format(DateTimeFormatter.ofPattern(ExternalConstant.FMT)), properties.getWorkId(), num);
             id = Long.valueOf(sid);
         } catch (Exception e) {
-            log.error("redis connect error!");
             id = sequence.nextId();
+            log.error("redis connect error! id:{}", id);
         }
         return id;
     }
