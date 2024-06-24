@@ -27,6 +27,7 @@
         <module>spaceXP-spring-boot-starter-multi-tenant</module>
         <module>spaceXP-spring-boot-starter-dynamic-datasource</module>
         <module>spaceXP-spring-boot-starter-kafka-datasource</module>
+        <module>spaceXP-spring-boot-starter-mybatis-plus-external</module>
     </modules>
     <dependencies>
         <dependency>

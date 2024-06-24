@@ -41,10 +41,9 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)  {
 
-        if (handler instanceof HandlerMethod ) {
+        if (handler instanceof HandlerMethod handlerMethod) {
             // 强转
             // 获取方法
-            HandlerMethod handlerMethod  = (HandlerMethod) handler;
             Method method = handlerMethod.getMethod();
             // 是否有AccessLimit注解
             if (!method.isAnnotationPresent(AccessLimit.class)) {

@@ -2,14 +2,17 @@ package cn.piesat.framework.redis.core;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.BoundSetOperations;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.support.atomic.RedisAtomicLong;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * {@code @date} 2022/9/28 14:27
  * {@code @description} : 包含一系列redis服务操作
  */
-@SuppressWarnings(value = { "unchecked" })
+@SuppressWarnings(value = { "unchecked","unused","UnusedReturnValue" })
 @RequiredArgsConstructor
 @Slf4j
 public class RedisService {
@@ -117,8 +120,6 @@ public class RedisService {
     /**
      * 删除集合对象
      *
-     * @param collection 多个对象
-     * @return
      */
 
     public Boolean deleteObject(final Collection<String> collection) {
@@ -169,8 +170,6 @@ public class RedisService {
     /**
      * 获得缓存的set
      *
-     * @param key
-     * @return
      */
 
     public <T> Set<T> getSet(final String key) {
@@ -277,5 +276,46 @@ public class RedisService {
             e.printStackTrace();
         }
         return false;
+    }
+    /**
+     * 获取链接工厂
+     */
+    public RedisConnectionFactory getConnectionFactory() {
+        return redisTemplate.getConnectionFactory();
+    }
+
+    /**
+     * 自增数
+     */
+    public long increment(String key) {
+        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+        return redisAtomicLong.incrementAndGet();
+    }
+
+    /**
+     * 自增数（带过期时间）
+     */
+    public long increment(String key, long time, TimeUnit timeUnit) {
+        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+        redisAtomicLong.expire(time, timeUnit);
+        return redisAtomicLong.incrementAndGet();
+    }
+
+    /**
+     * 自增数（带过期时间）
+     */
+    public long increment(String key, Instant expireAt) {
+        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+        redisAtomicLong.expireAt(expireAt);
+        return redisAtomicLong.incrementAndGet();
+    }
+
+    /**
+     * 自增数（带过期时间和步长）
+     */
+    public long increment(String key, int increment, long time, TimeUnit timeUnit) {
+        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+        redisAtomicLong.expire(time, timeUnit);
+        return redisAtomicLong.incrementAndGet();
     }
 }
