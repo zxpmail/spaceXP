@@ -3,30 +3,28 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
+        <artifactId>spaceXP-framework</artifactId>
         <groupId>cn.piesat.space</groupId>
-        <artifactId>spaceXP-tests</artifactId>
         <version>3.0.0</version>
     </parent>
-    <artifactId>spaceXP-spring-boot-tests-redis</artifactId>
-
+    <packaging>jar</packaging>
+    <artifactId>spaceXP-spring-boot-starter-redis-external</artifactId>
+    <name>${project.artifactId}</name>
+    <url>https://gitee.com/q4uryetsxzryjt</url>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>cn.piesat.space</groupId>
-            <artifactId>spaceXP-spring-boot-starter-web</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.piesat.space</groupId>
-            <artifactId>spaceXP-spring-boot-starter-redis-external</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.piesat.space</groupId>
-            <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
+            <artifactId>spaceXP-spring-boot-starter-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.26.0</version>
         </dependency>
     </dependencies>
 

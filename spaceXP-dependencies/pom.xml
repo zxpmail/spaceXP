@@ -52,10 +52,16 @@
         <aws-java-sdk.version>1.12.748</aws-java-sdk.version>
         <jakarta.validation.version>3.0.2</jakarta.validation.version>
         <mybatis.version>3.0.3</mybatis.version>
+        <org.redisson.version>3.30.0</org.redisson.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${org.redisson.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
