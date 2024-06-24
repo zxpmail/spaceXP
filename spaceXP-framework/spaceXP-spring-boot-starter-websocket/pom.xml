@@ -8,26 +8,17 @@
         <version>3.0.0</version>
     </parent>
     <packaging>jar</packaging>
-    <artifactId>spaceXP-spring-boot-starter-kafka-datasource</artifactId>
+    <artifactId>spaceXP-spring-boot-starter-websocket</artifactId>
     <name>${project.artifactId}</name>
     <url>https://gitee.com/q4uryetsxzryjt</url>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>2.1.1</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
     </dependencies>
 

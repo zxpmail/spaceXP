@@ -2,6 +2,7 @@ package cn.piesat.framework.kafka.datasource.core;
 
 import cn.piesat.framework.kafka.datasource.properties.KafkaConfigProperties;
 import com.alibaba.fastjson.JSONObject;
+import jakarta.annotation.Resource;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -17,7 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
+
 import java.lang.reflect.Field;
 
 import java.util.HashMap;

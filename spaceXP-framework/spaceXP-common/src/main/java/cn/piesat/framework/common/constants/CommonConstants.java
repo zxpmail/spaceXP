@@ -61,4 +61,8 @@ public interface CommonConstants {
     String UNDERLINE="_";
 
     String COLON=":";
+    /**
+     * 应用Id
+     */
+    String APP_ID="appId";
 }
