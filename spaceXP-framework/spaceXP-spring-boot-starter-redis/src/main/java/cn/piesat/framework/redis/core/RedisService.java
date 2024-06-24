@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
  * {@code @date} 2022/9/28 14:27
  * {@code @description} : 包含一系列redis服务操作
  */
-@SuppressWarnings(value = { "unchecked" })
+@SuppressWarnings(value = { "unchecked","unused","UnusedReturnValue" })
 @RequiredArgsConstructor
 @Slf4j
 public class RedisService {
@@ -123,7 +123,6 @@ public class RedisService {
      * 删除集合对象
      *
      * @param collection 多个对象
-     * @return
      */
 
     public Boolean deleteObject(final Collection<String> collection) {
@@ -174,8 +173,6 @@ public class RedisService {
     /**
      * 获得缓存的set
      *
-     * @param key
-     * @return
      */
 
     public <T> Set<T> getSet(final String key) {
