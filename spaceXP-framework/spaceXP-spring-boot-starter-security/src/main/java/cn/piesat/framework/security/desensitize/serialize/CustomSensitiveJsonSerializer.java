@@ -43,7 +43,7 @@ public class CustomSensitiveJsonSerializer extends JsonSerializer<String> implem
 
     @Override
     public void serialize(String s, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(String.valueOf(CharSequenceUtil.replace(s,start,end,symbol)));
+        jsonGenerator.writeString(String.valueOf(CharSequenceUtil.replaceByCodePoint(s,start,end,symbol)));
     }
 
     @Override
