@@ -51,7 +51,7 @@
                         </exclude>
                     </excludes>
                 </configuration>
-                <version>3.2.2</version>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>repackage</id>
