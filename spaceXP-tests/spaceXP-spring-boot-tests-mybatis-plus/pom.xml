@@ -17,7 +17,7 @@
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>
-            <artifactId>spaceXP-spring-boot-starter-mybatis-plus</artifactId>
+            <artifactId>spaceXP-spring-boot-starter-mybatis-plus-external</artifactId>
         </dependency>
         <dependency>
             <groupId>cn.piesat.space</groupId>

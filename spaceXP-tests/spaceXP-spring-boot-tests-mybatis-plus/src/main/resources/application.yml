@@ -14,3 +14,10 @@ spring:
 space:
   web:
     date-formatter-enable: true
+  table:
+    enable: true
+  db:
+    external:
+      work-id: 1
+      length: 7
+      key-prefix: zhou
