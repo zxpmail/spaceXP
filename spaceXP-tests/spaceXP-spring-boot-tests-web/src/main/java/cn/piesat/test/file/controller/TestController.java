@@ -127,8 +127,14 @@ public class TestController {
         log.info("log 日志2 ");
     }
 
-    @PostMapping(value = "/long2string")
-    public UserEntity long2string(@RequestBody UserEntity user)  {
-       return user;
+    @GetMapping ("/long2string")
+    public Object long2string()  {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setId(1234567891234567891L);
+        userEntity.setMobile("1235");
+        userEntity.setUsername("zxp");
+        HashMap<String, Object> map =new HashMap<>();
+        map.put("id",userEntity);
+        return map;
     }
 }

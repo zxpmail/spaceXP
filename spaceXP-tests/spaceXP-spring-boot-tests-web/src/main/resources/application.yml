@@ -14,16 +14,16 @@ space:
     xssEnable: true
     long2stringEnable: true
 
-server:
-  ssl:
-    enabled: true
-    key-store-type: JKS
-    key-store: classpath:localhost.jks
-    key-store-password: changeit
-    key-alias: localhost
-
-    trust-store: classpath:localhost.jks
-    trust-store-password: changeit
-    trust-store-provider: SUN
-    trust-store-type: JKS
-    client-auth: need
+#server:
+#  ssl:
+#    enabled: true
+#    key-store-type: JKS
+#    key-store: classpath:localhost.jks
+#    key-store-password: changeit
+#    key-alias: localhost
+#
+#    trust-store: classpath:localhost.jks
+#    trust-store-password: changeit
+#    trust-store-provider: SUN
+#    trust-store-type: JKS
+#    client-auth: need
