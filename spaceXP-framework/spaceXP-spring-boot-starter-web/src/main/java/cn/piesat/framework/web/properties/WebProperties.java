@@ -51,7 +51,7 @@ public class WebProperties {
     private String datePattern = "yyyy-MM-dd";
 
     /**
-     * date格式
+     * time 格式
      */
     private String timePattern = "HH:mm:ss";
     /**
