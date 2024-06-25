@@ -12,3 +12,4 @@ space:
       success-code: 0
   web:
     xssEnable: true
+    jackson-customize: true
