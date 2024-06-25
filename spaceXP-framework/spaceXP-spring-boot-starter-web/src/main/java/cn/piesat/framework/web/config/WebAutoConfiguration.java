@@ -9,16 +9,21 @@ import cn.piesat.framework.web.core.WebExceptionHandler;
 import cn.piesat.framework.web.properties.WebProperties;
 import cn.piesat.framework.web.xss.XssFilter;
 import cn.piesat.framework.web.xss.XssStringJsonSerializer;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -30,14 +35,19 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -124,38 +134,45 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
         //返回
         return objectMapper;
     }
+
+    @ConditionalOnProperty(name = "space.web.jackson-customize", havingValue = "true")
     @Bean
-    @ConditionalOnProperty(name = "space.web.date-formatter-enable", havingValue = "true")
-    @ConditionalOnMissingBean
-    public Jackson2ObjectMapperBuilder objectMapperBuilder(WebProperties webProperties) {
+    @Order(1)
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer(WebProperties webProperties) {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
                 .appendPattern(webProperties.getDateTimePattern())
                 .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
                 .toFormatter();
-        return new Jackson2ObjectMapperBuilder()
-                .createXmlMapper(false)
-                .indentOutput(true)
-                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .serializers(
-                        new LocalDateSerializer(DateTimeFormatter.ofPattern(webProperties.getDatePattern())),
-                        new LocalDateTimeSerializer(formatter))
-                .deserializers(
-                        new LocalDateDeserializer(DateTimeFormatter.ofPattern(webProperties.getDatePattern())),
-                        new LocalDateTimeDeserializer(formatter))
-                .modules(
-                        new JavaTimeModule(),
-                        new ParameterNamesModule(),
-                        new Jdk8Module());
-    }
-
-    @ConditionalOnProperty(name = "space.web.long2string-enable", havingValue = "true")
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return builder -> {
+            // 将入参中的空字符串""转为null
+            builder.deserializerByType(String.class, new StdScalarDeserializer<String>(String.class) {
+                @Override
+                public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
+                        throws IOException {
+                    // 重点在这儿:如果为空白则返回null
+                    String value = jsonParser.getValueAsString();
+                    if (value == null || "".equals(value.trim())) {
+                        return null;
+                    }
+                    return value;
+                }
+            });
+            // 设置java.util.Date时间类的序列化以及反序列化的格式
+            builder.simpleDateFormat(webProperties.getDateTimePattern());
+            // JSR 310日期时间处理
+            JavaTimeModule javaTimeModule = new JavaTimeModule();
+            javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(formatter));
+            javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ofPattern(webProperties.getDatePattern())));
+            javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ofPattern(webProperties.getTimePattern())));
+            javaTimeModule.addDeserializer(LocalDateTime.class,  new LocalDateTimeDeserializer(formatter));
+            javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(webProperties.getDatePattern())));
+            javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(webProperties.getTimePattern())));
+            builder.modules(javaTimeModule);
+
             builder.serializerByType(Long.class, ToStringSerializer.instance);
             builder.serializerByType(BigInteger.class, ToStringSerializer.instance);
             builder.serializerByType(BigDecimal.class, ToStringSerializer.instance);
-            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
         };
     }
 

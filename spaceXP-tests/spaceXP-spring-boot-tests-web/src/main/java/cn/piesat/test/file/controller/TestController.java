@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,6 +120,7 @@ public class TestController {
         private Long id;
         private String username;
         private String mobile;
+        private LocalDateTime createTime;
     }
 
     @PostMapping(value = "/upload")
@@ -133,6 +135,7 @@ public class TestController {
         userEntity.setId(1234567891234567891L);
         userEntity.setMobile("1235");
         userEntity.setUsername("zxp");
+        userEntity.setCreateTime(LocalDateTime.now());
         HashMap<String, Object> map =new HashMap<>();
         map.put("id",userEntity);
         return map;

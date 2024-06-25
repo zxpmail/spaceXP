@@ -41,11 +41,6 @@ public class WebProperties {
 
 
     /**
-     * 是否进行JSON LocalDateTime时间处理格式化
-     */
-    private Boolean dateFormatterEnable = false;
-
-    /**
      * dateTime格式
      */
     private String dateTimePattern = "yyyy-MM-dd HH:mm:ss";
@@ -54,6 +49,11 @@ public class WebProperties {
      * date格式
      */
     private String datePattern = "yyyy-MM-dd";
+
+    /**
+     * date格式
+     */
+    private String timePattern = "HH:mm:ss";
     /**
      * 忽略进行统一返回url
      */
@@ -75,6 +75,6 @@ public class WebProperties {
     /**
      * Long bigInteger json转成String
      */
-    private boolean long2stringEnable = true;
+    private boolean jacksonCustomize = true;
 
 }
