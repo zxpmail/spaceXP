@@ -30,7 +30,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -63,7 +62,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     private String module;
 
     @Bean
-    @ConditionalOnProperty(name = "space.web.cost-enable", havingValue = "true", matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.web.cost-enable", havingValue = "true")
     public TimeCostBeanPostProcessor timeCostBeanPostProcessor() {
         return new TimeCostBeanPostProcessor();
     }
@@ -126,7 +125,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
         return objectMapper;
     }
     @Bean
-    @ConditionalOnProperty(name = "space.web.date-formatter-enable", havingValue = "true", matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.web.date-formatter-enable", havingValue = "true")
     @ConditionalOnMissingBean
     public Jackson2ObjectMapperBuilder objectMapperBuilder(WebProperties webProperties) {
         DateTimeFormatter formatter = new DateTimeFormatterBuilder()
