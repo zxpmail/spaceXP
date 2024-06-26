@@ -32,7 +32,6 @@ public class LocalDateTimeSerializerConfig {
         Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder = new Jackson2ObjectMapperBuilder();
         return jackson2ObjectMapperBuilder.dateFormat(new SimpleDateFormat(mybatisPlusConfigProperties.getDateFormat()))
                 .serializerByType(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(mybatisPlusConfigProperties.getDateFormat())))
-                .serializerByType(Long.class, ToStringSerializer.instance)
                 .serializerByType(BigInteger.class, ToStringSerializer.instance)
                 .serializerByType(BigDecimal.class, ToStringSerializer.instance)
                 .deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(mybatisPlusConfigProperties.getDateFormat())));

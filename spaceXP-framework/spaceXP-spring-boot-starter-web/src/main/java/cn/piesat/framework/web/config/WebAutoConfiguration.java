@@ -165,7 +165,6 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
             javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(webProperties.getTimePattern())));
             builder.modules(javaTimeModule);
 
-            builder.serializerByType(Long.class, ToStringSerializer.instance);
             builder.serializerByType(BigInteger.class, ToStringSerializer.instance);
             builder.serializerByType(BigDecimal.class, ToStringSerializer.instance);
 
