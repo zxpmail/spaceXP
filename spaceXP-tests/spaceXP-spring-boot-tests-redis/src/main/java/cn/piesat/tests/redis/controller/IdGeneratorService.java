@@ -32,10 +32,12 @@ public class IdGeneratorService {
      * @param length
      * @return
      */
-    public String generateId(String key, Integer length) {
-        long num = redisService.increment(key, getEndTime());
-        String id = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")) + String.format("%0" + length + "d", num);
-        return id;
+    public Long generateId(String key, Integer length) {
+
+        long num = redisService.increment(key);
+        String sid = String.format("%s%02d%0"+length+"d" ,
+                LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd")), 2, num);
+        return Long.valueOf(sid);
     }
 
     /**

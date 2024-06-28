@@ -45,7 +45,7 @@ public class CustomIdGenerator implements IdentifierGenerator {
 
     @Override
     public Number nextId(Object entity) {
-        Number id = 0;
+        Number id;
         try {
             long num = redisService.increment(properties.getKeyPrefix() + ":" + entity.getClass().getName(), getEndTime());
             String sid = String.format("%s%02d%0" + properties.getLength() + "d",

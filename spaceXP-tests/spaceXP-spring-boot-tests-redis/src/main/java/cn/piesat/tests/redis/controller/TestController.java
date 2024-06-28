@@ -124,7 +124,7 @@ public class TestController {
 
     @GetMapping("generateId")
     void generateIdTest() {
-        String code = idGeneratorService.generateId("orderId", 6);
+        Long code = idGeneratorService.generateId("orderId", 9);
         System.out.println(code);
     }
 
