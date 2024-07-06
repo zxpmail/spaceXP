@@ -4,6 +4,9 @@ spring:
   mvc:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 space:
   common:
     result:

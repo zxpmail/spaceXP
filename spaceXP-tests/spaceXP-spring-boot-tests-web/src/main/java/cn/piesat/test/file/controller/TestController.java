@@ -140,4 +140,9 @@ public class TestController {
         map.put("id",userEntity);
         return map;
     }
+
+    @GetMapping ("/object")
+    public Object getObject()  {
+        return new Integer(0);
+    }
 }

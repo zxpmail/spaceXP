@@ -7,6 +7,7 @@ import cn.piesat.framework.feign.annotation.HasApiResult;
 import cn.piesat.framework.feign.core.FeignRequestInterceptor;
 import cn.piesat.tests.feign.consumer.model.entity.UserDO;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +26,7 @@ import java.util.Map;
  */
 @HasApiResult
 @FeignClient(name = "producer" ,path ="producer", configuration = FeignRequestInterceptor.class)
+@Hidden
 public interface UserFeignClient {
     @ApiOperation("分页查询")
     @PostMapping("/user/list")
@@ -39,4 +41,8 @@ public interface UserFeignClient {
 
     @PostMapping ("/user/map")
     Map<String,UserDO> map();
+
+
+    @GetMapping ("/user/null")
+    List<UserDO> getNull();
 }

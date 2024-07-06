@@ -57,12 +57,12 @@ public class ApiResult <T>{
     }
 
     public static<E> ApiResult<E> ok() {
-        return new ApiResult<E>();
+        return new ApiResult<>();
     }
 
     public static <E> ApiResult<E> ok(E o) {
         // 支持Controller层直接返回ApiResult
-        ApiResult<E> result = new ApiResult<E>(CommonResponseEnum.SUCCESS);
+        ApiResult<E> result = new ApiResult<>(CommonResponseEnum.SUCCESS);
 
         if (!(o instanceof ApiResult)) {
             // 其他obj封装进data,保持返回格式统一
@@ -72,18 +72,18 @@ public class ApiResult <T>{
     }
 
     public static<T> ApiResult<T> ok(String msg) {
-        return new ApiResult<T>(CommonResponseEnum.SUCCESS.getCode(), msg, null);
+        return new ApiResult<>(CommonResponseEnum.SUCCESS.getCode(), msg, null);
     }
 
     public static <T> ApiResult<T> ok(T data, String msg) {
-        return new ApiResult<T>(CommonResponseEnum.SUCCESS.getCode(), msg,  data);
+        return new ApiResult<>(CommonResponseEnum.SUCCESS.getCode(), msg, data);
     }
 
     /**
      * 自定义返回码
      */
     public static <T>ApiResult<T> ok(Integer code, String msg) {
-        return new ApiResult<T>(code, msg);
+        return new ApiResult<>(code, msg);
     }
 
 
@@ -96,14 +96,14 @@ public class ApiResult <T>{
      * @return 响应体
      */
     public static<T> ApiResult<T> ok(Integer code, String msg, T data) {
-        return new ApiResult<T>(code, msg, data);
+        return new ApiResult<>(code, msg, data);
     }
 
     public static <T> ApiResult<T> fail() {
-        return new ApiResult<T>(CommonResponseEnum.ERROR.getCode(), null, null);
+        return new ApiResult<>(CommonResponseEnum.ERROR.getCode(), null, null);
     }
     public static <T> ApiResult<T> fail(IBaseResponse iCommonResponse) {
-        return new ApiResult<T>(iCommonResponse);
+        return new ApiResult<>(iCommonResponse);
     }
 
     /***
@@ -113,7 +113,7 @@ public class ApiResult <T>{
      * @return 响应体
      */
     public static <T> ApiResult<T> fail(String msg) {
-        return new ApiResult<T>(CommonResponseEnum.ERROR.getCode(), msg, null);
+        return new ApiResult<>(CommonResponseEnum.ERROR.getCode(), msg, null);
     }
 
 
@@ -125,7 +125,7 @@ public class ApiResult <T>{
      * @return 响应体
      */
     public static <T> ApiResult<T> fail(Integer code, String msg) {
-        return new ApiResult<T>(code, msg, null);
+        return new ApiResult<>(code, msg, null);
     }
 
     /***
@@ -136,7 +136,7 @@ public class ApiResult <T>{
      * @return 响应体
      */
     public static <T> ApiResult<T> fail(Integer code, String msg,T data) {
-        return new ApiResult<T>(code, msg, data);
+        return new ApiResult<>(code, msg, data);
     }
 
 }
