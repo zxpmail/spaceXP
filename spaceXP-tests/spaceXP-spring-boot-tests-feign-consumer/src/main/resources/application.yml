@@ -31,4 +31,4 @@ feign:
         loggerLevel: full
 space:
   web:
-    date-formatter-enable: true
+    jackson-customize: true

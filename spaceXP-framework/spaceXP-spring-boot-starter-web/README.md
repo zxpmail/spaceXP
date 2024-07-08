@@ -35,7 +35,7 @@ space.web.cost-enable=true 开启bean初始化花费统计时间，默认不开�
 space.web.web-exception-enable=true 默认开启 是否使用统一异常
 space.web.return-value-enable 默认开启 是否开启统一包装返回值
 space.web.login-user-enable 默认开启  是否开启用户登录信息绑定到request域
-space.web.date-formatter-enable 默认不开启 是否开启LocalDatetime web自动转换
+space.web..jackson-customize 默认不开启 是否开启.jackson-customize web自动转换
 space.web.date-time-pattern 默认格式：yyyy-MM-dd HH:mm:ss 设置转换格式
 space.web.ignore-urls 忽略统一包装的url
 
