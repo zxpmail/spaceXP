@@ -18,7 +18,7 @@ spaceXP-tools 工具集合
 3.  xxxx
 
 #### 使用说明
-
+## 框架说明
 1.  spaceXP-common 公共功能：包含数据库AddGroup、UpdateGroup增加和更新注解；登录LoginUser注解和不进行自动包装返回值NoApiResult注解
     项目基本异常类BaseException类、基本响应接口和树形数据接口，ApiResult包装类分页PageResult类
     日志类以及实体复制工具CopyBeanUtils、生成树工具、jwt工具、servlet工具类
@@ -38,6 +38,25 @@ spaceXP-tools 工具集合
 15. spaceXP-spring-boot-starter-mybatis-plus-external mybatis-plus额外组件 支持发号功能
 16. spaceXP-spring-boot-starter-redis-external 包装redisson 分布式锁功能
 17. spaceXP-spring-boot-starter-websocket 实现socket消息发送以及心跳功能
+## 工具说明
+1. spaceXP-gateway 网关工具 实现网关鉴权
+2. spaceXP-generator 低代码工具
+3. spaceXP-generator-ui 低代码工具前端
+4. spaceXP-log 日志工具 实现记录登录日志和普通日志到数据库中
+## 测试说明
+1. spaceXP-spring-boot-tests-dynamic-datasource测试动态数据源
+2. spaceXP-spring-boot-tests-feign-producer 测试feign工具生产者
+3. spaceXP-spring-boot-tests-feign-consumer 测试feign工具消费者
+4. spaceXP-spring-boot-tests-file-s3 测试s3组件
+5. spaceXP-spring-boot-tests-kafka-datasource 测试kafka数据源组件
+6. spaceXP-spring-boot-tests-log 测试日志组件
+7. spaceXP-spring-boot-tests-multi-tenant 测试多租户组件
+8. spaceXP-spring-boot-tests-mybatis-plus 测试mybatis-plus组件
+9. spaceXP-spring-boot-tests-permission-data测试数据权限
+10. spaceXP-spring-boot-tests-permission-url 测试菜单权限
+11. spaceXP-spring-boot-tests-redis 测试redis组件
+12. spaceXP-spring-boot-tests-web 测试web组件
+13. spaceXP-spring-boot-tests-websocket 测试websocket组件
 #### 鸣谢
 本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 非常感谢众多软件和作者
