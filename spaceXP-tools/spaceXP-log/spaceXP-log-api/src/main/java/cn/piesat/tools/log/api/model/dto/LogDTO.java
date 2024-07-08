@@ -1,4 +1,4 @@
-package cn.piesat.log.api.model.dto;
+package cn.piesat.tools.log.api.model.dto;
 
 
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
