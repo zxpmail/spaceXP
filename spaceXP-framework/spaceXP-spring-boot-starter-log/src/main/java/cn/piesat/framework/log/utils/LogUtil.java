@@ -159,15 +159,15 @@ public class LogUtil {
         opLogEntity.setIp(ip);
         opLogEntity.setLocation(ip);
         opLogEntity.setRequestMethod(request.getMethod());
-        if (!StringUtils.hasText(OS)) {
+        if (!StringUtils.hasText(os)) {
             String uaStr = request.getHeader("user-agent");
             if (StringUtils.hasText(uaStr)) {
                 browser = UserAgentUtil.parse(uaStr).getBrowser().toString();
                 os = UserAgentUtil.parse(uaStr).getOs().toString();
             }
         }
-        opLogEntity.setBrowser(browser);
-        opLogEntity.setOs(os);
+        opLogEntity.setBrowser(browser == null ? LogConstants.BROWSER : browser);
+        opLogEntity.setOs(os == null ? LogConstants.OS : os);
         //访问目标方法的参数 可动态改变参数值
         Object[] args = joinPoint.getArgs();
         //获取执行的方法名

@@ -1,0 +1,12 @@
+server:
+  port: 8078
+spring:
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+  application:
+    name: test
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://localhost:8848/

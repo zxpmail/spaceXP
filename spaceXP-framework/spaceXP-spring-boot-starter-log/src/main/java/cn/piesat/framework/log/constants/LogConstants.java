@@ -34,4 +34,8 @@ public interface LogConstants {
     String INVALID_RET ="invalid return value";
 
     String INVALID_PARAMETER ="invalid parameter";
+
+    String BROWSER ="client";
+
+    String OS ="unknown";
 }
