@@ -31,6 +31,7 @@
         <module>spaceXP-spring-boot-starter-mybatis-plus-external</module>
         <module>spaceXP-spring-boot-starter-redis-external</module>
         <module>spaceXP-spring-boot-starter-websocket</module>
+        <module>spaceXP-spring-boot-starter-log-external</module>
     </modules>
     <dependencies>
         <dependency>
