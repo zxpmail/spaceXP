@@ -11,7 +11,7 @@
  Target Server Version : 50738
  File Encoding         : 65001
 
- Date: 08/07/2024 17:10:54
+ Date: 09/07/2024 15:06:47
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `sys_log`  (
   `request_method` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求方式||dto||vo',
   `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请求ip地址||dto||vo',
   `os` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '操作系统||dto||vo',
-  `browser` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '浏览器||dto||vo',
+  `browser` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '浏览器||dto||vo',
   `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '请求参数||dto||vo',
   `start_time` datetime(0) NULL DEFAULT NULL COMMENT '开始时间||dto||vo',
   `finish_time` datetime(0) NULL DEFAULT NULL COMMENT '完成时间||dto||vo',
@@ -40,10 +40,10 @@ CREATE TABLE `sys_log`  (
   `ex_detail` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '异常详情||dto||vo',
   `ex_desc` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '异常描述||dto||vo',
   `type` int(11) NULL DEFAULT NULL COMMENT '类型：1 操作记录 2异常记录||dto||vo||query',
-  `dept_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '部门ID||DTO||VO||Query',
+  `dept_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1' COMMENT '部门ID||DTO||VO||Query',
   `sub_system` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分系统标识',
-  `tenant_id` bigint(20) NOT NULL COMMENT '租户编号',
-  `creator` bigint(20) NOT NULL COMMENT '创建者',
+  `tenant_id` bigint(20) NULL DEFAULT NULL COMMENT '租户编号',
+  `creator` bigint(20) NOT NULL DEFAULT 1 COMMENT '创建者',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建日期||vo||query||between',
   `user_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户名称',
   `consuming_time` bigint(20) NULL DEFAULT NULL COMMENT '消耗时间',
@@ -65,7 +65,7 @@ CREATE TABLE `sys_login_log`  (
   `msg` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '提示消息||DTO||VO ',
   `logined` int(11) NULL DEFAULT NULL COMMENT '是否登录0登录1退出||VO||Query ',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '访问时间||VO||Query||between',
-  `tenant_id` bigint(20) NOT NULL COMMENT '租户编号',
+  `tenant_id` bigint(20) NULL DEFAULT NULL COMMENT '租户编号',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
 

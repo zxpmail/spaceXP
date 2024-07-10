@@ -18,7 +18,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spring.boot.version>2.7.18</spring.boot.version>
+        <spring.boot.version>2.7.4</spring.boot.version>
         <tomcat.version>9.0.91</tomcat.version>
         <spring.cloud.version>2021.0.5</spring.cloud.version>
         <spring.cloud.alibaba.version>2021.0.4.0</spring.cloud.alibaba.version>
@@ -28,7 +28,7 @@
 
         <lombok.version>1.18.24</lombok.version>
         <fastjson.version>1.2.83</fastjson.version>
-        <snakeyaml.version>2.0</snakeyaml.version>
+        <snakeyaml.version>1.33</snakeyaml.version>
         <fastjson-version>2.0.13</fastjson-version>
         <knife4j.version>3.0.3</knife4j.version>
         <guava-version>33.2.1-jre</guava-version>
@@ -45,7 +45,7 @@
         <swagger-annotations.verison>1.5.22</swagger-annotations.verison>
         <com.alibaba.cloud.version>2021.1</com.alibaba.cloud.version>
         <spring-cloud.verison>2021.0.4</spring-cloud.verison>
-        <spring-framework.version>5.3.37</spring-framework.version>
+        <spring-framework.version>5.3.24</spring-framework.version>
         <logback.version>1.2.13</logback.version>
         <org.springframework.security.version>5.8.13</org.springframework.security.version>
         <mysql.version>8.4.0</mysql.version>
@@ -61,7 +61,7 @@
         <spring-kafka.version>2.9.13</spring-kafka.version>
         <redssion-version>3.17.7</redssion-version>
         <commons-pool2-version>2.11.1</commons-pool2-version>
-        <netty.version>4.1.111.Final</netty.version>
+        <netty.version>4.1.85.Final</netty.version>
         <kafka-clients.version>3.4.1</kafka-clients.version>
         <commons-codec.version>1.17.0</commons-codec.version>
         <httpclient.version>4.5.14</httpclient.version>
@@ -97,11 +97,6 @@
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-handler</artifactId>
-                <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
                 <version>${netty.version}</version>
             </dependency>
             <dependency>
@@ -384,11 +379,7 @@
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-undertow</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-test</artifactId>

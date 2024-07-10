@@ -38,11 +38,12 @@ spaceXP-tools 工具集合
 15. spaceXP-spring-boot-starter-mybatis-plus-external mybatis-plus额外组件 支持发号功能
 16. spaceXP-spring-boot-starter-redis-external 包装redisson 分布式锁功能
 17. spaceXP-spring-boot-starter-websocket 实现socket消息发送以及心跳功能
+18. spaceXP-spring-boot-starter-log-external 实现log组件接口 直接保存到日志服务器中
 ## 工具说明
 1. spaceXP-gateway 网关工具 实现网关鉴权
 2. spaceXP-generator 低代码工具
 3. spaceXP-generator-ui 低代码工具前端
-4. spaceXP-log 日志工具 实现记录登录日志和普通日志到数据库中
+4. spaceXP-log 日志服务器，日志工具 实现记录登录日志和普通日志到数据库中
 ## 测试说明
 1. spaceXP-spring-boot-tests-dynamic-datasource测试动态数据源
 2. spaceXP-spring-boot-tests-feign-producer 测试feign工具生产者
@@ -57,6 +58,7 @@ spaceXP-tools 工具集合
 11. spaceXP-spring-boot-tests-redis 测试redis组件
 12. spaceXP-spring-boot-tests-web 测试web组件
 13. spaceXP-spring-boot-tests-websocket 测试websocket组件
+14. spaceXP-spring-boot-tests-log-external 测试log扩展组件
 #### 鸣谢
 本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 非常感谢众多软件和作者

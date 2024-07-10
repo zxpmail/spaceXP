@@ -1,12 +1,22 @@
 server:
   port: 8078
+  servlet:
+    context-path: /testLog
 spring:
   mvc:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
   application:
-    name: test
+    name: test-log
   cloud:
     nacos:
       discovery:
         server-addr: http://localhost:8848/
+
+space:
+  log:
+    external:
+      restTemplateEnabled: false
+      #restUrlPrefix: http://localhost:8006/log
+      logServerName: log
+      save: /log/add

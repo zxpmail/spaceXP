@@ -8,10 +8,10 @@ spring:
     mvc:
       pathmatch:
         matching-strategy: ANT_PATH_MATCHER
-#  redis:
-#    host: 192.168.2.100
-#    port: 36379
-#    database: 1
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 1
   application:
     name: gateway
   cloud:
@@ -35,6 +35,20 @@ spring:
           uri: lb://producer
           predicates:
             - Path=/*/producer/**
+          filters:
+            - StripPrefix=1
+            - SwaggerHeaderFilter
+        - id: log
+          uri: lb://log
+          predicates:
+            - Path=/*/log/**
+          filters:
+            - StripPrefix=1
+            - SwaggerHeaderFilter
+        - id: test-log
+          uri: lb://test-log
+          predicates:
+            - Path=/*/testLog/**
           filters:
             - StripPrefix=1
             - SwaggerHeaderFilter

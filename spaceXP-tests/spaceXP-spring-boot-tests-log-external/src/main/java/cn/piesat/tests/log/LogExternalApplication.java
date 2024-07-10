@@ -13,7 +13,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @author zhouxp
  */
 @SpringBootApplication
-@EnableFeignClients(basePackages = {"cn.piesat.framework.log.external.service"})
+@EnableFeignClients(basePackages = {"cn.piesat.framework.log.external.client"})
 public class LogExternalApplication {
     public static void main(String[] args) {
         SpringApplication.run(LogExternalApplication.class,args);

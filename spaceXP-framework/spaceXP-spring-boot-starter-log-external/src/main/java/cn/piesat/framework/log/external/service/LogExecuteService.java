@@ -3,7 +3,8 @@ package cn.piesat.framework.log.external.service;
 
 import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.common.model.vo.ApiResult;
-import cn.piesat.framework.log.external.properties.ToolsLogProperties;
+import cn.piesat.framework.log.external.properties.LogExternalProperties;
+import cn.piesat.framework.log.external.client.LogFeignClient;
 import cn.piesat.framework.log.service.ExecuteLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +22,18 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class LogExecuteService implements ExecuteLogService {
 
-    private final ToolsLogProperties toolsLogProperties;
-    private final RestTemplate restTemplate;
+    private final LogExternalProperties logExternalProperties;
+    @Autowired(required = false)
+    private  RestTemplate restTemplate;
 
     @Autowired(required = false)
     private LogFeignClient logFeignClient;
     @Override
     public void exec(OpLogEntity opLogEntity) {
-        logFeignClient.add(opLogEntity);
-        //restTemplate.postForEntity(toolsLogProperties.getRestUrlPrefix() +"/log/log/add",opLogEntity, ApiResult.class);
+        if(logExternalProperties.getRestTemplateEnabled()){
+            restTemplate.postForEntity(logExternalProperties.getRestUrlPrefix() + logExternalProperties.getSave(),opLogEntity, ApiResult.class);
+        }else{
+            logFeignClient.add(opLogEntity);
+        }
     }
 }
