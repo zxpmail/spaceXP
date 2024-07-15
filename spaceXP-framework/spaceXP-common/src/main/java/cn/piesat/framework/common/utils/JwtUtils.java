@@ -5,7 +5,13 @@ import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.dto.JwtUser;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import com.google.gson.Gson;
-import io.jsonwebtoken.*;
+
+import io.jsonwebtoken.CompressionCodecs;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.gson.io.GsonSerializer;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,7 +30,7 @@ import java.util.UUID;
 @Slf4j
 public class JwtUtils {
 
-    private static Gson gson =new Gson();
+    private static final Gson gson =new Gson();
     private static SecretKey getSecretKey(String tokenSignKey) {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(tokenSignKey));
     }
@@ -53,7 +59,6 @@ public class JwtUtils {
     }
 
     public static Object getValue(String token,String tokenSignKey){
-        String msg = null;
         if (!StringUtils.hasText(token)){
             throw new BaseException(CommonResponseEnum.TOKEN_EMPTY);
         }
@@ -65,7 +70,7 @@ public class JwtUtils {
                 .get(CommonConstants.USER);
     }
     public static JwtUser checkToken(String token,String tokenSignKey) {
-        String msg = null;
+        String msg;
         if (!StringUtils.hasText(token)){
             throw new BaseException(CommonResponseEnum.TOKEN_EMPTY);
         }

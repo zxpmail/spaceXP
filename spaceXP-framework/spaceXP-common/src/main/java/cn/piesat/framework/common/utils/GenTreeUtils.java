@@ -40,7 +40,6 @@ import java.util.stream.Collectors;
  *                 new MenuVo(12, "b销售2部", 10),
  *                 new MenuVo(13, "人事部", 1),
  *                 new MenuVo(14, "销售部", 1)));
- *
  *         // 组装树形结构
  *         List<MenuVo> menus = GenTreeUtil.buildTree(menusVoList, 0);
  * <p/>
