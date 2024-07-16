@@ -9,6 +9,11 @@ package cn.piesat.framework.common.constants;
  * @author zhouxp
  */
 public interface CommonConstants {
+
+    /**
+     * 默认除法运算精度
+     */
+    int DEF_DIV_SCALE = 10;
     /**
      * 请求路径
      */
