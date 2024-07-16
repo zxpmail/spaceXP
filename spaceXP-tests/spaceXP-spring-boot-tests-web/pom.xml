@@ -19,26 +19,6 @@
             <artifactId>spaceXP-spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>9.0.91</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>5.3.37</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>5.3.37</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.3.37</version>
-        </dependency>
-        <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
         </dependency>
