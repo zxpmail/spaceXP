@@ -12,7 +12,7 @@ import static cn.piesat.framework.common.constants.CommonConstants.DEF_DIV_SCALE
  * {@code @create}: 2024-07-16 10:13
  * {@code @author}: zhouxp
  */
-public class BigDecimalUtils {
+public class ArithmeticUtils {
 
     /**
      * 提供精确的加法运算

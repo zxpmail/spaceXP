@@ -1,0 +1,12 @@
+gen:
+  project:
+    packageName: cn.piesat
+    version: 1.0.0
+  developer :
+     author : zhouxiaoping,
+     email : zhouxiaoping@piesat.cn
+  templates:
+    - name: java/Controller.java.ftl
+      path: ${packageName}/src/views/${moduleName}/${functionName}/index.vue
+    - name: java/Controller.java.ftl
+      path: ${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java

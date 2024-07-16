@@ -2,7 +2,6 @@ server:
   port: 8888
   servlet:
     context-path: /generator
-
 spring:
   mvc:
     path-match:
@@ -10,15 +9,17 @@ spring:
   jackson:
     default-property-inclusion: non_null
   datasource:
-    driver-class-name: org.sqlite.JDBC
-    jdbcUrl: jdbc:sqlite:db/xp-generator.db
+#    driver-class-name: org.sqlite.JDBC
+#    jdbcUrl: jdbc:sqlite:db/xp-generator.db
     # MySQL
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    jdbcUrl: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-#    username: root
-#    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+    username: root
+    password: 123456
   freemarker:
     check-template-location: false
+  profiles:
+    active: template
 
 #     Oracle
 #    driver-class-name: oracle.jdbc.OracleDriver
@@ -61,3 +62,4 @@ mybatis-plus:
 logging:
   level:
     cn.piesat.tools.generator.mapper: debug
+
