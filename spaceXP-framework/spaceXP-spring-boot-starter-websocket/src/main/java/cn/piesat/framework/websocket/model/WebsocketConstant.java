@@ -12,4 +12,13 @@ public interface WebsocketConstant {
     Integer DEBUG_USER_APPID = 0;
 
     String DEFAULT_DOMAIN = "*";
+
+    /**
+     * 发送时间的限制，单位：毫秒
+     */
+    Integer SEND_TIME_LIMIT = 1000 * 5;
+    /**
+     * 发送消息缓冲上线，单位：bytes
+     */
+    Integer BUFFER_SIZE_LIMIT = 1024 * 100;
 }

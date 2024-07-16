@@ -10,9 +10,13 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
+import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+
+import static cn.piesat.framework.websocket.model.WebsocketConstant.BUFFER_SIZE_LIMIT;
+import static cn.piesat.framework.websocket.model.WebsocketConstant.SEND_TIME_LIMIT;
 
 /**
  * <p/>
@@ -40,6 +44,8 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
             String uid = (String) session.getAttributes().get(CommonConstants.USER_ID);
             Integer appId = (Integer) session.getAttributes().get(CommonConstants.APP_ID);
             if (uid != null || appId != null) {
+                // 实现 session 支持并发，可参考 https://blog.csdn.net/abu935009066/article/details/131218149
+                session = new ConcurrentWebSocketSessionDecorator(session, SEND_TIME_LIMIT, BUFFER_SIZE_LIMIT);
                 SessionSocketHolder.add(uid, appId, session);
             }
         } catch (Exception e) {
