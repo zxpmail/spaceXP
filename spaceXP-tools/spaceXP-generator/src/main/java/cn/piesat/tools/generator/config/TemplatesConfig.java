@@ -1,5 +1,6 @@
 package cn.piesat.tools.generator.config;
 
+import cn.piesat.tools.generator.model.entity.TemplateEntity;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public final class TemplatesConfig {
     /**
      * 模板列表
      */
-    private List<Templates> templates;
+    private List<TemplateEntity> templates;
 
     /**
      * 项目信息
@@ -63,31 +64,4 @@ public final class TemplatesConfig {
         private String email = "zhouxiaoping@piesat.cn";
     }
 
-    /**
-     * 模板信息实体类
-     */
-    @Data
-    static class Templates {
-        /**
-         * ID号
-         */
-        private Integer id;
-        /**
-         * 文件名称
-         */
-        private String name;
-        /**
-         * 生成文件路径
-         */
-        private String path;
-        /**
-         * 是否生成单一文件 1 是 0 否 如系统pom、启动文件为单一文件，controller、service等不是单一文件
-         */
-        private Integer only = 0;
-
-        /**
-         * 产生文件方式 单模块 1 多模块 0
-         */
-        private Integer single = 1;
-    }
 }

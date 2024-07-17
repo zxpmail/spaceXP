@@ -11,4 +11,6 @@ package cn.piesat.tools.generator.constants;
 public interface Constants {
     String EMPTY = "";
     char UNDERLINE_CHAR = '_';
+
+    String TEMPLATE_DIRECTORY = "/template/";
 }
