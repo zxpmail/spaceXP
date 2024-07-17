@@ -6,7 +6,15 @@ gen:
      author : zhouxiaoping,
      email : zhouxiaoping@piesat.cn
   templates:
+    - name: java/Application.java.ftl
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/${ModuleName}Application.java
+      only: 1
     - name: java/Controller.java.ftl
-      path: ${packageName}/src/views/${moduleName}/${functionName}/index.vue
-    - name: java/Controller.java.ftl
-      path: ${backendPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java
+      only: 0
+    - name: java/Service.java.ftl
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java
+      only: 0
+    - name: java/ServiceImpl.java.ftl
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java
+      only: 0

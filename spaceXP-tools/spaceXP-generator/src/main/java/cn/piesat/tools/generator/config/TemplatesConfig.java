@@ -13,7 +13,7 @@ import java.util.List;
  * {@code @create}: 2024-07-16 14:55
  * {@code @author}: zhouxp
  */
-@ConfigurationProperties(prefix = "gen" )
+@ConfigurationProperties(prefix = "gen")
 @Data
 @Component
 public class TemplatesConfig {
@@ -38,7 +38,13 @@ public class TemplatesConfig {
      */
     @Data
     static class Project {
+        /**
+         * 项目包
+         */
         private String packageName = "cn.piesat";
+        /**
+         * 项目版本
+         */
         private String version = "1.0.0";
     }
 
@@ -47,7 +53,13 @@ public class TemplatesConfig {
      */
     @Data
     static class Developer {
+        /**
+         * 创造者
+         */
         private String author = "zhouxiaoping";
+        /**
+         * 创建者EMail
+         */
         private String email = "zhouxiaoping@piesat.cn";
     }
 
@@ -56,7 +68,17 @@ public class TemplatesConfig {
      */
     @Data
     static class Templates {
+        /**
+         * 文件名称
+         */
         private String name;
+        /**
+         * 生成文件路径
+         */
         private String path;
+        /**
+         * 是否生成单一文件 1 是 0 否 如系统pom、启动文件为单一文件，controller、service等不是单一文件
+         */
+        private Integer only = 0;
     }
 }
