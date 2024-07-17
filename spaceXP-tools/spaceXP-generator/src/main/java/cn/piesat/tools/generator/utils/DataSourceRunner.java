@@ -5,8 +5,6 @@ import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.service.DataSourceService;
-import cn.piesat.tools.generator.service.ProjectService;
-import cn.piesat.tools.generator.service.TemplateService;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -19,7 +17,7 @@ import java.util.List;
 
 /**
  * <p/>
- * {@code @description}  :
+ * {@code @description}  :  启动时把数据库中的数据源加入内存中
  * <p/>
  * <b>@create:</b> 2023/12/9 19:58.
  *
@@ -31,12 +29,6 @@ public class DataSourceRunner implements ApplicationRunner {
     private DynamicDataSource dynamicDataSource;
     @Resource
     private DataSourceService dataSourceService;
-
-    @Resource
-    private TemplateService templateService;
-
-    @Resource
-    private ProjectService projectService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -52,8 +44,6 @@ public class DataSourceRunner implements ApplicationRunner {
             }
             dynamicDataSource.add(ds);
         }
-        TemplateUtils.templates = templateService.list();
-        TemplateUtils.project =projectService.getDefaultProject();
     }
 }
 

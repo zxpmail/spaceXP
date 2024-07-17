@@ -20,8 +20,6 @@ import java.util.Map;
  */
 @Slf4j
 public class TemplateUtils {
-    public static List<TemplateDO> templates ;
-    public static ProjectDO project;
     public static String getContent(String content, Map<String, Object> dataModel) {
         if (dataModel.isEmpty()) {
             return content;
