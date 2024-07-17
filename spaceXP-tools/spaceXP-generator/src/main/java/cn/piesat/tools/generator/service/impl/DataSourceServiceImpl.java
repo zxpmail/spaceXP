@@ -98,8 +98,9 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
      */
     @Override
     public Boolean update(DataSourceDTO dataSourceVO) {
-        datasourceTest(dataSourceVO);
         DataSourceDO byId = getById(dataSourceVO.getId());
+        dynamicDataSource.delete(byId.getConnName());
+        datasourceTest(dataSourceVO);
         BeanUtils.copyProperties(dataSourceVO,byId,CopyBeanUtils.getNullPropertyNames(dataSourceVO));
         return updateById(byId);
     }
@@ -117,7 +118,6 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         }
         return true;
     }
-
     /**
      * 根据数据源id删除记录
      * @param id 数据源Id
@@ -143,7 +143,6 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
         datasourceTest(dataSourceDTO);
         return true;
     }
-
     @Override
     public DataSourceDO getDataSourceDOByConnName(String connName) {
         if(StringUtils.hasText(connName)){

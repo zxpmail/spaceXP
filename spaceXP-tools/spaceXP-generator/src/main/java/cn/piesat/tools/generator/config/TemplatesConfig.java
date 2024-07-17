@@ -1,5 +1,6 @@
 package cn.piesat.tools.generator.config;
 
+import cn.piesat.tools.generator.model.entity.ProjectEntity;
 import cn.piesat.tools.generator.model.entity.TemplateEntity;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -27,41 +28,7 @@ public final class TemplatesConfig {
     /**
      * 项目信息
      */
-    private Project project;
+    private ProjectEntity project;
 
-    /**
-     * 开发者
-     */
-    private Developer developer;
-
-    /**
-     * 项目信息实体类
-     */
-    @Data
-    static class Project {
-        /**
-         * 项目包
-         */
-        private String packageName = "cn.piesat";
-        /**
-         * 项目版本
-         */
-        private String version = "1.0.0";
-    }
-
-    /**
-     * 开发者实现信息类
-     */
-    @Data
-    static class Developer {
-        /**
-         * 创造者
-         */
-        private String author = "zhouxiaoping";
-        /**
-         * 创建者EMail
-         */
-        private String email = "zhouxiaoping@piesat.cn";
-    }
 
 }

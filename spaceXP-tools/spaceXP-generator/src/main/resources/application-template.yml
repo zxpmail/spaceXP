@@ -1,10 +1,10 @@
 gen:
   project:
-    packageName: cn.piesat
+    groupId: cn.piesat
+    artifactId: test
     version: 1.0.0
-  developer :
-     author : zhouxiaoping,
-     email : zhouxiaoping@piesat.cn
+    author : zhouxiaoping
+    email : zhouxiaoping@piesat.cn
   templates:
     - id: 1
       name: java/Application.java.ftl

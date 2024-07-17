@@ -3,7 +3,7 @@
 #### 介绍
 积木组件:积沙成塔，结合springboot如：url权限、数据权限、文件上传、数据访问等等组件进行分离、包装等可以独立引用
 分为：2.0.0版本和3.0.0版本
-2.0.0基于springboot2.x版本 开发基于springboot2.7.4 java8
+2.0.0基于springboot2.x版本 开发基于springboot2.7.18 java8
 3.0.0基于springboot3.x版本 开发基于springboot3.2.2 java17
 #### 软件架构
 spaceXP-dependencies 架构依赖组件
