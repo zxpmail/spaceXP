@@ -8,7 +8,7 @@
         <el-button @click="getDataList()">查询</el-button>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="downloadName" placeholder="下载表名称"></el-input>
+        <el-input v-model="downloadName" placeholder="表前缀"></el-input>
       </el-form-item>
     </el-form>
     <el-table v-loading="state.dataListLoading" :data="state.dataList" border style="width: 100%"

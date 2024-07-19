@@ -80,10 +80,10 @@
     </el-card>
 </template>
 
-<script setup  name="${ModuleName}${FunctionName}Index">
+<script setup  name="${moduleName?cap_first}${functionName?cap_first}Index">
     import { reactive, ref, onMounted } from 'vue'
     import AddOrUpdate from './add-or-update.vue'
-    import { use${FunctionName}ListApi, use${FunctionName}BatchDeleteApi } from '@/api/${functionName}'
+    import { use${functionName?cap_first}ListApi, use${functionName?cap_first}BatchDeleteApi } from '@/api/${functionName}'
     import { ElMessage, ElMessageBox } from 'element-plus'
 
     const state = reactive({
@@ -116,7 +116,7 @@
 
     const query = async() => {
         state.dataListLoading = true
-        const res = await use${FunctionName}ListApi(state.queryForm).catch(()=>{state.dataListLoading = false})
+        const res = await use${functionName?cap_first}ListApi(state.queryForm).catch(()=>{state.dataListLoading = false})
         const {code,data} = res
         state.dataListLoading = false
         if(code === 200){
@@ -161,7 +161,7 @@
             cancelButtonText: '取消',
             type: 'warning'
         }).then(async() => {
-            const res = await use${FunctionName}BatchDeleteApi(data)
+            const res = await use${functionName?cap_first}BatchDeleteApi(data)
             const {code,message} = res
             if(code === 200){
                 ElMessage.success('删除成功')

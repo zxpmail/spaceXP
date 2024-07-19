@@ -40,41 +40,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ${className?cap_first}Controller {
 
-private final ${className?cap_first}Service ${className}Service;
+    private final ${className?cap_first}Service ${className}Service;
 
-@ApiOperation("分页查询")
-@PostMapping("/list")
-public PageResult list(PageBean pageBean, @RequestBody(required = false) ${className?cap_first}Query ${className}Query){
-return ${className}Service.list(pageBean,${className}Query);
-}
+    @ApiOperation("分页查询")
+    @PostMapping("/list")
+    public PageResult list(PageBean pageBean, @RequestBody(required = false) ${className?cap_first}Query ${className}Query){
+        return ${className}Service.list(pageBean,${className}Query);
+    }
 
-@ApiOperation("根据id查询")
-@GetMapping("/info/{id}")
-public ${className?cap_first}VO info(@PathVariable("id") ${pkType} id){
-return ${className}Service.info(id);
-}
+    @ApiOperation("根据id查询")
+    @GetMapping("/info/{id}")
+    public ${className?cap_first}VO info(@PathVariable("id") ${pkType} id){
+        return ${className}Service.info(id);
+    }
 
-@ApiOperation("保存信息")
-@PostMapping("/save")
-public Boolean save(@Validated(AddGroup.class) @RequestBody ${className?cap_first}DTO ${className}DTO){
-return ${className}Service.save(${className}DTO);
-}
+    @ApiOperation("保存信息")
+    @PostMapping("/save")
+    public Boolean save(@Validated(AddGroup.class) @RequestBody ${className?cap_first}DTO ${className}DTO){
+        return ${className}Service.save(${className}DTO);
+    }
 
-@ApiOperation("修改信息")
-@PutMapping("/update")
-public Boolean update(@Validated(UpdateGroup.class) @RequestBody ${className?cap_first}DTO ${className}DTO){
-return ${className}Service.update(${className}DTO);
-}
+    @ApiOperation("修改信息")
+    @PutMapping("/update")
+    public Boolean update(@Validated(UpdateGroup.class) @RequestBody ${className?cap_first}DTO ${className}DTO){
+        return ${className}Service.update(${className}DTO);
+    }
 
-@ApiOperation("批量删除信息")
-@DeleteMapping("/delete")
-public Boolean delete(@RequestBody List<${pkType}> ids){
-return ${className}Service.delete(ids);
-}
+    @ApiOperation("批量删除信息")
+    @DeleteMapping("/delete")
+    public Boolean delete(@RequestBody List<${pkType}> ids){
+        return ${className}Service.delete(ids);
+    }
 
-@ApiOperation("根据id删除信息")
-@DeleteMapping("/delete/{id}")
-public Boolean delete(@PathVariable ${pkType} id){
-return ${className}Service.delete(id);
-}
+    @ApiOperation("根据id删除信息")
+    @DeleteMapping("/delete/{id}")
+    public Boolean delete(@PathVariable ${pkType} id){
+        return ${className}Service.delete(id);
+    }
 }

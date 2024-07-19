@@ -1,13 +1,12 @@
 package cn.piesat.tools.generator.utils;
 
-import cn.piesat.tools.generator.model.entity.ProjectDO;
-import cn.piesat.tools.generator.model.entity.TemplateDO;
 import freemarker.template.Template;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.List;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -24,15 +23,15 @@ public class TemplateUtils {
         if (dataModel.isEmpty()) {
             return content;
         }
+        String templateName="";
         try (StringReader reader = new StringReader(content);
              StringWriter sw = new StringWriter()) {
-
-            String templateName = (String) dataModel.get("templateName");
-            Template template = new Template(templateName, reader, null, "utf-8");
+            templateName = (String) dataModel.get("templateName");
+            Template template = new Template(templateName, reader, null, StandardCharsets.UTF_8.name());
             template.process(dataModel, sw);
             return sw.toString();
         } catch (Exception e) {
-            log.error("渲染模板失败：" + e.getMessage(), e);
+            log.error("渲染模板失败：{} ,error {}",templateName,  e.getMessage(), e);
             throw new RuntimeException("渲染模板失败，请检查模板语法和数据模型", e);
         }
     }

@@ -71,7 +71,7 @@
 <script setup >
     import { reactive, ref } from 'vue'
     import { ElMessage } from 'element-plus/es'
-    import { use${FunctionName}Api, use${FunctionName}SubmitApi } from '@/api/${moduleName}/${functionName}'
+    import { use${functionName?cap_first}Api, use${functionName?cap_first}SubmitApi } from '@/api/${moduleName}/${functionName}'
 
     const emit = defineEmits(['refreshDataList'])
 
@@ -94,12 +94,12 @@
         }
 
         if (id) {
-            get${FunctionName}(id)
+            get${functionName?cap_first}(id)
         }
     }
 
-    const get${FunctionName} =  id  => {
-        use${FunctionName}Api(id).then(res => {
+    const get${functionName?cap_first} =  id  => {
+        use${functionName?cap_first}Api(id).then(res => {
             Object.assign(dataForm, res.data)
         })
     }
@@ -119,7 +119,7 @@
                 return false
             }
 
-            use${FunctionName}SubmitApi(dataForm).then(() => {
+            use${functionName?cap_first}SubmitApi(dataForm).then(() => {
                 ElMessage.success({
                     message: '操作成功',
                     duration: 500,

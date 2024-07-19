@@ -1,6 +1,7 @@
 package cn.piesat.tools.generator.service.impl;
 
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.tools.generator.config.TemplatesConfig;
 import cn.piesat.tools.generator.model.dto.ImportDataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.DatabaseDO;
@@ -38,6 +39,8 @@ public class ImportDataServiceImpl implements ImportDataService {
 
     private final DynamicDataSource dynamicDataSource;
     private final DatabaseService databaseService;
+
+    private final TemplatesConfig templatesConfig;
 
     @Override
     public List<TableVO> getAllTablesByDataSource(ImportDataSourceDTO importDataSourceDTO) {
@@ -124,7 +127,7 @@ public class ImportDataServiceImpl implements ImportDataService {
     }
 
     private List<TableVO> getSqlByTable(DatabaseDO databaseDO, ImportDataSourceDTO importDataSourceDTO) {
-        ProjectDO project = TemplateUtils.project;
+
         DataSource dataSource = dynamicDataSource.getDataSource(importDataSourceDTO.getConnName());
         String tableSql = databaseDO.getTableSql();
         if (databaseDO.getAddDatabaseName() == 1) {
@@ -144,12 +147,12 @@ public class ImportDataServiceImpl implements ImportDataService {
             table.setDbType(importDataSourceDTO.getDbType());
             table.setDatasourceId(importDataSourceDTO.getId());
             table.setConnName(importDataSourceDTO.getConnName());
-            table.setAuthor(project.getAuthor());
-            table.setEmail(project.getEmail());
-            table.setVersion(project.getVersion());
+            table.setAuthor(templatesConfig.getProject().getAuthor());
+            table.setEmail(templatesConfig.getProject().getEmail());
+            table.setVersion(templatesConfig.getProject().getVersion());
             table.setFunctionName(table.getTableName());
-            table.setPackageName(project.getGroupId());
-            table.setModuleName(project.getArtifactId());
+            table.setPackageName(templatesConfig.getProject().getGroupId());
+            table.setModuleName(templatesConfig.getProject().getArtifactId());
             table.setClassName(StrUtils.underlineToCamel(table.getTableName(), true));
             table.setFormLayout(1);
             return table;

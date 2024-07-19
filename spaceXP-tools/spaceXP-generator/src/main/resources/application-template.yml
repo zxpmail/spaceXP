@@ -8,86 +8,69 @@ gen:
   templates:
     - id: 1
       name: java/Application.java.ftl
-      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/${ModuleName}Application.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/${moduleName?cap_first}Application.java
       only: 1
-      single: 1
     - id: 2
       name: java/Controller.java.ftl
-      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/controller/${ClassName}Controller.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/controller/${className?cap_first}Controller.java
       only: 0
-      single: 1
     - id: 3
       name: java/Service.java.ftl
-      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/service/${className?cap_first}Service.java
       only: 0
-      single: 1
     - id: 4
       name: java/ServiceImpl.java.ftl
-      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/service/${ClassName}Service.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/service/impl/${className?cap_first}ServiceImpl.java
       only: 0
-      single: 1
     - id: 5
       name: java/DO.java.ftl
-      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/model/entity/${ClassName}DO.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/model/entity/${className?cap_first}DO.java
       only: 0
-      single: 1
     - id: 6
       name: java/DTO.java.ftl
-      path: ${moduleName}/${modelPath}/src/main/java/${packagePath}/${moduleName}/model/dto/${ClassName}DTO.java
+      path: ${moduleName}/${modelPath}/src/main/java/${packagePath}/${moduleName}/model/dto/${className?cap_first}DTO.java
       only: 0
-      single: 1
     - id: 7
       name: java/Mapper.java.ftl
-      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/mapper/${ClassName}Mapper.java
+      path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/mapper/${className?cap_first}Mapper.java
       only: 0
-      single: 1
     - id: 8
       name: java/VO.java.ftl
-      path: ${moduleName}/${modelPath}/src/main/java/${packagePath}/${moduleName}/model/vo/${ClassName}VO.java
+      path: ${moduleName}/${modelPath}/src/main/java/${packagePath}/${moduleName}/model/vo/${className?cap_first}VO.java
       only: 0
-      single: 1
     - id: 9
       name: yml/Application.yml.ftl
       path: ${moduleName}/${bizPath}/src/main/resources/application.yml
       only: 1
-      single: 1
     - id: 10
       name: xml/Mapper.xml.ftl
-      path: ${moduleName}/${bizPath}/src/main/resources/mapper/${moduleName}/${ClassName}Mapper.xml
+      path: ${moduleName}/${bizPath}/src/main/resources/mapper/${moduleName}/${className?cap_first}Mapper.xml
       only: 0
-      single: 1
     - id: 11
       name: xml/BizPom.xml.ftl
       path: ${moduleName}/${bizPath}/pom.yml
       only: 1
-      single: 1
     - id: 12
       name: xml/Pom.xml.ftl
       path: ${moduleName}/${modelPath}/pom.yml
       only: 1
-      single: 0
     - id: 13
       name: yml/Application.yml.ftl
       path: ${moduleName}/${bizPath}/src/main/resources/application.yml
-      only: 0
-      single: 1
+      only: 1
     - id: 14
       name: sql/api.js.ftl
-      path: ${moduleName}/${frontPath}/src/api/${functionName}.js
+      path: ${moduleName}/vue/src/api/${functionName}.js
       only: 0
-      single: 1
     - id: 15
       name: sql/menu.sql.ftl
-      path: ${moduleName}/${bizPath}/menu/${tableName}_menu.sql
+      path: ${moduleName}/menu/${tableName}_menu.sql
       only: 0
-      single: 1
     - id: 16
       name: vue/index.vue.ftl
-      path: ${moduleName}/${frontPath}/src/views/${functionName}/index.vue
+      path: ${moduleName}/vue/src/views/${functionName}/index.vue
       only: 0
-      single: 1
     - id: 17
       name: vue/add-or-update.vue.ftl
-      path: ${moduleName}/${frontPath}/src/views/${functionName}/add-or-update.vue
+      path: ${moduleName}/vue/src/views/${functionName}/add-or-update.vue
       only: 0
-      single: 1

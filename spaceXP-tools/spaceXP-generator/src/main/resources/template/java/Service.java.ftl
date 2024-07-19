@@ -71,4 +71,4 @@ public interface ${className?cap_first}Service extends IService<${className?cap_
     * @return false or true
     */
     Boolean delete(${pkType} id);
-    }
+}

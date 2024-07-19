@@ -1,5 +1,6 @@
 package cn.piesat.tools.generator.service;
 
+import cn.piesat.tools.generator.model.dto.BatchTableDTO;
 import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 
@@ -16,7 +17,9 @@ import java.util.List;
  */
 public interface GeneratorService {
 
-    void genTableCode(List<TableDTO> tables, HttpServletResponse response);
+    void genTableCode(TableDTO table, HttpServletResponse response);
 
     void genProjectCode(ProjectDTO projectDTO, HttpServletResponse response);
+
+    void genBatchTableCode(BatchTableDTO batchTableDTO, HttpServletResponse response);
 }

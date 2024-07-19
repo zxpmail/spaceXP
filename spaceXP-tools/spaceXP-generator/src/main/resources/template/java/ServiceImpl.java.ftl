@@ -41,143 +41,143 @@ import org.springframework.util.StringUtils;
 @Service("${className}Service")
 public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?cap_first}Mapper, ${className?cap_first}DO> implements ${className?cap_first}Service {
 
-@Override
-public PageResult list(PageBean pageBean, ${className?cap_first}Query ${className}Query) {
-// 分页参数
-IPage<${className?cap_first}DO> page = this.page(QueryUtils.getPage(pageBean), getWrapper(${className}Query));
-    // 检查分页结果
-    if (page == null || page.getTotal() == 0) {
-    return new PageResult(0L, new ArrayList<>());
-    } else {
-    return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), ${className?cap_first}VO::new));
-    }
+    @Override
+    public PageResult list(PageBean pageBean, ${className?cap_first}Query ${className}Query) {
+        // 分页参数
+        IPage<${className?cap_first}DO> page = this.page(QueryUtils.getPage(pageBean), getWrapper(${className}Query));
+        // 检查分页结果
+        if (page == null || page.getTotal() == 0) {
+            return new PageResult(0L, new ArrayList<>());
+        } else {
+            return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), ${className?cap_first}VO::new));
+        }
     }
 
     private LambdaQueryWrapper<${className?cap_first}DO> getWrapper(${className?cap_first}Query ${className}Query){
         LambdaQueryWrapper<${className?cap_first}DO> wrapper = Wrappers.lambdaQuery();
-            <#list queryList as field>
-                <#if field.queryType == 'between'>
-                    <#if field.attrType=='String'>
-                        if(StringUtils.hasText(${className}Query.getStart${field.attrName?cap_first}()) &&StringUtils.hasText(${className}Query.getEnd${field.attrName?cap_first}())){
-                        wrapper.between(${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.getStart${field.attrName?cap_first}(),${className}Query.getEnd${field.attrName?cap_first}());
-                        }
-                    <#else>
-                        if(!Objects.isNull(${className}Query.getStart${field.attrName?cap_first}())&&!Objects.isNull(${className}Query.getEnd${field.attrName?cap_first}())){
-                        wrapper.between(${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.getStart${field.attrName?cap_first}(),${className}Query.getEnd${field.attrName?cap_first}());
-                        }
-                    </#if>
-                <#elseif field.queryType == '='>
-                    <#if field.attrType=='String'>
-                        wrapper.eq(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.eq(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == '!='>
-                    <#if field.attrType=='String'>
-                        wrapper.ne(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.ne(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == '>'>
-                    <#if field.attrType=='String'>
-                        wrapper.gt(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.gt(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == '>='>
-                    <#if field.attrType=='String'>
-                        wrapper.ge(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.ge(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == '<'>
-                    <#if field.attrType=='String'>
-                        wrapper.lt(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.lt(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == '<='>
-                    <#if field.attrType=='String'>
-                        wrapper.le(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.le(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == 'like'>
-                    <#if field.attrType=='String'>
-                        wrapper.like(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == 'left like'>
-                    <#if field.attrType=='String'>
-                        wrapper.likeLeft(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
-                <#elseif field.queryType == 'right like'>
-                    <#if field.attrType=='String'>
-                        wrapper.likeRight(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
-                    </#if>
+        <#list queryList as field>
+            <#if field.queryType == 'between'>
+                <#if field.attrType=='String'>
+        if(StringUtils.hasText(${className}Query.getStart${field.attrName?cap_first}()) &&StringUtils.hasText(${className}Query.getEnd${field.attrName?cap_first}())){
+            wrapper.between(${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.getStart${field.attrName?cap_first}(),${className}Query.getEnd${field.attrName?cap_first}());
+        }
+                <#else>
+        if(!Objects.isNull(${className}Query.getStart${field.attrName?cap_first}())&&!Objects.isNull(${className}Query.getEnd${field.attrName?cap_first}())){
+            wrapper.between(${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.getStart${field.attrName?cap_first}(),${className}Query.getEnd${field.attrName?cap_first}());
+        }
                 </#if>
-            </#list>
-
-            <#list orderList as field>
-                if(!Objects.isNull(${className}Query.getOrder${field.attrName?cap_first}())) {
-                wrapper.orderBy(true, ${className}Query.getOrder${field.attrName?cap_first}(), ${className?cap_first}DO::get${field.attrName?cap_first});
-                }
-            </#list>
-            <#if select?has_content>
-                wrapper.select(${className?cap_first}DO.class,${select});
+            <#elseif field.queryType == '='>
+                <#if field.attrType=='String'>
+        wrapper.eq(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                <#else>
+        wrapper.eq(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == '!='>
+                <#if field.attrType=='String'>
+        wrapper.ne(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                <#else>
+        wrapper.ne(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == '>'>
+                <#if field.attrType=='String'>
+        wrapper.gt(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                <#else>
+        wrapper.gt(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == '>='>
+                <#if field.attrType=='String'>
+        wrapper.ge(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                <#else>
+        wrapper.ge(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == '<'>
+                <#if field.attrType=='String'>
+        wrapper.lt(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                <#else>
+        wrapper.lt(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == '<='>
+                <#if field.attrType=='String'>
+        wrapper.le(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                <#else>
+        wrapper.le(!Objects.isNull(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == 'like'>
+                <#if field.attrType=='String'>
+        wrapper.like(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == 'left like'>
+                <#if field.attrType=='String'>
+        wrapper.likeLeft(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
+            <#elseif field.queryType == 'right like'>
+                <#if field.attrType=='String'>
+        wrapper.likeRight(StringUtils.hasText(${className}Query.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}Query.get${field.attrName?cap_first}());
+                </#if>
             </#if>
-            return wrapper;
-            }
+        </#list>
 
-            @Override
-            public ${className?cap_first}VO info(${pkType} id) {
-            return CopyBeanUtils.copy(getById(id),${className?cap_first}VO::new);
-            }
+        <#list orderList as field>
+        if(!Objects.isNull(${className}Query.getOrder${field.attrName?cap_first}())) {
+            wrapper.orderBy(true, ${className}Query.getOrder${field.attrName?cap_first}(), ${className?cap_first}DO::get${field.attrName?cap_first});
+        }
+        </#list>
+        <#if select?has_content>
+        wrapper.select(${className?cap_first}DO.class,${select});
+        </#if>
+        return wrapper;
+    }
 
-            void repeat(${className?cap_first}DTO ${className}DTO,Boolean isAdd) {
-            LambdaQueryWrapper<${className?cap_first}DO> wrapper = new LambdaQueryWrapper<>();
-                <#list repeatList as field>
-                    <#if field.attrType=='String'>
-                        wrapper.eq(StringUtils.hasText(${className}DTO.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}DTO.get${field.attrName?cap_first}());
-                    <#else>
-                        wrapper.eq(!Objects.isNull(${className}DTO.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}DTO.get${field.attrName?cap_first}());
-                    </#if>
-                </#list>
-                if(!isAdd) {
-                wrapper.ne(${className?cap_first}DO::get${pk?cap_first},${className}DTO.get${pk?cap_first}());
-                }else if(CollectionUtils.isEmpty(wrapper.getExpression().getNormal())){
-                return;
-                }
-                if (count(wrapper) > 0) {
-                throw  new BaseException(CommonResponseEnum.RECORD_REPEAT);
-                }
-                }
+    @Override
+    public ${className?cap_first}VO info(${pkType} id) {
+        return CopyBeanUtils.copy(getById(id),${className?cap_first}VO::new);
+    }
 
-                @Override
-                public Boolean save(${className?cap_first}DTO ${className}DTO) {
-                <#if repeatList?? && (repeatList?size > 0) >
-                    repeat(${className}DTO,true);
-                </#if>
-                ${className?cap_first}DO ${className}DO = CopyBeanUtils.copy(${className}DTO, ${className?cap_first}DO::new);
-                return save(${className}DO);
-                }
+    void repeat(${className?cap_first}DTO ${className}DTO,Boolean isAdd) {
+        LambdaQueryWrapper<${className?cap_first}DO> wrapper = new LambdaQueryWrapper<>();
+        <#list repeatList as field>
+        <#if field.attrType=='String'>
+        wrapper.eq(StringUtils.hasText(${className}DTO.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}DTO.get${field.attrName?cap_first}());
+        <#else>
+        wrapper.eq(!Objects.isNull(${className}DTO.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}DTO.get${field.attrName?cap_first}());
+        </#if>
+        </#list>
+        if(!isAdd) {
+            wrapper.ne(${className?cap_first}DO::get${pk?cap_first},${className}DTO.get${pk?cap_first}());
+        }else if(CollectionUtils.isEmpty(wrapper.getExpression().getNormal())){
+            return;
+        }
+        if (count(wrapper) > 0) {
+            throw  new BaseException(CommonResponseEnum.RECORD_REPEAT);
+        }
+    }
 
-                @Override
-                public Boolean update(${className?cap_first}DTO ${className}DTO) {
-                <#if repeatList?? && (repeatList?size > 0) >
-                    repeat(${className}DTO,false);
-                </#if>
-                ${className?cap_first}DO ${className}DO = this.getById(${className}DTO.get${pk?cap_first}());
-                BeanUtils.copyProperties(${className}DTO, ${className}DO,CopyBeanUtils.getNullPropertyNames(${className}DTO));
-                return updateById(${className}DO);
-                }
+    @Override
+    public Boolean save(${className?cap_first}DTO ${className}DTO) {
+        <#if repeatList?? && (repeatList?size > 0) >
+        repeat(${className}DTO,true);
+        </#if>
+        ${className?cap_first}DO ${className}DO = CopyBeanUtils.copy(${className}DTO, ${className?cap_first}DO::new);
+        return save(${className}DO);
+    }
 
-                @Override
-                public Boolean delete(List<${pkType}> ids) {
-                return removeBatchByIds(ids);
-                }
+    @Override
+    public Boolean update(${className?cap_first}DTO ${className}DTO) {
+        <#if repeatList?? && (repeatList?size > 0) >
+        repeat(${className}DTO,false);
+        </#if>
+        ${className?cap_first}DO ${className}DO = this.getById(${className}DTO.get${pk?cap_first}());
+        BeanUtils.copyProperties(${className}DTO, ${className}DO,CopyBeanUtils.getNullPropertyNames(${className}DTO));
+        return updateById(${className}DO);
+    }
 
-                @Override
-                public Boolean delete(${pkType} id) {
-                return removeById(id);
-                }
-                }
+    @Override
+    public Boolean delete(List<${pkType}> ids) {
+        return removeBatchByIds(ids);
+    }
+
+    @Override
+    public Boolean delete(${pkType} id) {
+        return removeById(id);
+    }
+}

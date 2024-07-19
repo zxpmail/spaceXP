@@ -4,6 +4,7 @@ package cn.piesat.tools.generator.utils;
 import cn.piesat.tools.generator.constants.Constants;
 import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
+import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
@@ -27,19 +28,31 @@ import static cn.piesat.tools.generator.constants.Constants.*;
  */
 @Slf4j
 public class TemplateDataUtils {
+
+    /**
+     *
+     * @param dataModel 模版数据
+     * @param dataSourceDO  数据源
+     */
+    public static void setDataModelByDataSource(Map<String, Object> dataModel, DataSourceDO dataSourceDO) {
+        putStringIfNotEmpty(dataModel,DB_TYPE, dataSourceDO.getDbType());
+        putStringIfNotEmpty(dataModel,"url", dataSourceDO.getUrl());
+        putStringIfNotEmpty(dataModel,"username", dataSourceDO.getUsername());
+        putStringIfNotEmpty(dataModel,"password", dataSourceDO.getPassword());
+        putStringIfNotEmpty(dataModel,"driverClassName", dataSourceDO.getDriverClassName());
+    }
     /**
      * 用project来填充模版数据
      * @param dataModel 模版数据
      * @param projectDTO 项目数据
      */
     public static void setDataModelByProject(Map<String, Object> dataModel, ProjectDTO projectDTO) {
-
         if(projectDTO.getType()==ONE){
-            dataModel.put(BIZ_PATH, projectDTO.getArtifactId());
-            dataModel.put(MODEL_PATH, projectDTO.getArtifactId());
+            putStringIfNotEmpty(dataModel,BIZ_PATH, projectDTO.getArtifactId());
+            putStringIfNotEmpty(dataModel,MODEL_PATH, projectDTO.getArtifactId());
         }else{
-            dataModel.put(BIZ_PATH, projectDTO.getArtifactId() + "-biz");
-            dataModel.put(MODEL_PATH, projectDTO.getArtifactId() + "-model");
+            putStringIfNotEmpty(dataModel,BIZ_PATH, projectDTO.getArtifactId() + "-biz");
+            putStringIfNotEmpty(dataModel,MODEL_PATH, projectDTO.getArtifactId() + "-model");
         }
         putStringIfNotEmpty(dataModel,VERSION, projectDTO.getVersion());
         putStringIfNotEmpty(dataModel,MODULE_NAME, projectDTO.getArtifactId());
@@ -109,7 +122,7 @@ public class TemplateDataUtils {
         return "fieldInfo->" + result;
     }
     @SafeVarargs
-    public static void addSet(Integer flag, TableFieldDO field, Set<TableFieldDO>... sets) {
+    private static void addSet(Integer flag, TableFieldDO field, Set<TableFieldDO>... sets) {
         if (ObjectUtils.isEmpty(flag) || flag == ZERO || sets.length == ZERO) {
             return;
         }
@@ -166,14 +179,14 @@ public class TemplateDataUtils {
     /**
      * 改变第一个字符串首字母小写，如果第一为空 默认第二个字符串
      */
-    public static String changeNameFirst(String first, String second) {
+    private static String changeNameFirst(String first, String second) {
         return StringUtils.hasText(first) ? StringUtils.uncapitalize(first) : StringUtils.uncapitalize(second);
     }
 
     /**
      * 填充字符串到map中
      */
-    public static void putStringIfNotEmpty(Map<String, Object> map, String key, String value) {
+    private static void putStringIfNotEmpty(Map<String, Object> map, String key, String value) {
         if (StringUtils.hasText(value)) {
             map.put(key, value);
         } else {
@@ -181,7 +194,7 @@ public class TemplateDataUtils {
         }
     }
 
-    public static boolean isChar(char c) {
+    private static boolean isChar(char c) {
         return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
     }
 }

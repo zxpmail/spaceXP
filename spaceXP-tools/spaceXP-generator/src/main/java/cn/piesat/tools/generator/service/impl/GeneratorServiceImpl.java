@@ -1,17 +1,20 @@
 package cn.piesat.tools.generator.service.impl;
 
 import cn.piesat.framework.common.model.vo.ApiResult;
+import cn.piesat.tools.generator.config.TemplatesConfig;
 import cn.piesat.tools.generator.constants.Constants;
+import cn.piesat.tools.generator.model.dto.BatchTableDTO;
 import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
-import cn.piesat.tools.generator.model.entity.TemplateDO;
+import cn.piesat.tools.generator.model.entity.TemplateEntity;
 import cn.piesat.tools.generator.service.DataSourceService;
 import cn.piesat.tools.generator.service.GeneratorService;
 import cn.piesat.tools.generator.service.TableFieldService;
 import cn.piesat.tools.generator.service.TableService;
-import cn.piesat.tools.generator.utils.StrUtils;
+import cn.piesat.tools.generator.utils.DateUtils;
+import cn.piesat.tools.generator.utils.TemplateDataUtils;
 import cn.piesat.tools.generator.utils.TemplateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
@@ -26,17 +29,17 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
+import static cn.piesat.tools.generator.constants.Constants.*;
 
 /**
  * <p/>
@@ -50,25 +53,20 @@ import java.util.zip.ZipOutputStream;
 @RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
     private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-
     private final TableFieldService tableFieldService;
-
-
     private final TableService tableService;
-
     private final DataSourceService dataSourceService;
-
+    private final TemplatesConfig templatesConfig;
 
     private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer isOnly) {
-        for (TemplateDO template : TemplateUtils.templates) {
-            if (template.getIsOnly().equals(isOnly)) {
-                dataModel.put("templateName", template.getName());
+        for (TemplateEntity template : templatesConfig.getTemplates()) {
+            if (template.getOnly().equals(isOnly)) {
+                dataModel.put(TEMPLATE_NAME, template.getName());
                 String content = TemplateUtils.getContent(template.getContent(), dataModel);
                 String path = TemplateUtils.getContent(template.getPath(), dataModel);
                 try {
                     zip.putNextEntry(new ZipEntry(path));
-                    IOUtils.write(content, zip, "UTF-8");
+                    IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
                     zip.closeEntry();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
@@ -76,7 +74,6 @@ public class GeneratorServiceImpl implements GeneratorService {
             }
         }
     }
-
     private static void writeZip(HttpServletResponse response, ByteArrayOutputStream outputStream) throws IOException {
         byte[] responseData = outputStream.toByteArray();
         // 设置响应头部
@@ -98,7 +95,6 @@ public class GeneratorServiceImpl implements GeneratorService {
         response.getWriter().write(data);
     }
 
-
     /**
      * 通过数据字段设置数据模版
      *
@@ -113,95 +109,32 @@ public class GeneratorServiceImpl implements GeneratorService {
         // 导入的包列表
         Set<String> importList = tableFieldService.getPackageByTableId(tableId);
         dataModel.put("importList", importList);
-        setFieldTypeList(dataModel, tableFieldDOS);
-    }
-
-
-    /**
-     * 设置字段分类信息
-     */
-    private void setFieldTypeList(Map<String, Object> dataModel, List<TableFieldDO> tableFieldDOS) {
-        Set<TableFieldDO> voList = new HashSet<>();
-        Set<TableFieldDO> dtoList = new HashSet<>();
-        List<TableFieldDO> selectList = new ArrayList<>();
-        List<TableFieldDO> queryList = new ArrayList<>();
-        List<TableFieldDO> repeatList = new ArrayList<>();
-        List<TableFieldDO> orderList = new ArrayList<>();
-        // 表单列表
-        List<TableFieldDO> formList = new ArrayList<>();
-        // 网格列表
-        List<TableFieldDO> gridList = new ArrayList<>();
-        List<TableFieldDO> requiredList = new ArrayList<>();
-        for (TableFieldDO field : tableFieldDOS) {
-            if (field.getPrimaryPk() == 1) {
-                dataModel.put("pkType", field.getAttrType());
-                dataModel.put("pk", field.getAttrName());
-                dtoList.add(field);
-                voList.add(field);
-            }
-            if (field.getFormItem() == 1) {
-                dtoList.add(field);
-                voList.add(field);
-                formList.add(field);
-            }
-            if (field.getGridItem() == 1) {
-                voList.add(field);
-                gridList.add(field);
-            }
-            if ((field.getPrimaryPk() == 0) && (field.getGridItem() == 0)) {
-                selectList.add(field);
-            }
-            if (field.getQueryItem() == 1) {
-                queryList.add(field);
-            }
-            if (field.getFieldRepeat() == 1) {
-                repeatList.add(field);
-                dtoList.add(field);
-            }
-            if (field.getGridSort() == 1) {
-                orderList.add(field);
-            }
-            if (field.getFormRequired() == 1) {
-                requiredList.add(field);
-                dtoList.add(field);
-            }
-        }
-        dataModel.put("voList", voList);
-        dataModel.put("dtoList", dtoList);
-        dataModel.put("queryList", queryList);
-        dataModel.put("repeatList", repeatList);
-        dataModel.put("orderList", orderList);
-        dataModel.put("formList", formList);
-        dataModel.put("gridList", gridList);
-        dataModel.put("requiredList", requiredList);
-        dataModel.put("select", composeSelect(selectList));
-    }
-
-    private String composeSelect(List<TableFieldDO> selectList) {
-        if (CollectionUtils.isEmpty(selectList)) {
-            return Constants.EMPTY;
-        }
-        StringBuilder result = new StringBuilder();
-        for (TableFieldDO tableFieldDO : selectList) {
-            String fieldExpression = String.format("!fieldInfo.getColumn().equals(\"%s\")", tableFieldDO.getFieldName());
-            result.append(!StringUtils.hasText(result.toString()) ? fieldExpression : " && " + fieldExpression);
-        }
-
-        return "fieldInfo->" + result;
+        TemplateDataUtils.setDataModelByField(dataModel, tableFieldDOS);
     }
 
     @Override
-    public void genTableCode(List<TableDTO> tables, HttpServletResponse response) {
+    public void genTableCode(TableDTO table, HttpServletResponse response) {
         // 代码生成器信息
-        if (tables == null || tables.size() == 0) {
+        if (ObjectUtils.isEmpty(table)) {
             noData(response);
             return;
         }
-        Map<String, Object> dataModel = new HashMap<>();
+        genCode(table, response);
+    }
 
+    private <T> void genCode(T table, HttpServletResponse response) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            writeTable(tables, dataModel, zip);
+            Map<String, Object> dataModel = new HashMap<>();
+            if (table instanceof List) {
+                @SuppressWarnings("unchecked")
+                List<TableDTO> list = (List<TableDTO>) table;
+                for (TableDTO item : list) {
+                    writeTable(item, dataModel, zip);
+                }
+            } else {
+                writeTable((TableDTO) table, dataModel, zip);
+            }
             zip.finish();
             writeZip(response, outputStream);
         } catch (Exception e) {
@@ -209,12 +142,17 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
     }
 
-    private void writeTable(List<TableDTO> tables, Map<String, Object> dataModel, ZipOutputStream zip) {
-        for (TableDTO table : tables) {
-            dataModel.put("openingTime", LocalDateTime.now());
-            packTablesWriteZip(table, dataModel, zip);
-            dataModel.clear();
-        }
+    /**
+     * 生成单表并打包成zip
+     *
+     * @param table     表名
+     * @param dataModel 数据模式
+     * @param zip       上传zip流
+     */
+    private void writeTable(TableDTO table, Map<String, Object> dataModel, ZipOutputStream zip) {
+        dataModel.put(Constants.CREATE_TIME, DateUtils.LocalDateTime2String(LocalDateTime.now()));
+        packTablesWriteZip(table, dataModel, zip);
+        dataModel.clear();
     }
 
     private void noData(HttpServletResponse response) {
@@ -235,7 +173,7 @@ public class GeneratorServiceImpl implements GeneratorService {
         Map<String, Object> dataModel = new HashMap<>();
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            writeTable(projectDTO.getTables(), dataModel, zip);
+            //writeTable(projectDTO.getTables(), dataModel, zip);
             writeProject(projectDTO, dataModel, zip);
             zip.finish();
             writeZip(response, outputStream);
@@ -244,37 +182,40 @@ public class GeneratorServiceImpl implements GeneratorService {
         }
     }
 
+    @Override
+    public void genBatchTableCode(BatchTableDTO batchTableDTO, HttpServletResponse response) {
+        if (ObjectUtils.isEmpty(batchTableDTO) || CollectionUtils.isEmpty(batchTableDTO.getTables()) || ObjectUtils.isEmpty(batchTableDTO.getProject())) {
+            noData(response);
+            return;
+        }
+        batchTableDTO.getTables().forEach(t -> {
+            t.setAuthor(batchTableDTO.getProject().getAuthor());
+            t.setVersion(batchTableDTO.getProject().getVersion());
+            t.setEmail(batchTableDTO.getProject().getEmail());
+            t.setPackageName(batchTableDTO.getProject().getArtifactId());
+            t.setModuleName(batchTableDTO.getProject().getArtifactId());
+            t.setTablePrefix(batchTableDTO.getTablePrefix());
+            t.setFormLayout(batchTableDTO.getFormLayout());
+            t.setProjectId(batchTableDTO.getProject().getId());
+        });
+        genCode(batchTableDTO.getTables(), response);
+    }
+
     private void writeProject(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
-        dataModel.put("openingTime", LocalDateTime.now());
+        dataModel.put(Constants.CREATE_TIME, DateUtils.LocalDateTime2String(LocalDateTime.now()));
         packProjectWriteZip(projectDTO, dataModel, zip);
     }
 
 
     private void packProjectWriteZip(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
-        dataModel.put("bizPath", projectDTO.getArtifactId() + "-biz");
-        dataModel.put("modelPath", projectDTO.getArtifactId() + "-model");
-        dataModel.put("version", projectDTO.getVersion());
-        dataModel.put("moduleName", projectDTO.getArtifactId());
-        dataModel.put("ModuleName", StringUtils.capitalize(projectDTO.getArtifactId()));
-        dataModel.put("port", projectDTO.getPort());
-        dataModel.put("description", projectDTO.getDescription());
-        dataModel.put("package", projectDTO.getGroupId());
-        dataModel.put("packagePath", projectDTO.getGroupId().replace(".", File.separator));
-
+        TemplateDataUtils.setDataModelByProject(dataModel, projectDTO);
         setDataSourceInfo(dataModel, projectDTO.getTables().get(0));
-        // 开发者信息
-        dataModel.put("author", projectDTO.getAuthor());
-        dataModel.put("email", projectDTO.getEmail());
         writeZipByTemplate(dataModel, zip, 1);
     }
 
     private void setDataSourceInfo(Map<String, Object> dataModel, TableDTO tableDTO) {
         DataSourceDO dataSourceDO = dataSourceService.getDataSourceDOByConnName(tableDTO.getConnName());
-        dataModel.put("dbType", dataSourceDO.getDbType());
-        dataModel.put("url", dataSourceDO.getUrl());
-        dataModel.put("username", dataSourceDO.getUsername());
-        dataModel.put("password", dataSourceDO.getPassword());
-        dataModel.put("driverClassName", dataSourceDO.getDriverClassName());
+        TemplateDataUtils.setDataModelByDataSource(dataModel,dataSourceDO);
     }
 
     private void saveTableDTO(ProjectDTO projectDTO) {
@@ -293,62 +234,9 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     private void packTablesWriteZip(TableDTO table, Map<String, Object> dataModel, ZipOutputStream zip) {
-        setDataModelByTable(dataModel, table);
+        TemplateDataUtils.setDataModelByTable(dataModel, table);
         setDataModelByFields(dataModel, table.getId());
         writeZipByTemplate(dataModel, zip, 0);
     }
 
-    private void setDataModelByTable(Map<String, Object> dataModel, TableDTO table) {
-        dataModel.put("package", table.getPackageName());
-        dataModel.put("packagePath", table.getPackageName().replace(".", File.separator));
-        dataModel.put("version", table.getVersion());
-        dataModel.put("moduleName", table.getModuleName());
-        dataModel.put("ModuleName", StringUtils.capitalize(table.getModuleName()));
-        dataModel.put("dbType", table.getDbType());
-
-        // 开发者信息
-        dataModel.put("author", table.getAuthor());
-        dataModel.put("email", table.getEmail());
-        if(ObjectUtils.isEmpty(table.getGeneratorType())){
-            table.setGeneratorType(1);
-        }
-        if (table.getGeneratorType() == 1) {
-            dataModel.put("bizPath", table.getModuleName());
-            dataModel.put("modelPath", table.getModuleName());
-            dataModel.put("frontPath", table.getModuleName());
-        } else {
-            // 生成路径
-            dataModel.put("bizPath", table.getModuleName() + "-biz");
-            dataModel.put("modelPath", table.getModuleName() + "-model");
-            dataModel.put("frontPath", table.getModuleName() + "-view");
-        }
-        String tableName = table.getTableName();
-        dataModel.put("tableName", tableName);
-        if (StringUtils.hasText(table.getTablePrefix())) {
-            tableName = tableName.substring(table.getTablePrefix().length());
-            if (table.getFunctionName().equals(table.getTableName())) {
-                table.setFunctionName(tableName);
-            }
-        }
-        tableName = StrUtils.underlineToCamel(tableName, false);
-        if (StringUtils.hasText(table.getTableComment())) {
-            dataModel.put("tableComment", table.getTableComment());
-        } else {
-            dataModel.put("tableComment", tableName);
-        }
-        if (StringUtils.hasText(table.getClassName())) {
-            dataModel.put("className", StringUtils.uncapitalize(table.getClassName()));
-            dataModel.put("ClassName", table.getClassName());
-        } else {
-            dataModel.put("ClassName", StringUtils.capitalize(tableName));
-            dataModel.put("className", tableName);
-        }
-        if (StringUtils.hasText(table.getFunctionName())) {
-            dataModel.put("functionName", table.getFunctionName());
-            dataModel.put("FunctionName", StringUtils.capitalize(table.getFunctionName()));
-        } else {
-            dataModel.put("functionName", StringUtils.uncapitalize(tableName));
-            dataModel.put("FunctionName", tableName);
-        }
-    }
 }

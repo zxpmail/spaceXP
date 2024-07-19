@@ -15,8 +15,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ${moduleName?cap_first}Application {
 
-public static void main(String[] args) {
-SpringApplication.run(${moduleName?cap_first}Application.class, args);
-}
+    public static void main(String[] args) {
+        SpringApplication.run(${moduleName?cap_first}Application.class, args);
+    }
 
 }

@@ -171,7 +171,7 @@ const generatorHandle = () => {
     }
     // 先保存
     await useTableSubmitApi(dataForm)
-    useDownloadApi("generator/genTableCode", [dataForm])
+    useDownloadApi("generator/genTableCode", dataForm)
     visible.value = false
   })
 }

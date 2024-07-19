@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>2.7.18</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>${package}</groupId>
@@ -18,26 +18,26 @@
     </properties>
     <dependencies>
         <#if dbType=="MySQL">
-            <dependency>
-                <groupId>com.mysql</groupId>
-                <artifactId>mysql-connector-j</artifactId>
-                <version>8.2.0</version>
-            </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.2.0</version>
+        </dependency>
         </#if>
 
         <#if dbType=='PostgreSQL'>
-            <dependency>
-                <groupId>org.postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>42.6.0</version>
-            </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version>
+        </dependency>
         </#if>
         <#if dbType=='DM'>
-            <dependency>
-                <groupId>com.dameng</groupId>
-                <artifactId>DmJdbcDriver18</artifactId>
-                <version>8.1.2.141</version>
-            </dependency>
+        <dependency>
+            <groupId>com.dameng</groupId>
+            <artifactId>DmJdbcDriver18</artifactId>
+            <version>8.1.2.141</version>
+        </dependency>
         </#if>
         <dependency>
             <groupId>cn.piesat.space</groupId>
@@ -70,7 +70,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.4</version>
+                <version>2.7.18</version>
                 <configuration>
                     <excludes>
                         <exclude>

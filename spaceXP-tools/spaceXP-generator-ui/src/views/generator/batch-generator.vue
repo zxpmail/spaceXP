@@ -2,19 +2,19 @@
   <el-dialog v-model="visible" title="生成代码" :close-on-click-modal="false" draggable>
     <el-form ref="dataFormRef" :model="dataForm.project" :rules="dataRules" label-width="120px">
       <el-form-item label="表名前缀" prop="tablePrefix">
-        <el-input v-model="dataForm.project.tablePrefix" placeholder="表前缀"></el-input>
+        <el-input v-model="dataForm.tablePrefix" placeholder="表前缀"></el-input>
       </el-form-item>
       <el-form-item prop="artifactId" label="项目">
-        <el-select v-model="dataForm.project.artifactId" placeholder="项目名称" style="width: 100%" clearable
+        <el-select v-model="dataForm.project.id" placeholder="项目名称" style="width: 100%" clearable
                    @change="projectChange"
-                   value-key="projectId">
+                   >
           <el-option v-for="item in projectList" :key="item.id" :label="item.artifactId" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="表单布局" prop="formLayout">
-        <el-radio-group v-model="dataForm.project.formLayout">
-          <el-radio :label="1">一列</el-radio>
-          <el-radio :label="2">两列</el-radio>
+      <el-form-item label="表单布局" >
+        <el-radio-group v-model="dataForm.formLayout">
+          <el-radio :label="1" value="1">一列</el-radio>
+          <el-radio :label="2" value="2">两列</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>
@@ -36,16 +36,9 @@ const dataFormRef = ref()
 const projectList = ref([])
 const dataForm = reactive({
     tables:[],
+    formLayout: 1,
+    tablePrefix: '',
     project:{
-      tablePrefix: '',
-      projectId: '',
-      artifactId: '',
-      packageName: '',
-      email: '',
-      author: '',
-      version: '',
-      moduleName: '',
-      formLayout: 1
     }
 })
 const projectChange = (data) => {
@@ -67,8 +60,7 @@ const init = (data) => {
   getProjectList()
 }
 const dataRules = ref({
-  artifactId: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-  formLayout: [{required: true, message: '必填项不能为空', trigger: 'blur'}]
+  artifactId: [{required: true, message: '必填项不能为空', trigger: 'blur'}]
 })
 // 生成代码
 const generatorHandle = () => {
@@ -77,7 +69,7 @@ const generatorHandle = () => {
       return false
     }
     // 生成代码，zip压缩包
-    useDownloadApi('/generator/code/batch',dataForm)
+    useDownloadApi('/code/batch',dataForm)
     visible.value = false
   })
 }

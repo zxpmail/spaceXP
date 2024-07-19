@@ -4,7 +4,7 @@
     <!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="${package}.${moduleName}.model.entity.${className?cap_first}DO" id="${className}Map">
         <#list fieldList as field>
-            <result property="${field.attrName}" column="${field.fieldName}"/>
+        <result property="${field.attrName}" column="${field.fieldName}"/>
         </#list>
     </resultMap>
 

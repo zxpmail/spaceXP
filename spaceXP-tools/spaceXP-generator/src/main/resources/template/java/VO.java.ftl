@@ -30,17 +30,17 @@ private static final long serialVersionUID = 1L;
 
 <#list voList as field>
     <#if field.fieldComment!?length gt 0>
-        /*
-        * ${field.fieldComment}
-        */
-        @ApiModelProperty("${field.fieldComment}")
+    /*
+    * ${field.fieldComment}
+    */
+    @ApiModelProperty("${field.fieldComment}")
     </#if>
     <#if field.attrType == 'LocalDate'>
-        @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     <#elseif field.attrType == 'LocalDateTime'>
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     <#elseif field.attrType == 'Long'>
-        @JsonSerialize(using= ToStringSerializer.class)
+    @JsonSerialize(using= ToStringSerializer.class)
     </#if>
     private ${field.attrType} ${field.attrName};
 

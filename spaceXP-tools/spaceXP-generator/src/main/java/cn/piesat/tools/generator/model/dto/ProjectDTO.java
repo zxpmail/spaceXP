@@ -31,7 +31,7 @@ public class ProjectDTO {
     /**
      * 项目类型
      */
-    @NotBlank(message = "项目类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @NotNull(message = "项目类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
     private Integer type;
 
     /**
