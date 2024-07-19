@@ -12,18 +12,11 @@
 					:edit-config="{ trigger: 'click', mode: 'cell' }"
 				>
 					<vxe-column type="seq" width="60"></vxe-column>
-					<vxe-column width="60" title="拖动">
-						<template #default>
-							<span class="drag-btn">
-								<i class="vxe-icon-sort"></i>
-							</span>
-						</template>
-						<template #header>
-							<el-tooltip class="item" effect="dark" content="按住后可以上下拖动排序" placement="top-start">
-								<i class="vxe-icon-question-circle-fill"></i>
-							</el-tooltip>
-						</template>
-					</vxe-column>
+          <vxe-column field="primaryPk" title="主键">
+            <template #default="{ row }">
+              <vxe-checkbox v-model="row.primaryPk" :unchecked-value=0 :checked-value=1></vxe-checkbox>
+            </template>
+          </vxe-column>
 					<vxe-column field="fieldName" title="字段名"></vxe-column>
 					<vxe-column field="fieldComment" title="说明" :edit-render="{ name: 'input' }"></vxe-column>
 					<vxe-column field="fieldType" title="字段类型"></vxe-column>
@@ -180,7 +173,10 @@ const fillList = reactive([
 	{ label: 'DEFAULT', value: 'DEFAULT' },
 	{ label: 'INSERT', value: 'INSERT' },
 	{ label: 'UPDATE', value: 'UPDATE' },
-	{ label: 'INSERT_UPDATE', value: 'INSERT_UPDATE' }
+	{ label: 'ASSIGN_ID', value: 'ASSIGN_ID' },
+  { label: 'AUTO', value: 'AUTO' },
+  { label: 'INPUT', value: 'INPUT' },
+  { label: 'NONE', value: 'NONE' }
 ])
 
 const queryList = reactive([
