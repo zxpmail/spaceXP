@@ -35,7 +35,18 @@ public class ${className?cap_first}DO {
     @TableField(fill = FieldFill.UPDATE)
     </#if>
     <#if field.primaryPk == 1>
-    @TableId
+        <#if field.autoFill == "ASSIGN_ID">
+    @TableId(type = IdType.ASSIGN_ID)
+        </#if>
+        <#if field.autoFill == "AUTO">
+    @TableId(type = IdType.AUTO)
+        </#if>
+        <#if field.autoFill == "INPUT">
+    @TableId(type = IdType.INPUT)
+        </#if>
+        <#if field.autoFill == "NONE">
+    @TableId(type = IdType.NONE)
+        </#if>
     </#if>
     private ${field.attrType} ${field.attrName};
 

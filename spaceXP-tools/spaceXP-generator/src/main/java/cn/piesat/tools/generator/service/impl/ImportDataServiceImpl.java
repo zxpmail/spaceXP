@@ -84,9 +84,11 @@ public class ImportDataServiceImpl implements ImportDataService {
             String key = rs.getString("column_key");
             if (StringUtils.isNotBlank(key) && "PRI".equalsIgnoreCase(key)) {
                 f.setPrimaryPk(1);
+                f.setAutoFill("ASSIGN_ID");
                 hasPK.set(true);
             } else {
                 f.setPrimaryPk(0);
+                f.setAutoFill("DEFAULT");
             }
             // 获取字段对应的类型
             FieldTypeDO fieldTypeDO = map.get(f.getFieldType().toLowerCase());
@@ -112,7 +114,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             f.setVo(1);
             f.setGridList(1);
             f.setSort(rowNum);
-            f.setAutoFill("DEFAULT");
+
             f.setFormItem(1);
             f.setGridItem(1);
             f.setQueryType("=");
