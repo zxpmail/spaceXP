@@ -39,38 +39,38 @@ gen:
       path: ${moduleName}/${modelPath}/src/main/java/${packagePath}/${moduleName}/model/vo/${className?cap_first}VO.java
       only: 0
     - id: 9
+      name: java/Query.java.ftl
+      path: ${moduleName}/${modelPath}/src/main/java/${packagePath}/${moduleName}/model/query/${className?cap_first}Query.java
+      only: 0
+    - id: 10
       name: yml/Application.yml.ftl
       path: ${moduleName}/${bizPath}/src/main/resources/application.yml
       only: 1
-    - id: 10
+    - id: 11
       name: xml/Mapper.xml.ftl
       path: ${moduleName}/${bizPath}/src/main/resources/mapper/${moduleName}/${className?cap_first}Mapper.xml
       only: 0
-    - id: 11
+    - id: 12
       name: xml/BizPom.xml.ftl
       path: ${moduleName}/${bizPath}/pom.yml
       only: 1
-    - id: 12
+    - id: 13
       name: xml/Pom.xml.ftl
       path: ${moduleName}/${modelPath}/pom.yml
       only: 1
-    - id: 13
-      name: yml/Application.yml.ftl
-      path: ${moduleName}/${bizPath}/src/main/resources/application.yml
-      only: 1
     - id: 14
-      name: sql/api.js.ftl
-      path: ${moduleName}/vue/src/api/${functionName}.js
+      name: js/api.js.ftl
+      path: ${moduleName}/vue/src/api/${functionName}Api.js
       only: 0
     - id: 15
-      name: sql/menu.sql.ftl
-      path: ${moduleName}/menu/${tableName}_menu.sql
-      only: 0
-    - id: 16
       name: vue/index.vue.ftl
       path: ${moduleName}/vue/src/views/${functionName}/index.vue
       only: 0
-    - id: 17
+    - id: 16
       name: vue/add-or-update.vue.ftl
       path: ${moduleName}/vue/src/views/${functionName}/add-or-update.vue
+      only: 0
+    - id: 17
+      name: sql/menu.sql.ftl
+      path: ${moduleName}/menu/${tableName}_menu.sql
       only: 0

@@ -173,6 +173,7 @@ const fillList = reactive([
 	{ label: 'DEFAULT', value: 'DEFAULT' },
 	{ label: 'INSERT', value: 'INSERT' },
 	{ label: 'UPDATE', value: 'UPDATE' },
+  { label: 'INSERT_UPDATE', value: 'INSERT_UPDATE' },
 	{ label: 'ASSIGN_ID', value: 'ASSIGN_ID' },
   { label: 'AUTO', value: 'AUTO' },
   { label: 'INPUT', value: 'INPUT' },
