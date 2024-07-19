@@ -30,39 +30,41 @@ import static cn.piesat.tools.generator.constants.Constants.*;
 public class TemplateDataUtils {
 
     /**
-     *
-     * @param dataModel 模版数据
-     * @param dataSourceDO  数据源
+     * @param dataModel    模版数据
+     * @param dataSourceDO 数据源
      */
     public static void setDataModelByDataSource(Map<String, Object> dataModel, DataSourceDO dataSourceDO) {
-        putStringIfNotEmpty(dataModel,DB_TYPE, dataSourceDO.getDbType());
-        putStringIfNotEmpty(dataModel,"url", dataSourceDO.getUrl());
-        putStringIfNotEmpty(dataModel,"username", dataSourceDO.getUsername());
-        putStringIfNotEmpty(dataModel,"password", dataSourceDO.getPassword());
-        putStringIfNotEmpty(dataModel,"driverClassName", dataSourceDO.getDriverClassName());
+        putStringIfNotEmpty(dataModel, DB_TYPE, dataSourceDO.getDbType());
+        putStringIfNotEmpty(dataModel, "url", dataSourceDO.getUrl());
+        putStringIfNotEmpty(dataModel, "username", dataSourceDO.getUsername());
+        putStringIfNotEmpty(dataModel, "password", dataSourceDO.getPassword());
+        putStringIfNotEmpty(dataModel, "driverClassName", dataSourceDO.getDriverClassName());
     }
+
     /**
      * 用project来填充模版数据
-     * @param dataModel 模版数据
+     *
+     * @param dataModel  模版数据
      * @param projectDTO 项目数据
      */
     public static void setDataModelByProject(Map<String, Object> dataModel, ProjectDTO projectDTO) {
-        if(projectDTO.getType()==ONE){
-            putStringIfNotEmpty(dataModel,BIZ_PATH, projectDTO.getArtifactId());
-            putStringIfNotEmpty(dataModel,MODEL_PATH, projectDTO.getArtifactId());
-        }else{
-            putStringIfNotEmpty(dataModel,BIZ_PATH, projectDTO.getArtifactId() + "-biz");
-            putStringIfNotEmpty(dataModel,MODEL_PATH, projectDTO.getArtifactId() + "-model");
+        if (projectDTO.getType() == ONE) {
+            putStringIfNotEmpty(dataModel, BIZ_PATH, projectDTO.getArtifactId());
+            putStringIfNotEmpty(dataModel, MODEL_PATH, projectDTO.getArtifactId());
+        } else {
+            putStringIfNotEmpty(dataModel, BIZ_PATH, projectDTO.getArtifactId() + "-biz");
+            putStringIfNotEmpty(dataModel, MODEL_PATH, projectDTO.getArtifactId() + "-api");
         }
-        putStringIfNotEmpty(dataModel,VERSION, projectDTO.getVersion());
-        putStringIfNotEmpty(dataModel,MODULE_NAME, projectDTO.getArtifactId());
+        putStringIfNotEmpty(dataModel, VERSION, projectDTO.getVersion());
+        putStringIfNotEmpty(dataModel, MODULE_NAME, projectDTO.getArtifactId());
         dataModel.put("port", projectDTO.getPort());
-        putStringIfNotEmpty(dataModel,"description", projectDTO.getDescription());
-        putStringIfNotEmpty(dataModel,PACKAGE, projectDTO.getGroupId());
-        putStringIfNotEmpty(dataModel,PACKAGE_PATH, projectDTO.getGroupId().replace(".", File.separator));
-        putStringIfNotEmpty(dataModel,AUTHOR, projectDTO.getAuthor());
-        putStringIfNotEmpty(dataModel,EMAIL, projectDTO.getEmail());
+        putStringIfNotEmpty(dataModel, "description", projectDTO.getDescription());
+        putStringIfNotEmpty(dataModel, PACKAGE, projectDTO.getGroupId());
+        putStringIfNotEmpty(dataModel, PACKAGE_PATH, projectDTO.getGroupId().replace(".", File.separator));
+        putStringIfNotEmpty(dataModel, AUTHOR, projectDTO.getAuthor());
+        putStringIfNotEmpty(dataModel, EMAIL, projectDTO.getEmail());
     }
+
     /**
      * 用字段列表数据来填充模版数据
      *
@@ -109,6 +111,7 @@ public class TemplateDataUtils {
         dataModel.put(REQUIRED_LIST, requiredList);
         dataModel.put(SELECT, composeSelect(selectList));
     }
+
     private static String composeSelect(Set<TableFieldDO> selectList) {
         if (CollectionUtils.isEmpty(selectList)) {
             return Constants.EMPTY;
@@ -121,6 +124,7 @@ public class TemplateDataUtils {
 
         return "fieldInfo->" + result;
     }
+
     @SafeVarargs
     private static void addSet(Integer flag, TableFieldDO field, Set<TableFieldDO>... sets) {
         if (ObjectUtils.isEmpty(flag) || flag == ZERO || sets.length == ZERO) {
@@ -151,11 +155,9 @@ public class TemplateDataUtils {
         if (table.getGeneratorType() == SINGLE_MODULE) {
             putStringIfNotEmpty(dataModel, BIZ_PATH, table.getModuleName());
             putStringIfNotEmpty(dataModel, MODEL_PATH, table.getModuleName());
-            putStringIfNotEmpty(dataModel, FRONT_PATH, table.getModuleName());
         } else {
             putStringIfNotEmpty(dataModel, BIZ_PATH, table.getModuleName() + "-biz");
-            putStringIfNotEmpty(dataModel, BIZ_PATH, table.getModuleName() + "-model");
-            putStringIfNotEmpty(dataModel, BIZ_PATH, table.getModuleName() + "-view");
+            putStringIfNotEmpty(dataModel, MODEL_PATH, table.getModuleName() + "-api");
         }
         String tableName = table.getTableName();
         putStringIfNotEmpty(dataModel, TABLE_NAME, tableName);

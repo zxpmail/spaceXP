@@ -89,7 +89,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     public void writeJsonToResponse(HttpServletResponse response, String data) throws IOException {
-        response.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(data);

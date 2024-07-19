@@ -89,11 +89,6 @@ public interface Constants {
     String MODEL_PATH ="modelPath";
 
     /**
-     * 前端路径
-     */
-    String FRONT_PATH="frontPath";
-
-    /**
      * 表名称
      */
     String TABLE_NAME="tableName";
