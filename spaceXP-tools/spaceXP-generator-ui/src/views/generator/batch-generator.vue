@@ -69,7 +69,7 @@ const generatorHandle = () => {
       return false
     }
     // 生成代码，zip压缩包
-    useDownloadApi('/code/batch',dataForm)
+    useDownloadApi("generator/genBatchTableCode", dataForm)
     visible.value = false
   })
 }

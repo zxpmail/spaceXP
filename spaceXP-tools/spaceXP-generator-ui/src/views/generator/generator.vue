@@ -170,9 +170,10 @@ const generatorHandle = () => {
       return false
     }
     // 先保存
-    await useTableSubmitApi(dataForm)
-    useDownloadApi("generator/genTableCode", dataForm)
-    visible.value = false
+    useTableSubmitApi(dataForm).then(() => {
+      useDownloadApi("generator/genTableCode", dataForm)
+      visible.value = false
+    })
   })
 }
 
