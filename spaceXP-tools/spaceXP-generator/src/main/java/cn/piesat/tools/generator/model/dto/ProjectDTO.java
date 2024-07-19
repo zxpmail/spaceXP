@@ -32,8 +32,7 @@ public class ProjectDTO {
      * 项目类型
      */
     @NotBlank(message = "项目类型不能为空", groups = {AddGroup.class, UpdateGroup.class})
-    @Length(max = 50 , message = "长度必须小于等于50" ,groups ={AddGroup.class,UpdateGroup.class} )
-    private String type;
+    private Integer type;
 
     /**
      * 组织机构ID

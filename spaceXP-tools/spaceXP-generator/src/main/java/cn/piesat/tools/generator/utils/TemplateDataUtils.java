@@ -2,6 +2,7 @@ package cn.piesat.tools.generator.utils;
 
 
 import cn.piesat.tools.generator.constants.Constants;
+import cn.piesat.tools.generator.model.dto.ProjectDTO;
 import cn.piesat.tools.generator.model.dto.TableDTO;
 import cn.piesat.tools.generator.model.entity.TableFieldDO;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +27,29 @@ import static cn.piesat.tools.generator.constants.Constants.*;
  */
 @Slf4j
 public class TemplateDataUtils {
+    /**
+     * 用project来填充模版数据
+     * @param dataModel 模版数据
+     * @param projectDTO 项目数据
+     */
+    public static void setDataModelByProject(Map<String, Object> dataModel, ProjectDTO projectDTO) {
 
+        if(projectDTO.getType()==ONE){
+            dataModel.put(BIZ_PATH, projectDTO.getArtifactId());
+            dataModel.put(MODEL_PATH, projectDTO.getArtifactId());
+        }else{
+            dataModel.put(BIZ_PATH, projectDTO.getArtifactId() + "-biz");
+            dataModel.put(MODEL_PATH, projectDTO.getArtifactId() + "-model");
+        }
+        putStringIfNotEmpty(dataModel,VERSION, projectDTO.getVersion());
+        putStringIfNotEmpty(dataModel,MODULE_NAME, projectDTO.getArtifactId());
+        dataModel.put("port", projectDTO.getPort());
+        putStringIfNotEmpty(dataModel,"description", projectDTO.getDescription());
+        putStringIfNotEmpty(dataModel,PACKAGE, projectDTO.getGroupId());
+        putStringIfNotEmpty(dataModel,PACKAGE_PATH, projectDTO.getGroupId().replace(".", File.separator));
+        putStringIfNotEmpty(dataModel,AUTHOR, projectDTO.getAuthor());
+        putStringIfNotEmpty(dataModel,EMAIL, projectDTO.getEmail());
+    }
     /**
      * 用字段列表数据来填充模版数据
      *

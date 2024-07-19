@@ -19,7 +19,11 @@
 			<el-table-column prop="artifactId" label="项目标识" header-align="center" align="center"></el-table-column>
 			<el-table-column prop="groupId" label="项目包名" show-overflow-tooltip header-align="center" align="center"></el-table-column>
 			<el-table-column prop="version" label="版本" show-overflow-tooltip header-align="center" align="center"></el-table-column>
-      <el-table-column prop="type" label="类型" show-overflow-tooltip header-align="center" align="center"></el-table-column>
+      <el-table-column prop="type" label="类型" show-overflow-tooltip header-align="center" align="center">
+        <template v-slot="{ row }">
+          <span>{{ row.type === 1 ? '多模块' : '单体' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="author" label="作者" show-overflow-tooltip header-align="center" align="center"></el-table-column>
       <el-table-column prop="email" label="Email" show-overflow-tooltip header-align="center" align="center"></el-table-column>
 			<el-table-column label="操作" fixed="right" header-align="center" align="center" width="180">

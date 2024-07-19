@@ -12,11 +12,8 @@
 			</el-form-item>
       <el-form-item label="项目类型" prop="type">
         <el-select v-model="dataForm.type" clearable placeholder="项目类型" style="width: 100%">
-          <el-option value="单体" label="单体"></el-option>
-          <el-option value="EUREKA" label="EUREKA"></el-option>
-          <el-option value="NACOS" label="NACOS"></el-option>
-          <el-option value="NACOS CONFIG" label="NACOS CONFIG"></el-option>
-          <el-option value="代码" label="代码"></el-option>
+          <el-option value="0" label="单体"></el-option>
+          <el-option value="1" label="多模块"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="作者" prop="author">
@@ -54,7 +51,7 @@ const dataForm = reactive({
   artifactId: 'test',
   groupId: 'cn.piesat',
   version: '1.0.0',
-  type: '单体',
+  type: '0',
   author: 'zhouxiaoping',
   email: 'zhouxiaoping@piesat.cn',
   description: '',

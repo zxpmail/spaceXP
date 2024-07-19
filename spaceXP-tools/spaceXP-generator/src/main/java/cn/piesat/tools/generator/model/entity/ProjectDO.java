@@ -19,9 +19,9 @@ import java.util.Date;
 public class ProjectDO extends BaseDO{
 
     /**
-     * 项目类型
+     * 项目类型 1为单模块 0为多模块
      */
-    private String type;
+    private Integer type;
 
     /**
      * 组织机构ID
