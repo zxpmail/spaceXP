@@ -70,7 +70,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * @return 返回结果，true：增加成功，false：存在
      */
     public Boolean delete(String key) {
-        if (!existsDataSource(key)) {
+        if (existsDataSource(key)) {
             targetDataSourceMap.remove(key);
             super.afterPropertiesSet();
             return true;

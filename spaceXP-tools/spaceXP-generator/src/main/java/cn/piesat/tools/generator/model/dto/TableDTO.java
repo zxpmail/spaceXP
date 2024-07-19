@@ -3,6 +3,7 @@ package cn.piesat.tools.generator.model.dto;
 
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
+import cn.piesat.tools.generator.annotation.StartsWithChar;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -37,12 +38,14 @@ public class TableDTO  {
     /**
      * 表名
      */
+    @StartsWithChar(message = "表名必须以字母开始",groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "表名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100 , message = "长度必须小于等于100" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String tableName;
     /**
      * 实体类名称
      */
+    @StartsWithChar(message = "类名必须以字母开始",groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "类名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100 , message = "长度必须小于等于100" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String className;
@@ -72,6 +75,7 @@ public class TableDTO  {
     /**
      * 项目标识
      */
+    @StartsWithChar(message = "项目标识必须以字母开始",groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "项目标识不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100 , message = "长度必须小于等于100" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String moduleName;
@@ -85,6 +89,7 @@ public class TableDTO  {
     /**
      * 功能名
      */
+    @StartsWithChar(message = "功能名必须以字母开始",groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "功能名不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100 , message = "长度必须小于等于100" ,groups ={AddGroup.class,UpdateGroup.class} )
     private String functionName;

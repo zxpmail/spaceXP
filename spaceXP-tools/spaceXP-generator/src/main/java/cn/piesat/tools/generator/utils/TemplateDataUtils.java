@@ -196,7 +196,7 @@ public class TemplateDataUtils {
         }
     }
 
-    private static boolean isChar(char c) {
+    public static boolean isChar(char c) {
         return (c >= 65 && c <= 90) || (c >= 97 && c <= 122);
     }
 }
