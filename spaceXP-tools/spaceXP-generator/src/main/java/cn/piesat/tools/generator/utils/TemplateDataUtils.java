@@ -53,7 +53,7 @@ public class TemplateDataUtils {
             putStringIfNotEmpty(dataModel, MODEL_PATH, projectDTO.getArtifactId());
         } else {
             putStringIfNotEmpty(dataModel, BIZ_PATH, projectDTO.getArtifactId() + "-biz");
-            putStringIfNotEmpty(dataModel, MODEL_PATH, projectDTO.getArtifactId() + "-api");
+            putStringIfNotEmpty(dataModel, MODEL_PATH, projectDTO.getArtifactId() + "-model");
         }
         putStringIfNotEmpty(dataModel, VERSION, projectDTO.getVersion());
         putStringIfNotEmpty(dataModel, MODULE_NAME, projectDTO.getArtifactId());
@@ -157,7 +157,7 @@ public class TemplateDataUtils {
             putStringIfNotEmpty(dataModel, MODEL_PATH, table.getModuleName());
         } else {
             putStringIfNotEmpty(dataModel, BIZ_PATH, table.getModuleName() + "-biz");
-            putStringIfNotEmpty(dataModel, MODEL_PATH, table.getModuleName() + "-api");
+            putStringIfNotEmpty(dataModel, MODEL_PATH, table.getModuleName() + "-model");
         }
         String tableName = table.getTableName();
         putStringIfNotEmpty(dataModel, TABLE_NAME, tableName);

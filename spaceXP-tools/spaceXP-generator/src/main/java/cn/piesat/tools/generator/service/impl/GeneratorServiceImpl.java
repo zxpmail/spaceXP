@@ -70,7 +70,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer must, Integer moduleType) {
         for (TemplateEntity template : templatesConfig.getTemplates()) {
-            if ((must <= template.getMust()) && (moduleType <= template.getModuleType())) {
+            if ((must >= template.getMust()) && (moduleType >= template.getModuleType())) {
                 dataModel.put(TEMPLATE_NAME, template.getName());
                 String content = TemplateUtils.getContent(template.getContent(), dataModel);
                 String path = TemplateUtils.getContent(template.getPath(), dataModel);
@@ -79,7 +79,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                     IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
                     zip.closeEntry();
                 } catch (IOException e) {
-                    log.error("path:{}",path, e);
+                    log.error("name:{},path:{}",template.getName(),template.getPath(), e);
                     throw new RuntimeException(e);
                 }
             }
@@ -204,7 +204,8 @@ public class GeneratorServiceImpl implements GeneratorService {
             t.setAuthor(batchTableDTO.getProject().getAuthor());
             t.setVersion(batchTableDTO.getProject().getVersion());
             t.setEmail(batchTableDTO.getProject().getEmail());
-            t.setPackageName(batchTableDTO.getProject().getArtifactId());
+            t.setGeneratorType(batchTableDTO.getProject().getType());
+            t.setPackageName(batchTableDTO.getProject().getGroupId());
             t.setModuleName(batchTableDTO.getProject().getArtifactId());
             t.setTablePrefix(batchTableDTO.getTablePrefix());
             t.setFormLayout(batchTableDTO.getFormLayout());
