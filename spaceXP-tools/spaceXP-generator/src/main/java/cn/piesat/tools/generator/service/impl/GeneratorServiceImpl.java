@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,7 @@ import static cn.piesat.tools.generator.constants.Constants.*;
  *
  * @author zhouxp
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GeneratorServiceImpl implements GeneratorService {
@@ -58,9 +60,17 @@ public class GeneratorServiceImpl implements GeneratorService {
     private final DataSourceService dataSourceService;
     private final TemplatesConfig templatesConfig;
 
-    private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer isOnly) {
+    /**
+     * 从模版中获取数据流，根据模版数据进行替换后，生成zip数据
+     *
+     * @param dataModel  模版数据
+     * @param zip        包数据
+     * @param must       1 必须生成 2当选择项目时生成，没有选项目时不生成
+     * @param moduleType 生成文件的模块类型 1为单模块 2 为多模块  单模块只生成单模块文件，多模块方式生成不仅是多模块还包含单模块
+     */
+    private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer must, Integer moduleType) {
         for (TemplateEntity template : templatesConfig.getTemplates()) {
-            if (template.getOnly().equals(isOnly)) {
+            if ((must <= template.getMust()) && (moduleType <= template.getModuleType())) {
                 dataModel.put(TEMPLATE_NAME, template.getName());
                 String content = TemplateUtils.getContent(template.getContent(), dataModel);
                 String path = TemplateUtils.getContent(template.getPath(), dataModel);
@@ -69,11 +79,13 @@ public class GeneratorServiceImpl implements GeneratorService {
                     IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
                     zip.closeEntry();
                 } catch (IOException e) {
+                    log.error("path:{}",path, e);
                     throw new RuntimeException(e);
                 }
             }
         }
     }
+
     private static void writeZip(HttpServletResponse response, ByteArrayOutputStream outputStream) throws IOException {
         byte[] responseData = outputStream.toByteArray();
         // 设置响应头部
@@ -210,12 +222,12 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void packProjectWriteZip(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
         TemplateDataUtils.setDataModelByProject(dataModel, projectDTO);
         setDataSourceInfo(dataModel, projectDTO.getTables().get(0));
-        writeZipByTemplate(dataModel, zip, 1);
+        writeZipByTemplate(dataModel, zip, 2,projectDTO.getType());
     }
 
     private void setDataSourceInfo(Map<String, Object> dataModel, TableDTO tableDTO) {
         DataSourceDO dataSourceDO = dataSourceService.getDataSourceDOByConnName(tableDTO.getConnName());
-        TemplateDataUtils.setDataModelByDataSource(dataModel,dataSourceDO);
+        TemplateDataUtils.setDataModelByDataSource(dataModel, dataSourceDO);
     }
 
     private void saveTableDTO(ProjectDTO projectDTO) {
@@ -236,7 +248,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void packTablesWriteZip(TableDTO table, Map<String, Object> dataModel, ZipOutputStream zip) {
         TemplateDataUtils.setDataModelByTable(dataModel, table);
         setDataModelByFields(dataModel, table.getId());
-        writeZipByTemplate(dataModel, zip, 0);
+        writeZipByTemplate(dataModel, zip, 1,1);
     }
 
 }

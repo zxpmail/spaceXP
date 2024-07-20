@@ -24,14 +24,14 @@ public class TemplateEntity {
      */
     private String path;
     /**
-     * 是否生成单一文件 1 是 0 否 如系统pom、启动文件为单一文件，controller、service等不是单一文件
+     * 当为1时必须生成，如:controller、service等文件  当为2包含1的所有文件
      */
-    private Integer only = 0;
+    private Integer must = 1;
 
     /**
-     * 产生文件方式 单模块 1 多模块 0
+     * 产生文件方式 单模块 1 多模块 2
      */
-    private Integer single = 1;
+    private Integer moduleType = 1;
 
     /**
      * 模版内容

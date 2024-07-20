@@ -21,7 +21,7 @@
 			<el-table-column prop="version" label="版本" show-overflow-tooltip header-align="center" align="center"></el-table-column>
       <el-table-column prop="type" label="类型" show-overflow-tooltip header-align="center" align="center">
         <template v-slot="{ row }">
-          <span>{{ row.type === 0 ? '多模块' : '单体' }}</span>
+          <span>{{ row.type === 2 ? '多模块' : '单体' }}</span>
         </template>
       </el-table-column>
       <el-table-column prop="author" label="作者" show-overflow-tooltip header-align="center" align="center"></el-table-column>

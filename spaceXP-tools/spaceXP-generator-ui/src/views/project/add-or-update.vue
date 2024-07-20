@@ -13,7 +13,7 @@
       <el-form-item label="项目类型" prop="type">
         <el-select v-model="dataForm.type" clearable placeholder="项目类型" style="width: 100%">
           <el-option :value="1" label="单体"></el-option>
-          <el-option :value="0" label="多模块"></el-option>
+          <el-option :value="2" label="多模块"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="作者" prop="author">
