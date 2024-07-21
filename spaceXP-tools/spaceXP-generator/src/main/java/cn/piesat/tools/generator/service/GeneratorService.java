@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface GeneratorService {
 
-    void genTableCode(TableDTO table, HttpServletResponse response);
+    void genTableCode(List<TableDTO> table, HttpServletResponse response);
 
     void genProjectCode(ProjectDTO projectDTO, HttpServletResponse response);
 

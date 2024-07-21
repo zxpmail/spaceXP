@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -70,7 +71,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer must, Integer moduleType) {
         for (TemplateEntity template : templatesConfig.getTemplates()) {
-            if ((must >= template.getMust()) && (moduleType >= template.getModuleType())) {
+            if ((must == template.getMust()) && (moduleType >= template.getModuleType())) {
                 dataModel.put(TEMPLATE_NAME, template.getName());
                 String content = TemplateUtils.getContent(template.getContent(), dataModel);
                 String path = TemplateUtils.getContent(template.getPath(), dataModel);
@@ -79,7 +80,7 @@ public class GeneratorServiceImpl implements GeneratorService {
                     IOUtils.write(content, zip, StandardCharsets.UTF_8.name());
                     zip.closeEntry();
                 } catch (IOException e) {
-                    log.error("name:{},path:{}",template.getName(),template.getPath(), e);
+                    log.error("name:{},path:{}", template.getName(), template.getPath(), e);
                     throw new RuntimeException(e);
                 }
             }
@@ -125,7 +126,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     }
 
     @Override
-    public void genTableCode(TableDTO table, HttpServletResponse response) {
+    public void genTableCode(List<TableDTO> table, HttpServletResponse response) {
         // 代码生成器信息
         if (ObjectUtils.isEmpty(table)) {
             noData(response);
@@ -134,19 +135,10 @@ public class GeneratorServiceImpl implements GeneratorService {
         genCode(table, response);
     }
 
-    private <T> void genCode(T table, HttpServletResponse response) {
+    private void genCode(List<TableDTO> list, HttpServletResponse response) {
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            Map<String, Object> dataModel = new HashMap<>();
-            if (table instanceof List) {
-                @SuppressWarnings("unchecked")
-                List<TableDTO> list = (List<TableDTO>) table;
-                for (TableDTO item : list) {
-                    writeTable(item, dataModel, zip);
-                }
-            } else {
-                writeTable((TableDTO) table, dataModel, zip);
-            }
+            writeTables(list, zip);
             zip.finish();
             writeZip(response, outputStream);
         } catch (Exception e) {
@@ -157,14 +149,16 @@ public class GeneratorServiceImpl implements GeneratorService {
     /**
      * 生成单表并打包成zip
      *
-     * @param table     表名
-     * @param dataModel 数据模式
-     * @param zip       上传zip流
+     * @param tables 表信息
+     * @param zip    上传zip流
      */
-    private void writeTable(TableDTO table, Map<String, Object> dataModel, ZipOutputStream zip) {
-        dataModel.put(Constants.CREATE_TIME, DateUtils.LocalDateTime2String(LocalDateTime.now()));
-        packTablesWriteZip(table, dataModel, zip);
-        dataModel.clear();
+    private void writeTables(List<TableDTO> tables, ZipOutputStream zip) {
+        for (TableDTO item : tables) {
+            Map<String, Object> dataModel = new HashMap<>();
+            dataModel.put(Constants.CREATE_TIME, DateUtils.LocalDateTime2String(LocalDateTime.now()));
+            packTablesWriteZip(item, dataModel, zip);
+            dataModel.clear();
+        }
     }
 
     private void noData(HttpServletResponse response) {
@@ -182,11 +176,11 @@ public class GeneratorServiceImpl implements GeneratorService {
             return;
         }
         saveTableDTO(projectDTO);
-        Map<String, Object> dataModel = new HashMap<>();
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
              ZipOutputStream zip = new ZipOutputStream(outputStream)) {
-            //writeTable(projectDTO.getTables(), dataModel, zip);
-            writeProject(projectDTO, dataModel, zip);
+            initTables(projectDTO.getTables(),projectDTO,1);
+            writeTables(projectDTO.getTables(), zip);
+            writeProject(projectDTO, zip);
             zip.finish();
             writeZip(response, outputStream);
         } catch (Exception e) {
@@ -200,21 +194,26 @@ public class GeneratorServiceImpl implements GeneratorService {
             noData(response);
             return;
         }
-        batchTableDTO.getTables().forEach(t -> {
-            t.setAuthor(batchTableDTO.getProject().getAuthor());
-            t.setVersion(batchTableDTO.getProject().getVersion());
-            t.setEmail(batchTableDTO.getProject().getEmail());
-            t.setGeneratorType(batchTableDTO.getProject().getType());
-            t.setPackageName(batchTableDTO.getProject().getGroupId());
-            t.setModuleName(batchTableDTO.getProject().getArtifactId());
-            t.setTablePrefix(batchTableDTO.getTablePrefix());
-            t.setFormLayout(batchTableDTO.getFormLayout());
-            t.setProjectId(batchTableDTO.getProject().getId());
-        });
+        initTables(batchTableDTO.getTables(),batchTableDTO.getProject(),batchTableDTO.getFormLayout());
         genCode(batchTableDTO.getTables(), response);
     }
 
-    private void writeProject(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
+    private static void initTables(List<TableDTO> tables,ProjectDTO projectDTO,Integer formLayout ) {
+        tables.forEach(t -> {
+            t.setAuthor(projectDTO.getAuthor());
+            t.setVersion(projectDTO.getVersion());
+            t.setEmail(projectDTO.getEmail());
+            t.setGeneratorType(projectDTO.getType());
+            t.setPackageName(projectDTO.getGroupId());
+            t.setModuleName(projectDTO.getArtifactId());
+            t.setTablePrefix(projectDTO.getTablePrefix());
+            t.setFormLayout(formLayout);
+            t.setProjectId(projectDTO.getId());
+        });
+    }
+
+    private void writeProject(ProjectDTO projectDTO, ZipOutputStream zip) {
+        Map<String, Object> dataModel = new HashMap<>();
         dataModel.put(Constants.CREATE_TIME, DateUtils.LocalDateTime2String(LocalDateTime.now()));
         packProjectWriteZip(projectDTO, dataModel, zip);
     }
@@ -223,7 +222,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void packProjectWriteZip(ProjectDTO projectDTO, Map<String, Object> dataModel, ZipOutputStream zip) {
         TemplateDataUtils.setDataModelByProject(dataModel, projectDTO);
         setDataSourceInfo(dataModel, projectDTO.getTables().get(0));
-        writeZipByTemplate(dataModel, zip, 2,projectDTO.getType());
+        writeZipByTemplate(dataModel, zip, 2, projectDTO.getType());
     }
 
     private void setDataSourceInfo(Map<String, Object> dataModel, TableDTO tableDTO) {
@@ -249,7 +248,7 @@ public class GeneratorServiceImpl implements GeneratorService {
     private void packTablesWriteZip(TableDTO table, Map<String, Object> dataModel, ZipOutputStream zip) {
         TemplateDataUtils.setDataModelByTable(dataModel, table);
         setDataModelByFields(dataModel, table.getId());
-        writeZipByTemplate(dataModel, zip, 1,1);
+        writeZipByTemplate(dataModel, zip, 1, 1);
     }
 
 }

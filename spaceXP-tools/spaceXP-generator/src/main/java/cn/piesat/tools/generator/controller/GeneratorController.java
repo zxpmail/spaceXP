@@ -33,7 +33,7 @@ public class GeneratorController {
      * 单表生成代码（zip压缩包）
      */
     @PostMapping("/genTableCode")
-    public void genTableCode(@Validated @RequestBody TableDTO  table, HttpServletResponse response){
+    public void genTableCode(@Validated @RequestBody List<TableDTO>  table, HttpServletResponse response){
         generatorService.genTableCode(table,response);
     }
 
