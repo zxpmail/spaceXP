@@ -110,6 +110,7 @@ const syncHandle = (row) => {
 		.then(() => {
 			useTableSyncApi(row).then(() => {
 				ElMessage.success('同步成功')
+        getDataList()
 			})
 		})
 		.catch(() => {})
