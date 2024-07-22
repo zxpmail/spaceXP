@@ -1,4 +1,4 @@
-package cn.piesat.framework.security.utils;
+package cn.piesat.framework.redis.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

@@ -5,8 +5,10 @@ import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.redis.annotation.AccessLimit;
 
 
-
+import cn.piesat.framework.redis.utils.Md5Util;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -14,6 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -58,12 +61,16 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             }
             long seconds = accessLimit.second();
             int maxCount = accessLimit.maxCount();
-
+            Map<String, String[]> parameterMap = request.getParameterMap();
+            String params ="";
+            if(!CollectionUtils.isEmpty(parameterMap)){
+                String s = JSON.toJSONString(parameterMap);
+                params = Md5Util.generateMD5(s);
+            }
             // 存储key
             String key = keyPrefix + CommonConstants.UNDERLINE + request.getRemoteAddr().replace(CommonConstants.COLON, CommonConstants.UNDERLINE) +
                     CommonConstants.UNDERLINE +
-                    request.getServletPath();
-
+                    request.getServletPath()+params;
             // 已经访问的次数
             Integer count = (Integer) redisService.redisTemplate.opsForValue().get(key);
             log.info("已经访问的次数:" + count);

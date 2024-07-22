@@ -106,7 +106,12 @@ public class TestController {
     public Object  accessLimit(@PathVariable("key") String key){
         return new HashMap<String, Object>(){{put(key,"hello");}};
     }
-
+    @ApiOperation("限流")
+    @GetMapping("accessLimit1")
+    @AccessLimit(maxCount = 4)
+    public Object  accessLimit1(){
+        return new HashMap<String, Object>(){{put("1","hello");}};
+    }
     @GetMapping("testLock")
     @DLock("'person:' + #person.id + ':' + #cateId")
     public void testLock( Person person,Integer cateId) throws InterruptedException {
