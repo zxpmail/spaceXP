@@ -58,6 +58,7 @@ public class TemplateDataUtils {
         putStringIfNotEmpty(dataModel, VERSION, projectDTO.getVersion());
         putStringIfNotEmpty(dataModel, MODULE_NAME, projectDTO.getArtifactId());
         dataModel.put("port", projectDTO.getPort());
+        dataModel.put("single", projectDTO.getType());
         putStringIfNotEmpty(dataModel, "description", projectDTO.getDescription());
         putStringIfNotEmpty(dataModel, PACKAGE, projectDTO.getGroupId());
         putStringIfNotEmpty(dataModel, PACKAGE_PATH, projectDTO.getGroupId().replace(".", File.separator));
@@ -171,7 +172,6 @@ public class TemplateDataUtils {
             }
         }
         tableName = StrUtils.underlineToCamel(tableName, false);
-        putStringIfNotEmpty(dataModel, TABLE_NAME, tableName);
 
         putStringIfNotEmpty(dataModel, TABLE_COMMENT, changeNameFirst(table.getTableComment(), tableName));
         putStringIfNotEmpty(dataModel, CLASS_NAME, changeNameFirst(table.getClassName(), tableName));

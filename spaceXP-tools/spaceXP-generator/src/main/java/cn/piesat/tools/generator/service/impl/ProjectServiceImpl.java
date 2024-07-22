@@ -61,7 +61,6 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
     @Transactional(rollbackFor = Exception.class)
     public Boolean add(ProjectDTO projectDTO) {
         repeat(projectDTO);
-        updateDefault(projectDTO);
         return save(CopyBeanUtils.copy(projectDTO,ProjectDO::new));
     }
 
@@ -83,20 +82,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectDO> im
         if(ObjectUtils.isEmpty(byId)){
             return false;
         }
-        updateDefault(projectDTO);
         BeanUtils.copyProperties(projectDTO,byId,CopyBeanUtils.getNullPropertyNames(projectDTO));
         return updateById(byId);
     }
 
-    private void updateDefault(ProjectDTO projectDTO) {
-        if(projectDTO.getIsDefault()!=1){
-            return;
-        }
-        LambdaUpdateWrapper<ProjectDO> wrapper =new LambdaUpdateWrapper<>();
-        wrapper.eq(ProjectDO::getIsDefault,1);
-        wrapper.set(ProjectDO::getIsDefault,0);
-        update(wrapper);
-    }
 
     @Override
     public Boolean delete(List<Long> ids) {

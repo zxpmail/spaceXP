@@ -9,9 +9,9 @@
         <relativePath/>
     </parent>
     <groupId>${package}</groupId>
-    <artifactId>${moduleName}-model</artifactId>
+    <artifactId>${modelPath}</artifactId>
     <version>${version}</version>
-    <name>${moduleName}-model</name>
+    <name>${modelPath}</name>
     <properties>
         <java.version>1.8</java.version>
     </properties>

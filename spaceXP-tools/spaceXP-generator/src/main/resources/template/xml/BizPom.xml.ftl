@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>${package}</groupId>
-    <artifactId>${moduleName}-biz</artifactId>
+    <artifactId>${bizPath}</artifactId>
     <version>${version}</version>
-    <name>${moduleName}-biz</name>
+    <name>${bizPath}</name>
     <description>${description}</description>
     <properties>
         <java.version>1.8</java.version>
@@ -54,10 +54,16 @@
             <artifactId>spaceXP-spring-boot-starter-knife4j</artifactId>
             <version>2.0.0</version>
         </dependency>
+        <#if single==2>
         <dependency>
             <groupId>${package}</groupId>
             <artifactId>${moduleName}-model</artifactId>
             <version>${version}</version>
+        </dependency>
+        </#if>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

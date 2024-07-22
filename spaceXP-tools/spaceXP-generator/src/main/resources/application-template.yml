@@ -10,7 +10,7 @@ gen:
       name: java/Application.java.ftl
       path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/${moduleName?cap_first}Application.java
       must: 2
-      moduleType: 2
+      moduleType: 1
     - id: 2
       name: java/Controller.java.ftl
       path: ${moduleName}/${bizPath}/src/main/java/${packagePath}/${moduleName}/controller/${className?cap_first}Controller.java

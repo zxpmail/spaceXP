@@ -83,7 +83,6 @@ public class ProjectDTO {
     /**
      * 是否是默认 0否 1是
      */
-    @NotNull(message = "是否是默认", groups =  {AddGroup.class, UpdateGroup.class})
     private Integer isDefault;
     /**
      * 表前缀
