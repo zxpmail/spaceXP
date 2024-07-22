@@ -71,17 +71,16 @@ const submitHandle = () => {
     return
   }
   const data = state.dataList.filter(m => tables.includes(m.id))
-  const uniqueArr = Array.from(new Set(data.map(({datasourceName}) => datasourceName)));
-
+  const uniqueArr = [... new Set(data.map(d=>d.connName))] ;
   if (uniqueArr.length > 1) {
     ElMessage.warning('生成代码必须保证为相同的数据源名称')
-    return
+  }else {
+    dataForm.project.tables = data
+    dataForm.project.tablePrefix = downloadName.value
+    // 源码下载
+    useDownloadApi('generator/genProjectCode', dataForm.project)
+    visible.value = false
   }
-  dataForm.project.tables = data
-  dataForm.project.tablePrefix = downloadName.value
-  // 源码下载
-  useDownloadApi('generator/genProjectCode',dataForm.project)
-  visible.value = false
 }
 
 defineExpose({

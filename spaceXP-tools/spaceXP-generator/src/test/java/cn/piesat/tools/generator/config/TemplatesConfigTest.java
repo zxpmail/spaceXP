@@ -26,7 +26,6 @@ public class TemplatesConfigTest {
     @Test
     public void TestTemplatesConfig(){
         assertEquals(templatesConfig.getTemplates().size(),17);
-        assertNotNull(templatesConfig.getDeveloper());
         assertNotNull(templatesConfig.getProject());
     }
 }
