@@ -23,7 +23,7 @@
         <tomcat.version>9.0.91</tomcat.version>
         <spring.cloud.version>2021.0.9</spring.cloud.version>
         <spring.cloud.alibaba.version>2021.0.6.1</spring.cloud.alibaba.version>
-
+        <org.springframework.version>5.3.37</org.springframework.version>
 
         <ojdbc8-version>21.7.0.0</ojdbc8-version>
         <mybatis-plus.version>3.5.3.2</mybatis-plus.version>
@@ -47,7 +47,6 @@
         <swagger-annotations.verison>1.5.22</swagger-annotations.verison>
         <com.alibaba.cloud.version>2021.1</com.alibaba.cloud.version>
         <spring-cloud.verison>2021.0.4</spring-cloud.verison>
-        <spring-framework.version>5.3.24</spring-framework.version>
         <logback.version>1.2.13</logback.version>
         <org.springframework.security.version>5.8.13</org.springframework.security.version>
         <mysql.version>9.0.0</mysql.version>
@@ -66,7 +65,7 @@
         <kafka-clients.version>3.4.1</kafka-clients.version>
         <commons-codec.version>1.17.0</commons-codec.version>
         <httpclient.version>4.5.14</httpclient.version>
-        <feign-okhttp.version>13.3</feign-okhttp.version>
+        <feign-okhttp.version>10.12</feign-okhttp.version>
         <okio.version>3.8.0</okio.version>
         <jakarta.validation.version>3.1.0</jakarta.validation.version>
     </properties>
