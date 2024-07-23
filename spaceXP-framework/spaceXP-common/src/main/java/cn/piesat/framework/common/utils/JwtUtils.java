@@ -12,6 +12,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.MissingClaimException;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.gson.io.GsonSerializer;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -113,5 +114,9 @@ public class JwtUtils {
             log.error(msg, e);
             throw new BaseException(CommonResponseEnum.SYS_ERROR);
         }
+    }
+
+    public static void main(String[] args) {
+        System.out.println(createToken("zxp","cuAihCz53DZRjZwbsGcZJ2Ai6At+T142uphtJMsk7iQ="));
     }
 }

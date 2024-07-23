@@ -83,6 +83,9 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-gson</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+        </dependency>
     </dependencies>
 </project>
