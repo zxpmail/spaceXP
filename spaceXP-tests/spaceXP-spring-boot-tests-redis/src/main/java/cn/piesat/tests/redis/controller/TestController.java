@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -54,7 +56,7 @@ public class TestController {
      * 信息
      */
     @ApiOperation("根据key查询")
-    @GetMapping("{key}")
+    @GetMapping("/info/{key}")
     public Object info(@PathVariable("key") String key){
         return redisService.getObject(key);
     }
@@ -63,7 +65,7 @@ public class TestController {
      * 信息
      */
     @ApiOperation("设置")
-    @GetMapping("{key}/{value}")
+    @GetMapping("set/{key}/{value}")
     public Object set(@PathVariable("key") String key,@PathVariable("value") String value){
          redisService.setObject(key,value);
          return "ok";
@@ -81,13 +83,13 @@ public class TestController {
         return "ok";
     }
 
-    @ApiOperation("设置hash")
+    @ApiOperation("获取hash")
     @GetMapping("getHash/{key}")
     public Object get(@PathVariable("key") String key){
          return redisService.getMapValue("hello", key);
     }
 
-    @ApiOperation("设置hash")
+    @ApiOperation("删除hash")
     @GetMapping("deleteHash/{key}")
     public void deleteHash(@PathVariable("key") String key){
          redisService.deleteMapMatching("hello", key);
@@ -106,11 +108,18 @@ public class TestController {
     public Object  accessLimit(@PathVariable("key") String key){
         return new HashMap<String, Object>(){{put(key,"hello");}};
     }
-    @ApiOperation("限流")
+    @ApiOperation("限流1")
     @GetMapping("accessLimit1")
     @AccessLimit(maxCount = 4)
     public Object  accessLimit1(){
         return new HashMap<String, Object>(){{put("1","hello");}};
+    }
+
+    @ApiOperation("限流2")
+    @PostMapping("accessLimit2")
+    @AccessLimit(maxCount = 4)
+    public Object  accessLimit2(@RequestPart MultipartFile file){
+        return new HashMap<String, Object>(){{put("2","hello");}};
     }
     @GetMapping("testLock")
     @DLock("'person:' + #person.id + ':' + #cateId")
