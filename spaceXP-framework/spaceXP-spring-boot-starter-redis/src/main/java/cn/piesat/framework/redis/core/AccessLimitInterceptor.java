@@ -8,16 +8,23 @@ import cn.piesat.framework.redis.annotation.AccessLimit;
 import cn.piesat.framework.redis.utils.Md5Util;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -33,17 +40,25 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 
 public class AccessLimitInterceptor implements HandlerInterceptor {
-    private final RedisService redisService;
-
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     private final String keyPrefix;
 
-    public AccessLimitInterceptor(RedisService redisService, String keyPrefix) {
-        this.redisService = redisService;
+    private final DefaultRedisScript<Long> redisLuaScript = new DefaultRedisScript<>();
+
+
+    public AccessLimitInterceptor( String keyPrefix) {
         this.keyPrefix = keyPrefix;
     }
 
+    @PostConstruct
+    public void init() {
+        redisLuaScript.setResultType(Long.class);
+        redisLuaScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("rateLimiter.lua")));
+    }
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)  {
 
         if (handler instanceof HandlerMethod) {
             // 强转
@@ -62,28 +77,27 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             long seconds = accessLimit.second();
             int maxCount = accessLimit.maxCount();
             Map<String, String[]> parameterMap = request.getParameterMap();
-            String params ="";
-            if(!CollectionUtils.isEmpty(parameterMap)){
+            String params = "";
+            if (!CollectionUtils.isEmpty(parameterMap)) {
                 String s = JSON.toJSONString(parameterMap);
                 params = Md5Util.generateMD5(s);
             }
             // 存储key
             String key = keyPrefix + CommonConstants.UNDERLINE + request.getRemoteAddr().replace(CommonConstants.COLON, CommonConstants.UNDERLINE) +
                     CommonConstants.UNDERLINE +
-                    request.getServletPath()+params;
-            // 已经访问的次数
-            Integer count = (Integer) redisService.redisTemplate.opsForValue().get(key);
-            log.info("已经访问的次数:" + count);
-            if (null == count || -1 == count) {
-                redisService.setObject(key, 1, seconds, TimeUnit.SECONDS);
-                return true;
+                    request.getServletPath() + params;
+            List<String> keys = new ArrayList<>();
+            keys.add(key);
+            Long count = stringRedisTemplate.execute(
+                    redisLuaScript,
+                    keys,
+                    String.valueOf(maxCount),
+                    String.valueOf(seconds));
+            log.info("已经访问的次数:{},key:{}" , count, key);
+            if (count != null && count == 0) {
+                log.info("限流功能key:{} ", key);
+                throw new BaseException("请求过于频繁请稍后再试");
             }
-
-            if (count < maxCount) {
-                redisService.redisTemplate.opsForValue().increment(key);
-                return true;
-            }
-            throw new BaseException("请求过于频繁请稍后再试");
         }
         return true;
     }

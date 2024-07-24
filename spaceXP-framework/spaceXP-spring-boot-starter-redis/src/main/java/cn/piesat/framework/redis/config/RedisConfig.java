@@ -116,7 +116,7 @@ public class RedisConfig {
     @Bean
     @ConditionalOnProperty(name = "space.redis.access-limit-enable", havingValue = "true")
     public AccessLimitInterceptor accessLimitInterceptor(RedisService redisService){
-        return new AccessLimitInterceptor(redisService,module);
+        return new AccessLimitInterceptor(module);
     }
 
     @Bean
