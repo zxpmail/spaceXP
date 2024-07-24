@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p/>
@@ -64,6 +65,14 @@ public class TestController {
         throw new BaseException(CommonResponseEnum.ERROR);
     }
 
+    @OpLog(op = BusinessEnum.CLEAN,description = "测试")
+    @GetMapping(value = "/testParam")
+    public void testParam(HttpServletRequest req,String name)  {
+        log.debug(".....debug....");
+        log.info(".....info.....");
+        log.warn("........warn.......");
+        log.error("........error.......");
+    }
     @Resource
     private TestService testService;
     @PostMapping(value = "/testService")

@@ -5,6 +5,7 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.piesat.framework.common.constants.CommonConstants;
+import cn.piesat.framework.common.utils.ArgsUtils;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.log.constants.LogConstants;
 import cn.piesat.framework.common.model.enums.BusinessEnum;
@@ -13,6 +14,7 @@ import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.log.properties.LogProperties;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiOperation;
+
 import org.aspectj.lang.JoinPoint;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
@@ -21,8 +23,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -34,6 +34,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+import java.util.List;
 import java.util.Map;
 
 import static cn.piesat.framework.common.constants.CommonConstants.BROWSER;
@@ -175,25 +176,12 @@ public class LogUtil {
         // 类名
         opLogEntity.setClassPath(joinPoint.getTarget().getClass().getName());
         opLogEntity.setActionMethod(joinPoint.getSignature().getName());
-
-
-        if (args != null && args.length != 0) {
-            boolean isFile = false;
-            for (Object arg : args) {
-                if (arg instanceof MultipartFile || arg instanceof MultipartFile[]) {
-                    isFile = true;
-                    break;
-                }
-            }
-            if (!isFile) {
-                try {
-                    opLogEntity.setParams(JSON.toJSONString(args));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    opLogEntity.setParams(JSON.toJSONString(LogConstants.INVALID_PARAMETER));
-                }
-            }
-
+        List<Object> argsList = ArgsUtils.processArgs(args);
+        try {
+            opLogEntity.setParams(JSON.toJSONString(argsList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            opLogEntity.setParams(JSON.toJSONString(LogConstants.INVALID_PARAMETER));
         }
         opLogEntity.setModule(module);
         Map<String, Object> op = LogUtil.getControllerMethodOp(joinPoint, logProperties.getLogFlag());
