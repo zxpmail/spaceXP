@@ -23,10 +23,15 @@ public @interface AccessLimit {
     /**
      * 指定second 时间内 API请求次数
      */
-    int maxCount() default 5;
+    int maxCount() default 1;
 
     /**
      * 请求次数的指定时间范围  秒数(redis数据过期时间)
      */
     int second() default 60;
+
+    /**
+     * 提示
+     */
+    String message() default "请求过于频繁请稍后再试";
 }

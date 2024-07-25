@@ -25,9 +25,10 @@ import java.util.concurrent.TimeUnit;
  * {@code @description}  :防刷切面实现类
  * <p/>
  * <b>@create:</b> 2023/12/19 15:05.
- *
+ * 过期说明：参见AccessLimitInterceptor @AccessLimit 可以实现防刷功能
  * @author zhouxp
  */
+@Deprecated
 @Aspect
 public final class PreventReplayAspect {
 

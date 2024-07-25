@@ -5,6 +5,7 @@ import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.redis.annotation.AccessLimit;
 
 
+import cn.piesat.framework.redis.properties.RedisProperties;
 import cn.piesat.framework.redis.utils.Md5Util;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +39,16 @@ import java.util.Map;
  * @author zhouxp
  */
 @Slf4j
-
 public class AccessLimitInterceptor implements HandlerInterceptor {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
-    private final String keyPrefix;
+    private final RedisProperties  redisProperties;
 
     private final DefaultRedisScript<Long> redisLuaScript = new DefaultRedisScript<>();
 
 
-    public AccessLimitInterceptor( String keyPrefix) {
-        this.keyPrefix = keyPrefix;
+    public AccessLimitInterceptor( RedisProperties  redisProperties) {
+        this.redisProperties = redisProperties;
     }
 
     @PostConstruct
@@ -76,16 +76,18 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             }
             long seconds = accessLimit.second();
             int maxCount = accessLimit.maxCount();
-            Map<String, String[]> parameterMap = request.getParameterMap();
             String params = "";
-            if (!CollectionUtils.isEmpty(parameterMap)) {
-                String s = JSON.toJSONString(parameterMap);
-                params = Md5Util.generateMD5(s);
+            if(!redisProperties.getOnlyUrl()) {
+                Map<String, String[]> parameterMap = request.getParameterMap();
+                if (!CollectionUtils.isEmpty(parameterMap)) {
+                    String s = JSON.toJSONString(parameterMap);
+                    params = Md5Util.generateMD5(s);
+                }
             }
             // 存储key
-            String key = keyPrefix + CommonConstants.UNDERLINE + request.getRemoteAddr().replace(CommonConstants.COLON, CommonConstants.UNDERLINE) +
+            String key = redisProperties.getKeyPrefix() +
                     CommonConstants.UNDERLINE +
-                    request.getServletPath() + params;
+                    request.getRequestURI() + params;
             List<String> keys = new ArrayList<>();
             keys.add(key);
             Long count = stringRedisTemplate.execute(
@@ -96,7 +98,7 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
             log.info("已经访问的次数:{},key:{}" , count, key);
             if (count != null && count == 0) {
                 log.info("限流功能key:{} ", key);
-                throw new BaseException("请求过于频繁请稍后再试");
+                throw new BaseException(accessLimit.message());
             }
         }
         return true;

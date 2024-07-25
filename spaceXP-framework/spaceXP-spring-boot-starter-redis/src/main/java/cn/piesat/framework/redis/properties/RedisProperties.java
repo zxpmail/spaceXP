@@ -17,14 +17,37 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "space.redis")
 public class RedisProperties {
 
-    private Boolean messageEnable = false; //消息机制是否开启
+    /**
+     * 消息机制是否开启
+     */
+    private Boolean messageEnable = false;
 
+    /**
+     * 消息主题
+     */
     private String topics = "TOPIC";
 
-    private Boolean compressEnable = false; //压缩是否开启
+    /**
+     * 压缩是否开启
+     */
+    private Boolean compressEnable = false;
 
-    private Boolean preventReplayEnable = false; //防止重新刷新页面是否开启
+    /**
+     * 防止重新刷新页面是否开启
+     */
+    private Boolean preventReplayEnable = false;
 
-    private Boolean accessLimitEnable = false; //限流拦截器是否开启
+    /**
+     * 限流拦截器是否开启
+     */
+    private Boolean accessLimitEnable = false;
+    /**
+     * 只拦截url 不对参数处理
+     */
+    private Boolean onlyUrl = false;
 
+    /**
+     * 访问健keyPrefix
+     */
+    private String keyPrefix = "access_";
 }
