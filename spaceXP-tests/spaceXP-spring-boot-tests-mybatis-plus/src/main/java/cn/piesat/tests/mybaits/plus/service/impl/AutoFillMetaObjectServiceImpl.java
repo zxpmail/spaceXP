@@ -20,7 +20,7 @@ public class AutoFillMetaObjectServiceImpl implements AutoFillMetaObjectService 
 
     @Override
     public void insertFill(MetaObjectHandler metaObjectHandler, MetaObject metaObject) {
-            metaObjectHandler.strictInsertFill(metaObject, "passwordUpdateTime", LocalDateTime::now, LocalDateTime.class);
+           // metaObjectHandler.strictInsertFill(metaObject, "passwordUpdateTime", LocalDateTime::now, LocalDateTime.class);
 
     }
     @Override

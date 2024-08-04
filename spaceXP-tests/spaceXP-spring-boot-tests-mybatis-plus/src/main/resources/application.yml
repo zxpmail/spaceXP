@@ -12,8 +12,6 @@ spring:
   jackson:
     time-zone: GMT+8
 space:
-  web:
-    date-formatter-enable: true
   table:
     enable: true
   db:
@@ -22,6 +20,8 @@ space:
       length: 7
       key-prefix: zhou
 mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: deleted

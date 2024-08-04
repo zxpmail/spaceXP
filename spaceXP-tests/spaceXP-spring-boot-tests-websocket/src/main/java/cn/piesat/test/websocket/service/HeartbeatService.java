@@ -26,7 +26,7 @@ public class HeartbeatService {
     @Resource
     private MessageHandler messageHandler;
 
-    @Scheduled(fixedDelay = 360,timeUnit = TimeUnit.HOURS)
+    @Scheduled(fixedDelay = 30,timeUnit = TimeUnit.SECONDS)
     public void run(){
         MessagePack messagePack = new MessagePack(0,"1001","1001",1," heartbeat");
         TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));

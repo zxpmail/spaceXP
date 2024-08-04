@@ -14,8 +14,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 
- *
  * @author zhouxp
  * @email zhouxiaoping@piesat.cn
  * @date 2022-10-08 14:43:40
@@ -25,20 +23,20 @@ import java.time.LocalDateTime;
 @TableName("sys_user")
 public class UserDO implements Serializable {
     private static final long serialVersionUID = 1L;
-    @JsonSerialize(using= ToStringSerializer.class)
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     private String username;
     private String password;
     private String nickname;
     private String sex;
-    private Long state;
+    private Long state = 1L;
     private Long deptId;
     private String changePasswordFlag;
-    @TableField(fill = FieldFill.INSERT_UPDATE,exist = false)
+    @TableField(fill = FieldFill.INSERT_UPDATE, exist = false)
     private Long updateId;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime passwordUpdateTime;
+    //@TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime passwordUpdateTime =LocalDateTime.now();
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)
