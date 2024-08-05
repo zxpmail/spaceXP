@@ -76,4 +76,6 @@ public interface CommonConstants {
      * 应用Id
      */
     String APP_ID="appId";
+
+    String PARAMETERS_NULL ="参数不能为空！";
 }
