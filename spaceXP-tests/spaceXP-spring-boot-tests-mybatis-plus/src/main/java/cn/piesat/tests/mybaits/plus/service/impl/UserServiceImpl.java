@@ -4,7 +4,7 @@ import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.mybatis.plus.annotation.DynamicTableName;
 import cn.piesat.framework.mybatis.plus.model.TableNameEntity;
-import cn.piesat.framework.mybatis.plus.utils.CheckUtils;
+import cn.piesat.framework.mybatis.plus.utils.CheckRecordRepeatUtils;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tests.mybaits.plus.dao.mapper.UserMapper;
 import cn.piesat.tests.mybaits.plus.model.entity.UserDO;
@@ -38,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public Boolean add(UserDO userDO) {
         this.count();
-        CheckUtils.singleValueCheckRecordRepeat(userDO.getUsername(),UserDO::getUsername,this::count,"数据不能重复");
+        CheckRecordRepeatUtils.checkRecordRepeat(userDO.getUsername(),UserDO::getUsername,this::count);
         return save(userDO);
     }
 
