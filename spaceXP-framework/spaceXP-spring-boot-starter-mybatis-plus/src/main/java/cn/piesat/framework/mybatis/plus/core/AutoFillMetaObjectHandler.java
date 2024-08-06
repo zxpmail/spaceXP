@@ -3,6 +3,10 @@ package cn.piesat.framework.mybatis.plus.core;
 import cn.piesat.framework.common.constants.CommonConstants;
 
 import cn.piesat.framework.common.utils.ServletUtils;
+import cn.piesat.framework.common.utils.TypesInitializerUtils;
+import cn.piesat.framework.mybatis.plus.annotation.DefaultFieldFill;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,8 +81,11 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
     @Value("${mybatis-plus.global-config.db-config.logic-not-delete-value:0}")
     private Integer deleteInitValue;
 
+    private final Boolean defaultFill;
+
     @Override
     public void insertFill(MetaObject metaObject) {
+        defaultFillValue(metaObject,true);
         if (metaObject.hasGetter(createTime) && metaObject.hasSetter(createTime)) {
             this.strictInsertFill(metaObject, createTime, LocalDateTime::now, LocalDateTime.class);
         }
@@ -99,7 +106,26 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
 
     }
 
+    private void defaultFillValue(MetaObject metaObject, Boolean isAdd) {
+        if (!defaultFill) return;
+        for (Field field : metaObject.getOriginalObject().getClass().getDeclaredFields()) {
+            if (field.isAnnotationPresent(DefaultFieldFill.class) && field.isAnnotationPresent(TableField.class)) {
+                TableField tableField = field.getAnnotation(TableField.class);
+                if (isAdd) {
+                    if (tableField.fill() == FieldFill.INSERT || tableField.fill() == FieldFill.INSERT_UPDATE) {
+                        metaObject.setValue(field.getName(), TypesInitializerUtils.initialize(field.getType()));
+                    }
+                } else {
+                    if (tableField.fill() == FieldFill.UPDATE || tableField.fill() ==  FieldFill.INSERT_UPDATE) {
+                        metaObject.setValue(field.getName(), TypesInitializerUtils.initialize(field.getType()));
+                    }
+                }
+            }
+        }
+    }
+
     private void fillValue(MetaObject metaObject, String field, HttpServletRequest request, String constantValue) {
+        defaultFillValue(metaObject,false);
         String id = "-1";
         if (!ObjectUtils.isEmpty(request)) {
             id = request.getHeader(constantValue);

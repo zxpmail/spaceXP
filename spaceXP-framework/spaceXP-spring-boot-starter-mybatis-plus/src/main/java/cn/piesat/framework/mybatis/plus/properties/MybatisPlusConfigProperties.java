@@ -34,4 +34,6 @@ public class MybatisPlusConfigProperties {
     private String dateFormat = "yyyy-MM-dd HH:mm:ss";//LocalDateTime时间格式
 
     private Boolean dateFormatEnable = false;//是否启动时间格式转换
+
+    private Boolean defaultFill = false;//是否启动默认填充值
 }

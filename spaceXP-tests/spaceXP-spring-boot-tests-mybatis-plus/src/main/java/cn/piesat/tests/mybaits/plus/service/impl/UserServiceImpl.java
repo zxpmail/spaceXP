@@ -37,7 +37,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     }
     @Override
     public Boolean add(UserDO userDO) {
-        this.count();
         CheckRecordRepeatUtils.checkRecordRepeat(userDO.getUsername(),UserDO::getUsername,this::count);
         return save(userDO);
     }

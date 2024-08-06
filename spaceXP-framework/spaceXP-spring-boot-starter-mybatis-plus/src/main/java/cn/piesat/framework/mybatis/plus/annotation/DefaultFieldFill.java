@@ -18,5 +18,4 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD}) //定义了注解声明在哪些元素之前
 @Documented
 public @interface DefaultFieldFill {
-    Object value =null;
 }

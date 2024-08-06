@@ -78,4 +78,6 @@ public interface CommonConstants {
     String APP_ID="appId";
 
     String PARAMETERS_NULL ="参数不能为空！";
+
+    String Unsupported_type="不支持类型";
 }

@@ -1,5 +1,6 @@
 package cn.piesat.tests.mybaits.plus.model.entity;
 
+import cn.piesat.framework.mybatis.plus.annotation.DefaultFieldFill;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import lombok.Value;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -35,8 +37,9 @@ public class UserDO implements Serializable {
     private String changePasswordFlag;
     @TableField(fill = FieldFill.INSERT_UPDATE, exist = false)
     private Long updateId;
-    //@TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime passwordUpdateTime =LocalDateTime.now();
+    @DefaultFieldFill
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime passwordUpdateTime;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)

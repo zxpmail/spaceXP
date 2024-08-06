@@ -19,6 +19,7 @@ space:
       work-id: 1
       length: 7
       key-prefix: zhou
+    default-fill: true
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

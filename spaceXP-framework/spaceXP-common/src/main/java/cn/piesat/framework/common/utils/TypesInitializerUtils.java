@@ -50,7 +50,7 @@ public class TypesInitializerUtils {
         } else if (typeClass == LocalTime.class) {
             return (T) LocalTime.MIDNIGHT;
         }else if (typeClass == LocalDateTime.class) {
-            return (T) LocalTime.now();
+            return (T) LocalDateTime.now();
         }else {
             throw new IllegalArgumentException(CommonConstants.Unsupported_type + typeClass);
         }
