@@ -28,5 +28,8 @@ space.common.response-code.success-value 默认值操作成功 可以定义成�
 space.common.response-code.error-code 默认值500 可以定义失败返回码值
 space.common.response-code.error-value 默认值操作失败 可以定义失败返回值
 等等返回code和值
-
+使用服务层校验功能
+设置space.common.service-validation-enable为true开启服务层效验功能
+在服务层方法上添加@ServiceValidation
+在参数上增加@ServiceValidation或者JSR303注解即可
 

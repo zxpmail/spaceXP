@@ -15,6 +15,15 @@ public final class CommonProperties {
 
     private Boolean apiMapResultEnable = false;
 
+    public Boolean getServiceValidationEnable() {
+        return serviceValidationEnable;
+    }
+
+    public void setServiceValidationEnable(Boolean serviceValidationEnable) {
+        this.serviceValidationEnable = serviceValidationEnable;
+    }
+
+    private Boolean serviceValidationEnable =false;
     public Boolean getApiMapResultEnable() {
         return apiMapResultEnable;
     }
