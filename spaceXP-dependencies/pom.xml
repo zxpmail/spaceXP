@@ -67,7 +67,7 @@
         <httpclient.version>4.5.14</httpclient.version>
         <feign-okhttp.version>10.12</feign-okhttp.version>
         <okio.version>3.8.0</okio.version>
-        <jakarta.validation.version>3.1.0</jakarta.validation.version>
+        <podam.version>8.0.2.RELEASE</podam.version>
     </properties>
 
     <dependencyManagement>
@@ -138,11 +138,6 @@
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
                 <version>${spring-kafka.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk</artifactId>
-                <version>${aws-java-sdk.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -300,6 +295,11 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>cn.piesat.space</groupId>
+                <artifactId>spaceXP-spring-boot-starter-test</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
                 <version>${spring.boot.version}</version>
@@ -411,21 +411,6 @@
                 <version>${commons-logging-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.xuxueli</groupId>
-                <artifactId>xxl-job-core</artifactId>
-                <version>${xxl-job.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jsch</artifactId>
-                <version>${jsch.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-net</groupId>
-                <artifactId>commons-net</artifactId>
-                <version>${commons-net.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.amazonaws</groupId>
                 <artifactId>aws-java-sdk-s3</artifactId>
                 <version>${oss.s3.version}</version>
@@ -477,9 +462,9 @@
                 <version>${okio.version}</version>
             </dependency>
             <dependency>
-                <groupId>jakarta.validation</groupId>
-                <artifactId>jakarta.validation-api</artifactId>
-                <version>${jakarta.validation.version}</version>
+                <groupId>uk.co.jemos.podam</groupId>
+                <artifactId>podam</artifactId>
+                <version>${podam.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

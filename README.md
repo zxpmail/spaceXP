@@ -39,6 +39,7 @@ spaceXP-tools 工具集合
 16. spaceXP-spring-boot-starter-redis-external 包装redisson 分布式锁功能
 17. spaceXP-spring-boot-starter-websocket 实现socket消息发送以及心跳功能
 18. spaceXP-spring-boot-starter-log-external 实现log组件接口 直接保存到日志服务器中
+19. spaceXP-spring-boot-starter-test 实现test组件
 ## 工具说明
 1. spaceXP-gateway 网关工具 实现网关鉴权
 2. spaceXP-generator 低代码工具
