@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-    cn.piesat.framework.common.properties.CommonProperties
+    cn.piesat.framework.common.config.CommonAutoConfig

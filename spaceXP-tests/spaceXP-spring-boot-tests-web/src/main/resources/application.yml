@@ -13,6 +13,7 @@ space:
       message: msg
     response-code:
       success-code: 0
+    service-validation-enable: true
   web:
     xssEnable: true
     jacksonCustomize: true

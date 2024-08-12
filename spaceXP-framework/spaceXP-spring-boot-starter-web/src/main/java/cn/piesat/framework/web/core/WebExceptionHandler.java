@@ -7,6 +7,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.interfaces.IBaseResponse;
 import cn.piesat.framework.common.model.vo.ApiMapResult;
 import cn.piesat.framework.common.utils.ExceptionUtil;
+import cn.piesat.framework.web.constants.Constants;
 import feign.FeignException;
 
 
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -61,6 +63,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class WebExceptionHandler {
 
+    @Value("${space.web.parameterErrorEnable:true}")
+    private Boolean parameterErrorEnable;
     private final String module;
 
     /**
@@ -102,6 +106,15 @@ public class WebExceptionHandler {
         return ifDepthExceptionType(e);
     }
 
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ApiMapResult<IBaseResponse> handlerIllegalArgumentException(IllegalArgumentException e) throws Throwable {
+        if(e.getMessage().contains(Constants.PARAM_NULL)){
+            log.error("{}", e.getMessage(), e);
+            return ApiMapResult.fail(CommonResponseEnum.PARAM_ERROR.getCode(), Constants.PARAM_IS_NOT_NULL);
+        }
+        errorDispose(e);
+        return ifDepthExceptionType(e);
+    }
     /**
      * 二次深度检查错误类型
      */
@@ -170,9 +183,9 @@ public class WebExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ApiMapResult<IBaseResponse> handleConstraintViolationException(ConstraintViolationException e) throws Throwable {
         errorDispose(e);
-        String smg = "";
+        String smg = "参数校验错误!";
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
-        if (log.isDebugEnabled()) {
+        if (parameterErrorEnable) {
             for (ConstraintViolation<?> error : constraintViolations) {
                 log.error("{} -> {}", error.getPropertyPath(), error.getMessageTemplate());
                 smg = error.getMessageTemplate();
@@ -210,7 +223,7 @@ public class WebExceptionHandler {
 
     private ApiMapResult<IBaseResponse> getBindResult(BindingResult bindingResult) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        if (log.isDebugEnabled()) {
+        if (parameterErrorEnable) {
             for (FieldError error : fieldErrors) {
                 log.error("{} -> {}", error.getDefaultMessage(), error.getDefaultMessage());
             }

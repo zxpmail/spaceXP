@@ -77,4 +77,14 @@ public class WebProperties {
      */
     private boolean jacksonCustomize = true;
 
+    /**
+     * service 参数校验是否生效
+     */
+    private boolean serviceValidationEnable = true;
+
+    /**
+     * 参数错误是否显示详细信息
+     */
+
+    private Boolean parameterErrorEnable = true;
 }
