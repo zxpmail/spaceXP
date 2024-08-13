@@ -28,6 +28,7 @@
         <module>spaceXP-spring-boot-tests-kafka-datasource</module>
         <module>spaceXP-spring-boot-tests-websocket</module>
         <module>spaceXP-spring-boot-tests-log-external</module>
+        <module>spaceXP-spring-boot-tests-test</module>
     </modules>
     <dependencies>
         <dependency>

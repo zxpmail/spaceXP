@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 public class CommonAutoConfig {
-    @ConditionalOnProperty(name = "space.common.service-validation-enable", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnProperty(name = "space.common.service-validation-enable", havingValue = "true")
     @Bean
     public ServiceValidationAspect getServiceValidationAspect() {
         return new ServiceValidationAspect();

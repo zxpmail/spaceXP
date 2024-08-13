@@ -82,4 +82,6 @@ public interface CommonConstants {
     String Unsupported_type="不支持类型";
 
     String SIGNATURE_ARGUMENT ="参数不能为空!";
+
+    String COMMA =",";
 }

@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties({TestProperties.class})
 public class AutoTestConfig {
     @Bean
-    public  AutoSetPojo getAutoSetPojo(TestProperties testProperties) {
+    public AutoSetPojo getAutoSetPojo(TestProperties testProperties) {
         return new AutoSetPojo(testProperties);
     }
 }
