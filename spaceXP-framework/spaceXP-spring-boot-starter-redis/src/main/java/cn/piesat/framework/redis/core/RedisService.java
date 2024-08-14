@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
+import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -23,19 +24,21 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p>redis服务操作类</p>
+ *
  * @author :zhouxp
  * {@code @date} 2022/9/28 14:27
  * {@code @description} : 包含一系列redis服务操作
  */
-@SuppressWarnings(value = { "unchecked","unused","UnusedReturnValue" })
+@SuppressWarnings(value = {"unchecked", "unused", "UnusedReturnValue"})
 @RequiredArgsConstructor
 @Slf4j
 public class RedisService {
-    public final RedisTemplate<String,Object> redisTemplate;
+    public final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 缓存基本的对象，Integer、String、实体类等
-     * @param key 缓存的键值
+     *
+     * @param key   缓存的键值
      * @param value 缓存的值
      */
     public <T> void setObject(final String key, final T value) {
@@ -45,9 +48,9 @@ public class RedisService {
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *
-     * @param key 缓存的键值
-     * @param value 缓存的值
-     * @param timeout 时间
+     * @param key      缓存的键值
+     * @param value    缓存的值
+     * @param timeout  时间
      * @param timeUnit 时间颗粒度
      */
     public <T> void setObject(final String key, final T value, final Long timeout, final TimeUnit timeUnit) {
@@ -57,31 +60,35 @@ public class RedisService {
     /**
      * 设置有效时间
      *
-     * @param key Redis键
+     * @param key     Redis键
      * @param timeout 超时时间
      * @return true=设置成功；false=设置失败
      */
-    public boolean expire(final String key, final long timeout) {
-        return expire(key, timeout, TimeUnit.SECONDS);
+    @Nullable
+    public Boolean expire(final String key, final long timeout) {
+        return redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
 
     /**
      * 设置有效时间
      *
-     * @param key Redis键
+     * @param key     Redis键
      * @param timeout 超时时间
-     * @param unit 时间单位
+     * @param unit    时间单位
      * @return true=设置成功；false=设置失败
      */
+    @Nullable
     public Boolean expire(final String key, final long timeout, final TimeUnit unit) {
         return redisTemplate.expire(key, timeout, unit);
     }
+
     /**
      * 获取有效时间
      *
      * @param key Redis键
      * @return 有效时间
      */
+    @Nullable
     public Long getExpire(final String key) {
         return redisTemplate.getExpire(key);
     }
@@ -92,6 +99,7 @@ public class RedisService {
      * @param key 键
      * @return true 存在 false不存在
      */
+    @Nullable
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
@@ -102,23 +110,28 @@ public class RedisService {
      * @param key 缓存键值
      * @return 缓存键值对应的数据
      */
+    @Nullable
     public <T> T getObject(final String key) {
         return (T) redisTemplate.opsForValue().get(key);
-
     }
+
     /**
      * 删除单个对象
      */
+    @Nullable
     public Boolean delete(final String key) {
         return redisTemplate.delete(key);
     }
+
+    @Nullable
     public Long deleteAll(final String key) {
         Set<String> keys = redisTemplate.keys(key + "*");
-        if (CollectionUtils.isEmpty(keys)||keys.size()<1){
+        if (CollectionUtils.isEmpty(keys) || keys.size() < 1) {
             return 0L;
         }
         return redisTemplate.delete(keys);
     }
+
     /**
      * 删除集合对象
      *
@@ -127,7 +140,7 @@ public class RedisService {
 
     public Boolean deleteObject(final Collection<String> collection) {
         Long delete = redisTemplate.delete(collection);
-        if (delete != null){
+        if (delete != null) {
             return delete > 0;
         }
         return false;
@@ -136,7 +149,7 @@ public class RedisService {
     /**
      * 缓存List数据
      *
-     * @param key 缓存的键值
+     * @param key      缓存的键值
      * @param dataList 待缓存的List数据
      * @return 缓存的对象
      */
@@ -151,6 +164,7 @@ public class RedisService {
      * @param key 缓存的键值
      * @return 缓存键值对应的数据
      */
+    @Nullable
     public <T> List<T> getList(final String key) {
         return (List<T>) redisTemplate.opsForList().range(key, 0, -1);
     }
@@ -158,7 +172,7 @@ public class RedisService {
     /**
      * 缓存Set
      *
-     * @param key 缓存键值
+     * @param key     缓存键值
      * @param dataSet 缓存的数据
      * @return 缓存数据的对象
      */
@@ -171,10 +185,29 @@ public class RedisService {
     }
 
     /**
-     * 获得缓存的set
+     * 添加元素到Redis Set中
      *
+     * @param key   Redis键
+     * @param value 要添加的值
      */
+    public <T> void addSet(String key, T value) {
+        redisTemplate.opsForSet().add(key, value);
+    }
 
+    /**
+     * 删除Set中的元素
+     *
+     * @param key   Redis键
+     * @param value 要删除的值
+     */
+    public <T> void removeSet(String key, T value) {
+        redisTemplate.opsForSet().remove(key, value);
+    }
+
+    /**
+     * 获得缓存的set
+     */
+    @Nullable
     public <T> Set<T> getSet(final String key) {
         return (Set<T>) redisTemplate.opsForSet().members(key);
     }
@@ -183,9 +216,7 @@ public class RedisService {
      * 缓存Map
      */
     public <T> void setMap(final String key, final Map<String, T> dataMap) {
-        if (dataMap != null) {
-            redisTemplate.opsForHash().putAll(key, dataMap);
-        }
+        redisTemplate.opsForHash().putAll(key, dataMap);
     }
 
     /**
@@ -198,8 +229,8 @@ public class RedisService {
     /**
      * 往Hash中存入数据
      *
-     * @param key Redis键
-     * @param hKey Hash键
+     * @param key   Redis键
+     * @param hKey  Hash键
      * @param value 值
      */
     public <T> void setMapValue(final String key, final String hKey, final T value) {
@@ -209,10 +240,11 @@ public class RedisService {
     /**
      * 获取Hash中的数据
      *
-     * @param key Redis键
+     * @param key  Redis键
      * @param hKey Hash键
      * @return Hash中的对象
      */
+    @Nullable
     public <T> T getMapValue(final String key, final String hKey) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         return opsForHash.get(key, hKey);
@@ -221,7 +253,7 @@ public class RedisService {
     /**
      * 获取多个Hash中的数据
      *
-     * @param key Redis键
+     * @param key   Redis键
      * @param hKeys Hash键集合
      * @return Hash对象集合
      */
@@ -232,7 +264,7 @@ public class RedisService {
     /**
      * 删除Hash中的某条数据
      *
-     * @param key Redis键
+     * @param key  Redis键
      * @param hKey Hash键
      * @return 是否成功
      */
@@ -246,16 +278,18 @@ public class RedisService {
      * @param pattern 字符串前缀
      * @return 对象列表
      */
+    @Nullable
     public Collection<String> keys(final String pattern) {
         return redisTemplate.keys(pattern);
     }
 
     /**
      * 按通配符删除hash中的key
+     *
      * @param hashKey hashKey
      * @param pattern 通配符
      */
-    public void  deleteMapMatching(String hashKey, String pattern){
+    public void deleteMapMatching(String hashKey, String pattern) {
         try (Cursor<Map.Entry<Object, Object>> cursor = redisTemplate.opsForHash().scan(hashKey, ScanOptions.scanOptions().match(pattern).build())) {
             while (cursor.hasNext()) {
                 Map.Entry<Object, Object> entry = cursor.next();
@@ -263,11 +297,14 @@ public class RedisService {
             }
         }
     }
+
     @Value("${space.redis.topics:TOPIC}")
     private String channel;
-    private  boolean send(Object message){
-        return convertAndSend(channel,message);
+
+    private boolean send(Object message) {
+        return convertAndSend(channel, message);
     }
+
     /**
      * 向通道发布消息
      */
@@ -290,6 +327,10 @@ public class RedisService {
      * 获取链接工厂
      */
     public RedisConnectionFactory getConnectionFactory() {
+        RedisConnectionFactory connectionFactory = redisTemplate.getConnectionFactory();
+        if (connectionFactory == null) {
+            throw new IllegalArgumentException("Connection factory cannot be null");
+        }
         return redisTemplate.getConnectionFactory();
     }
 
@@ -297,35 +338,55 @@ public class RedisService {
      * 自增数
      */
     public long increment(String key) {
-        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
-        return redisAtomicLong.incrementAndGet();
+        try {
+            RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key,getConnectionFactory());
+            return redisAtomicLong.incrementAndGet();
+        } catch (Exception e) {
+            log.error("Error incrementing value: " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
      * 自增数（带过期时间）
      */
     public long increment(String key, long time, TimeUnit timeUnit) {
-        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
-        redisAtomicLong.expire(time, timeUnit);
-        return redisAtomicLong.incrementAndGet();
+        try {
+            RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+            redisAtomicLong.expire(time, timeUnit);
+            return redisAtomicLong.incrementAndGet();
+        } catch (Exception e) {
+            log.error("Error incrementing value: " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
      * 自增数（带过期时间）
      */
     public long increment(String key, Instant expireAt) {
-        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
-        redisAtomicLong.expireAt(expireAt);
-        return redisAtomicLong.incrementAndGet();
+        try {
+            RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+            redisAtomicLong.expireAt(expireAt);
+            return redisAtomicLong.incrementAndGet();
+        } catch (Exception e) {
+            log.error("Error incrementing value: " + e.getMessage());
+            throw e;
+        }
     }
 
     /**
      * 自增数（带过期时间和步长）
      */
     public long increment(String key, int increment, long time, TimeUnit timeUnit) {
-        RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
-        redisAtomicLong.expire(time, timeUnit);
-        return redisAtomicLong.incrementAndGet();
+        try {
+            RedisAtomicLong redisAtomicLong = new RedisAtomicLong(key, getConnectionFactory());
+            redisAtomicLong.expire(time, timeUnit);
+            return redisAtomicLong.incrementAndGet();
+        } catch (Exception e) {
+            log.error("Error incrementing value: " + e.getMessage());
+            throw e;
+        }
     }
 
 }
