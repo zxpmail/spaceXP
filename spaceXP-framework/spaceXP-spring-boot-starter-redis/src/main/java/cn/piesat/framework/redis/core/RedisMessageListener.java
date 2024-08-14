@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.lang.Nullable;
 
 import javax.annotation.Resource;
 
@@ -17,23 +18,32 @@ import javax.annotation.Resource;
  * @author zhouxp
  */
 @Slf4j
-@SuppressWarnings({"unchecked","rawtypes"})
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class RedisMessageListener implements MessageListener {
 
     @Resource
-    private  RedisTemplate<String,Object> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private  MessageService messageService;
-
+    private MessageService messageService;
 
 
     @Override
+    public void onMessage(Message message, @Nullable byte[] pattern) {
 
-    public void onMessage(Message message, byte[] pattern) {
+        try {
+            //序列化对象（特别注意：发布的时候需要设置序列化；订阅方也需要设置序列化）
+            MessageBody messageBody = (MessageBody) redisTemplate.getValueSerializer().deserialize(message.getBody());
+            if (messageBody != null) {
+                messageService.handle(messageBody);
+            }else{
+                log.info("message info is null");
+            }
+        } catch (Exception e) {
+            log.info("error handle message {}", e.getMessage(), e);
+            throw e;
+        }
 
-        //序列化对象（特别注意：发布的时候需要设置序列化；订阅方也需要设置序列化）
-        MessageBody messageBody = (MessageBody) redisTemplate.getValueSerializer().deserialize(message.getBody());
-        messageService.handle(messageBody);
+
     }
 }
