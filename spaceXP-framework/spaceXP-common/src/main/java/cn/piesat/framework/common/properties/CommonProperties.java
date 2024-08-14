@@ -13,6 +13,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "space.common")
 public final class CommonProperties {
 
+    public String getMessageGroupPrefix() {
+        return messageGroupPrefix;
+    }
+
+    public void setMessageGroupPrefix(String messageGroupPrefix) {
+        this.messageGroupPrefix = messageGroupPrefix;
+    }
+
+    /**
+     * 存储消息通用组的前缀
+     */
+    private String messageGroupPrefix ="cn:piesat:message:group";
     private Boolean apiMapResultEnable = false;
 
     public Boolean getServiceValidationEnable() {
