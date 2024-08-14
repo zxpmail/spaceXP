@@ -31,6 +31,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.util.StringUtils;
@@ -80,6 +81,7 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
     }
 
     @ConditionalOnProperty(name = "space.web.return-value-enable", havingValue = "true", matchIfMissing = true)
+    @DependsOn({"commonProperties"})
     @Bean
     public UniformApiResultWrapper returnValueBean(WebProperties webProperties, CommonProperties commonProperties) {
         return new UniformApiResultWrapper(commonProperties.getApiMapResultEnable(), webProperties);

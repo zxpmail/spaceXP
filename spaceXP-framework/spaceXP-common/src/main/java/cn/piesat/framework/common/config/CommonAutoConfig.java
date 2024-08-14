@@ -21,7 +21,7 @@ public class CommonAutoConfig {
         return new ServiceValidationAspect();
     }
 
-    @Bean
+    @Bean("commonProperties")
     public CommonProperties getCommonProperties(){
         return  new CommonProperties();
     }

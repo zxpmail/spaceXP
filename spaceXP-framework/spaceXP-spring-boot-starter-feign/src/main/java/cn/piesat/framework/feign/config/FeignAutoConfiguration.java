@@ -20,6 +20,7 @@ import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.Ordered;
 
 /**
@@ -37,6 +38,7 @@ public class FeignAutoConfiguration{
     private final ObjectFactory<HttpMessageConverters> messageConverters;
     @Bean
     @ConditionalOnMissingBean
+    @DependsOn("commonProperties")
     @ConditionalOnClass(name = {"cn.piesat.framework.common.model.vo.ApiMapResult"})
     public Decoder feignDecoder(ObjectProvider<HttpMessageConverterCustomizer> customizers, CommonProperties commonProperties) {
         return new OptionalDecoder(new ResponseEntityDecoder(new ResultDecoder(new SpringDecoder(this.messageConverters, customizers),commonProperties.getApiMapResultEnable())));
