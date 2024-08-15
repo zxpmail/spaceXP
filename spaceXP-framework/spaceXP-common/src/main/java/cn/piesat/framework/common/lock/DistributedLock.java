@@ -1,4 +1,4 @@
-package cn.piesat.framework.redis.external.core;
+package cn.piesat.framework.common.lock;
 
 import java.util.concurrent.TimeUnit;
 

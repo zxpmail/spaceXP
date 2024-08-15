@@ -126,7 +126,7 @@ public class TestController {
     public void testLock( Person person,Integer cateId) throws InterruptedException {
         System.out.printf("当前执行线程: %s%n", Thread.currentThread().getName()) ;
         log.info("id: {} , cateId:{}",person.getId(),cateId);
-        Thread.sleep(20000); ;
+        Thread.sleep(20000);
     }
 
     @Data
@@ -142,5 +142,11 @@ public class TestController {
         System.out.println(code);
     }
 
+    @Resource
+    private TestService testService;
+    @GetMapping("testLock1")
+    public void testLock()  {
+        testService.testLock();
 
+    }
 }

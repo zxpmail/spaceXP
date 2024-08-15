@@ -3,8 +3,10 @@ package cn.piesat.framework.redis.external.config;
 
 
 import cn.piesat.framework.redis.external.core.DistributedLockAspect;
+import cn.piesat.framework.redis.external.core.RedissonLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -21,5 +23,10 @@ public class RedisExternalConfig {
     @Bean
     public DistributedLockAspect DistributedLock(RedissonClient redissonClient){
         return new DistributedLockAspect(redissonClient);
+    }
+
+    @Bean
+    public RedissonLock getRedissonLock(RedissonClient redissonClient){
+        return new RedissonLock(redissonClient);
     }
 }
