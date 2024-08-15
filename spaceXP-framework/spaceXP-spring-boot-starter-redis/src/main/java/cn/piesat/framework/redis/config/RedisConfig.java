@@ -107,6 +107,7 @@ public class RedisConfig {
         return container;
     }
 
+    @SuppressWarnings("deprecation")
     @Bean
     @ConditionalOnProperty(name = "space.redis.prevent-replay-enable", havingValue = "true")
     public PreventReplayAspect preventAspect(RedisService redisService){
