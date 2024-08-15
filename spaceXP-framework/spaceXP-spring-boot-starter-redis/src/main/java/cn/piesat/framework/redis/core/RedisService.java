@@ -215,15 +215,15 @@ public class RedisService {
     /**
      * 缓存Map
      */
-    public <T> void setMap(final String key, final Map<String, T> dataMap) {
+    public <K,T>  void setMap(final String key, final Map<K, T> dataMap) {
         redisTemplate.opsForHash().putAll(key, dataMap);
     }
 
     /**
      * 获得缓存的Map
      */
-    public Map<Object, Object> getMap(final String key) {
-        return redisTemplate.opsForHash().entries(key);
+    public <K,T> Map<K, T> getMap(final String key) {
+        return (Map<K, T>) redisTemplate.opsForHash().entries(key);
     }
 
     /**
@@ -233,7 +233,7 @@ public class RedisService {
      * @param hKey  Hash键
      * @param value 值
      */
-    public <T> void setMapValue(final String key, final String hKey, final T value) {
+    public <K,T> void setMapValue(final String key, final K hKey, final T value) {
         redisTemplate.opsForHash().put(key, hKey, value);
     }
 
@@ -245,7 +245,7 @@ public class RedisService {
      * @return Hash中的对象
      */
     @Nullable
-    public <T> T getMapValue(final String key, final String hKey) {
+    public <K,T> T getMapValue(final String key, final K hKey) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         return opsForHash.get(key, hKey);
     }
@@ -268,7 +268,7 @@ public class RedisService {
      * @param hKey Hash键
      * @return 是否成功
      */
-    public boolean deleteMapValue(final String key, final String hKey) {
+    public <K> boolean deleteMapValue(final String key, final K hKey) {
         return redisTemplate.opsForHash().delete(key, hKey) > 0;
     }
 

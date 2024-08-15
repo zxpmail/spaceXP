@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -87,6 +89,12 @@ public class TestController {
     @GetMapping("getHash/{key}")
     public Object get(@PathVariable("key") String key){
          return redisService.getMapValue("hello", key);
+    }
+
+    @ApiOperation("获取allHash")
+    @GetMapping("getAllHash")
+    public Map<String, List<String>> getAllHash(){
+        return redisService.getMap("hello");
     }
 
     @ApiOperation("删除hash")
