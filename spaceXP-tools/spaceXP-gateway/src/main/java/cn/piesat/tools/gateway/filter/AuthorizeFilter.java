@@ -32,7 +32,6 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -54,7 +53,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        if(gatewayProperties.getIsAuthentication()){
+        if (gatewayProperties.getIsAuthentication()) {
             return chain.filter(exchange);
         }
         ServerHttpRequest request = exchange.getRequest();
@@ -70,16 +69,16 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         if (split.length < 1) {
             return chain.filter(exchange.mutate().request(header.build()).build());
         }
-        String sass = split[0];
-        String path = uri.substring(sass.length() + 1);
-        ServerHttpRequest mutableReq = null;
+        String service = split[0];
+        String path = uri.substring(service.length() + 1);
+        ServerHttpRequest mutableReq;
         //  检查白名单（配置）
         if (!CollectionUtils.isEmpty(gatewayProperties.getIgnorePaths())) {
             for (String ignorePath : gatewayProperties.getIgnorePaths()) {
-                if (PATH_MATCHER.match(ignorePath,uri)) {
+                if (PATH_MATCHER.match(ignorePath, uri)) {
                     mutableReq = header
                             .header(CommonConstants.URI, path)
-                            .header(CommonConstants.SASS, sass)
+                            .header(CommonConstants.SASS, service)
                             .build();
                     return chain.filter(exchange.mutate().request(mutableReq).build());
                 }
@@ -89,55 +88,67 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         if (!StringUtils.hasText(token)) {
             token = request.getQueryParams().getFirst(CommonConstants.TOKEN);
         }
-        if(gatewayProperties.getIsRedirect()){
-            if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
-               return getVoidMono(response, GatewayResponseEnum.REDIRECT);
+        if (!StringUtils.hasText(token)) {
+            token = request.getHeaders().getFirst(GatewayConstant.WS_TOKEN);
+        }
+        if (gatewayProperties.getIsRedirect()) {
+            if (!StringUtils.hasText(token) || "''".equalsIgnoreCase(token)) {
+                return getVoidMono(response, GatewayResponseEnum.REDIRECT);
             }
-        }else {
-            if (!StringUtils.hasText(token)||"''".equalsIgnoreCase(token)) {
-                return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
+        } else {
+            if (!StringUtils.hasText(token) || "''".equalsIgnoreCase(token)) {
+                return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
             }
         }
 
-        Object userId =null;
+        Object userId;
         try {
             userId = JwtUtils.getValue(token, gatewayProperties.getTokenProperties().getTokenSignKey());
         } catch (Exception ex) {
-            return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
+            return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
         //保证同一用户登录在不同窗口登录一次
         Object checkToken = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + "_check_" + userId);
         if (ObjectUtils.isEmpty(checkToken) || !token.equalsIgnoreCase(checkToken.toString())) {
-            return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
+            return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
 
         Object object = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + userId);
-        JwtUser user = null;
+        JwtUser user;
         try {
             assert object != null;
             user = JSON.parseObject(object.toString(), JwtUser.class);
         } catch (Exception ex) {
-            return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
+            return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
-
 
         redisService.expire(gatewayProperties.getTokenProperties().getLoginToken() + user.getUserId(), gatewayProperties.getTokenProperties().getExpiration());
 
-        try {
-            mutableReq = header.header(CommonConstants.USER_ID, user.getUserId().toString())
-                    .header(CommonConstants.DEPT_ID, user.getDeptId().toString())
-                    .header(CommonConstants.TENANT_ID, user.getTenantId().toString())
-                    .header(CommonConstants.USERNAME, URLEncoder.encode(user.getUserName(), StandardCharsets.UTF_8.toString()))
-                    .header(CommonConstants.DEPT_NAME, URLEncoder.encode(user.getDeptName(), StandardCharsets.UTF_8.toString()))
-                    .header(CommonConstants.URI, path)
-                    .header(CommonConstants.SASS, sass)
-                    .build();
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        mutableReq = header.header(CommonConstants.USER_ID, user.getUserId().toString())
+                .header(CommonConstants.DEPT_ID, user.getDeptId().toString())
+                .header(CommonConstants.TENANT_ID, user.getTenantId().toString())
+                .header(CommonConstants.USERNAME, encode(user.getUserName()))
+                .header(CommonConstants.DEPT_NAME, encode(user.getDeptName()))
+                .header(CommonConstants.URI, path)
+                .header(CommonConstants.SASS, service)
+                .header(CommonConstants.APP_ID, GatewayConstant.APP_ID)
+                .build();
+
 
         ServerWebExchange mutableExchange = exchange.mutate().request(mutableReq).build();
         return chain.filter(mutableExchange);
+    }
+
+    private String encode(String name) {
+        if (!StringUtils.hasText(name)) {
+            return GatewayConstant.defaultName;
+        }
+        try {
+            return URLEncoder.encode(name, GatewayConstant.UTF8);
+        } catch (UnsupportedEncodingException e) {
+            log.error("{} Encoding not supported: UTF-8", name, e);
+            throw new RuntimeException(e);
+        }
     }
 
     private Mono<Void> getVoidMono(ServerHttpResponse response, IBaseResponse iBaseResponse) {

@@ -23,5 +23,10 @@ public interface GatewayConstant {
 
     String X_FORWARDED_FOR = "X-Forwarded-For";
 
+    String defaultName ="test";
 
+    String UTF8="UTF-8";
+
+    String WS_TOKEN = "Sec-Websocket-Protocol";
+    String APP_ID = "1";
 }
