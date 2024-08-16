@@ -114,6 +114,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         Object object = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + userId);
         JwtUser user = null;
         try {
+            assert object != null;
             user = JSON.parseObject(object.toString(), JwtUser.class);
         } catch (Exception ex) {
             return getVoidMono(response,CommonResponseEnum.TOKEN_INVALID);
