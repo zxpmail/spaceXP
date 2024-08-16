@@ -29,6 +29,7 @@
         <module>spaceXP-spring-boot-tests-websocket</module>
         <module>spaceXP-spring-boot-tests-log-external</module>
         <module>spaceXP-spring-boot-tests-test</module>
+        <module>spaceXP-spring-boot-tests-user</module>
     </modules>
     <dependencies>
         <dependency>
