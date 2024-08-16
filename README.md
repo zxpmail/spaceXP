@@ -61,6 +61,7 @@ spaceXP-tools 工具集合
 13. spaceXP-spring-boot-tests-websocket 测试websocket组件
 14. spaceXP-spring-boot-tests-log-external 测试log扩展组件
 15. spaceXP-spring-boot-tests-test 测试test组件
+16. spaceXP-spring-boot-tests-user 测试gateway用户登录
 #### 鸣谢
 本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 非常感谢众多软件和作者
