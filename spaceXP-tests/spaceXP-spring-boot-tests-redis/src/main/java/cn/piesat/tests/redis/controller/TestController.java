@@ -15,14 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,16 +40,8 @@ public class TestController {
 
 
     @PostMapping("/message")
-    public void sendMessage(@RequestParam String message) {
+    public void sendMessage(@RequestBody MessageBody<String> messageBody) {
         // 发布消息
-        MessageBody<Integer> messageBody = new MessageBody<>();
-
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        messageBody.setData(message +"||"+ timeFormatter.format(now));
-        messageBody.setToId(1);
-        messageBody.setFromId(2);
-        messageBody.setType(0);
         redisService.convertAndSend("TOPIC",messageBody);
     }
     /**
