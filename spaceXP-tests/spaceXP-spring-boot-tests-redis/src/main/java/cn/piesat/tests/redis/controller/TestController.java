@@ -48,7 +48,7 @@ public class TestController {
 
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        messageBody.setData(message +","+ timeFormatter.format(now));
+        messageBody.setData(message +"||"+ timeFormatter.format(now));
         messageBody.setToId(1);
         messageBody.setFromId(2);
         messageBody.setType(0);
