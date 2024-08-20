@@ -34,7 +34,7 @@ public class WebSocketProperties {
     /**
      * 允许跨域
      */
-    private List<String> domainNames ;
+    private String domainNames ="*" ;
 
 
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8001
+  port: 8081
 spring:
   main:
     allow-circular-references: true
@@ -11,7 +11,7 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-    database: 1
+    database: 0
   application:
     name: gateway
   cloud:
@@ -24,19 +24,29 @@ spring:
           enabled: false
           lower-case-service-id: true
       routes:
+        - id: websocket
+          uri: lb:ws://websocket
+          predicates:
+            - Path=/websocket/**
+          filters:
+            - SwaggerHeaderFilter
+        - id: admin
+          uri: lb://admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - SwaggerHeaderFilter
         - id: consumer
           uri: lb://consumer
           predicates:
-            - Path=/*/consumer/**
+            - Path=/consumer/**
           filters:
-            - StripPrefix=1
             - SwaggerHeaderFilter
         - id: producer
           uri: lb://producer
           predicates:
-            - Path=/*/producer/**
+            - Path=/producer/**
           filters:
-            - StripPrefix=1
             - SwaggerHeaderFilter
         - id: log
           uri: lb://log
@@ -63,3 +73,6 @@ login:
     - "/swagger-ui.html"
     - "/log/log/add"
     - "goview"
+logging:
+  level:
+    root: debug

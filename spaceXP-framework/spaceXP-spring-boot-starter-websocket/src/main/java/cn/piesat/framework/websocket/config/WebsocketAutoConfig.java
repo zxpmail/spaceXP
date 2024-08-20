@@ -23,8 +23,8 @@ public class WebsocketAutoConfig {
         return new SpringWebSocketHandlerInterceptor(webSocketProperties);
     }
     @Bean
-    public SpringWebSocketHandler springWebSocketHandler(){
-        return  new SpringWebSocketHandler();
+    public SpringWebSocketHandler springWebSocketHandler(WebSocketProperties webSocketProperties){
+        return  new SpringWebSocketHandler(webSocketProperties.getDebug());
     }
 
     @Bean

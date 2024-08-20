@@ -53,7 +53,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        if (gatewayProperties.getIsAuthentication()) {
+        if (!gatewayProperties.getIsAuthentication()) {
             return chain.filter(exchange);
         }
         ServerHttpRequest request = exchange.getRequest();
@@ -89,14 +89,16 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             token = request.getQueryParams().getFirst(CommonConstants.TOKEN);
         }
         if (!StringUtils.hasText(token)) {
-            token = request.getHeaders().getFirst(GatewayConstant.WS_TOKEN);
+            token = request.getHeaders().getFirst(GatewayConstant.WS_TOKEN);;
         }
         if (gatewayProperties.getIsRedirect()) {
             if (!StringUtils.hasText(token) || "''".equalsIgnoreCase(token)) {
+                log.error("redirect");
                 return getVoidMono(response, GatewayResponseEnum.REDIRECT);
             }
         } else {
             if (!StringUtils.hasText(token) || "''".equalsIgnoreCase(token)) {
+                log.error("token is null!!");
                 return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
             }
         }
@@ -108,8 +110,9 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
         //保证同一用户登录在不同窗口登录一次
-        Object checkToken = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + "_check_" + userId);
-        if (ObjectUtils.isEmpty(checkToken) || !token.equalsIgnoreCase(checkToken.toString())) {
+        String checkToken = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + "_check_" + userId);
+        if (ObjectUtils.isEmpty(checkToken) || !token.equalsIgnoreCase(checkToken)) {
+            log.error("{} token is invalid!!!",checkToken);
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
 
@@ -119,6 +122,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             assert object != null;
             user = JSON.parseObject(object.toString(), JwtUser.class);
         } catch (Exception ex) {
+            log.error("parse user fail !!!");
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
 

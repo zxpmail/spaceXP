@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistration;
@@ -25,14 +26,14 @@ import java.util.List;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableWebSocket
-@DependsOn({"springWebSocketHandler","springWebSocketHandlerInterceptor"})
+@DependsOn({"springWebSocketHandler", "springWebSocketHandlerInterceptor"})
 public class SpringWebSocketConfig implements WebSocketConfigurer {
 
-    @Value("${space.websocket.allowedOrigin:false}")
+    @Value("${space.websocket.allowedOrigin:true}")
     private Boolean allowedOrigin;
 
-    @Value("#{'space.websocket.domainNames'.split(',')}")
-    private List<String> domainNames;
+    @Value("${space.websocket.domainNames:*}")
+    private String domainNames;
 
     @Value("${space.websocket.handlerPath:/ws}")
     private String handlerPath;
@@ -47,13 +48,12 @@ public class SpringWebSocketConfig implements WebSocketConfigurer {
         WebSocketHandlerRegistration webSocketHandlerRegistration = registry.addHandler(springWebSocketHandler, handlerPath)
                 .addInterceptors(springWebSocketHandlerInterceptor);
         if (allowedOrigin) {
-            if (CollectionUtils.isEmpty(domainNames)) {
+            if (!StringUtils.hasText(domainNames)) {
                 webSocketHandlerRegistration.setAllowedOrigins(WebsocketConstant.DEFAULT_DOMAIN);
             } else {
-                webSocketHandlerRegistration.setAllowedOrigins(domainNames.toArray(new String[0]));
+                webSocketHandlerRegistration.setAllowedOrigins(domainNames.split(","));
             }
         }
-
     }
 }
 

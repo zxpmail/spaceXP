@@ -28,11 +28,16 @@ import static cn.piesat.framework.websocket.model.WebsocketConstant.SEND_TIME_LI
 @Slf4j
 public class SpringWebSocketHandler extends AbstractWebSocketHandler {
 
+    private final Boolean debugged;
     @Autowired(required = false)
     private CallbackService callbackService;
 
     @Autowired(required = false)
     private MessageService messageService;
+
+    public SpringWebSocketHandler(Boolean debugged) {
+        this.debugged = debugged;
+    }
 
     /**
      * socket 建立成功事件 @OnOpen
@@ -76,7 +81,9 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
         try {
             String uid = (String) session.getAttributes().get(CommonConstants.USER_ID);
             Integer appId = (Integer) session.getAttributes().get(CommonConstants.APP_ID);
-            callbackService.sessionClose(uid,appId);
+            if(!debugged) {
+                callbackService.sessionClose(uid, appId);
+            }
             if (StringUtils.hasText(uid) && appId != null) {
                 SessionSocketHolder.removeAndClose(uid, appId);
             }

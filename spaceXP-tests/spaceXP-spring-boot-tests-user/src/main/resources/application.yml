@@ -1,10 +1,10 @@
 server:
   port: 8086
   servlet:
-    context-path: /user
+    context-path: /admin
 spring:
   application:
-    name: producer
+    name: user
   mvc:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
