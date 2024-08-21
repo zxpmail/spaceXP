@@ -5,7 +5,7 @@ import cn.piesat.framework.redis.annotation.AccessLimit;
 import cn.piesat.framework.redis.annotation.PreventReplay;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.external.annotation.DLock;
-import cn.piesat.framework.redis.model.MessageBody;
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -40,9 +40,9 @@ public class TestController {
 
 
     @PostMapping("/message")
-    public void sendMessage(@RequestBody MessageBody<String> messageBody) {
+    public void sendMessage(@RequestBody MessageEntity messageEntity) {
         // 发布消息
-        redisService.convertAndSend("TOPIC",messageBody);
+        redisService.convertAndSend("TOPIC",messageEntity);
     }
     /**
      * 信息

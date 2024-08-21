@@ -1,4 +1,4 @@
-package cn.piesat.test.websocket.model.enums;
+package cn.piesat.framework.common.model.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 /**
  * <p/>
- * {@code @description}:
+ * {@code @description}  :消息类别
  * <p/>
- * {@code @create}: 2024-06-19 13:43
- * {@code @author}: zhouxp
+ * <b>@create:</b> 2024-06-04 13:50.
+ *
+ * @author zhouxp
  */
 @AllArgsConstructor
 @NoArgsConstructor

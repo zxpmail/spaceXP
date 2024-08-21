@@ -18,12 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public class SessionSocketHolder {
-    private static final ConcurrentHashMap<String, ConcurrentHashMap<Integer, WebSocketSession>> SESSION_POOL = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Long, ConcurrentHashMap<Integer, WebSocketSession>> SESSION_POOL = new ConcurrentHashMap<>();
 
     /**
      * 添加 session
      */
-    public static void add(String userId, Integer appId, WebSocketSession session) {
+    public static void add(Long userId, Integer appId, WebSocketSession session) {
         if (userId == null || session == null || appId == null) {
             log.warn("Attempted to add a null key or session to the pool.");
             return;
@@ -51,13 +51,13 @@ public class SessionSocketHolder {
     /**
      * 删除 session,会返回删除的 session
      */
-    public static WebSocketSession remove(String userId, Integer appId) {
+    public static WebSocketSession remove(Long userId, Integer appId) {
         ConcurrentHashMap<Integer, WebSocketSession> sessionMap = getSessionMap(userId, appId);
         if (sessionMap == null) return null;
         return sessionMap.remove(appId);
     }
 
-    private static ConcurrentHashMap<Integer, WebSocketSession> getSessionMap(String userId, Integer appId) {
+    private static ConcurrentHashMap<Integer, WebSocketSession> getSessionMap(Long userId, Integer appId) {
         if (userId == null || appId == null) {
             log.info("Attempted to get a session with a null key.");
             return null;
@@ -73,14 +73,14 @@ public class SessionSocketHolder {
     /**
      * 删除并同步关闭连接
      */
-    public static void removeAndClose(String userId, Integer appId) {
+    public static void removeAndClose(Long userId, Integer appId) {
         close(userId, appId,remove(userId,appId));
     }
 
     /**
      * 释放session资源
      */
-    public static void close(String userId, Integer appId, WebSocketSession session) {
+    public static void close(Long userId, Integer appId, WebSocketSession session) {
         if (session == null) {
             log.warn("Attempted to get a session with a null");
             return;
@@ -92,11 +92,11 @@ public class SessionSocketHolder {
         }
     }
 
-    public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, WebSocketSession>>get(){
+    public static ConcurrentHashMap<Long, ConcurrentHashMap<Integer, WebSocketSession>>get(){
         return SESSION_POOL;
     }
 
-    public static ConcurrentHashMap<Integer, WebSocketSession>get( String userId){
+    public static ConcurrentHashMap<Integer, WebSocketSession>get( Long userId){
         return SESSION_POOL.get(userId);
     }
 }

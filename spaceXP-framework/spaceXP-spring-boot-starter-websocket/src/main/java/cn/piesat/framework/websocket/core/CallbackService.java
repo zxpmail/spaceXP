@@ -14,7 +14,7 @@ public interface CallbackService {
      * @param userId 用户ID
      * @param appId 应用ID
      */
-    default   void addUser2Group(String userId,Integer appId){
+    default   void addUser2Group(Long userId,Integer appId){
     }
 
     /**
@@ -22,5 +22,5 @@ public interface CallbackService {
      * @param userId 用户ID
      * @param appId 应用ID
      */
-    default void sessionClose(String userId,Integer appId){}
+    default void sessionClose(Long userId,Integer appId){}
 }

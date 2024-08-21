@@ -4,8 +4,6 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
-import java.util.List;
-
 /**
  * <p/>
  * {@code @description}: 配置类

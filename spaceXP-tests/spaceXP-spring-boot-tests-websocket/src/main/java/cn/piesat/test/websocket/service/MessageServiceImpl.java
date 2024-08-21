@@ -2,10 +2,11 @@ package cn.piesat.test.websocket.service;
 
 
 
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import cn.piesat.framework.websocket.core.MessageHandler;
-import cn.piesat.framework.websocket.core.MessageService;
+import cn.piesat.framework.websocket.core.WebSocketMessageService;
 
-import cn.piesat.test.websocket.model.MessagePack;
+
 import com.alibaba.fastjson.JSON;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -22,7 +23,7 @@ import javax.annotation.Resource;
  * {@code @author}: zhouxp
  */
 @Service
-public class MessageServiceImpl implements MessageService{
+public class MessageServiceImpl implements WebSocketMessageService {
 
     @Resource
     private MessageHandler messageHandler;
@@ -30,8 +31,8 @@ public class MessageServiceImpl implements MessageService{
     public void recTextMessage(TextMessage message) {
         String payload = message.getPayload();
         if(StringUtils.hasText(payload)) {
-            MessagePack messagePack = JSON.parseObject(payload, MessagePack.class);
-            messageHandler.sendMessage(messagePack.getToId(), message);
+            MessageEntity messageEntity = JSON.parseObject(payload, MessageEntity.class);
+            messageHandler.sendMessage(messageEntity.getToId(), message);
         }
     }
 }

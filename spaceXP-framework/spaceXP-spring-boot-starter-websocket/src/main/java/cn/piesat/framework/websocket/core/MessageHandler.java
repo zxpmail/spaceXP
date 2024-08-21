@@ -4,7 +4,6 @@ import cn.piesat.framework.websocket.util.SessionSocketHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
@@ -25,11 +24,11 @@ public class MessageHandler {
     private CallbackService callbackService;
 
     public void heartbeat(TextMessage message) {
-        ConcurrentHashMap<String, ConcurrentHashMap<Integer, WebSocketSession>> map = SessionSocketHolder.get();
+        ConcurrentHashMap<Long, ConcurrentHashMap<Integer, WebSocketSession>> map = SessionSocketHolder.get();
         if (map == null) {
             return;
         }
-        for (Map.Entry<String, ConcurrentHashMap<Integer, WebSocketSession>> e : map.entrySet()) {
+        for (Map.Entry<Long, ConcurrentHashMap<Integer, WebSocketSession>> e : map.entrySet()) {
             for (Map.Entry<Integer, WebSocketSession> e1 : e.getValue().entrySet()) {
                 WebSocketSession session = e1.getValue();
                 if (session.isOpen()) {
@@ -48,8 +47,8 @@ public class MessageHandler {
         }
     }
 
-    public void sendMessage(String toUserId, TextMessage message) {
-        if (!StringUtils.hasText(toUserId) || ObjectUtils.isEmpty(message)) {
+    public void sendMessage(Long toUserId, TextMessage message) {
+        if (ObjectUtils.isEmpty(toUserId) || ObjectUtils.isEmpty(message)) {
             log.info("消息或消息类型为空！");
             return;
         }

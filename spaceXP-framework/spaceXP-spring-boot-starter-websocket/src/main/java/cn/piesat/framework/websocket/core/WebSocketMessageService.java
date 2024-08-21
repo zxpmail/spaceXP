@@ -10,7 +10,7 @@ import org.springframework.web.socket.TextMessage;
  * {@code @create}: 2024-06-19 10:56
  * {@code @author}: zhouxp
  */
-public interface MessageService {
+public interface WebSocketMessageService {
     /**
      * 用户收到消息处理进行处理
      */

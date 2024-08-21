@@ -1,9 +1,9 @@
 package cn.piesat.test.websocket.service;
 
 
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import cn.piesat.framework.websocket.core.MessageHandler;
 
-import cn.piesat.test.websocket.model.MessagePack;
 import com.alibaba.fastjson.JSON;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,8 +28,8 @@ public class HeartbeatService {
 
     @Scheduled(fixedDelay = 30,timeUnit = TimeUnit.SECONDS)
     public void run(){
-        MessagePack messagePack = new MessagePack(0,"1001","1001",1," heartbeat");
-        TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
+        MessageEntity messageEntity = new MessageEntity(1001L,1001L,1,"heartbeat","heartbeat");
+        TextMessage textMessage = new TextMessage(JSON.toJSONString(messageEntity));
         messageHandler.heartbeat(textMessage);
     }
 }

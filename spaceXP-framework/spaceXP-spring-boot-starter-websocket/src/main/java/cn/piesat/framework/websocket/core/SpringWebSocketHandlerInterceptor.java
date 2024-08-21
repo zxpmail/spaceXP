@@ -43,14 +43,15 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
     public boolean beforeHandshake(@Nonnull ServerHttpRequest request, @Nonnull ServerHttpResponse response, @Nonnull WebSocketHandler wsHandler, @Nonnull Map<String, Object> attributes) throws Exception {
         super.beforeHandshake(request, response, wsHandler, attributes);
         if (request instanceof ServletServerHttpRequest) {
-            String userId = WebsocketConstant.DEBUG_USER_ID;
+            Long userId = WebsocketConstant.DEBUG_USER_ID;
             Integer appId = WebsocketConstant.DEBUG_USER_APPID;
             if (!webSocketProperties.getDebug()) {
-                userId = request.getHeaders().getFirst(CommonConstants.USER_ID);
-                if (!StringUtils.hasText(userId)) {
+                String uId = request.getHeaders().getFirst(CommonConstants.USER_ID);
+                if (!StringUtils.hasText(uId) || !pattern.matcher(uId).matches()) {
                     log.info("Attempted to get a Header with a null userId.");
                     return false;
                 }
+                userId = Long.parseLong(uId);
                 String rAppId = request.getHeaders().getFirst(CommonConstants.APP_ID);
 
                 if (!StringUtils.hasText(rAppId) || !pattern.matcher(rAppId).matches()) {

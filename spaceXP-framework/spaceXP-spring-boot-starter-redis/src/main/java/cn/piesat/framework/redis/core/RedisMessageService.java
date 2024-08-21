@@ -1,6 +1,6 @@
 package cn.piesat.framework.redis.core;
 
-import cn.piesat.framework.redis.model.MessageBody;
+import cn.piesat.framework.common.model.entity.MessageEntity;
 
 /**
  * <p/>
@@ -10,7 +10,7 @@ import cn.piesat.framework.redis.model.MessageBody;
  *
  * @author zhouxp
  */
-public interface MessageService<T> {
-    default void handle(MessageBody<T> messageBody) {
+public interface RedisMessageService {
+    default void handle(MessageEntity messageEntity) {
     }
 }

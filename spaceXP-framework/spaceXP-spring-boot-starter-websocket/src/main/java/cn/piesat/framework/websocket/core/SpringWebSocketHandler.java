@@ -4,7 +4,7 @@ import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.websocket.util.SessionSocketHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -33,7 +33,7 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
     private CallbackService callbackService;
 
     @Autowired(required = false)
-    private MessageService messageService;
+    private WebSocketMessageService messageService;
 
     public SpringWebSocketHandler(Boolean debugged) {
         this.debugged = debugged;
@@ -46,7 +46,7 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) {
         log.info("WebSocket connected 已经建立连接:sessionId={} address={}", session.getId(), Objects.requireNonNull(session.getLocalAddress()));
         try {
-            String uid = (String) session.getAttributes().get(CommonConstants.USER_ID);
+            Long uid = (Long) session.getAttributes().get(CommonConstants.USER_ID);
             Integer appId = (Integer) session.getAttributes().get(CommonConstants.APP_ID);
             if (uid != null || appId != null) {
                 // 实现 session 支持并发，可参考 https://blog.csdn.net/abu935009066/article/details/131218149
@@ -79,12 +79,12 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      */
     private  void close(WebSocketSession session) {
         try {
-            String uid = (String) session.getAttributes().get(CommonConstants.USER_ID);
+            Long uid = (Long) session.getAttributes().get(CommonConstants.USER_ID);
             Integer appId = (Integer) session.getAttributes().get(CommonConstants.APP_ID);
             if(!debugged) {
                 callbackService.sessionClose(uid, appId);
             }
-            if (StringUtils.hasText(uid) && appId != null) {
+            if (ObjectUtils.isEmpty(uid) && appId != null) {
                 SessionSocketHolder.removeAndClose(uid, appId);
             }
         } catch (Exception e) {

@@ -1,8 +1,8 @@
 package cn.piesat.test.websocket.controller;
 
 
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import cn.piesat.framework.websocket.core.MessageHandler;
-import cn.piesat.test.websocket.model.MessagePack;
 import com.alibaba.fastjson.JSON;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +32,8 @@ public class WebSocketController {
     @PostMapping(value = "/send")
     public void send()  {
 
-        MessagePack messagePack = new MessagePack(1,"1001","1001",1," hello world");
-        TextMessage textMessage = new TextMessage(JSON.toJSONString(messagePack));
-        messageHandler.sendMessage("1001",textMessage);
+        MessageEntity messageEntity = new MessageEntity(1001L,1001L,1,"hello world","hello");
+        TextMessage textMessage = new TextMessage(JSON.toJSONString(messageEntity));
+        messageHandler.sendMessage(1001L,textMessage);
     }
 }

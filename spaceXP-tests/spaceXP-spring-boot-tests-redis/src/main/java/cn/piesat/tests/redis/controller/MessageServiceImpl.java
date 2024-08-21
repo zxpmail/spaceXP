@@ -1,8 +1,8 @@
 package cn.piesat.tests.redis.controller;
 
-import cn.piesat.framework.redis.core.MessageService;
+import cn.piesat.framework.redis.core.RedisMessageService;
 
-import cn.piesat.framework.redis.model.MessageBody;
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +16,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class MessageServiceImpl implements MessageService <Integer>{
+public class MessageServiceImpl implements RedisMessageService {
     @Override
-    public void handle(MessageBody<Integer> messageBody) {
-        log.info("收到消息: {}, 类型: {} ",messageBody.getData(),messageBody.getType());
+    public void handle(MessageEntity messageEntity) {
+        RedisMessageService.super.handle(messageEntity);
+        log.info("收到消息: {}, 类型: {} 消息标题:{}",messageEntity.getBody(),messageEntity.getType(),messageEntity.getTitle());
     }
 }

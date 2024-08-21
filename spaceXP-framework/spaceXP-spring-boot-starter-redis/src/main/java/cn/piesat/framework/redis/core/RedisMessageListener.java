@@ -1,6 +1,6 @@
 package cn.piesat.framework.redis.core;
 
-import cn.piesat.framework.redis.model.MessageBody;
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
@@ -25,7 +25,7 @@ public class RedisMessageListener implements MessageListener {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private MessageService messageService;
+    private RedisMessageService messageService;
 
 
     @Override
@@ -33,7 +33,7 @@ public class RedisMessageListener implements MessageListener {
 
         try {
             //序列化对象（特别注意：发布的时候需要设置序列化；订阅方也需要设置序列化）
-            MessageBody messageBody = (MessageBody) redisTemplate.getValueSerializer().deserialize(message.getBody());
+            MessageEntity messageBody = (MessageEntity) redisTemplate.getValueSerializer().deserialize(message.getBody());
             if (messageBody != null) {
                 messageService.handle(messageBody);
             }else{

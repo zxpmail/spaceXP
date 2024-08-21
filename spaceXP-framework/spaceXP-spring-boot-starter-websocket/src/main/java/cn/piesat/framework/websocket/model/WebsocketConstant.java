@@ -8,7 +8,7 @@ package cn.piesat.framework.websocket.model;
  * {@code @author}: zhouxp
  */
 public interface WebsocketConstant {
-    String DEBUG_USER_ID = "1001";
+    Long DEBUG_USER_ID = 1001L;
     Integer DEBUG_USER_APPID = 0;
 
     String DEFAULT_DOMAIN = "*";
