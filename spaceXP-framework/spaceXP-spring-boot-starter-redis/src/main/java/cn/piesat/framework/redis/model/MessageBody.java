@@ -37,4 +37,9 @@ public class MessageBody<T> implements Serializable {
      */
     private Object data;
 
+    /**
+     * 消息简介
+     */
+    private String message;
+
 }

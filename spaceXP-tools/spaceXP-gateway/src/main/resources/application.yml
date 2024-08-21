@@ -27,7 +27,13 @@ spring:
         - id: websocket
           uri: lb:ws://websocket
           predicates:
-            - Path=/websocket/**
+            - Path=/websocket/ws/**
+          filters:
+            - SwaggerHeaderFilter
+        - id: wsApi
+          uri: lb://websocket
+          predicates:
+            - Path=/websocket/message/**
           filters:
             - SwaggerHeaderFilter
         - id: admin
