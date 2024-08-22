@@ -4,10 +4,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
+<#if castQueryImportList?seq_contains("LocalDate") || castQueryImportList?seq_contains("LocalDateTime") >
 import org.springframework.format.annotation.DateTimeFormat;
-
-<#list importList as i>
-    import ${i!};
+</#if>
+<#list queryImportList as i>
+import ${i!};
 </#list>
 
 /**

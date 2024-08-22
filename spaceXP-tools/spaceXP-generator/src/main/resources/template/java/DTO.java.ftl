@@ -2,9 +2,14 @@ package ${package}.${moduleName}.model.dto;
 
 import cn.piesat.framework.common.annotation.validator.group.AddGroup;
 import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
+
+<#if castDtoImportList?seq_contains("LocalDate") || castDtoImportList?seq_contains("LocalDateTime") >
 import com.fasterxml.jackson.annotation.JsonFormat;
+</#if>
+<#if castDtoImportList?seq_contains("Long") >
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+</#if>
 import lombok.Data;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -13,8 +18,8 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.*;
 import javax.validation.constraints.*;
 
-<#list importList as i>
-    import ${i!};
+<#list dtoImportList as i>
+import ${i!};
 </#list>
 
 /**

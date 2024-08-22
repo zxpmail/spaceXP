@@ -12,10 +12,13 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static cn.piesat.tools.generator.constants.Constants.*;
 
@@ -72,6 +75,7 @@ public class TemplateDataUtils {
      * @param dataModel   模版数据
      * @param tableFields 字段列表数据
      */
+    @SuppressWarnings("unchecked")
     public static void setDataModelByField(Map<String, Object> dataModel, List<TableFieldDO> tableFields) {
 
         Set<TableFieldDO> voList = new HashSet<>();
@@ -102,15 +106,52 @@ public class TemplateDataUtils {
                 selectList.add(field);
             }
         }
+
+        Set<String> importList = (Set<String>) dataModel.get("importList");
         dataModel.put(VO_LIST, voList);
+        dataModel.put("voImportList", getImportList(voList, importList));
+        dataModel.put("castVoImportList", getCastList(voList, new ArrayList<String>(){{add("LocalDate");add("LocalDateTime");add("Long");}}));
+
         dataModel.put(DTO_LIST, dtoList);
+        dataModel.put("dtoImportList", getImportList(dtoList, importList));
+        dataModel.put("castDtoImportList", getCastList(dtoList, new ArrayList<String>(){{add("LocalDate");add("LocalDateTime");add("Long");}}));
         dataModel.put(QUERY_LIST, queryList);
+        dataModel.put("queryImportList", getImportList(queryList, importList));
+        dataModel.put("castQueryImportList", getCastList(queryList, new ArrayList<String>(){{add("LocalDate");add("LocalDateTime");}}));
         dataModel.put(REPEAT_LIST, repeatList);
         dataModel.put(ORDER_LIST, orderList);
         dataModel.put(FORM_LIST, formList);
         dataModel.put(GRID_LIST, gridList);
         dataModel.put(REQUIRED_LIST, requiredList);
         dataModel.put(SELECT, composeSelect(selectList));
+    }
+
+    private static Set<String> getCastList(Set<TableFieldDO> fields, List<String> types) {
+        if (CollectionUtils.isEmpty(types) || CollectionUtils.isEmpty(fields))
+            return new HashSet<>();
+        return fields.stream()
+                .map(TableFieldDO::getAttrType).filter(types::contains).collect(Collectors.toCollection(HashSet::new));
+    }
+
+    private static List<String> getImportList(Set<TableFieldDO> fields, Set<String> importList) {
+        if (CollectionUtils.isEmpty(importList) || CollectionUtils.isEmpty(fields))
+            return new ArrayList<>();
+        Set<String> attrTypes = fields.stream()
+                .map(TableFieldDO::getAttrType)
+                .collect(Collectors.toCollection(HashSet::new));
+        return importList.stream()
+                .filter(m -> {
+                    if (m == null) {
+                        return false;
+                    }
+                    int lastDotIndex = m.lastIndexOf(".");
+                    if (lastDotIndex < 0) {
+                        return false;
+                    }
+                    String substring = m.substring(lastDotIndex + 1);
+                    return attrTypes.contains(substring);
+                })
+                .collect(Collectors.toList());
     }
 
     private static String composeSelect(Set<TableFieldDO> selectList) {
@@ -164,10 +205,11 @@ public class TemplateDataUtils {
         putStringIfNotEmpty(dataModel, TABLE_NAME, tableName);
         if (StringUtils.hasText(table.getTablePrefix())) {
             String temp = tableName.substring(table.getTablePrefix().length());
-            if (StringUtils.hasText(temp) || isChar(temp.charAt(0))) {
+            if (StringUtils.hasText(temp) && isChar(temp.charAt(0))) {
                 tableName = temp;
                 if (table.getFunctionName().equals(table.getTableName())) {
                     table.setFunctionName(tableName);
+                    table.setClassName(tableName);
                 }
             }
         }

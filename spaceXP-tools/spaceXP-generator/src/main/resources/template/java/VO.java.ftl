@@ -1,15 +1,19 @@
 package ${package}.${moduleName}.model.vo;
 
+<#if castVoImportList?seq_contains("LocalDate") || castVoImportList?seq_contains("LocalDateTime") >
 import com.fasterxml.jackson.annotation.JsonFormat;
+</#if>
+<#if castVoImportList?seq_contains("Long") >
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+</#if>
 import lombok.Data;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-<#list importList as i>
-    import ${i!};
+<#list voImportList as i>
+import ${i!};
 </#list>
 
 /**
