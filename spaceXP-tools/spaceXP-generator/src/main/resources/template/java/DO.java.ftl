@@ -2,7 +2,7 @@ package ${package}.${moduleName}.model.entity;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.*;
 <#list importList as i>
-    import ${i!};
+import ${i!};
 </#list>
 
 /**
