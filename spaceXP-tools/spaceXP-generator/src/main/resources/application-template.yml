@@ -68,7 +68,7 @@ gen:
       moduleType: 1
     - id: 13
       name: xml/Pom.xml.ftl
-      path: ${moduleName}/${modelPath}/pom.yml
+      path: ${moduleName}/${modelPath}/pom.xml
       must: 2
       moduleType: 2
     - id: 14
