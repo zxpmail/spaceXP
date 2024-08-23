@@ -52,41 +52,46 @@ gen:
       must: 1
       moduleType: 1
     - id: 10
+      name: java/ServiceTest.java.ftl
+      path: ${moduleName}/${bizPath}/src/test/java/${packagePath}/${moduleName}/service/${className?cap_first}ServiceTest.java
+      must: 1
+      moduleType: 1
+    - id: 11
       name: yml/Application.yml.ftl
       path: ${moduleName}/${bizPath}/src/main/resources/application.yml
       must: 2
       moduleType: 1
-    - id: 11
+    - id: 12
       name: xml/Mapper.xml.ftl
       path: ${moduleName}/${bizPath}/src/main/resources/mapper/${moduleName}/${className?cap_first}Mapper.xml
       must: 1
       moduleType: 1
-    - id: 12
+    - id: 13
       name: xml/BizPom.xml.ftl
-      path: ${moduleName}/${bizPath}/pom.yml
+      path: ${moduleName}/${bizPath}/pom.xml
       must: 2
       moduleType: 1
-    - id: 13
+    - id: 14
       name: xml/Pom.xml.ftl
       path: ${moduleName}/${modelPath}/pom.xml
       must: 2
       moduleType: 2
-    - id: 14
+    - id: 15
       name: js/api.js.ftl
       path: ${moduleName}/vue/src/api/${functionName}Api.js
       must: 1
       moduleType: 1
-    - id: 15
+    - id: 16
       name: vue/index.vue.ftl
       path: ${moduleName}/vue/src/views/${functionName}/index.vue
       must: 1
       moduleType: 1
-    - id: 16
+    - id: 17
       name: vue/add-or-update.vue.ftl
       path: ${moduleName}/vue/src/views/${functionName}/add-or-update.vue
       must: 1
       moduleType: 1
-    - id: 17
+    - id: 18
       name: sql/menu.sql.ftl
       path: ${moduleName}/menu/${tableName}_menu.sql
       must: 1
