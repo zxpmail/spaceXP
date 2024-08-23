@@ -50,4 +50,9 @@ public class RedisProperties {
      * 访问健keyPrefix
      */
     private String keyPrefix = "access_";
+
+    /**
+     * hashKey是否为String
+     */
+    private Boolean hashKeyIsString = true;
 }
