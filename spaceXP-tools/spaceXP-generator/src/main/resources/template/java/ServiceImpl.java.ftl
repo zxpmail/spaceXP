@@ -133,7 +133,7 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
     public ${className?cap_first}VO info(${pkType} id) {
         return CopyBeanUtils.copy(getById(id),${className?cap_first}VO::new);
     }
-
+<#if repeatList?? && (repeatList?size > 0) >
     void repeat(${className?cap_first}DTO ${className}DTO,Boolean isAdd) {
         LambdaQueryWrapper<${className?cap_first}DO> wrapper = new LambdaQueryWrapper<>();
         <#list repeatList as field>
@@ -152,7 +152,7 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
             throw  new BaseException(CommonResponseEnum.RECORD_REPEAT);
         }
     }
-
+</#if>
     @Override
     public Boolean save(${className?cap_first}DTO ${className}DTO) {
         <#if repeatList?? && (repeatList?size > 0) >
