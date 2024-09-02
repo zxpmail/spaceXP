@@ -6,10 +6,6 @@ import cn.piesat.framework.common.annotation.validator.group.UpdateGroup;
 <#if castDtoImportList?seq_contains("LocalDate") || castDtoImportList?seq_contains("LocalDateTime") >
 import com.fasterxml.jackson.annotation.JsonFormat;
 </#if>
-<#if castDtoImportList?seq_contains("Long") >
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-</#if>
 import lombok.Data;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
@@ -49,8 +45,6 @@ private static final long serialVersionUID = 1L;
     @JsonFormat(pattern="yyyy-MM-dd")
     <#elseif field.attrType == 'LocalDateTime'>
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    <#elseif field.attrType == 'Long'>
-    @JsonSerialize(using= ToStringSerializer.class)
     </#if>
     <#if field.primaryPk == 1>
         <#if field.attrType == 'String'>
