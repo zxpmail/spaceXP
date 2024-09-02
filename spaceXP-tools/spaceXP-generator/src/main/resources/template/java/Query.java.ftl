@@ -42,6 +42,7 @@ public class ${className?cap_first}Query  {
     /**
     * 结束${field.fieldComment}
     */
+    @ApiModelProperty("结束${field.fieldComment}")
         <#if field.attrType == 'LocalDate'>
     @JsonFormat(pattern="yyyy-MM-dd")
         <#elseif field.attrType == 'LocalDateTime'>

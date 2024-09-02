@@ -95,7 +95,7 @@ public class TemplateDataUtils {
                 voList.add(field);
             }
             addSet(field.getFormItem(), field, dtoList, voList, formList);
-            addSet(field.getGridItem(), field, voList, gridList);
+            addSet(field.getGridItem(), field, dtoList, voList, gridList);
             addSet(field.getQueryItem(), field, queryList);
             addSet(field.getFieldRepeat(), field, dtoList, repeatList);
             addSet(field.getGridSort(), field, orderList);

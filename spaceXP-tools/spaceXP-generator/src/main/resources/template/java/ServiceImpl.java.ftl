@@ -19,7 +19,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,14 +43,13 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
 
     @Override
     public PageResult list(PageBean pageBean, ${className?cap_first}Query ${className}Query) {
-        // 分页参数
-        IPage<${className?cap_first}DO> page = this.page(QueryUtils.getPage(pageBean), getWrapper(${className}Query));
-        // 检查分页结果
-        if (page == null || page.getTotal() == 0) {
-            return new PageResult(0L, new ArrayList<>());
+        IPage<${className?cap_first}DO> page ;
+        if (Objects.isNull(${className}Query)) {
+            page = this.page(QueryUtils.getPage(pageBean));
         } else {
-            return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), ${className?cap_first}VO::new));
+            page = this.page(QueryUtils.getPage(pageBean), getWrapper(${className}Query));
         }
+        return new PageResult(page.getTotal(), CopyBeanUtils.copy(page.getRecords(), ${className?cap_first}VO::new));
     }
 
     private LambdaQueryWrapper<${className?cap_first}DO> getWrapper(${className?cap_first}Query ${className}Query){

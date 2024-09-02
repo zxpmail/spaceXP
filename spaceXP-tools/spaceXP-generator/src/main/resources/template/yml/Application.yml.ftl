@@ -1,5 +1,5 @@
 server:
-    port: ${port}
+    port: ${port?c}
     servlet:
         context-path:  /${moduleName}
 spring:
