@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
 <#if castQueryImportList?seq_contains("LocalDate") || castQueryImportList?seq_contains("LocalDateTime") >
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 </#if>
 <#list queryImportList as i>
 import ${i!};
@@ -33,9 +33,9 @@ public class ${className?cap_first}Query  {
     @ApiModelProperty("${field.fieldComment}")
     </#if>
     <#if field.attrType == 'LocalDate'>
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     <#elseif field.attrType == 'LocalDateTime'>
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     </#if>
     <#if field.queryType == 'between'>
     private ${field.attrType}   start${field.attrName?cap_first};
@@ -43,9 +43,9 @@ public class ${className?cap_first}Query  {
     * 结束${field.fieldComment}
     */
         <#if field.attrType == 'LocalDate'>
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
         <#elseif field.attrType == 'LocalDateTime'>
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
         </#if>
     private ${field.attrType}   end${field.attrName?cap_first};
     <#else>
