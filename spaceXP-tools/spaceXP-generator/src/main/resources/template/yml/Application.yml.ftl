@@ -1,7 +1,7 @@
 server:
-    port: ${port?c}
-servlet:
-    context-path:  /${moduleName}
+    port: ${port}
+    servlet:
+        context-path:  /${moduleName}
 spring:
     application:
         name: ${moduleName}
