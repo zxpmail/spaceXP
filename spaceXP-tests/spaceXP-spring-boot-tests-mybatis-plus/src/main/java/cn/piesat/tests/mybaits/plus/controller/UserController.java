@@ -109,4 +109,10 @@ public class UserController {
     public UserDO dynamicInfo( TableNameEntity tableName, @PathVariable("id") Long id){
         return userService.dynamicInfo(tableName,id);
     }
+
+    @ApiOperation("查询用户信息")
+    @GetMapping("/getUserByName")
+    public UserDO getUserByName(String name){
+        return userService.getUserByName(name);
+    }
 }

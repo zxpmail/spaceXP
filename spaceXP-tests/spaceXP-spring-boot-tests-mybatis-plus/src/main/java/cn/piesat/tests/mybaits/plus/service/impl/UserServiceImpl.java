@@ -9,10 +9,12 @@ import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tests.mybaits.plus.dao.mapper.UserMapper;
 import cn.piesat.tests.mybaits.plus.model.entity.UserDO;
 import cn.piesat.tests.mybaits.plus.service.UserService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -60,5 +62,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public UserDO dynamicInfo(TableNameEntity tableName, Long id) {
         return getById(id);
+    }
+
+    @Override
+    public UserDO getUserByName(String name) {
+        LambdaQueryWrapper<UserDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(StringUtils.hasText(name), UserDO::getUsername,name);
+        return getOne(wrapper);
     }
 }

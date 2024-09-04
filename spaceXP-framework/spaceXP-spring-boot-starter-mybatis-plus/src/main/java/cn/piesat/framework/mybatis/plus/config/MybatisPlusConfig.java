@@ -4,6 +4,7 @@ package cn.piesat.framework.mybatis.plus.config;
 import cn.piesat.framework.mybatis.plus.core.AutoFillMetaObjectHandler;
 import cn.piesat.framework.mybatis.plus.core.DynamicTableNameAspect;
 import cn.piesat.framework.mybatis.plus.core.DynamicTableNameHandler;
+import cn.piesat.framework.mybatis.plus.core.GetOneAspect;
 import cn.piesat.framework.mybatis.plus.core.MybatisPlusExceptionHandler;
 import cn.piesat.framework.mybatis.plus.properties.DynamicTableNameProperties;
 import cn.piesat.framework.mybatis.plus.properties.MybatisPlusConfigProperties;
@@ -79,5 +80,9 @@ public class MybatisPlusConfig {
     public DynamicTableNameAspect dynamicTableNameAspect(){
         return new DynamicTableNameAspect();
     }
-
+    @Bean
+    @ConditionalOnProperty(name = "space.db.get-one-enable")
+    public GetOneAspect getOneAspect(MybatisPlusConfigProperties mybatisPlusConfigProperties){
+        return new GetOneAspect(mybatisPlusConfigProperties.getLimitSql());
+    }
 }

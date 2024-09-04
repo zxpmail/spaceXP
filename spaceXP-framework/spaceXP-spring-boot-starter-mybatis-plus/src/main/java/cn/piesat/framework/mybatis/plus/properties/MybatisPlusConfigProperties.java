@@ -36,4 +36,8 @@ public class MybatisPlusConfigProperties {
     private Boolean dateFormatEnable = false;//是否启动时间格式转换
 
     private Boolean defaultFill = false;//是否启动默认填充值
+
+    private Boolean getOneEnable ; //是否启动getOne拦截器
+
+    private String limitSql =" LIMIT 1 "; //getOne在wrapper中增加last(" LIMIT 1 ")
 }

@@ -31,5 +31,7 @@ public interface UserService extends IService<UserDO> {
 
     Boolean delete(Long id);
     UserDO dynamicInfo(TableNameEntity tableName, Long id);
+
+    UserDO getUserByName(String name);
 }
 

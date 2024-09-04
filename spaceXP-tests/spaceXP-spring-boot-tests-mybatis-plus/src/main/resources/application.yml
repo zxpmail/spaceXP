@@ -20,6 +20,7 @@ space:
       length: 7
       key-prefix: zhou
     default-fill: true
+    get-one-enable: true
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
