@@ -1,7 +1,7 @@
 package ${package}.${moduleName}.model.vo;
 
 <#if castVoImportList?seq_contains("LocalDate") || castVoImportList?seq_contains("LocalDateTime") >
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 </#if>
 <#if castVoImportList?seq_contains("Long") >
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -40,9 +40,9 @@ private static final long serialVersionUID = 1L;
     @ApiModelProperty("${field.fieldComment}")
     </#if>
     <#if field.attrType == 'LocalDate'>
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     <#elseif field.attrType == 'LocalDateTime'>
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     <#elseif field.attrType == 'Long'>
     @JsonSerialize(using= ToStringSerializer.class)
     </#if>
