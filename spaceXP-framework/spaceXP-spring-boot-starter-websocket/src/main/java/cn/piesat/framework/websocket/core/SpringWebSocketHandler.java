@@ -13,7 +13,7 @@ import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
 
 import javax.annotation.Nonnull;
-import java.util.Objects;
+
 
 import static cn.piesat.framework.websocket.model.WebsocketConstant.BUFFER_SIZE_LIMIT;
 import static cn.piesat.framework.websocket.model.WebsocketConstant.SEND_TIME_LIMIT;
@@ -44,7 +44,8 @@ public class SpringWebSocketHandler extends AbstractWebSocketHandler {
      */
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
-        log.info("WebSocket connected 已经建立连接:sessionId={} address={}", session.getId(), Objects.requireNonNull(session.getLocalAddress()));
+
+        log.info("WebSocket connected 已经建立连接:sessionId={} address={}", session.getId(), session.getAttributes().get(CommonConstants.IP));
         try {
             Long uid = (Long) session.getAttributes().get(CommonConstants.USER_ID);
             Integer appId = (Integer) session.getAttributes().get(CommonConstants.APP_ID);

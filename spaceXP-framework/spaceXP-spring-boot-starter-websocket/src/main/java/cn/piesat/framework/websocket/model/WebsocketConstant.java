@@ -21,4 +21,5 @@ public interface WebsocketConstant {
      * 发送消息缓冲上线，单位：bytes
      */
     Integer BUFFER_SIZE_LIMIT = 1024 * 100;
+    String IP = "127.0.0.1";
 }

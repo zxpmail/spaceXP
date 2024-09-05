@@ -107,6 +107,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         try {
             userId = JwtUtils.getValue(token, gatewayProperties.getTokenProperties().getTokenSignKey());
         } catch (Exception ex) {
+            log.error("token转化错误！！");
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
         //保证同一用户登录在不同窗口登录一次

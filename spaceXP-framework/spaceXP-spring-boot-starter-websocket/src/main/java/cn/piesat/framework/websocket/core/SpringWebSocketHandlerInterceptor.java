@@ -45,6 +45,7 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
         if (request instanceof ServletServerHttpRequest) {
             Long userId = WebsocketConstant.DEBUG_USER_ID;
             Integer appId = WebsocketConstant.DEBUG_USER_APPID;
+            String ip = WebsocketConstant.IP;
             if (!webSocketProperties.getDebug()) {
                 String uId = request.getHeaders().getFirst(CommonConstants.USER_ID);
                 if (!StringUtils.hasText(uId) || !pattern.matcher(uId).matches()) {
@@ -53,7 +54,7 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
                 }
                 userId = Long.parseLong(uId);
                 String rAppId = request.getHeaders().getFirst(CommonConstants.APP_ID);
-
+                ip = request.getHeaders().getFirst(CommonConstants.IP);
                 if (!StringUtils.hasText(rAppId) || !pattern.matcher(rAppId).matches()) {
                     log.info("Attempted to get a Header with a null  or no number appId.");
                     return false;
@@ -69,6 +70,7 @@ public class SpringWebSocketHandlerInterceptor extends HttpSessionHandshakeInter
             if (session != null) {
                 attributes.put(CommonConstants.USER_ID, userId);
                 attributes.put(CommonConstants.APP_ID, appId);
+                attributes.put(CommonConstants.IP, ip);
                 return true;
             }
         }
