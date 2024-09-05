@@ -33,7 +33,7 @@ public class SessionSocketHolder {
             WebSocketSession userSession = userMap.get(appId);
             if (userSession != null) {
                 try {
-                    session.close();
+                    userSession.close();
                     userMap.remove(appId);
                 } catch (IOException e) {
                     log.error("Failed to close WebSocket session with user:{},{},{} ", userId, appId, e);
