@@ -61,7 +61,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         String uri = request.getURI().getPath();
         String ip = analysisSourceIp(request);
-        ServerHttpRequest.Builder header = request.mutate().header(GatewayConstant.IP, ip);
+        ServerHttpRequest.Builder header = request.mutate().header(CommonConstants.IP, ip);
         if (!StringUtils.hasText(uri)) {
             return chain.filter(exchange.mutate().request(header.build()).build());
         }
@@ -89,7 +89,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             token = request.getQueryParams().getFirst(CommonConstants.TOKEN);
         }
         if (!StringUtils.hasText(token)) {
-            token = request.getHeaders().getFirst(GatewayConstant.WS_TOKEN);;
+            token = request.getHeaders().getFirst(GatewayConstant.WS_TOKEN);
         }
         if (gatewayProperties.getIsRedirect()) {
             if (!StringUtils.hasText(token) || "''".equalsIgnoreCase(token)) {
