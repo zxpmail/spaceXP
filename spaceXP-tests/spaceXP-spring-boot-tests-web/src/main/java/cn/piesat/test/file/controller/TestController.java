@@ -4,6 +4,7 @@ package cn.piesat.test.file.controller;
 import cn.piesat.framework.common.annotation.LoginUser;
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.model.dto.JwtUser;
+import cn.piesat.framework.common.utils.ValidationUtils;
 import cn.piesat.test.file.model.entity.Student;
 import cn.piesat.test.file.service.TestService;
 import io.swagger.annotations.Api;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -152,5 +152,13 @@ public class TestController {
     public Student getStu(@RequestBody   Student stu){
         return testService.
                 testStu(stu,null);
+    }
+
+    @GetMapping("testValid")
+    public Student testValid(){
+        Student student = new Student();
+        student.setId(1);
+        ValidationUtils.validate(student);
+        return student;
     }
 }
