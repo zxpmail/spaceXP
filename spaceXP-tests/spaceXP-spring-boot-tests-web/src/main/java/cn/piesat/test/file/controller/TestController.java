@@ -9,8 +9,10 @@ import cn.piesat.test.file.model.entity.Student;
 import cn.piesat.test.file.service.TestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -160,5 +163,31 @@ public class TestController {
         student.setId(1);
         ValidationUtils.validate(student);
         return student;
+    }
+
+    @Resource
+    private RestTemplate restTemplate;
+    @GetMapping("testC")
+    public FStat testC(){
+
+        TStat encrypt = new TStat("40", "ICgYFgQWD8AAAARlCgEKAaqqqqqqNPU=", "encrypt", "1831992120334823425");
+        FStat fStat = restTemplate.postForObject("http://111.203.213.54:18887", encrypt, FStat.class);
+        return fStat;
+    }
+    @Data
+    @AllArgsConstructor
+    static class TStat{
+      String satID;
+      String srcFrame;
+      String reqType;
+      String reqID;
+    }
+
+    @Data
+    static class FStat{
+       String encFrame;
+       String reqID;
+       String result;
+       String satID;
     }
 }
