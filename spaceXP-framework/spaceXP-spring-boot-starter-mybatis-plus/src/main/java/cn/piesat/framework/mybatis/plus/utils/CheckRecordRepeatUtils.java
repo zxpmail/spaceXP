@@ -84,7 +84,7 @@ public class CheckRecordRepeatUtils {
      * @param <V>             值类型
      */
     public static <T, R, V> void checkRecordRepeat(V checkValue, SFunction<T, R> columnExtractor, Function<LambdaQueryWrapper<T>, Long> countExecutor, String errorMessage) {
-        checkRecordRepeat(m -> m.eq((ObjectUtils.isEmpty(checkValue)), columnExtractor, checkValue), countExecutor, errorMessage);
+        checkRecordRepeat(m -> m.eq((!ObjectUtils.isEmpty(checkValue)), columnExtractor, checkValue), countExecutor, errorMessage);
     }
 
 
