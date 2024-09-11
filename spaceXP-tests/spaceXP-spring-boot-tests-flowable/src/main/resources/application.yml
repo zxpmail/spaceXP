@@ -1,0 +1,22 @@
+server:
+  port: 8081
+flowable:
+  idm:
+    app:
+      admin:
+        user-id: admin
+        password: admin
+        first-name: zhou
+        last-name: xp
+  database-schema-update: true #没有数据库表的时候生成数据库表(true)建表后可关闭(false),下次启动不会再次建表
+  async-executor-activate: false #关闭定时任务JOB
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/flowable-test?autoReconnect=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true #此处的nullCatalogMeansCurrent=true:
+    username: root
+    password: 123456
+logging:
+  level:
+    org.flowable: DEBUG
