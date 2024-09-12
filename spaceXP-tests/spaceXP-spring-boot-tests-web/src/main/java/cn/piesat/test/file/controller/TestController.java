@@ -47,7 +47,7 @@ public class TestController {
      */
     @ApiOperation("测试根据配置文件修改枚举")
     @GetMapping("/changeEnum")
-    public String changeEnum() {
+    private String changeEnum() {
         return "ok";
     }
 
