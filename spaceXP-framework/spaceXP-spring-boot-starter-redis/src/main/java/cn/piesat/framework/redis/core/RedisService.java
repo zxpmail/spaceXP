@@ -168,7 +168,7 @@ public class RedisService {
      * @param <T> 类型
      */
     public <T> long setList(final String key, final T data) {
-        Long count = redisTemplate.opsForList().rightPush(key, t);
+        Long count = redisTemplate.opsForList().rightPush(key, data);
         return count == null ? 0 : count;
     }
     /**
