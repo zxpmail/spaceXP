@@ -154,10 +154,23 @@ public class RedisService {
      * @return 缓存的对象
      */
     public <T> long setList(final String key, final List<T> dataList) {
-        Long count = redisTemplate.opsForList().rightPushAll(key, dataList);
+        Long count = null;
+        for (T t : dataList) {
+            count = redisTemplate.opsForList().rightPush(key, t);
+        }
         return count == null ? 0 : count;
     }
 
+    /**
+     * 缓存List数据
+     * @param key 缓存的键值
+     * @param data 数据
+     * @param <T> 类型
+     */
+    public <T> long setList(final String key, final T data) {
+        Long count = redisTemplate.opsForList().rightPush(key, t);
+        return count == null ? 0 : count;
+    }
     /**
      * 获得缓存的list对象
      *
