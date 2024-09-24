@@ -35,6 +35,7 @@
         <module>spaceXP-spring-boot-starter-websocket</module>
         <module>spaceXP-spring-boot-starter-log-external</module>
         <module>spaceXP-spring-boot-starter-test</module>
+        <module>spaceXP-spring-boot-starter-sse</module>
     </modules>
     <artifactId>spaceXP-framework</artifactId>
     <dependencies>
