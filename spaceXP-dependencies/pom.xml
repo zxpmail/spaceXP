@@ -300,6 +300,11 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>cn.piesat.space</groupId>
+                <artifactId>spaceXP-spring-boot-starter-sse</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot</artifactId>
                 <version>${spring.boot.version}</version>
