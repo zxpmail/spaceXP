@@ -40,6 +40,7 @@ spaceXP-tools 工具集合
 17. spaceXP-spring-boot-starter-websocket 实现socket消息发送以及心跳功能
 18. spaceXP-spring-boot-starter-log-external 实现log组件接口 直接保存到日志服务器中
 19. spaceXP-spring-boot-starter-test 实现test组件
+20. spaceXP-spring-boot-starter-sse 实现sse消息发送以及心跳功能
 ## 工具说明
 1. spaceXP-gateway 网关工具 实现网关鉴权
 2. spaceXP-generator 低代码工具
@@ -62,6 +63,7 @@ spaceXP-tools 工具集合
 14. spaceXP-spring-boot-tests-log-external 测试log扩展组件
 15. spaceXP-spring-boot-tests-test 测试test组件
 16. spaceXP-spring-boot-tests-user 测试gateway用户登录
+17. spaceXP-spring-boot-tests-sse 测试sse组件
 #### 鸣谢
 本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 非常感谢众多软件和作者
