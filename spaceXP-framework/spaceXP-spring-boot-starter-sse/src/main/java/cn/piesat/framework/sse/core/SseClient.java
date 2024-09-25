@@ -1,6 +1,5 @@
 package cn.piesat.framework.sse.core;
 
-import cn.piesat.framework.common.constants.CommonConstants;
 import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.sse.properties.SseProperties;
 import cn.piesat.framework.sse.util.SseSessionHolder;
@@ -12,9 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -38,13 +35,7 @@ public class SseClient {
         this.sseProperties = sseProperties;
     }
 
-    public SseEmitter login(HttpServletRequest request) {
-        if (request == null) {
-            log.warn("request 不能为空！");
-            throw new BaseException("request 参数为空！");
-        }
-        String userId = request.getParameter(CommonConstants.USER_ID);
-        String appId = request.getParameter(CommonConstants.APP_ID);
+    public SseEmitter createSession(String userId, String appId ) {
         if (!StringUtils.hasText(userId) || !StringUtils.hasText(appId)) {
             log.warn("参数异常，用户Id或者应用id为空");
             throw new BaseException("参数异常，用户Id或者应用id为空");
