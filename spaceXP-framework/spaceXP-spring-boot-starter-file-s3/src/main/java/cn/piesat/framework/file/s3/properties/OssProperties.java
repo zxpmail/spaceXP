@@ -26,7 +26,7 @@ public class OssProperties {
     /**
      * 对象存储服务的URL
      * 如果是服务器MinIO等直接使用 [$schema]://[$ip]:[$port]
-     * 外网[$Schema]://[$Bucket].[$Endpoint]/[$Object]*
+     * 网络地址[$Schema]://[$Bucket].[$Endpoint]/[$Object]*
      * https://help.aliyun.com/document_detail/375241.html*
      */
     private String endpoint;
