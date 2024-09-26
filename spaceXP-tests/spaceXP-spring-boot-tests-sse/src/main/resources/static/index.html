@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="con"></div>
+<script>
+    let chat = document.getElementById("con");
+    if (window.EventSource) {
+        //创建sse
+        let eventSource = new EventSource(`http://localhost:8080/sse/login?userId=1001&appId=1`);
+        eventSource.onopen = function (event) {
+            console.log('SSE链接成功');
+        }
+        eventSource.onmessage = function (event) {
+            if(event.data){
+                chat.innerHTML += event.data + '<br/>';
+            }
+        }
+        eventSource.onerror = (error) => {
+            console.log('SSE链接失败');
+        };
+    } else {
+        alert("你的浏览器不支持SSE");
+    }
+</script>
+</body>
+</html>

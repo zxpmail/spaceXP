@@ -1,0 +1,3 @@
+space:
+  redis:
+    message-enable: true
