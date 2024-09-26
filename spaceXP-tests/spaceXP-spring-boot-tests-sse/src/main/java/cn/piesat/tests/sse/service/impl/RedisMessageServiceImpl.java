@@ -1,4 +1,4 @@
-package cn.piesat.sse.websocket.service.impl;
+package cn.piesat.tests.sse.service.impl;
 
 import cn.piesat.framework.common.model.entity.MessageEntity;
 import cn.piesat.framework.redis.core.RedisMessageService;
@@ -11,7 +11,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 
 
 /**

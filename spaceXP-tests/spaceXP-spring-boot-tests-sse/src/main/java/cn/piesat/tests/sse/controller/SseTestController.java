@@ -1,4 +1,4 @@
-package cn.piesat.sse.websocket.controller;
+package cn.piesat.tests.sse.controller;
 
 
 import cn.piesat.framework.common.annotation.NoApiResult;
@@ -8,6 +8,7 @@ import cn.piesat.framework.sse.core.SseClient;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -47,7 +48,7 @@ public class SseTestController {
     }
 
     @NoApiResult
-    @GetMapping(value = "/login")
+    @PostMapping(value = "/login")
     public SseEmitter login(String userId, String appId) {
         return sseClient.createSession(userId,appId);
     }

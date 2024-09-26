@@ -1,4 +1,4 @@
-package cn.piesat.sse.websocket;
+package cn.piesat.tests.sse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
