@@ -1,6 +1,7 @@
 package cn.piesat.framework.sse.core;
 
 import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.sse.model.SseAttributes;
 import cn.piesat.framework.sse.properties.SseProperties;
 import cn.piesat.framework.sse.util.SseSessionHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -35,13 +38,13 @@ public class SseClient {
         this.sseProperties = sseProperties;
     }
 
-    public SseEmitter createSession(String userId, String appId ) {
+    public SseEmitter createSession(String userId, String appId, Map<String, Object> attributes) {
         if (!StringUtils.hasText(userId) || !StringUtils.hasText(appId)) {
             log.warn("参数异常，用户Id或者应用id为空");
             throw new BaseException("参数异常，用户Id或者应用id为空");
         }
         try {
-            SseEmitter sseEmitter = SseSessionHolder.add(userId, appId, sseProperties.getTimeout());
+            SseEmitter sseEmitter = SseSessionHolder.add(userId, appId, sseProperties.getTimeout(), attributes);
 
             final ScheduledFuture<?> future = threadPoolTaskScheduler.scheduleAtFixedRate(
                     new HeartBeatTask(sseEmitter, userId, appId, sseProperties.getHeartbeatMessage()),
@@ -51,7 +54,7 @@ public class SseClient {
             sseEmitter.onTimeout(() -> handleSessionCompletion(future, userId, appId, "连接超时...................."));
             sseEmitter.onError(t -> handleSessionCompletion(future, userId, appId, "Error(userId: " + userId + ")"));
             if (callbackService != null) {
-                callbackService.addUser2Group(userId, appId);
+                callbackService.addUser2Group(userId, appId, attributes);
             }
             return sseEmitter;
         } catch (Exception e) {
@@ -75,26 +78,21 @@ public class SseClient {
         }
     }
 
-    public boolean sendMessage(String userId, String appId, String messageId, String message, SseEmitter session) {
-        return sendMessage(userId, appId, messageId, message, session, MediaType.APPLICATION_JSON);
+    public boolean sendMessage(String userId, String appId, String messageId, String message, ConcurrentHashMap<String, SseAttributes> userMap) {
+        return sendMessage(userId, appId, messageId, message, userMap, MediaType.APPLICATION_JSON);
     }
 
-    public boolean sendMessage(String userId, String appId, String messageId, String message) {
-        return sendMessage(userId, appId, messageId, message, null, MediaType.APPLICATION_JSON);
-    }
-
-    public boolean sendMessage(String userId, String appId, String messageId, String message, MediaType mediaType) {
-        return sendMessage(userId, appId, messageId, message, null, mediaType);
-    }
-
-    public boolean sendMessage(String userId, String appId, String messageId, String message, SseEmitter session, MediaType mediaType) {
-        if (!StringUtils.hasText(userId) || !StringUtils.hasText(appId) || !StringUtils.hasText(messageId) || !StringUtils.hasText(message) || mediaType == null) {
+    public boolean sendMessage(String userId, String appId, String messageId, String message, ConcurrentHashMap<String, SseAttributes> userMap, MediaType mediaType) {
+        if (!StringUtils.hasText(userId) || !StringUtils.hasText(appId) || !StringUtils.hasText(messageId) || !StringUtils.hasText(message) || userMap == null || mediaType == null) {
             log.warn("参数异常，用户Id{},应用id{},消息id:{},消息:{}, 媒体类型:{}", userId, appId, messageId, message, mediaType);
             return false;
         }
-        if (session == null) {
-            session = SseSessionHolder.getSession(userId, appId);
+        SseAttributes sseAttributes = userMap.get(appId);
+        if (sseAttributes == null) {
+            log.warn("参数异常，用户Id{},应用id{},用户会话属性为空", userId, appId);
+            return false;
         }
+        SseEmitter session = sseAttributes.getSession();
         if (session == null) {
             log.warn("参数异常，用户Id{},应用id{},用户会话为空", userId, appId);
             return false;
@@ -104,7 +102,7 @@ public class SseClient {
             log.info("用户Id{},应用id{},消息id:{},消息:{}", userId, appId, messageId, message);
             return true;
         } catch (Exception e) {
-            SseSessionHolder.remove(userId, appId);
+            userMap.remove(appId);
             sessionClose(userId, appId);
             log.error("用户Id{},应用id{},消息id:{},消息:{}", userId, appId, messageId, message, e);
             session.complete();
@@ -118,6 +116,9 @@ public class SseClient {
         }
     }
 
+    public ConcurrentHashMap<String, SseAttributes> getUserMap(String userId, String appId) {
+        return SseSessionHolder.getSessionMap(userId, appId);
+    }
 
     public boolean close(String userId, String appId) {
         if (!StringUtils.hasText(userId) || !StringUtils.hasText(appId)) {

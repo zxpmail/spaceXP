@@ -1,6 +1,8 @@
 package cn.piesat.framework.sse.core;
 
 
+import java.util.Map;
+
 /**
  * <p/>
  * {@code @description}: 回调类
@@ -14,7 +16,7 @@ public interface CallbackService {
      * @param userId 用户ID
      * @param appId 应用ID
      */
-    default   void addUser2Group(String userId,String appId){
+    default   void addUser2Group(String userId, String appId, Map<String, Object> attributes){
     }
 
     /**
