@@ -15,6 +15,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -50,6 +52,9 @@ public class SseTestController {
     @NoApiResult
     @PostMapping(value = "/login")
     public SseEmitter login(String userId, String appId) {
-        return sseClient.createSession(userId,appId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId","1001");
+        map.put("appId","1");
+        return sseClient.createSession(userId,appId,map);
     }
 }

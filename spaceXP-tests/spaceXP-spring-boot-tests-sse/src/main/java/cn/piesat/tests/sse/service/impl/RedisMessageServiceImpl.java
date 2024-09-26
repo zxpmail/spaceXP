@@ -3,14 +3,15 @@ package cn.piesat.tests.sse.service.impl;
 import cn.piesat.framework.common.model.entity.MessageEntity;
 import cn.piesat.framework.redis.core.RedisMessageService;
 import cn.piesat.framework.sse.core.SseClient;
-import cn.piesat.framework.sse.util.SseSessionHolder;
+import cn.piesat.framework.sse.model.SseAttributes;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -32,9 +33,12 @@ public class RedisMessageServiceImpl implements RedisMessageService {
         }
         Integer appId = messageEntity.getAppId();
         Long toId = messageEntity.getToId();
-        SseEmitter session = SseSessionHolder.getSession(String.valueOf(toId), String.valueOf(appId));
+        ConcurrentHashMap<String, SseAttributes> userMap = sseClient.getUserMap(String.valueOf(toId), String.valueOf(appId));
+        SseAttributes sseAttributes = userMap.get(String.valueOf(appId));
+        Map<String, Object> attributes = sseAttributes.getAttributes();
+        log.info("属性值： userId:{},appId: {}", attributes.get("userId"),attributes.get("appId"));
         String s = JSON.toJSONString(messageEntity);
-        sseClient.sendMessage(String.valueOf(toId), String.valueOf(appId),String.valueOf(s.hashCode()),s);
+        sseClient.sendMessage(String.valueOf(toId), String.valueOf(appId),String.valueOf(s.hashCode()),s,userMap);
         log.info("收到消息: {}, 类型: {} 消息标题:{}",messageEntity.getBody(),messageEntity.getType(),messageEntity.getTitle());
     }
 }
