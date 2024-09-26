@@ -32,7 +32,7 @@ public class HeartBeatTask implements Runnable {
 
     @Override
     public void run() {
-        log.info("Send Heartbeat Date: {},userId: {},appId: {}", LocalDateTime.now(), userId, appId);
+        log.debug("Send Heartbeat Date: {},userId: {},appId: {}", LocalDateTime.now(), userId, appId);
         if (sseEmitter != null) {
             try {
                 sseEmitter.send(heartbeatMessage, MediaType.APPLICATION_JSON);
