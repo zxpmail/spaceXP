@@ -26,19 +26,30 @@ import java.util.concurrent.ConcurrentHashMap;
 public class RedisMessageServiceImpl implements RedisMessageService {
     @Resource
     private SseClient sseClient;
+
     @Override
     public void handle(MessageEntity messageEntity) {
-        if (ObjectUtils.isEmpty(messageEntity)){
+        if (ObjectUtils.isEmpty(messageEntity)) {
             return;
         }
+
         Integer appId = messageEntity.getAppId();
         Long toId = messageEntity.getToId();
         ConcurrentHashMap<String, SseAttributes> userMap = sseClient.getUserMap(String.valueOf(toId), String.valueOf(appId));
+        if (userMap == null) {
+            log.info("属性值： userMap is null");
+            return;
+        }
         SseAttributes sseAttributes = userMap.get(String.valueOf(appId));
+        if (sseAttributes == null) {
+            log.info("属性值： sseAttributes is null");
+            return;
+        }
         Map<String, Object> attributes = sseAttributes.getAttributes();
-        log.info("属性值： userId:{},appId: {}", attributes.get("userId"),attributes.get("appId"));
+
+        log.info("属性值： userId:{},appId: {}", attributes.get("userId"), attributes.get("appId"));
         String s = JSON.toJSONString(messageEntity);
-        sseClient.sendMessage(String.valueOf(toId), String.valueOf(appId),String.valueOf(s.hashCode()),s,userMap);
-        log.info("收到消息: {}, 类型: {} 消息标题:{}",messageEntity.getBody(),messageEntity.getType(),messageEntity.getTitle());
+        sseClient.sendMessage(String.valueOf(toId), String.valueOf(appId), String.valueOf(s.hashCode()), s, userMap);
+        log.info("收到消息: {}, 类型: {} 消息标题:{}", messageEntity.getBody(), messageEntity.getType(), messageEntity.getTitle());
     }
 }
