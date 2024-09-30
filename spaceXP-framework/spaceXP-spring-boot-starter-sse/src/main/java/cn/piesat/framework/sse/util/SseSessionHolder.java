@@ -9,10 +9,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
 
 /**
  * <p/>
@@ -48,19 +46,19 @@ public class SseSessionHolder {
             sseAttributes.setAttributes(attributes);
         }
         if (userSession != null) {
-            log.info("Date: {} | Client: {} | AppId: {} | Reconnection to server", LocalDateTime.now(), userId, appId);
-        } else {
-            try {
-                userSession = new SseEmitter(timeout);
-                sseAttributes = new SseAttributes();
-                sseAttributes.setAttributes(attributes);
-                sseAttributes.setSession(userSession);
-                userMap.put(appId, sseAttributes);
-                log.info("Date: {} | Client: {} | AppId: {} | Connection to server", LocalDateTime.now(), userId, appId);
-            } catch (Exception e) {
-                log.error("Date: {}  create user session error", LocalDateTime.now(), e);
-                throw new BaseException("create user session error");
-            }
+            userSession.completeWithError(new BaseException("RepeatConnect(Id:" + userId + ")"));
+            log.info("Date: {} | Client: {} | AppId: {} | RepeatConnect to server", LocalDateTime.now(), userId, appId);
+        }
+        try {
+            userSession = new SseEmitter(timeout);
+            sseAttributes = new SseAttributes();
+            sseAttributes.setAttributes(attributes);
+            sseAttributes.setSession(userSession);
+            userMap.put(appId, sseAttributes);
+            log.info("Date: {} | Client: {} | AppId: {} | Connection to server", LocalDateTime.now(), userId, appId);
+        } catch (Exception e) {
+            log.error("Date: {}  create user session error", LocalDateTime.now(), e);
+            throw new BaseException("create user session error");
         }
         return userSession;
     }

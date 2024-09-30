@@ -65,48 +65,45 @@ public class SseClient {
 
     private void handleSessionCompletion(ScheduledFuture<?> future, String userId, String appId, String message) {
         synchronized (isCancelled) {
-            if (!isCancelled.get()) {
                 if (StringUtils.hasText(message)) {
                     SseSessionHolder.onError(userId, appId, new BaseException(message));
                 } else {
                     SseSessionHolder.onCompletion(userId, appId);
                 }
                 sessionClose(userId, appId);
-                future.cancel(true);
-                isCancelled.set(true);
-            }
+                if (future != null) {
+                    future.cancel(true);
+                }
         }
     }
 
-    public boolean sendMessage(String userId, String appId, String messageId, String message, ConcurrentHashMap<String, SseAttributes> userMap) {
-        return sendMessage(userId, appId, messageId, message, userMap, MediaType.APPLICATION_JSON);
+    public void sendMessage(String userId, String appId, String messageId, String message, ConcurrentHashMap<String, SseAttributes> userMap) {
+        sendMessage(userId, appId, messageId, message, userMap, MediaType.APPLICATION_JSON);
     }
 
-    public boolean sendMessage(String userId, String appId, String messageId, String message, ConcurrentHashMap<String, SseAttributes> userMap, MediaType mediaType) {
+    public void sendMessage(String userId, String appId, String messageId, String message, ConcurrentHashMap<String, SseAttributes> userMap, MediaType mediaType) {
         if (!StringUtils.hasText(userId) || !StringUtils.hasText(appId) || !StringUtils.hasText(messageId) || !StringUtils.hasText(message) || userMap == null || mediaType == null) {
             log.warn("参数异常，用户Id{},应用id{},消息id:{},消息:{}, 媒体类型:{}", userId, appId, messageId, message, mediaType);
-            return false;
+            return;
         }
         SseAttributes sseAttributes = userMap.get(appId);
         if (sseAttributes == null) {
             log.warn("参数异常，用户Id{},应用id{},用户会话属性为空", userId, appId);
-            return false;
+            return;
         }
         SseEmitter session = sseAttributes.getSession();
         if (session == null) {
             log.warn("参数异常，用户Id{},应用id{},用户会话为空", userId, appId);
-            return false;
+            return;
         }
         try {
             session.send(SseEmitter.event().id(messageId).reconnectTime(sseProperties.getReconnectTimeMillis()).data(message, mediaType));
             log.info("用户Id{},应用id{},消息id:{},消息:{}", userId, appId, messageId, message);
-            return true;
         } catch (Exception e) {
             userMap.remove(appId);
             sessionClose(userId, appId);
             log.error("用户Id{},应用id{},消息id:{},消息:{}", userId, appId, messageId, message, e);
             session.complete();
-            return false;
         }
     }
 
