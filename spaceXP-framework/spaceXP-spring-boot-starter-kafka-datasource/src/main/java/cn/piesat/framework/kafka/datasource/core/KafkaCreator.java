@@ -19,13 +19,10 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Field;
-
 import java.util.HashMap;
 import java.util.HashSet;
-
 import java.util.Map;
 import java.util.Objects;
-
 import java.util.Set;
 
 
@@ -131,7 +128,7 @@ public class KafkaCreator implements InitializingBean {
                     kafkaListenerContainerFactory.getContainerProperties().setPollTimeout(entry.getValue().getPollTimeout());
                 } else {
                     Class<? extends KafkaListenerContainerFactory<?>> consumerFactory = entry.getValue().getConsumerFactory();
-                    KafkaListenerContainerFactory<?> listenerContainerFactory = consumerFactory.newInstance();
+                    KafkaListenerContainerFactory<?> listenerContainerFactory = consumerFactory.getDeclaredConstructor().newInstance();
                     if (listenerContainerFactory instanceof ConcurrentKafkaListenerContainerFactory) {
                         kafkaListenerContainerFactory = (ConcurrentKafkaListenerContainerFactory<Integer, String>) listenerContainerFactory;
                     } else {
@@ -160,9 +157,9 @@ public class KafkaCreator implements InitializingBean {
         if (!ObjectUtils.isEmpty(consumerFactoryFilter)) {
             if (!ObjectUtils.isEmpty(consumerFactoryFilter.getStrategy())) {
                 //代表使用了自定义策略
-                RecordFilterStrategy recordFilterStrategy = null;
+                RecordFilterStrategy recordFilterStrategy;
                 try {
-                    recordFilterStrategy = consumerFactoryFilter.getStrategy().newInstance();
+                    recordFilterStrategy = consumerFactoryFilter.getStrategy().getDeclaredConstructor().newInstance();
                 } catch (Exception e) {
                     log.error("create strategy instance error {}", e.getMessage());
                     return;
