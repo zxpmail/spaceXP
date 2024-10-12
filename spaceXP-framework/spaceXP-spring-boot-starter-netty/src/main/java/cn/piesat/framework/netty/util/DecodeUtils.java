@@ -1,5 +1,7 @@
-package cn.piesat.framework.netty.model.enums;
+package cn.piesat.framework.netty.util;
 
+import cn.piesat.framework.netty.model.enums.ByteOrderEnum;
+import cn.piesat.framework.netty.model.enums.TypeEnum;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 
@@ -26,7 +28,7 @@ public final class DecodeUtils {
      * @return 解码数据
      */
     public static Object decode(int byteNum, ByteBuf buff,
-                                String type, boolean endian) {
+                                String type, ByteOrderEnum endian) {
         Object value;
         final TypeEnum typeEnum = TypeEnum.match(type);
         if (typeEnum == null) {
@@ -95,11 +97,11 @@ public final class DecodeUtils {
      * @param endian 字节序
      * @return 解码数据
      */
-    public static long readUnSignInt(ByteBuf buff, boolean endian) {
+    public static long readUnSignInt(ByteBuf buff, ByteOrderEnum endian) {
         if (buff == null || buff.readableBytes() < Integer.BYTES) {
             throw new IllegalArgumentException("ByteBuf is null or too short to read an integer.");
         }
-        int intValue = endian ? buff.readIntLE() : buff.readInt();
+        int intValue = endian == ByteOrderEnum.LITTLE_ENDIAN  ? buff.readIntLE() : buff.readInt();
         return intValue & 0x0FFFFFFFFL;
     }
 
@@ -110,11 +112,11 @@ public final class DecodeUtils {
      * @param endian 字节序
      * @return 解码数据
      */
-    public static int readInt(ByteBuf buff, boolean endian) {
+    public static int readInt(ByteBuf buff, ByteOrderEnum endian) {
         if (buff.readableBytes() < Integer.BYTES) {
             throw new IndexOutOfBoundsException("Not enough bytes to read a int value.");
         }
-        return endian ? buff.readIntLE() : buff.readInt();
+        return endian == ByteOrderEnum.LITTLE_ENDIAN  ? buff.readIntLE() : buff.readInt();
     }
 
     /**
@@ -124,11 +126,11 @@ public final class DecodeUtils {
      * @param endian 字节序
      * @return 解码数据
      */
-    public static short readShort(ByteBuf buff, boolean endian) {
+    public static short readShort(ByteBuf buff, ByteOrderEnum endian) {
         if (buff.readableBytes() < Short.BYTES) {
             throw new IndexOutOfBoundsException("Not enough bytes to read a short value.");
         }
-        return endian ? buff.readShortLE() : buff.readShort();
+        return endian == ByteOrderEnum.LITTLE_ENDIAN  ? buff.readShortLE() : buff.readShort();
     }
 
     /**
@@ -138,11 +140,11 @@ public final class DecodeUtils {
      * @param endian 字节序
      * @return 解码数据
      */
-    public static int readUnSignShort(ByteBuf buff, boolean endian) {
+    public static int readUnSignShort(ByteBuf buff, ByteOrderEnum endian) {
         if (buff.readableBytes() < Short.BYTES) {
             throw new IndexOutOfBoundsException("Not enough bytes to read a short value.");
         }
-        short shortValue = endian ? buff.readShortLE() : buff.readShort();
+        short shortValue = endian == ByteOrderEnum.LITTLE_ENDIAN ? buff.readShortLE() : buff.readShort();
         return shortValue & 0x0FFFF;
     }
 
