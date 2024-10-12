@@ -22,12 +22,12 @@ public final class DecodeUtils {
      * 解码
      *
      * @param byteNum 字节数
-     * @param buff    数据
+     * @param in    数据
      * @param type    枚举类型字符串
      * @param endian  编码
      * @return 解码数据
      */
-    public static Object decode(int byteNum, ByteBuf buff,
+    public static Object decode(int byteNum, ByteBuf in,
                                 String type, ByteOrderEnum endian) {
         Object value;
         final TypeEnum typeEnum = TypeEnum.match(type);
@@ -36,25 +36,25 @@ public final class DecodeUtils {
         }
         switch (typeEnum) {
             case HEX_STRING:
-                value = readHexString(byteNum, buff);
+                value = readHexString(byteNum, in);
                 break;
             case USHORT:
-                value = readUnSignShort(buff, endian);
+                value = readUnSignShort(in, endian);
                 break;
             case SHORT:
-                value = readShort(buff, endian);
+                value = readShort(in, endian);
                 break;
             case INT:
-                value = readInt(buff, endian);
+                value = readInt(in, endian);
                 break;
             case UINT:
-                value = readUnSignInt(buff, endian);
+                value = readUnSignInt(in, endian);
                 break;
             case BYTE:
-                value = readByte(buff);
+                value = readByte(in);
                 break;
             case UBYTE:
-                value = readUnSignByte(buff);
+                value = readUnSignByte(in);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported type: " + type);
@@ -65,86 +65,86 @@ public final class DecodeUtils {
     /**
      * 读无符号byte
      *
-     * @param buff 编码数据
+     * @param in 编码数据
      * @return 解码数据
      */
-    public static short readUnSignByte(ByteBuf buff) {
-        if (!buff.isReadable(1)) {
+    public static short readUnSignByte(ByteBuf in) {
+        if (!in.isReadable(1)) {
             throw new IllegalArgumentException("Buffer does not have enough readable bytes.");
         }
-        byte by = buff.readByte();
+        byte by = in.readByte();
         return (short) (by & 0x0FF);
     }
 
     /**
      * 读byte
      *
-     * @param buff 编码数据
+     * @param in 编码数据
      * @return 解码数据
      */
-    public static byte readByte(ByteBuf buff) {
+    public static byte readByte(ByteBuf in) {
         // 检查是否有足够的字节可以读取
-        if (!buff.isReadable(1)) {
+        if (!in.isReadable(1)) {
             throw new IllegalArgumentException("Buffer does not have enough readable bytes.");
         }
-        return buff.readByte();
+        return in.readByte();
     }
 
     /**
      * 读无符号int
      *
-     * @param buff   编码数据
+     * @param in   编码数据
      * @param endian 字节序
      * @return 解码数据
      */
-    public static long readUnSignInt(ByteBuf buff, ByteOrderEnum endian) {
-        if (buff == null || buff.readableBytes() < Integer.BYTES) {
+    public static long readUnSignInt(ByteBuf in, ByteOrderEnum endian) {
+        if (in == null || in.readableBytes() < Integer.BYTES) {
             throw new IllegalArgumentException("ByteBuf is null or too short to read an integer.");
         }
-        int intValue = endian == ByteOrderEnum.LITTLE_ENDIAN  ? buff.readIntLE() : buff.readInt();
+        int intValue = endian == ByteOrderEnum.LITTLE_ENDIAN  ? in.readIntLE() : in.readInt();
         return intValue & 0x0FFFFFFFFL;
     }
 
     /**
      * 读int
      *
-     * @param buff   编码数据
+     * @param in   编码数据
      * @param endian 字节序
      * @return 解码数据
      */
-    public static int readInt(ByteBuf buff, ByteOrderEnum endian) {
-        if (buff.readableBytes() < Integer.BYTES) {
+    public static int readInt(ByteBuf in, ByteOrderEnum endian) {
+        if (in.readableBytes() < Integer.BYTES) {
             throw new IndexOutOfBoundsException("Not enough bytes to read a int value.");
         }
-        return endian == ByteOrderEnum.LITTLE_ENDIAN  ? buff.readIntLE() : buff.readInt();
+        return endian == ByteOrderEnum.LITTLE_ENDIAN  ? in.readIntLE() : in.readInt();
     }
 
     /**
      * 读short
      *
-     * @param buff   编码数据
+     * @param in   编码数据
      * @param endian 字节序
      * @return 解码数据
      */
-    public static short readShort(ByteBuf buff, ByteOrderEnum endian) {
-        if (buff.readableBytes() < Short.BYTES) {
+    public static short readShort(ByteBuf in, ByteOrderEnum endian) {
+        if (in.readableBytes() < Short.BYTES) {
             throw new IndexOutOfBoundsException("Not enough bytes to read a short value.");
         }
-        return endian == ByteOrderEnum.LITTLE_ENDIAN  ? buff.readShortLE() : buff.readShort();
+        return endian == ByteOrderEnum.LITTLE_ENDIAN  ? in.readShortLE() : in.readShort();
     }
 
     /**
      * 读无符号short
      *
-     * @param buff   编码数据
+     * @param in   编码数据
      * @param endian 字节序
      * @return 解码数据
      */
-    public static int readUnSignShort(ByteBuf buff, ByteOrderEnum endian) {
-        if (buff.readableBytes() < Short.BYTES) {
+    public static int readUnSignShort(ByteBuf in, ByteOrderEnum endian) {
+        if (in.readableBytes() < Short.BYTES) {
             throw new IndexOutOfBoundsException("Not enough bytes to read a short value.");
         }
-        short shortValue = endian == ByteOrderEnum.LITTLE_ENDIAN ? buff.readShortLE() : buff.readShort();
+        short shortValue = endian == ByteOrderEnum.LITTLE_ENDIAN ? in.readShortLE() : in.readShort();
         return shortValue & 0x0FFFF;
     }
 
@@ -152,12 +152,12 @@ public final class DecodeUtils {
      * 读Hex字符串
      *
      * @param num  字节长度
-     * @param buff 编码数据
+     * @param in 编码数据
      * @return 字符串
      */
-    public static String readHexString(int num, ByteBuf buff) {
-        String value = ByteBufUtil.hexDump(buff, 0, num);
-        readByteBuf(num, buff);
+    public static String readHexString(int num, ByteBuf in) {
+        String value = ByteBufUtil.hexDump(in, 0, num);
+        readByteBuf(num, in);
         return value;
     }
 
@@ -165,29 +165,29 @@ public final class DecodeUtils {
      * 读Hex字符串没有数据缓冲区偏移
      *
      * @param num  字节长度
-     * @param buff 编码数据
+     * @param in 编码数据
      * @return 字符串
      */
-    public static String readHexStringWithoutOffset(int num, ByteBuf buff) {
-        if (buff == null) {
+    public static String readHexStringWithoutOffset(int num, ByteBuf in) {
+        if (in == null) {
             throw new IllegalArgumentException("ByteBuf cannot be null");
         }
-        int readableBytes = buff.readableBytes();
+        int readableBytes = in.readableBytes();
         if (num < 0 || num > readableBytes) {
             throw new IllegalArgumentException("Invalid num: " + num + ". Should be between 0 and " + readableBytes);
         }
-        return ByteBufUtil.hexDump(buff, 0, num);
+        return ByteBufUtil.hexDump(in, 0, num);
     }
 
     /**
      * 移动读指针
      *
      * @param num  移动字节数
-     * @param buff 数据缓冲区ByteBuf
+     * @param in 数据缓冲区ByteBuf
      */
-    private static void readByteBuf(int num, ByteBuf buff) {
+    private static void readByteBuf(int num, ByteBuf in) {
         // 防止空指针异常
-        if (buff == null) {
+        if (in == null) {
             throw new IllegalArgumentException("ByteBuf cannot be null");
         }
 
@@ -197,14 +197,14 @@ public final class DecodeUtils {
         }
 
         // 避免超出Buffer长度的读取
-        if (num > buff.readableBytes()) {
+        if (num > in.readableBytes()) {
             throw new IndexOutOfBoundsException("Not enough readable bytes in buffer");
         }
         // 统一读取逻辑
         if (num == 1) {
-            buff.readByte();
+            in.readByte();
         } else {
-            buff.readBytes(num);
+            in.readBytes(num);
         }
     }
 }
