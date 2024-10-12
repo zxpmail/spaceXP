@@ -19,23 +19,18 @@ public final class DecodeUtils {
     /**
      * 解码
      *
-     * @param symbol  符号
      * @param byteNum 字节数
      * @param buff    数据
      * @param type    枚举类型字符串
      * @param endian  编码
      * @return 解码数据
      */
-    public static Object decode(String symbol, int byteNum, ByteBuf buff,
+    public static Object decode(int byteNum, ByteBuf buff,
                                 String type, boolean endian) {
         Object value;
         final TypeEnum typeEnum = TypeEnum.match(type);
         if (typeEnum == null) {
             throw new IllegalArgumentException("Invalid type: " + type);
-        }
-
-        if (buff.readableBytes() < byteNum) {
-            throw new IndexOutOfBoundsException("Insufficient bytes in buffer");
         }
         switch (typeEnum) {
             case HEX_STRING:
@@ -62,7 +57,6 @@ public final class DecodeUtils {
             default:
                 throw new IllegalArgumentException("Unsupported type: " + type);
         }
-
         return value;
     }
 
