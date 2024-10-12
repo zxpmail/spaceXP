@@ -41,6 +41,7 @@ spaceXP-tools 工具集合
 18. spaceXP-spring-boot-starter-log-external 实现log组件接口 直接保存到日志服务器中
 19. spaceXP-spring-boot-starter-test 实现test组件
 20. spaceXP-spring-boot-starter-sse 实现sse消息发送以及心跳功能
+21. spaceXP-spring-boot-starter-netty 实现netty工具
 ## 工具说明
 1. spaceXP-gateway 网关工具 实现网关鉴权
 2. spaceXP-generator 低代码工具
