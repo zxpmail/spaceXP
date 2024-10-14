@@ -3,10 +3,7 @@ package cn.piesat.framework.netty.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,7 +27,7 @@ public class NettyProperties {
          */
         private String name;
         /**
-         * 数据项类型
+         * 数据项类型 参照TypeEnum
          */
         private String type;
         /**

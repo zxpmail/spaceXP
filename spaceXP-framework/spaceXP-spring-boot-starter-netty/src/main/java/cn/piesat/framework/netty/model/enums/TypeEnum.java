@@ -8,10 +8,6 @@ package cn.piesat.framework.netty.model.enums;
  * {@code @author}: zhouxp
  */
 public enum TypeEnum {
-    /**
-     * 时间字符串
-     */
-    TYPE_DATE_STRING("date_string"),
 
     /**
      * HEX字符串
