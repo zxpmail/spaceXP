@@ -18,10 +18,10 @@ import java.util.Set;
 @ConfigurationProperties(prefix = "space.netty")
 public class NettyProperties {
 
-    private Set<Item> items = new HashSet<>();
+    private Set<DataItem> items = new HashSet<>();
 
     @Data
-    static class Item {
+    public final static class DataItem {
         /**
          * 数据项名称
          */
@@ -43,7 +43,7 @@ public class NettyProperties {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            Item item = (Item) o;
+            DataItem item = (DataItem) o;
             return name.equals(item.name);
         }
 
