@@ -96,17 +96,46 @@ public class MessageUtils {
         return map;
     }
 
+    /**
+     * 从NettyProperties.DataItem中顺序读取map值写入ByteBuf中
+     *
+     * @param out           写入的ByteBuf
+     * @param properties    配置属性
+     * @param byteOrderEnum 字节顺序
+     * @param data          需要写入的数据
+     */
     public static void Map2byteBuf(ByteBuf out, NettyProperties properties,
                                    ByteOrderEnum byteOrderEnum, Map<String, Object> data) {
         Object version = data.get("version");
+        if (version == null) {
+            log.error("version data is null");
+            return;
+        }
         EncodeUtils.encode(properties.getVersionType(), version, out, byteOrderEnum);
         for (NettyProperties.DataItem item : properties.getItems()) {
             if (item.getIsKipped()) {
                 out.writeZero(item.getBytes());
             } else {
-
+                if (item.getIsPackageLength()) {
+                    Object o = data.get("data");
+                    if (o instanceof byte[]) {
+                        byte[] bytes = (byte[]) o;
+                        int length = bytes.length;
+                        EncodeUtils.encode(item.getType(), length, out, byteOrderEnum);
+                        out.writeBytes(bytes);
+                    } else {
+                        log.error("user data is null");
+                        throw new IllegalArgumentException("Expected byte[] for 'data' key");
+                    }
+                } else {
+                    Object o = data.get(item.getName());
+                    if (o == null) {
+                        log.error("item data {} is null ", item.getName());
+                        return;
+                    }
+                    EncodeUtils.encode(item.getType(), o, out, byteOrderEnum);
+                }
             }
         }
     }
-
 }
