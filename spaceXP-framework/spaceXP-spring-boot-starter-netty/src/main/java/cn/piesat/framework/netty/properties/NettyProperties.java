@@ -18,7 +18,33 @@ import java.util.Set;
 @ConfigurationProperties(prefix = "space.netty")
 public class NettyProperties {
 
+    /**
+     * 数据项,不包含version位
+     */
     private Set<DataItem> items = new HashSet<>();
+
+    /**
+     * 版本占位数
+     */
+    private Integer versionBytes = 1;
+    /**
+     * 包长占位数
+     */
+    private Integer packetSize = 32;
+    /**
+     * 版本值
+     */
+    private long versionValue = 0x80L;
+
+    /**
+     * 版本类型
+     */
+    private String versionType;
+
+    /**
+     * 最大包长
+     */
+    private int maxPacketSize = 1024;
 
     @Data
     public final static class DataItem {
