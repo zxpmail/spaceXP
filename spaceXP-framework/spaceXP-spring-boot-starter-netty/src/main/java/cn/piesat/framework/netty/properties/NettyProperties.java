@@ -3,7 +3,9 @@ package cn.piesat.framework.netty.properties;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,7 +23,7 @@ public class NettyProperties {
     /**
      * 数据项,不包含version位
      */
-    private Set<DataItem> items = new HashSet<>();
+    private List<DataItem> items = new ArrayList<>();
 
     /**
      * 版本占位数
@@ -65,17 +67,10 @@ public class NettyProperties {
          */
         private Boolean isKipped = false;
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            DataItem item = (DataItem) o;
-            return name.equals(item.name);
-        }
+        /**
+         *是否是包长字段
+         */
+        private Boolean isPackageLength = false;
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(name);
-        }
     }
 }

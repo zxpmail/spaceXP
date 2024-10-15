@@ -7,6 +7,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p/>
@@ -25,9 +26,9 @@ public class MessageUtils {
      * @param byteOrderEnum 字节顺序 大端还是小端
      * @return 已经解析数据
      */
-    public static HashMap<String, Object> byteBuf2Message(ByteBuf in, NettyProperties properties,
-                                                          ByteOrderEnum byteOrderEnum, ErrorLogService errorLogService) {
-       
+    public static HashMap<String, Object> byteBuf2Map(ByteBuf in, NettyProperties properties,
+                                                      ByteOrderEnum byteOrderEnum, ErrorLogService errorLogService) {
+
         if (in.readableBytes() < properties.getPacketSize()) {
             return null;
         }
@@ -50,7 +51,7 @@ public class MessageUtils {
             // 此时，应该结束。等待后面的数据到达
             if (in.readableBytes() < properties.getPacketSize() - 1) {
                 byte[] bytes = new byte[num];
-                in.getBytes(0,bytes);
+                in.getBytes(0, bytes);
                 errorLogService.send(bytes);
                 return null;
             }
@@ -64,13 +65,48 @@ public class MessageUtils {
         }
         HashMap<String, Object> map = new HashMap<>();
         for (NettyProperties.DataItem item : properties.getItems()) {
-            if(item.getIsKipped()){
+            if (item.getIsKipped()) {
                 in.readBytes(item.getBytes());
-            }else{
+            } else {
                 Object decode = DecodeUtils.decode(item.getBytes(), in, item.getType(), byteOrderEnum);
-                map.put(item.getName(),decode);
+                if (item.getIsPackageLength()) {
+                    int len = (int) decode;
+                    if (len > properties.getMaxPacketSize()) {
+                        byte[] bytes = new byte[properties.getPacketSize()];
+                        in.getBytes(0, bytes);
+                        errorLogService.send(bytes);
+                        in.markReaderIndex();
+                        return null;
+                    } else {
+                        byte[] data = new byte[len];
+                        try {
+                            in.readBytes(data);
+                            map.put("data", data);
+                        } catch (Exception e) {
+                            // 处理读取异常
+                            log.error("Error reading bytes: {}", e.getMessage());
+                            return null;
+                        }
+                    }
+                } else {
+                    map.put(item.getName(), decode);
+                }
             }
         }
         return map;
     }
+
+    public static void Map2byteBuf(ByteBuf out, NettyProperties properties,
+                                   ByteOrderEnum byteOrderEnum, Map<String, Object> data) {
+        Object version = data.get("version");
+        EncodeUtils.encode(properties.getVersionType(), version, out, byteOrderEnum);
+        for (NettyProperties.DataItem item : properties.getItems()) {
+            if (item.getIsKipped()) {
+                out.writeZero(item.getBytes());
+            } else {
+
+            }
+        }
+    }
+
 }
