@@ -1,0 +1,6 @@
+space:
+  websocket:
+    debug: true
+logging:
+  level:
+    root: debug

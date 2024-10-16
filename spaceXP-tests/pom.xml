@@ -32,6 +32,7 @@
         <module>spaceXP-spring-boot-tests-user</module>
         <module>spaceXP-spring-boot-tests-flowable</module>
         <module>spaceXP-spring-boot-tests-sse</module>
+        <module>spaceXP-spring-boot-tests-netty</module>
     </modules>
     <dependencies>
         <dependency>
