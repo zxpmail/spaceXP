@@ -22,7 +22,15 @@ public class PDXPClientChannelHandler extends SimpleChannelInboundHandler<Map<St
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Map<String, Object> stringObjectMap) throws Exception {
-
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        // 当发生异常时关闭连接
+        cause.printStackTrace();
+        ctx.close();
+        tcpClient.connect();
+    }
+    @Override
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, Map<String, Object> map)  {
+        System.out.println("Received from server: " + map);
+        tcpClient.send(map);
     }
 }
