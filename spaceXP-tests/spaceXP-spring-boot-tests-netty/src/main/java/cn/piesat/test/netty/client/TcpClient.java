@@ -1,6 +1,8 @@
 package cn.piesat.test.netty.client;
 
+import cn.piesat.framework.netty.model.enums.ByteOrderEnum;
 import cn.piesat.framework.netty.properties.NettyProperties;
+import cn.piesat.test.netty.codec.PDXPDecoder;
 import cn.piesat.test.netty.handler.PDXPClientChannelHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -69,7 +71,7 @@ public class TcpClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel ch) {
-
+                        ch.pipeline().addLast(new PDXPDecoder(nettyProperties.getMessageItem(), ByteOrderEnum.LITTLE_ENDIAN));
                         ch.pipeline().addLast(new PDXPClientChannelHandler(TcpClient.this));
                     }
                 });
