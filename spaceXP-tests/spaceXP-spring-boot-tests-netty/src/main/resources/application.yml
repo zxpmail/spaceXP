@@ -1,6 +1,48 @@
 space:
-  websocket:
-    debug: true
-logging:
-  level:
-    root: debug
+  netty:
+    items:
+      - name: mid
+        type: ushort
+        bytes: 2
+        is-kipped: false
+        is-package-length: false
+      - name : sid
+        type: uint
+        bytes: 4
+        is-kipped: false
+        is-package-length: false
+      - name: did
+        type: uint
+        bytes: 4
+        is-kipped: false
+        is-package-length: false
+      - name: bid
+        type: uint
+        bytes: 4
+        is-kipped: false
+        is-package-length: false
+      - name: no
+        type: uint
+        bytes: 4
+        is-kipped: false
+        is-package-length: false
+      - name: s1
+        type: byte
+        bytes: 5
+        is-kipped: true
+        is-package-length: false
+      - name: day
+        type: ushort
+        bytes: 2
+        is-kipped: false
+        is-package-length: false
+      - name: time
+        type: uint
+        bytes: 4
+        is-kipped: false
+        is-package-length: false
+      - name: length
+        type: ushort
+        bytes: 2
+        is-kipped: false
+        is-package-length: true
