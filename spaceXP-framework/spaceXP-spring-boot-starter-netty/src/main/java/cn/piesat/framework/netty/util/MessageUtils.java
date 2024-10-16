@@ -29,7 +29,7 @@ public class MessageUtils {
     public static HashMap<String, Object> byteBuf2Map(ByteBuf in, NettyProperties.MessageItem messageItem,
                                                       ByteOrderEnum byteOrderEnum, ErrorLogService errorLogService) {
 
-        if (in.readableBytes() < messageItem.getPacketSize()) {
+        if (in.readableBytes() < messageItem.getHeaderPacketSize()) {
             return null;
         }
         long version = (long) DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
@@ -49,7 +49,7 @@ public class MessageUtils {
             // 当略过，一个字节之后，
             // 数据包的长度，又变得不满足
             // 此时，应该结束。等待后面的数据到达
-            if (in.readableBytes() < messageItem.getPacketSize() - 1) {
+            if (in.readableBytes() < messageItem.getHeaderPacketSize() - 1) {
                 byte[] bytes = new byte[num];
                 in.getBytes(0, bytes);
                 errorLogService.send(bytes);
@@ -59,7 +59,7 @@ public class MessageUtils {
         }
 
         //剩余长度不足可读取数量[没有内容长度位]
-        if (in.readableBytes() < messageItem.getPacketSize() - messageItem.getVersionBytes()) {
+        if (in.readableBytes() < messageItem.getHeaderPacketSize() - messageItem.getVersionBytes()) {
             in.readerIndex(beginIdx);
             return null;
         }
@@ -72,7 +72,7 @@ public class MessageUtils {
                 if (item.getIsPackageLength()) {
                     int len = (int) decode;
                     if (len > messageItem.getMaxPacketSize()) {
-                        byte[] bytes = new byte[messageItem.getPacketSize()];
+                        byte[] bytes = new byte[messageItem.getHeaderPacketSize()];
                         in.getBytes(0, bytes);
                         errorLogService.send(bytes);
                         in.markReaderIndex();

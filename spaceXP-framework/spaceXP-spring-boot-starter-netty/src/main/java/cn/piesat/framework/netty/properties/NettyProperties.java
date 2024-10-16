@@ -54,9 +54,9 @@ public class NettyProperties {
          */
         private Integer versionBytes = 1;
         /**
-         * 包长占位数
+         * 头部包长占位数
          */
-        private Integer packetSize = 32;
+        private Integer headerPacketSize = 32;
         /**
          * 版本值
          */
