@@ -22,26 +22,26 @@ public class MessageUtils {
      * 注意第一位版本数据
      *
      * @param in            待解析ByteBuf
-     * @param properties    解析数据项目
+     * @param messageItem    解析数据项目
      * @param byteOrderEnum 字节顺序 大端还是小端
      * @return 已经解析数据
      */
-    public static HashMap<String, Object> byteBuf2Map(ByteBuf in, NettyProperties properties,
+    public static HashMap<String, Object> byteBuf2Map(ByteBuf in, NettyProperties.MessageItem messageItem,
                                                       ByteOrderEnum byteOrderEnum, ErrorLogService errorLogService) {
 
-        if (in.readableBytes() < properties.getPacketSize()) {
+        if (in.readableBytes() < messageItem.getPacketSize()) {
             return null;
         }
-        long version = (long) DecodeUtils.decode(0, in, properties.getVersionType(), byteOrderEnum);
+        long version = (long) DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
         int beginIdx = 0; //记录包头位置
         int num = 0;
-        while (version != properties.getVersionValue()) {
+        while (version != messageItem.getVersionValue()) {
             // 获取包头开始的index
             beginIdx = in.readerIndex();
             // 标记包头开始的index
             in.markReaderIndex();
             // 读到了协议的开始标志，结束while循环
-            version = (long) DecodeUtils.decode(0, in, properties.getVersionType(), byteOrderEnum);
+            version = (long) DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
             // 未读到包头，略过一个字节
             // 每次略过，一个字节，去读取，包头信息的开始标记
             in.resetReaderIndex();
@@ -49,7 +49,7 @@ public class MessageUtils {
             // 当略过，一个字节之后，
             // 数据包的长度，又变得不满足
             // 此时，应该结束。等待后面的数据到达
-            if (in.readableBytes() < properties.getPacketSize() - 1) {
+            if (in.readableBytes() < messageItem.getPacketSize() - 1) {
                 byte[] bytes = new byte[num];
                 in.getBytes(0, bytes);
                 errorLogService.send(bytes);
@@ -59,20 +59,20 @@ public class MessageUtils {
         }
 
         //剩余长度不足可读取数量[没有内容长度位]
-        if (in.readableBytes() < properties.getPacketSize() - properties.getVersionBytes()) {
+        if (in.readableBytes() < messageItem.getPacketSize() - messageItem.getVersionBytes()) {
             in.readerIndex(beginIdx);
             return null;
         }
         HashMap<String, Object> map = new HashMap<>();
-        for (NettyProperties.DataItem item : properties.getItems()) {
+        for (NettyProperties.DataItem item : messageItem.getItems()) {
             if (item.getIsKipped()) {
                 in.readBytes(item.getBytes());
             } else {
                 Object decode = DecodeUtils.decode(item.getBytes(), in, item.getType(), byteOrderEnum);
                 if (item.getIsPackageLength()) {
                     int len = (int) decode;
-                    if (len > properties.getMaxPacketSize()) {
-                        byte[] bytes = new byte[properties.getPacketSize()];
+                    if (len > messageItem.getMaxPacketSize()) {
+                        byte[] bytes = new byte[messageItem.getPacketSize()];
                         in.getBytes(0, bytes);
                         errorLogService.send(bytes);
                         in.markReaderIndex();
@@ -100,19 +100,19 @@ public class MessageUtils {
      * 从NettyProperties.DataItem中顺序读取map值写入ByteBuf中
      *
      * @param out           写入的ByteBuf
-     * @param properties    配置属性
+     * @param messageItem    配置属性
      * @param byteOrderEnum 字节顺序
      * @param data          需要写入的数据
      */
-    public static void Map2byteBuf(ByteBuf out, NettyProperties properties,
+    public static void Map2byteBuf(ByteBuf out, NettyProperties.MessageItem messageItem,
                                    ByteOrderEnum byteOrderEnum, Map<String, Object> data) {
         Object version = data.get("version");
         if (version == null) {
             log.error("version data is null");
             return;
         }
-        EncodeUtils.encode(properties.getVersionType(), version, out, byteOrderEnum);
-        for (NettyProperties.DataItem item : properties.getItems()) {
+        EncodeUtils.encode(messageItem.getVersionType(), version, out, byteOrderEnum);
+        for (NettyProperties.DataItem item : messageItem.getItems()) {
             if (item.getIsKipped()) {
                 out.writeZero(item.getBytes());
             } else {
