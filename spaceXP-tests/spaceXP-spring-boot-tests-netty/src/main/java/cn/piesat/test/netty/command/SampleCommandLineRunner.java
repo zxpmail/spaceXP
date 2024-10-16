@@ -1,9 +1,12 @@
 package cn.piesat.test.netty.command;
 
+import cn.piesat.framework.netty.properties.NettyProperties;
 import cn.piesat.test.netty.client.TcpClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * <p/>
@@ -16,11 +19,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SampleCommandLineRunner implements CommandLineRunner {
 
+    @Resource
+    private NettyProperties nettyProperties;
     @Override
     public void run(String... args)  {
         log.info("Application started with arguments: {} " , String.join(", ", args));
-        int port = 9001;
-        new TcpClient("127.0.0.1",port).start();
+        new TcpClient(nettyProperties).start();
         // 执行你的逻辑
         log.info("Performing initialization tasks...");
     }
