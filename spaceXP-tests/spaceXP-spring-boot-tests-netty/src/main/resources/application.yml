@@ -1,7 +1,6 @@
 space:
   netty:
     messageItem:
-
       items:
         - name: mid
           type: ushort
@@ -48,3 +47,13 @@ space:
           bytes: 2
           is-kipped: false
           is-package-length: true
+      max-packet-size: 1024
+      header-packet-size: 32
+      version-bytes: 1
+      version-value: 0x80
+      version-type: ushort
+    tcp-client:
+      reconnect-delay-ms: 1000
+      retry-max-count: 5
+      server-host: 127.0.0.1
+      server-port: 9001
