@@ -66,6 +66,7 @@ spaceXP-tools 工具集合
 16. spaceXP-spring-boot-tests-user 测试gateway用户登录
 17. spaceXP-spring-boot-tests-sse 测试sse组件
 18. spaceXP-spring-boot-tests-netty 测试netty组件
+19. spaceXP-spring-boot-tests-disruptor测试disruptor
 #### 鸣谢
 本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 非常感谢众多软件和作者
