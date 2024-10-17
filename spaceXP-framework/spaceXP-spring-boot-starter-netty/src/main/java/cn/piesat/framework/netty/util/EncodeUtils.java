@@ -25,9 +25,9 @@ public final class EncodeUtils {
     /**
      * 组装配置文件所配置的ByteBuf
      *
-     * @param type   枚举类型字符串
-     * @param value  值
-     * @param out    ByteBuf缓存域
+     * @param type          枚举类型字符串
+     * @param value         值
+     * @param out           ByteBuf缓存域
      * @param byteOrderEnum 字节序
      */
     public static void encode(String type, Object value,
@@ -69,7 +69,7 @@ public final class EncodeUtils {
      * 写字符串数据
      *
      * @param value 值
-     * @param out ByteBuf缓存区
+     * @param out   ByteBuf缓存区
      */
     public static void writeHexString(Object value, ByteBuf out) {
         if (value == null) {
@@ -78,8 +78,14 @@ public final class EncodeUtils {
         if (!(value instanceof String)) {
             throw new IllegalArgumentException("The provided object must be of type String");
         }
-        String m = (String) value;
-        writeHexString(m, out);
+        try {
+            String m = (String) value;
+            writeHexString(m, out);
+        } catch (Exception e) {
+            log.error("write hexString {} error .......", value, e);
+            throw e;
+        }
+
     }
 
     /**
@@ -107,7 +113,7 @@ public final class EncodeUtils {
      * 写字符串数据
      *
      * @param value 值
-     * @param out ByteBuf缓存区
+     * @param out   ByteBuf缓存区
      */
     public static void writeString(Object value, ByteBuf out) {
         // 检查参数是否为null
@@ -117,8 +123,13 @@ public final class EncodeUtils {
         if (!(value instanceof String)) {
             throw new IllegalArgumentException("The provided object must be of type String");
         }
-        String m = (String) value;
-        writeString(m, out);
+        try {
+            String m = (String) value;
+            writeString(m, out);
+        } catch (Exception e) {
+            log.error("write String {} error .......", value, e);
+            throw e;
+        }
     }
 
     /**
@@ -138,11 +149,11 @@ public final class EncodeUtils {
     /**
      * 写int数据
      *
-     * @param value    值
-     * @param out    ByteBuf缓存区
+     * @param value         值
+     * @param out           ByteBuf缓存区
      * @param byteOrderEnum 字节序
      */
-    public static void writeInt(Object value, ByteBuf out,  ByteOrderEnum byteOrderEnum) {
+    public static void writeInt(Object value, ByteBuf out, ByteOrderEnum byteOrderEnum) {
         // 检查obj是否为null
         if (value == null) {
             throw new IllegalArgumentException("Object cannot be null.");
@@ -150,34 +161,40 @@ public final class EncodeUtils {
         if (!(value instanceof Integer)) {
             throw new IllegalArgumentException("The provided object must be of type Integer");
         }
-        int m = (int) value;
+        try {
+            int m = (int) value;
 
-        //小字节序
-        if (byteOrderEnum == ByteOrderEnum.LITTLE_ENDIAN) {
-            out.writeIntLE(m);
-        } else {
-            out.writeInt(m);
+            //小字节序
+            if (byteOrderEnum == ByteOrderEnum.LITTLE_ENDIAN) {
+                out.writeIntLE(m);
+            } else {
+                out.writeInt(m);
+            }
+        } catch (Exception e) {
+            log.error("write int {} error .......", value, e);
+            throw e;
         }
+
     }
 
     /**
      * 写无符号byte数据
      *
      * @param value 值
-     * @param out ByteBuf缓存区
+     * @param out   ByteBuf缓存区
      */
     public static void writeUnSignByte(Object value, ByteBuf out) {
         short m;
-        if(value instanceof  Long){
-           long m1 = (Long) value;
-           m= (short) m1;
-        }else if (value instanceof Integer){
+        if (value instanceof Long) {
+            long m1 = (Long) value;
+            m = (short) m1;
+        } else if (value instanceof Integer) {
             int m1 = (Integer) value;
-            m= (short) m1;
-        }else if( value instanceof  Short){
+            m = (short) m1;
+        } else if (value instanceof Short) {
             m = (short) value;
-        }else{
-            log.error("data cast error {}",value);
+        } else {
+            log.error("data cast error {}", value);
             return;
         }
         writeUnSignByte(m, out);
@@ -197,45 +214,67 @@ public final class EncodeUtils {
      * 写byte数据
      *
      * @param value 值
-     * @param out ByteBuf缓存区
+     * @param out   ByteBuf缓存区
      */
     public static void writeByte(Object value, ByteBuf out) {
-        short m = (short) value;
-        assert m <= 127 && m >= -128;
-        out.writeByte(m);
+        try {
+            short m = (short) value;
+            assert m <= 127 && m >= -128;
+            out.writeByte(m);
+        } catch (Exception e) {
+            log.error("write byte {} error .......", value, e);
+            throw e;
+        }
     }
 
     /**
      * 写无符号short数据
      *
-     * @param value    值
-     * @param out    ByteBuf缓存区
+     * @param value         值
+     * @param out           ByteBuf缓存区
      * @param byteOrderEnum 字节序
      */
     public static void writeUnSignShort(Object value, ByteBuf out, ByteOrderEnum byteOrderEnum) {
-        int m = (int) value;
-        assert m >= 0 && m <= 65535;
-        m &= 0x0FFFF;
-        writeShort(m, out, byteOrderEnum);
+        try {
+            int m = (int) value;
+            assert m >= 0 && m <= 65535;
+            m &= 0x0FFFF;
+            writeShort(m, out, byteOrderEnum);
+        } catch (Exception e) {
+            log.error("write SignShort {} error .......", value, e);
+            throw e;
+        }
     }
 
     /**
      * 写short数据
      *
-     * @param value    值
-     * @param out    ByteBuf缓存区
+     * @param value         值
+     * @param out           ByteBuf缓存区
      * @param byteOrderEnum 字节序
      */
     public static void writeShort(Object value, ByteBuf out, ByteOrderEnum byteOrderEnum) {
-        int m = (int) value;
-        //-32768~32767
-        assert m >= -32768 && m <= 32767;
-        writeShort(m, out, byteOrderEnum);
+        try {
+            int m = (int) value;
+            //-32768~32767
+            assert m >= -32768 && m <= 32767;
+            writeShort(m, out, byteOrderEnum);
+        } catch (Exception e) {
+            log.error("write Short {} error .......", value, e);
+            throw e;
+        }
     }
+
     public static void writeUnSignInt(Object value, ByteBuf out, ByteOrderEnum byteOrderEnum) {
-        long m = (Long) value;
-        writeUnSignInt( out, m, byteOrderEnum);
+        try {
+            long m = (Long) value;
+            writeUnSignInt(out, m, byteOrderEnum);
+        } catch (Exception e) {
+            log.error("write SignInt {} error .......", value, e);
+            throw e;
+        }
     }
+
     public static void writeUnSignInt(ByteBuf out, Long value, ByteOrderEnum byteOrderEnum) {
         if (value < 0 || value >= 0x100000000L) {
             throw new IllegalArgumentException("Value must be between 0 and 0xFFFFFFFF");
@@ -297,8 +336,8 @@ public final class EncodeUtils {
     /**
      * 写short数据
      *
-     * @param m      数据
-     * @param out    ByteBuf
+     * @param m             数据
+     * @param out           ByteBuf
      * @param byteOrderEnum 字节序
      */
     public static void writeShort(int m, ByteBuf out, ByteOrderEnum byteOrderEnum) {
