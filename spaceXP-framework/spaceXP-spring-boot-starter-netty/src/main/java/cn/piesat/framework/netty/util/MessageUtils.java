@@ -32,21 +32,7 @@ public class MessageUtils {
         if (in.readableBytes() < messageItem.getHeaderPacketSize()) {
             return null;
         }
-        Long version = 0L;
-        Object ver = DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
-        if(ver instanceof Short){
-            version = Long.valueOf((Short) ver);
-        }else if(ver instanceof  Integer){
-            version = Long.valueOf((Integer) ver);
-        }else if(ver instanceof Long){
-            version = (Long) ver;
-        }else if(ver instanceof Byte){
-            version =Long.valueOf((Byte) ver);
-        }else{
-            log.error("version info error {} .........",ver);
-            in.markReaderIndex();
-            return  null;
-        }
+        long version = getaLong(in, messageItem, byteOrderEnum);
         int beginIdx = 0; //记录包头位置
         int num = 0;
         while (version != messageItem.getVersionValue()) {
@@ -55,7 +41,7 @@ public class MessageUtils {
             // 标记包头开始的index
             in.markReaderIndex();
             // 读到了协议的开始标志，结束while循环
-            version = (long) DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
+            version = getaLong(in, messageItem, byteOrderEnum);
             // 未读到包头，略过一个字节
             // 每次略过，一个字节，去读取，包头信息的开始标记
             in.resetReaderIndex();
@@ -108,6 +94,25 @@ public class MessageUtils {
             }
         }
         return map;
+    }
+
+    private static Long getaLong(ByteBuf in, NettyProperties.MessageItem messageItem, ByteOrderEnum byteOrderEnum) {
+        Long version;
+        Object ver = DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
+        if(ver instanceof Short){
+            version = Long.valueOf((Short) ver);
+        }else if(ver instanceof  Integer){
+            version = Long.valueOf((Integer) ver);
+        }else if(ver instanceof Long){
+            version = (Long) ver;
+        }else if(ver instanceof Byte){
+            version =Long.valueOf((Byte) ver);
+        }else{
+            log.error("version info error {} .........",ver);
+            in.markReaderIndex();
+            throw new RuntimeException(" version info is null");
+        }
+        return version;
     }
 
     /**
