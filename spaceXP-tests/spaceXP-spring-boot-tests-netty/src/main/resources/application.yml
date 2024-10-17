@@ -22,7 +22,7 @@ space:
           bytes: 4
           is-kipped: false
           is-package-length: false
-        - name: no
+        - name: sn
           type: uint
           bytes: 4
           is-kipped: false

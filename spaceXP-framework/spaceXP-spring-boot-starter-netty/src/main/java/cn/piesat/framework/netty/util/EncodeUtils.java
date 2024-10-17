@@ -266,8 +266,16 @@ public final class EncodeUtils {
     }
 
     public static void writeUnSignInt(Object value, ByteBuf out, ByteOrderEnum byteOrderEnum) {
+        long m;
         try {
-            long m = (Long) value;
+            if (value instanceof Long) {
+                m = (Long) value;
+            } else if (value instanceof Integer) {
+                m = (Integer) value;
+            } else {
+                log.error("data cast error {}", value);
+                return;
+            }
             writeUnSignInt(out, m, byteOrderEnum);
         } catch (Exception e) {
             log.error("write SignInt {} error .......", value, e);

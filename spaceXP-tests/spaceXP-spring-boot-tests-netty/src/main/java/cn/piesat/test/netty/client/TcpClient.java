@@ -4,6 +4,7 @@ import cn.piesat.framework.netty.model.enums.ByteOrderEnum;
 import cn.piesat.framework.netty.properties.NettyProperties;
 import cn.piesat.test.netty.codec.PDXPDecoder;
 import cn.piesat.test.netty.codec.PDXPEncoder;
+import cn.piesat.test.netty.handler.HeartbeatHandler;
 import cn.piesat.test.netty.handler.PDXPClientChannelHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -12,6 +13,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +76,8 @@ public class TcpClient {
                     protected void initChannel(SocketChannel ch) {
                         ch.pipeline().addLast(new PDXPDecoder(nettyProperties.getMessageItem(), ByteOrderEnum.LITTLE_ENDIAN));
                         ch.pipeline().addLast(new PDXPEncoder(nettyProperties.getMessageItem(), ByteOrderEnum.LITTLE_ENDIAN));
+                        ch.pipeline().addLast(new IdleStateHandler(0, 0, 5, TimeUnit.SECONDS));
+                        ch.pipeline().addLast(new HeartbeatHandler());
                         ch.pipeline().addLast(new PDXPClientChannelHandler(TcpClient.this));
                     }
                 });
@@ -114,5 +118,4 @@ public class TcpClient {
         log.info("client is close .........................................");
         group.shutdownGracefully();
     }
-
 }
