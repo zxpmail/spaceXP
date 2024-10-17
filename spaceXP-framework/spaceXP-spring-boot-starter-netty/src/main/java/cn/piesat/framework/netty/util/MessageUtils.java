@@ -32,7 +32,21 @@ public class MessageUtils {
         if (in.readableBytes() < messageItem.getHeaderPacketSize()) {
             return null;
         }
-        long version = (long) DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
+        Long version = 0L;
+        Object ver = DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
+        if(ver instanceof Short){
+            version = Long.valueOf((Short) ver);
+        }else if(ver instanceof  Integer){
+            version = Long.valueOf((Integer) ver);
+        }else if(ver instanceof Long){
+            version = (Long) ver;
+        }else if(ver instanceof Byte){
+            version =Long.valueOf((Byte) ver);
+        }else{
+            log.error("version info error {} .........",ver);
+            in.markReaderIndex();
+            return  null;
+        }
         int beginIdx = 0; //记录包头位置
         int num = 0;
         while (version != messageItem.getVersionValue()) {

@@ -7,6 +7,7 @@ import cn.piesat.framework.netty.util.MessageUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
  * {@code @create}: 2024-10-16 15:34
  * {@code @author}: zhouxp
  */
+@Slf4j
 public class PDXPDecoder extends ByteToMessageDecoder {
 
     private final NettyProperties.MessageItem messageItem;
@@ -37,6 +39,7 @@ public class PDXPDecoder extends ByteToMessageDecoder {
             @Override
             public void send(byte[] data) {
                 ErrorLogService.super.send(data);
+                log.info("error ... {}",new String( data));
             }
         });
         if(message == null){

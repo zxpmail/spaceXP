@@ -51,7 +51,7 @@ space:
       header-packet-size: 32
       version-bytes: 1
       version-value: 0x80
-      version-type: ushort
+      version-type: ubyte
     tcp-client:
       reconnect-delay-ms: 1000
       retry-max-count: 5
