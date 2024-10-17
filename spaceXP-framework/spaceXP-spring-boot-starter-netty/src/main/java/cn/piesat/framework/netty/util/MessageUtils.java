@@ -22,7 +22,7 @@ public class MessageUtils {
      * 注意第一位版本数据
      *
      * @param in            待解析ByteBuf
-     * @param messageItem    解析数据项目
+     * @param messageItem   解析数据项目
      * @param byteOrderEnum 字节顺序 大端还是小端
      * @return 已经解析数据
      */
@@ -50,13 +50,13 @@ public class MessageUtils {
             // 数据包的长度，又变得不满足
             // 此时，应该结束。等待后面的数据到达
             if (in.readableBytes() < messageItem.getHeaderPacketSize() - 1) {
-                byte[] bytes = new byte[num];
-                in.getBytes(0, bytes);
-                errorLogService.send(bytes);
+                execError(in, errorLogService, beginIdx, num);
                 return null;
             }
             num++;
         }
+
+        execError(in, errorLogService, beginIdx, num);
 
         //剩余长度不足可读取数量[没有内容长度位]
         if (in.readableBytes() < messageItem.getHeaderPacketSize() - messageItem.getVersionBytes()) {
@@ -96,19 +96,27 @@ public class MessageUtils {
         return map;
     }
 
+    private static void execError(ByteBuf in, ErrorLogService errorLogService, int beginIdx, int num) {
+        if (num > 0) {
+            byte[] bytes = new byte[num + 1];
+            in.getBytes(beginIdx - num, bytes);
+            errorLogService.send(bytes);
+        }
+    }
+
     private static Long getaLong(ByteBuf in, NettyProperties.MessageItem messageItem, ByteOrderEnum byteOrderEnum) {
         Long version;
         Object ver = DecodeUtils.decode(0, in, messageItem.getVersionType(), byteOrderEnum);
-        if(ver instanceof Short){
+        if (ver instanceof Short) {
             version = Long.valueOf((Short) ver);
-        }else if(ver instanceof  Integer){
+        } else if (ver instanceof Integer) {
             version = Long.valueOf((Integer) ver);
-        }else if(ver instanceof Long){
+        } else if (ver instanceof Long) {
             version = (Long) ver;
-        }else if(ver instanceof Byte){
-            version =Long.valueOf((Byte) ver);
-        }else{
-            log.error("version info error {} .........",ver);
+        } else if (ver instanceof Byte) {
+            version = Long.valueOf((Byte) ver);
+        } else {
+            log.error("version info error {} .........", ver);
             in.markReaderIndex();
             throw new RuntimeException(" version info is null");
         }
@@ -119,7 +127,7 @@ public class MessageUtils {
      * 从NettyProperties.DataItem中顺序读取map值写入ByteBuf中
      *
      * @param out           写入的ByteBuf
-     * @param messageItem    配置属性
+     * @param messageItem   配置属性
      * @param byteOrderEnum 字节顺序
      * @param data          需要写入的数据
      */
