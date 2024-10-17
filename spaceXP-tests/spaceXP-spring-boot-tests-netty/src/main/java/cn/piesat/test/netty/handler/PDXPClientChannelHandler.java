@@ -16,6 +16,12 @@ import java.util.Map;
 public class PDXPClientChannelHandler extends SimpleChannelInboundHandler<Map<String,Object>> {
 
     private final TcpClient tcpClient;
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.err.println("Server connection is closed.");
+        tcpClient.start();
+        super.channelInactive(ctx);
+    }
 
     public PDXPClientChannelHandler(TcpClient tcpClient) {
         this.tcpClient = tcpClient;

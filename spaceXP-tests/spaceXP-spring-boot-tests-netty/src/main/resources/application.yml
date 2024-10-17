@@ -53,7 +53,7 @@ space:
       version-value: 0x80
       version-type: ubyte
     tcp-client:
-      reconnect-delay-ms: 1000
+      reconnect-delay-ms: 10000
       retry-max-count: 5
       server-host: 127.0.0.1
       server-port: 9001

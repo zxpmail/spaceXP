@@ -20,11 +20,11 @@ import javax.annotation.Resource;
 public class SampleCommandLineRunner implements CommandLineRunner {
 
     @Resource
-    private NettyProperties nettyProperties;
+    private TcpClient tcpClient;
     @Override
     public void run(String... args)  {
         log.info("Application started with arguments: {} " , String.join(", ", args));
-        new TcpClient(nettyProperties).start();
+        tcpClient.start();
         // 执行你的逻辑
         log.info("Performing initialization tasks...");
     }

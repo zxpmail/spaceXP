@@ -1,9 +1,11 @@
 package cn.piesat.test.netty.handler;
 
+import cn.piesat.test.netty.client.TcpClient;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +17,8 @@ import java.util.Map;
  * {@code @author}: zhouxp
  */
 public class HeartbeatHandler extends ChannelInboundHandlerAdapter {
-
+    @Resource
+    private TcpClient tcpClient;
     private final Map<String,Object> map = new HashMap<>();
 
     public HeartbeatHandler() {
@@ -40,5 +43,11 @@ public class HeartbeatHandler extends ChannelInboundHandlerAdapter {
         } else {
             super.userEventTriggered(ctx, evt);
         }
+    }
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        // 当发生异常时关闭连接，触发重连
+        cause.printStackTrace();
+        ctx.close();
     }
 }
