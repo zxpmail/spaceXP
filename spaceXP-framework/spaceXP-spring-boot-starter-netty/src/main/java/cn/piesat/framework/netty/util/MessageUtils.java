@@ -98,7 +98,7 @@ public class MessageUtils {
 
     private static void execError(ByteBuf in, ErrorLogService errorLogService, int beginIdx, int num) {
         if (num > 0) {
-            byte[] bytes = new byte[num + 1];
+            byte[] bytes = new byte[num ];
             in.getBytes(beginIdx - num, bytes);
             errorLogService.send(bytes);
         }

@@ -24,7 +24,7 @@ public class PDXPDecoder extends ByteToMessageDecoder {
 
     private final NettyProperties.MessageItem messageItem;
 
-    private final ByteOrderEnum byteOrderEnum ;
+    private final ByteOrderEnum byteOrderEnum;
 
     public PDXPDecoder(NettyProperties.MessageItem messageItem, ByteOrderEnum byteOrderEnum) {
         this.messageItem = messageItem;
@@ -33,16 +33,20 @@ public class PDXPDecoder extends ByteToMessageDecoder {
 
 
     @Override
-    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list)  {
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
 
         HashMap<String, Object> message = MessageUtils.byteBuf2Map(byteBuf, messageItem, byteOrderEnum, new ErrorLogService() {
             @Override
             public void send(byte[] data) {
+                StringBuilder sb = new StringBuilder();
+                for (byte b : data) {
+                    sb.append(String.format("%02X ", b));
+                }
                 ErrorLogService.super.send(data);
-                log.info("error ... {}",new String( data));
+                log.info("error ... {}", sb.toString().trim());
             }
         });
-        if(message == null){
+        if (message == null) {
             return;
         }
 
