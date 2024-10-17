@@ -120,11 +120,7 @@ public class MessageUtils {
      */
     public static void Map2byteBuf(ByteBuf out, NettyProperties.MessageItem messageItem,
                                    ByteOrderEnum byteOrderEnum, Map<String, Object> data) {
-        Object version = data.get("version");
-        if (version == null) {
-            log.error("version data is null");
-            return;
-        }
+        Object version = messageItem.getVersionValue();
         EncodeUtils.encode(messageItem.getVersionType(), version, out, byteOrderEnum);
         for (NettyProperties.DataItem item : messageItem.getItems()) {
             if (item.getIsKipped()) {

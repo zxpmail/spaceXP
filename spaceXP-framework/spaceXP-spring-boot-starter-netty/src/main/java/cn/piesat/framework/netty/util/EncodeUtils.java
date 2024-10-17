@@ -167,7 +167,19 @@ public final class EncodeUtils {
      * @param out ByteBuf缓存区
      */
     public static void writeUnSignByte(Object value, ByteBuf out) {
-        short m = (short) value;
+        short m;
+        if(value instanceof  Long){
+           long m1 = (Long) value;
+           m= (short) m1;
+        }else if (value instanceof Integer){
+            int m1 = (Integer) value;
+            m= (short) m1;
+        }else if( value instanceof  Short){
+            m = (short) value;
+        }else{
+            log.error("data cast error {}",value);
+            return;
+        }
         writeUnSignByte(m, out);
     }
 
@@ -221,8 +233,8 @@ public final class EncodeUtils {
         writeShort(m, out, byteOrderEnum);
     }
     public static void writeUnSignInt(Object value, ByteBuf out, ByteOrderEnum byteOrderEnum) {
-        long m = (long) value;
-        writeShort(m, out, byteOrderEnum);
+        long m = (Long) value;
+        writeUnSignInt( out, m, byteOrderEnum);
     }
     public static void writeUnSignInt(ByteBuf out, Long value, ByteOrderEnum byteOrderEnum) {
         if (value < 0 || value >= 0x100000000L) {
