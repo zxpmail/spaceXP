@@ -34,6 +34,7 @@
         <module>spaceXP-spring-boot-tests-sse</module>
         <module>spaceXP-spring-boot-tests-netty</module>
         <module>spaceXP-spring-boot-tests-disruptor</module>
+        <module>spaceXP-spring-boot-tests-kafka</module>
     </modules>
     <dependencies>
         <dependency>
