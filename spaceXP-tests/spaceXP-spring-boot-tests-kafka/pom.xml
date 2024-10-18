@@ -18,5 +18,9 @@
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
     </dependencies>
 </project>
