@@ -22,5 +22,9 @@
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-netty</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-common</artifactId>
+        </dependency>
     </dependencies>
 </project>
