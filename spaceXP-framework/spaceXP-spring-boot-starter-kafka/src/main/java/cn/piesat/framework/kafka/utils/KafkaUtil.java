@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.lang.Nullable;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -20,12 +21,16 @@ public class KafkaUtil {
         ListenableFuture<SendResult<K, V>> future = kafkaTemplate.send(topic, value);
         future.addCallback(new ListenableFutureCallback<SendResult<K, V>>() {
             @Override
-            public void onSuccess(SendResult<K, V> result) {
+            public void onSuccess(@Nullable SendResult<K, V> result) {
+                if (result == null || result.getRecordMetadata() == null) {
+                    log.error("发送数据成功，topic:{},result is null ", topic);
+                    return;
+                }
                 RecordMetadata recordMetadata = result.getRecordMetadata();
                 String topic = recordMetadata.topic();
                 int partition = recordMetadata.partition();
                 long offset = recordMetadata.offset();
-                log.debug("发送数据成功，topic:{},partition:{},offset:{}", topic, partition, offset);
+                log.info("发送数据成功，topic:{},partition:{},offset:{}", topic, partition, offset);
             }
 
             @Override
