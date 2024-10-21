@@ -26,9 +26,9 @@ import java.util.List;
 
 @Component
 @ConditionalOnProperty(prefix = "spring.kafka.consumer", name = "group-id")
-public class KafkaConsumer {
+public class Kafka1Consumer {
 
-    private static final Logger log = LoggerFactory.getLogger(KafkaConsumer.class);
+    private static final Logger log = LoggerFactory.getLogger(Kafka1Consumer.class);
 
     /**
      * 监听指定主题上的消息，topics 属性是一个字符串数组，可以监听多个主题。

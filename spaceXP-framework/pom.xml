@@ -37,6 +37,7 @@
         <module>spaceXP-spring-boot-starter-test</module>
         <module>spaceXP-spring-boot-starter-sse</module>
         <module>spaceXP-spring-boot-starter-netty</module>
+        <module>spaceXP-spring-boot-starter-kafka</module>
     </modules>
     <artifactId>spaceXP-framework</artifactId>
     <dependencies>
