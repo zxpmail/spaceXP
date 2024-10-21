@@ -1,0 +1,44 @@
+spring:
+  kafka:
+    bootstrap-servers: 192.168.2.32:9092 # kafka 服务器集群地址，默认为 localhost:9092
+    template:
+      default-topic: demo  #将消息发送到的默认主题，KafkaTemplate.sendDefault
+    listener:
+      type: batch #监听器类型，可选值有：SINGLE（单条消费，默认）、BATCH（批量消息）
+
+    # kafka 生产者配置
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer #生产者 key 序列化方式
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer #生产者 value 序列化方式
+      batch-size: 16KB #默认批处理大小，如果值太小，则可能降低吞吐量，为零将完全禁用批处理，当 linger.ms=0 时，此值无效
+      buffer-memory: 32MB #生产者可以用来缓冲等待发送到服务器的记录的总内存大小
+      retries: 3 #发送失败时的重试次数，当大于零时，允许重试失败的发送。
+      #      在考虑请求完成之前，生产者要求领导者已收到的确认数，可选值有：-1、0、1(默认为1)
+      #      使用事务时，必须配置为 -1，表示领导者必须收到所有副本的确认消息。
+      acks: -1
+      properties:
+        #消息提交延时时间(单位毫秒)，当生产者接收到消息 linger.ms 秒钟后，就会将消息提交给 kafka。
+        #当生产端积累的消息达到 batch-size 大小后，也会将消息提交给 kafka。
+        #linger.ms 默认为 0 ，表示每接收到一条消息就会立即提交给 kafka，此时 batch-size 无效。如果对实时性要求高，则建议设置为 0
+        linger.ms: 0
+        partitioner:
+          class: cn.piesat.kafka.MyKafkaPartitioner #kafka 自定义分区规则
+      transaction-id-prefix: tx_kafka.
+
+    # kafka 消费者配置
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer #消费者 key 反序列化方式
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #消费者 value 反序列化方式
+      group-id: test-consumer-group #标识此消费者所属的消费者组的唯一字符串，这里只要你是默认安装，那就是这个，不用修改
+      #消费者客户端 id，在消费者组需要唯一指定。发出请求时会传递给服务器，用于服务器端日志记录
+      #不写时，会自动命名，比如：consumer-1、consumer-2...，原子性递增。通常不建议自定义，使用默认值即可，因为容易冲突
+      #client-id: wangmx1
+      enable-auto-commit: true #消费者的偏移量是否在后台自动提交，默认为 true
+      auto-commit-interval: 5000 #如果enable.auto.commit=true，则消费者偏移自动提交给Kafka的频率（以毫秒为单位），默认值为 5000
+      # 当 Kafka 中没有初始偏移量或者服务器上不再存在当前偏移量时该怎么办，可选的值有 latest、earliest、exception、none，默认值为 latest
+      # latest：重置为分区中最新的 offset(消费分区中新产生的数据)、earliest:重置为分区中最小的 offset
+      auto-offset-reset: latest
+      properties:
+        session.timeout.ms: 180000 #消费会话超时时间(超过这个时间consumer没有发送心跳,就会触发 rebalance(重新平衡) 操作)
+        request.timeout.ms: 120000 #消费请求超时时间
+      max-poll-records: 5 #一次调用poll（）时返回的最大记录数，即批量消费每次最多消费多少条消息，注意是最多，并不是必须满足数量后才消费.
