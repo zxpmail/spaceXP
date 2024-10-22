@@ -19,8 +19,26 @@ import java.util.List;
 @ConfigurationProperties(prefix = "space.netty")
 public class NettyProperties {
 
+    /**
+     * TCP客户端信息
+     */
     private TcpClientItem tcpClient;
+    /**
+     * TCP服务器端信息
+     */
+    private TcpServerItem tcpServer;
+    @Data
+    public final static class TcpServerItem {
+        /**
+         * 服务器地址
+         */
+        private String host;
+        /**
+         * 服务器端口
+         */
+        private Integer port;
 
+    }
     @Data
     public final static class TcpClientItem {
         /**
