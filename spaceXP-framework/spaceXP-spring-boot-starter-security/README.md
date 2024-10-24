@@ -79,7 +79,7 @@ space.security.secretKey 加解密秘钥
         #L为你所在的城市名称
         #ST为你所在的省份名称
         #C为你的国家名称或区号
-        keytool -genkeypair -keysize1024 -validity3650 -alias "privateKey" -keystore "privateKeys.keystore" -storepass "public_password1234" -keypass "private_password1234" -dname "CN=localhost,OU=localhost,O=localhost,L=SH,ST=SH,C=CN"
+        keytool -genkeypair -keysize 1024 -validity 3650 -alias privateKey -keystore privateKeys.keystore -storepass public_password1234 -keypass private_password1234 -dname CN=localhost,OU=localhost,O=localhost,L=SH,ST=SH,C=CN
         
         ##2.把私匙库内的公匙导出到一个文件当中
         #alias：私钥别称
