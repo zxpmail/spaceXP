@@ -20,6 +20,8 @@ public class SecurityProperties {
 
     private License license;
 
+    private Boolean licenseEnable = false;
+
     @Data
     public static class License {
         /**

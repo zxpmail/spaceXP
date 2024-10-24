@@ -1,11 +1,13 @@
 package cn.piesat.framework.security.config;
 
 import cn.piesat.framework.security.core.EncryptAspect;
+import cn.piesat.framework.security.core.InstallLicense;
 import cn.piesat.framework.security.properties.SecurityProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * <p/>
@@ -17,10 +19,22 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SecurityProperties.class)
-public class SecurityConfig {
+public class SecurityConfig  {
     @Bean
-    @ConditionalOnProperty(name = "space.security.enable", havingValue = "true",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.security.enable", havingValue = "true")
     public EncryptAspect encryptAspect(SecurityProperties securityProperties){
         return new EncryptAspect(securityProperties.getSecretKey());
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "space.security.license-enable", havingValue = "true")
+    public InstallLicense installLicense(SecurityProperties securityProperties){
+        return new InstallLicense(securityProperties.getLicense());
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "space.security.license-enable", havingValue = "true")
+    public LicenseWebMvcConfig licenseWebMvcConfig(){
+        return new LicenseWebMvcConfig();
     }
 }
