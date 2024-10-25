@@ -20,8 +20,7 @@ import java.util.prefs.Preferences;
 /**
  * <p/>
  * {@code @description}: 证书工具类
- * LicenseUtil.generateLicense(new CustomLicenseParam(),new X500Principal("CN=localhost,   OU=localhost,   O=localhost,   L=SH,   ST=SH,   C=CN"));
- * <p/>
+  * <p/>
  * {@code @create}: 2024-10-24 14:41
  * {@code @author}: zhouxp
  */
