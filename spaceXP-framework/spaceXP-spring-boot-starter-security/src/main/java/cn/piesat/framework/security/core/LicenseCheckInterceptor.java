@@ -28,8 +28,9 @@ public class LicenseCheckInterceptor implements HandlerInterceptor {
             return true;
         } else {
             response.setCharacterEncoding("utf-8");
-            Map<String, String> result = new HashMap<>(1);
-            result.put("result", "您的证书无效，请核查服务器是否取得授权或重新申请证书！");
+            Map<String, Object> result = new HashMap<>(2);
+            result.put("code",500);
+            result.put("message", "您的证书无效，请核查服务器是否取得授权或重新申请证书！");
             response.getWriter().write(jsonMapper.writeValueAsString(result));
             return false;
         }

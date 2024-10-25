@@ -36,6 +36,16 @@ public class SecurityProperties {
          * 访问公钥库的密码
          */
         private String storePass = "public_password1234";
+
+        /**
+         * 证书文件
+         */
+        private String licenseFile = "d:/license/license.lic";
+
+        /**
+         * 证书文件
+         */
+        private String publicKeysFile = "d:/license/publicCerts.keystore";
     }
 
 }

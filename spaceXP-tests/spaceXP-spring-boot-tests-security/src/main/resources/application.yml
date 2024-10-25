@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: security
+  mvc:
+    path-match:
+      matching-strategy: ANT_PATH_MATCHER
+space:
+  security:
+    license-enable: true
+    license:
+      subject: license
+      public-alias: publicCert
+      store-pass: public_password1234

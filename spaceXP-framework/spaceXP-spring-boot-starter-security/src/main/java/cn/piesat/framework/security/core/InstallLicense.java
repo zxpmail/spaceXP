@@ -25,20 +25,25 @@ public class InstallLicense extends AbstractValidateItem {
 
     @Override
     public void validate() {
-        log.info("++++++++ 开始安装证书 ++++++++");
-        LicenseVerifyParam param = new LicenseVerifyParam();
-        param.setSubject(license.getSubject());
-        param.setPublicAlias(license.getPublicAlias());
-        param.setStorePass(license.getStorePass());
-        // 相对路径resources资源目录
-        String resourcePath = Objects.requireNonNull(getClass().getClassLoader().getResource("")).getPath();
-        // 证书地址
-        param.setLicensePath(resourcePath + "license.lic");
-        // 公钥地址
-        param.setPublicKeysStorePath(resourcePath + "publicCerts.keystore");
-        // 安装证书
+        try {
+            log.info("++++++++ 开始安装证书 ++++++++");
+            LicenseVerifyParam param = new LicenseVerifyParam();
+            param.setSubject(license.getSubject());
+            param.setPublicAlias(license.getPublicAlias());
+            param.setStorePass(license.getStorePass());
+            // 相对路径resources资源目录
+            String resourcePath = Objects.requireNonNull(getClass().getClassLoader().getResource("")).getPath();
+            // 证书地址
+            param.setLicensePath(license.getLicenseFile());
+            // 公钥地址
+            param.setPublicKeysStorePath(license.getPublicKeysFile());
+            // 安装证书
 
-        LicenseUtil.install(param);
-        log.info("++++++++ 证书安装结束 ++++++++");
+            LicenseUtil.install(param);
+            log.info("++++++++ 证书安装结束 ++++++++");
+        }catch (Exception e){
+            log.error("安装证书失败.........",e);
+        }
+
     }
 }
