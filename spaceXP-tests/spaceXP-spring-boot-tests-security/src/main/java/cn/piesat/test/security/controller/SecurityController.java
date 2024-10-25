@@ -2,6 +2,8 @@ package cn.piesat.test.security.controller;
 
 import cn.piesat.framework.security.annotation.DecryptMethod;
 import cn.piesat.framework.security.annotation.EncryptMethod;
+import cn.piesat.framework.security.model.CustomLicenseParam;
+import cn.piesat.framework.security.utils.LicenseUtil;
 import cn.piesat.test.security.model.entity.DesensitizeDO;
 import cn.piesat.test.security.model.entity.EncryptDO;
 import io.swagger.annotations.Api;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.security.auth.x500.X500Principal;
 
 /**
  * <p/>
@@ -52,5 +56,12 @@ public class SecurityController {
         encryptDO.setAge(12);
         encryptDO.setName("E7798C31C4A94F2C43DE78FE8D050D40");
         return encryptDO;
+    }
+
+    @ApiOperation("生成认证")
+    @GetMapping("generateLicense")
+    public String generateLicense() {
+        LicenseUtil.generateLicense(new CustomLicenseParam(), new X500Principal("CN=localhost,   OU=localhost,   O=localhost,   L=SH,   ST=SH,   C=CN"));
+        return "证书生成成功！";
     }
 }
