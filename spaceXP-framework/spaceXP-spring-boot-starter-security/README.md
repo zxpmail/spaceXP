@@ -99,3 +99,12 @@ space.security.secretKey 加解密秘钥
         1、certfile.cer 认证证书文件，已经没用了，可以删除
         2、privateKeys.keystore 私钥文件，自己保存，以后用于生成license.lic证书
         3、publicKeys.keystore 公钥文件，以后会和license.lic证书一起放到使用者项目里
+
+        space.security.licenseEnable=true开启证书校验功能
+        space.security.license.subject 证书subject
+        space.security.license.publicAlias 公钥别称
+        space.security.license.storePass 访问公钥库的密码
+        space.security.license.licenseFile 证书文件
+        space.security.license.publicKeysFile 公钥文件
+
+    具体实例请参照spaceXP-spring-boot-tests-security应用实例

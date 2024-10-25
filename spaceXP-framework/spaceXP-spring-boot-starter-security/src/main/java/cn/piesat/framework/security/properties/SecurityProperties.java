@@ -43,7 +43,7 @@ public class SecurityProperties {
         private String licenseFile = "d:/license/license.lic";
 
         /**
-         * 证书文件
+         * 公钥文件
          */
         private String publicKeysFile = "d:/license/publicCerts.keystore";
     }
