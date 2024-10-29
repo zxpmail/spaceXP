@@ -2,6 +2,7 @@ package cn.piesat.framework.common.config;
 
 import cn.piesat.framework.common.aspect.ServiceValidationAspect;
 import cn.piesat.framework.common.properties.CommonProperties;
+import cn.piesat.framework.common.utils.SpringBeanUtil;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,5 +25,10 @@ public class CommonAutoConfig {
     @Bean("commonProperties")
     public CommonProperties getCommonProperties(){
         return  new CommonProperties();
+    }
+
+    @Bean
+    public SpringBeanUtil getSpringBeanUtil(){
+        return  new SpringBeanUtil();
     }
 }
