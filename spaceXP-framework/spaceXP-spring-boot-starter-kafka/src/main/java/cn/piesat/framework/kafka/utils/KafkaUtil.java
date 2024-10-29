@@ -16,6 +16,7 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.kafka.config.MethodKafkaListenerEndpoint;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.lang.Nullable;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
@@ -75,10 +76,11 @@ public class KafkaUtil {
     }
 
     /**
-     *  创建kafka topic
+     * 创建kafka topic
+     *
      * @param topicName  topic名
      * @param partitions 分区数
-     * @param replicas 副本数
+     * @param replicas   副本数
      */
     public static void createTopic(String topicName, int partitions, short replicas) throws Exception {
         NewTopic newTopic = new NewTopic(topicName, partitions, replicas);
@@ -89,30 +91,32 @@ public class KafkaUtil {
 
     /**
      * 修改topic的过期时间
+     *
      * @param topicName topic名称
-     * @param ms 过期时间（毫秒值）
+     * @param ms        过期时间（毫秒值）
      */
     public static void updateTopicRetention(String topicName, String ms) throws Exception {
-        Map<ConfigResource, Collection<AlterConfigOp>> configs =new HashMap<>();
+        Map<ConfigResource, Collection<AlterConfigOp>> configs = new HashMap<>();
         //声明一个ConfigResource，用来判断是给什么用的，此处是给topic，名字是java_test用的
-        ConfigResource configResource=new ConfigResource(ConfigResource.Type.TOPIC,topicName);
+        ConfigResource configResource = new ConfigResource(ConfigResource.Type.TOPIC, topicName);
         ConfigEntry configEntry = new ConfigEntry(TopicConfig.RETENTION_MS_CONFIG, ms);
         //设置一个AlterConfigOp对象用来，处理做什么操作，这里使用的SET(或者APPEND)类型的添加操作
-        AlterConfigOp alterConfigOp=new AlterConfigOp(configEntry,AlterConfigOp.OpType.SET);
+        AlterConfigOp alterConfigOp = new AlterConfigOp(configEntry, AlterConfigOp.OpType.SET);
         //添加到Collection中，用于传到incrementalAlterConfigs方法中
-        Collection<AlterConfigOp> configOps=new ArrayList<>();
+        Collection<AlterConfigOp> configOps = new ArrayList<>();
         configOps.add(alterConfigOp);
         //给map赋值
-        configs.put(configResource,configOps);
+        configs.put(configResource, configOps);
         // 创建AlterConfigsOptions
         AlterConfigsOptions alterConfigsOptions = new AlterConfigsOptions().timeoutMs(10000);
         // 执行修改操作
-        adminClient.incrementalAlterConfigs(configs,alterConfigsOptions).all().get();
+        adminClient.incrementalAlterConfigs(configs, alterConfigsOptions).all().get();
         log.info("【{}】topic过期时间设置完成，过期时间为：{}毫秒", topicName, ms);
     }
 
     /**
      * 列出 topic
+     *
      * @return topic列表
      */
     public static Set<String> listTopic() throws Exception {
@@ -122,6 +126,7 @@ public class KafkaUtil {
 
     /**
      * 判断topic是否存在
+     *
      * @param topicName topic名
      */
     public static boolean existTopic(String topicName) throws Exception {
@@ -134,20 +139,22 @@ public class KafkaUtil {
 
     /**
      * 根据ID查询容器是否存在
+     *
      * @param id 监听容器id
      */
-    public static boolean existListenerContainer(String id)  {
+    public static boolean existListenerContainer(String id) {
         Set<String> listenerIds = kafkaListenerEndpointRegistry.getListenerContainerIds();
         return listenerIds.contains(id);
     }
 
     /**
      * 创建kafka监听容器并注册到注册信息中，一次可以注册多个topic的监听容器
-     * @param id 容器id，自定义
-     * @param consumerGroupId  消费者组id自定义
-     * @param processBean 处理消息的类
-     * @param processMethod 处理消息的方法
-     * @param topics 需要监听的topic数组
+     *
+     * @param id              容器id，自定义
+     * @param consumerGroupId 消费者组id自定义
+     * @param processBean     处理消息的类
+     * @param processMethod   处理消息的方法
+     * @param topics          需要监听的topic数组
      */
     public static void registerListenerContainer(String id, String consumerGroupId, Object processBean, Method processMethod, String... topics) throws Exception {
         //判断id是否存在
@@ -185,6 +192,130 @@ public class KafkaUtil {
         //注册Container并启动，startImmediately表示立马启动
         kafkaListenerEndpointRegistry.registerListenerContainer(endpoint, SpringBeanUtil.getBean(KafkaListenerContainerFactory.class), true);
         log.info("Kafka监听容器操作：ID为{}的容器已【注册】，监听的topics：{}", id, topics);
-        
+
+    }
+
+    /**
+     * 根据id开启监听容器的运行状态
+     * @param id 监听容器的id
+     */
+    public static void startListenerContainer(String id)  {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        if (listenerContainer == null) {
+            log.info("Kafka监听容器操作：ID为{}的容器不存在，不操作！", id);
+            return;
+        }
+        listenerContainer.start();
+        log.info("Kafka监听容器操作：ID为{}的容器已【开启】", id);
+    }
+
+
+    /**
+     * 根据id停止监听容器的运行状态
+     * @param id 监听容器的id
+     */
+    public static void stopListenerContainer(String id)  {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        if (listenerContainer == null) {
+            log.info("Kafka监听容器操作：ID为{}的容器不存在，不操作！", id);
+            return;
+        }
+        listenerContainer.stop();
+        log.info("Kafka监听容器操作：ID为{}的容器已【停止】", id);
+    }
+
+
+    /**
+     * 根据id暂停监听容器的监听状态
+     * @param id 监听容器的id
+     */
+    public static void pauseListenerContainer(String id) {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        if (listenerContainer == null) {
+            log.info("Kafka监听容器操作：ID为{}的容器不存在，不操作！", id);
+            return;
+        }
+        listenerContainer.pause();
+        log.info("Kafka监听容器操作：ID为{}的容器已【暂停】", id);
+    }
+
+    /**
+     * 根据id恢复监听容器的监听状态
+     * @param id 监听容器的id
+     */
+    public static void resumeListenerContainer(String id) {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        if (listenerContainer == null) {
+            log.info("Kafka监听容器操作：ID为{}的容器不存在，不操作！", id);
+            return;
+        }
+        listenerContainer.resume();
+        log.info("Kafka监听容器操作：ID为{}的容器已【恢复】", id);
+    }
+
+
+    /**
+     * 是否是正常状态的容器
+     * kafka监听容器的运行状态标志是running，监听状态标志是pauseRequested，停止是关闭了资源，暂停是停止消费）
+     * 只有running是true，并且pauseRequested是false，监听容器才能正常消费消息
+     * @param id 监听容器的id
+     */
+    public static boolean isNormalStateListenerContainer(String id) {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        //如果不存在此id容器，则返回false
+        if (listenerContainer == null) {
+            return false;
+        }
+        //存在则返回容器的运行状态和非暂停状态
+        return listenerContainer.isRunning() && !listenerContainer.isPauseRequested();
+    }
+
+
+    /**
+     * 获取监听容器的暂停状态（监听的状态）
+     * @param id 监听容器id
+     */
+    public static boolean getPauseStateListenerContainer(String id) {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        if (listenerContainer == null) {
+            return true;
+        }
+        return listenerContainer.isPauseRequested();
+
+    }
+
+    /**
+     * 获取监听容器的运行状态（容器的状态）
+     * @param id 监听容器id
+     */
+    public static boolean getRunningStateListenerContainer(String id) {
+        MessageListenerContainer listenerContainer = kafkaListenerEndpointRegistry.getListenerContainer(id);
+        if (listenerContainer == null) {
+            return false;
+        }
+        return listenerContainer.isRunning();
+    }
+
+    /**
+     * 使容器的运行状态和监听状态都是正常
+     *
+     * @param id 监听容器的id
+     * @return boolean 正常返回true，非正常返回false
+     */
+    public static boolean setStateNormalListenerContainer(String id) {
+        if (!existListenerContainer(id)) {
+            log.info("Kafka监听容器操作：ID为{}的容器不存在，不操作！", id);
+            return false;
+        }
+        //先判断容器运行状态是否正常，如果不正常，则开启
+        if (!getRunningStateListenerContainer(id)) {
+            startListenerContainer(id);
+        }
+        //再判断容器监听状态是否正常，如果不正常，则恢复
+        if (getPauseStateListenerContainer(id)) {
+            resumeListenerContainer(id);
+        }
+        //设置完后，再查询状态并返回。
+        return isNormalStateListenerContainer(id);
     }
 }
