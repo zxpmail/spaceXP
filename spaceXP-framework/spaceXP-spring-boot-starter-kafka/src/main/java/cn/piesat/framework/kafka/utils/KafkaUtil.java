@@ -1,10 +1,10 @@
 package cn.piesat.framework.kafka.utils;
 
+import cn.piesat.framework.common.utils.SpringBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AlterConfigOp;
 import org.apache.kafka.clients.admin.AlterConfigsOptions;
-import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.ConfigEntry;
 import org.apache.kafka.clients.admin.CreateTopicsResult;
 import org.apache.kafka.clients.admin.ListTopicsResult;
@@ -12,13 +12,17 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.config.ConfigResource;
 import org.apache.kafka.common.config.TopicConfig;
+import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
+import org.springframework.kafka.config.MethodKafkaListenerEndpoint;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.lang.Nullable;
+import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -75,7 +79,6 @@ public class KafkaUtil {
      * @param topicName  topic名
      * @param partitions 分区数
      * @param replicas 副本数
-     * @throws Exception
      */
     public static void createTopic(String topicName, int partitions, short replicas) throws Exception {
         NewTopic newTopic = new NewTopic(topicName, partitions, replicas);
@@ -88,7 +91,6 @@ public class KafkaUtil {
      * 修改topic的过期时间
      * @param topicName topic名称
      * @param ms 过期时间（毫秒值）
-     * @throws Exception
      */
     public static void updateTopicRetention(String topicName, String ms) throws Exception {
         Map<ConfigResource, Collection<AlterConfigOp>> configs =new HashMap<>();
@@ -112,7 +114,6 @@ public class KafkaUtil {
     /**
      * 列出 topic
      * @return topic列表
-     * @throws Exception
      */
     public static Set<String> listTopic() throws Exception {
         ListTopicsResult listTopicsResult = adminClient.listTopics();
@@ -129,5 +130,61 @@ public class KafkaUtil {
             return false;
         }
         return strings.contains(topicName);
+    }
+
+    /**
+     * 根据ID查询容器是否存在
+     * @param id 监听容器id
+     */
+    public static boolean existListenerContainer(String id)  {
+        Set<String> listenerIds = kafkaListenerEndpointRegistry.getListenerContainerIds();
+        return listenerIds.contains(id);
+    }
+
+    /**
+     * 创建kafka监听容器并注册到注册信息中，一次可以注册多个topic的监听容器
+     * @param id 容器id，自定义
+     * @param consumerGroupId  消费者组id自定义
+     * @param processBean 处理消息的类
+     * @param processMethod 处理消息的方法
+     * @param topics 需要监听的topic数组
+     */
+    public static void registerListenerContainer(String id, String consumerGroupId, Object processBean, Method processMethod, String... topics) throws Exception {
+        //判断id是否存在
+        if (existListenerContainer(id)) {
+            //如果当前id的容器已存在，不添加
+            log.info("当前id为{}的容器已存在，不进行添加操作！", id);
+            return;
+        }
+        //判断所有队列是否存在
+        for (String topic : topics) {
+            if (!existTopic(topic)) {
+                //如果存在topic不存在，不添加
+                log.info("【{}】topic不存在，不进行添加操作！", topic);
+                return;
+            }
+        }
+        MethodKafkaListenerEndpoint<String, String> endpoint = new MethodKafkaListenerEndpoint<>();
+        //设置监听器端点相关信息
+        //设置Id
+        endpoint.setId(id);
+        //设置消费者组
+        endpoint.setGroupId(consumerGroupId);
+        //设置要监听的topic数组，可以是多个
+        endpoint.setTopics(topics);
+        //设置每个监听器线程数
+        endpoint.setConcurrency(3);
+        //设置批量监听
+        endpoint.setBatchListener(true);
+        //设置消息处理工厂类，这里用的是默认工厂
+        endpoint.setMessageHandlerMethodFactory(new DefaultMessageHandlerMethodFactory());
+        //设置实际处理的Bean对象，即实际的对象，比如new Class();
+        endpoint.setBean(processBean);
+        //设置实际处理的方法(包含方法名和参数)
+        endpoint.setMethod(processMethod);
+        //注册Container并启动，startImmediately表示立马启动
+        kafkaListenerEndpointRegistry.registerListenerContainer(endpoint, SpringBeanUtil.getBean(KafkaListenerContainerFactory.class), true);
+        log.info("Kafka监听容器操作：ID为{}的容器已【注册】，监听的topics：{}", id, topics);
+        
     }
 }
