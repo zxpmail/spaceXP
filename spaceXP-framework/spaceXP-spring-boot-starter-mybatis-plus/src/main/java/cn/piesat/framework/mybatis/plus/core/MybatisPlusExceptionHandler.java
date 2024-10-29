@@ -30,7 +30,7 @@ public class MybatisPlusExceptionHandler {
     @ExceptionHandler(value = BadSqlGrammarException.class)
     public ApiMapResult<IBaseResponse> handleException(BadSqlGrammarException e) {
         log.error(CommonConstants.MESSAGE,module, ExceptionUtil.getMessage(e));
-        return ApiMapResult.fail(CommonResponseEnum.BAD_SQL_GRAMMAR_ERROR);
+        return ApiMapResult.fail(ExceptionUtil.getMessage(e));
     }
 
 
