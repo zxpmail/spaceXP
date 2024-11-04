@@ -7,7 +7,7 @@ package cn.piesat.framework.log.external;
  * {@code @create}: 2024-11-04 16:17
  * {@code @author}: zhouxp
  */
-public interface DynamicLogging {
+public interface DynamicLoggingConfigurer {
     /**
      * 设置日志级别
      * @param packageName 包名
