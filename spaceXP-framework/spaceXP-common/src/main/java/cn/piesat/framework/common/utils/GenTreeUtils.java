@@ -3,10 +3,12 @@ package cn.piesat.framework.common.utils;
 
 import cn.piesat.framework.common.model.interfaces.ITreeNode;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 
-import java.util.Arrays;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,6 +57,7 @@ import java.util.stream.Collectors;
  * <p/>
  * <b>@create:</b> 2023/9/22 9:00.
  */
+@Slf4j
 public class GenTreeUtils {
 
     /**
@@ -72,14 +75,14 @@ public class GenTreeUtils {
     }
 
     /**
-     *
      * @param tree 树形结构
+     * @param <E>  节点类型
      * @return 打平的List
-     * @param <E> 节点类型
      */
     public static <E extends ITreeNode<E, V>, V> List<E> treeToList(List<E> tree) {
         return treeToList(tree, ITreeNode::getChildren, ITreeNode::setChildren);
     }
+
     /**
      * 使用Map合成树 (注意会改变原来menuList值)
      * 参考 <a href="https://juejin.cn/post/7398047016183889935#heading-13">...</a>
@@ -149,5 +152,97 @@ public class GenTreeUtils {
             resultList.add(node);
         }
         return resultList;
+    }
+
+    /**
+     * 在树中查询符合条件节点以及其父节点
+     * 例如：@Data
+     *     static class TreeNode {
+     *         int val;
+     *         List<TreeNode> children;
+     *
+     *         TreeNode(int x) {
+     *             val = x;
+     *             children = new ArrayList<>();
+     *         }
+     *     }
+     *         TreeNode root = new TreeNode(1);
+     *         TreeNode node2 = new TreeNode(5);
+     *         TreeNode node3 = new TreeNode(3);
+     *         TreeNode node4 = new TreeNode(4);
+     *         TreeNode node5 = new TreeNode(5);
+     *
+     *         root.children.add(node2);
+     *         root.children.add(node3);
+     *         node2.children.add(node4);
+     *         node2.children.add(node5);
+     *
+     *         // 查找所有路径
+     *
+     *         List<List<TreeNode>> paths = findAllNodes(root, x -> x.val == 5, TreeNode::getChildren);
+     *         for (List<TreeNode> path : paths) {
+     *             for (TreeNode n : path) {
+     *                 System.out.print(n.val + " ");
+     *             }
+     *             System.out.println();
+     *         }
+     *     }
+     * @param root           根节点
+     * @param predicate      判断条件
+     * @param getSubChildren 当前树的子节点
+     * @param <E>            树类型
+     */
+    public static <E> List<List<E>> findAllNodes(E root, Predicate<E> predicate, Function<E, List<E>> getSubChildren) {
+        if (root == null || getSubChildren == null) {
+            return null;
+        }
+        List<List<E>> allNodes = new ArrayList<>();
+        findNodes(root, predicate, getSubChildren, new ArrayList<>(), allNodes);
+        return allNodes;
+    }
+
+    /**
+     * 查找树，当找到节点就保存此节点到根上的节点，没有查询到就不保存
+     *
+     * @param node           查询的树节点
+     * @param predicate      判断条件
+     * @param getSubChildren 当前树的子节点
+     * @param currentNodes   查找树一次结果节点列表
+     * @param allNodes       查询节点集合
+     * @param <E>            树类型
+     */
+    private static <E> void findNodes(E node, Predicate<E> predicate, Function<E, List<E>> getSubChildren, List<E> currentNodes, List<List<E>> allNodes) {
+        if (node == null || getSubChildren == null) {
+            return;
+        }
+        try {
+            currentNodes.add(node);
+            if (predicate.test(node)) {
+                allNodes.add(Collections.unmodifiableList(new ArrayList<>(currentNodes)));
+            }
+            List<E> children = getSubChildren.apply(node);
+            if (children != null && !children.isEmpty()) {
+                processChildren(children, predicate, getSubChildren, currentNodes, allNodes);
+            }
+        } catch (Exception e) {
+            log.error("Error processing node {}", node, e);
+        } finally {
+            currentNodes.remove(currentNodes.size() - 1);
+        }
+    }
+
+    /**
+     * 遍历处理子节点
+     * @param children       子节点
+     * @param predicate      判断条件
+     * @param getSubChildren 当前树的子节点
+     * @param currentNodes   查找树一次结果节点列表
+     * @param allNodes       查询节点集合
+     * @param <E>            树类型
+     */
+    private static <E> void processChildren(List<E> children, Predicate<E> predicate, Function<E, List<E>> getSubChildren, List<E> currentNodes, List<List<E>> allNodes) {
+        for (E child : children) {
+            findNodes(child, predicate, getSubChildren, currentNodes, allNodes);
+        }
     }
 }
