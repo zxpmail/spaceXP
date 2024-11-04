@@ -221,6 +221,7 @@ public class GenTreeUtils {
             }
         } catch (Exception e) {
             log.error("Error processing node {}", node, e);
+            throw new RuntimeException("Error processing node");
         } finally {
             currentNodes.remove(currentNodes.size() - 1);
         }
