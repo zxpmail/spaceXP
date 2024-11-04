@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +18,7 @@ import java.util.List;
 public class ArgsUtils {
     /**
      * 前端参数数组转换成list ，file只记录filename
+     *
      * @param args 前端参数数组
      * @return 转换成list
      */
@@ -34,9 +34,7 @@ public class ArgsUtils {
                         if (files.length != 0) {
                             addToArgsList(argsList, processMultipleFiles(files));
                         }
-                    } else if (arg instanceof HttpServletRequest) {
-                        continue;
-                    } else{
+                    } else {
                         argsList.add(arg);
                     }
                 }
@@ -44,6 +42,7 @@ public class ArgsUtils {
         }
         return argsList;
     }
+
     private static void addToArgsList(List<Object> list, String value) {
         list.add(value);
     }
@@ -52,7 +51,7 @@ public class ArgsUtils {
         try {
             return file.getOriginalFilename();
         } catch (Exception e) {
-            log.error("Error obtaining filename",e);
+            log.error("Error obtaining filename", e);
             return "Error obtaining filename";
         }
     }
@@ -68,4 +67,5 @@ public class ArgsUtils {
         }
         return sb.toString();
     }
+
 }
