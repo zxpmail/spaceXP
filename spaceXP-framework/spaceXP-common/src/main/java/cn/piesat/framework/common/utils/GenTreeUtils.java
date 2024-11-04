@@ -2,7 +2,6 @@ package cn.piesat.framework.common.utils;
 
 
 import cn.piesat.framework.common.model.interfaces.ITreeNode;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -160,7 +159,6 @@ public class GenTreeUtils {
      *     static class TreeNode {
      *         int val;
      *         List<TreeNode> children;
-     *
      *         TreeNode(int x) {
      *             val = x;
      *             children = new ArrayList<>();
@@ -171,14 +169,11 @@ public class GenTreeUtils {
      *         TreeNode node3 = new TreeNode(3);
      *         TreeNode node4 = new TreeNode(4);
      *         TreeNode node5 = new TreeNode(5);
-     *
      *         root.children.add(node2);
      *         root.children.add(node3);
      *         node2.children.add(node4);
      *         node2.children.add(node5);
-     *
      *         // 查找所有路径
-     *
      *         List<List<TreeNode>> paths = findAllNodes(root, x -> x.val == 5, TreeNode::getChildren);
      *         for (List<TreeNode> path : paths) {
      *             for (TreeNode n : path) {
