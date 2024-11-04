@@ -5,10 +5,12 @@ import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.common.model.enums.BusinessEnum;
+import cn.piesat.framework.log.external.DynamicLoggingConfigurer;
 import cn.piesat.tests.log.service.TestService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,5 +88,19 @@ public class TestController {
         log.info(".....info.....");
         log.warn("........warn.......");
         log.error("........error.......");
+    }
+
+    @Resource
+    private DynamicLoggingConfigurer  loggingConfigurer;
+    @GetMapping("/setLogLevel")
+    public String setLogLevel(@RequestParam String packageName, @RequestParam String level) {
+        loggingConfigurer.setLogLevel(packageName, level);
+        return "Log level for " + packageName + " set to " + level;
+    }
+
+    @GetMapping("/resetLogLevel")
+    public String resetLogLevel(@RequestParam String packageName) {
+        loggingConfigurer.resetLogLevel(packageName);
+        return "Log level for " + packageName + " reset to default";
     }
 }
