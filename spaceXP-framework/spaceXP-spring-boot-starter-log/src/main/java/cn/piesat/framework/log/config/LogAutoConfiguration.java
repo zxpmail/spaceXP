@@ -6,6 +6,7 @@ import cn.piesat.framework.log.core.SwaggerLogAspect;
 import cn.piesat.framework.log.event.LogListener;
 import cn.piesat.framework.log.external.Log4j2DynamicLoggingConfigurer;
 import cn.piesat.framework.log.external.LogbackDynamicLoggingConfigurer;
+import cn.piesat.framework.log.external.LoggingDynamicLoggingConfigurer;
 import cn.piesat.framework.log.properties.LogProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -29,7 +30,7 @@ public class LogAutoConfiguration implements WebMvcConfigurer {
     @Value("${spring.application.name:test}")
     private String module;
     @Bean
-    @ConditionalOnProperty(name = "space.log.log-flag", havingValue = "2",matchIfMissing = false)
+    @ConditionalOnProperty(name = "space.log.log-flag", havingValue = "2")
     public SwaggerLogAspect swaggerLogAspect(LogProperties logProperties){
         return new SwaggerLogAspect(logProperties,module);
     }
@@ -55,5 +56,11 @@ public class LogAutoConfiguration implements WebMvcConfigurer {
     @ConditionalOnClass(name = "org.apache.logging.log4j.core.LoggerContext")
     public Log4j2DynamicLoggingConfigurer log4j2DynamicLoggingConfigurer() {
         return new Log4j2DynamicLoggingConfigurer();
+    }
+
+    @Bean
+    @ConditionalOnMissingClass({"ch.qos.logback.classic.LoggerContext","org.apache.logging.log4j.core.LoggerContext"})
+    public LoggingDynamicLoggingConfigurer loggingDynamicLoggingConfigurer() {
+        return new LoggingDynamicLoggingConfigurer();
     }
 }
