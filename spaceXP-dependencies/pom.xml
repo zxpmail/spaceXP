@@ -68,10 +68,16 @@
         <feign-okhttp.version>10.12</feign-okhttp.version>
         <okio.version>3.8.0</okio.version>
         <podam.version>8.0.2.RELEASE</podam.version>
+        <log4j-core.version>2.23.0</log4j-core.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j-core.version}</version>
+            </dependency>
             <!-- 统一依赖管理 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
