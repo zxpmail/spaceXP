@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,9 @@ public class ArgsUtils {
         List<Object> argsList = new ArrayList<>();
         if (args != null && args.length != 0) {
             for (Object arg : args) {
+                if(arg instanceof ServletResponse || arg instanceof ServletRequest){
+                    continue;
+                }
                 if (!ObjectUtils.isEmpty(arg)) {
                     if (arg instanceof MultipartFile) {
                         addToArgsList(argsList, processSingleFile((MultipartFile) arg));

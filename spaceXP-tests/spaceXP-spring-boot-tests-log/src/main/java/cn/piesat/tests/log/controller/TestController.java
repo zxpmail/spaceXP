@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * <p/>
@@ -68,7 +69,7 @@ public class TestController {
 
     @OpLog(op = BusinessEnum.CLEAN,description = "测试")
     @GetMapping(value = "/testParam")
-    public void testParam(HttpServletRequest req,String name)  {
+    public void testParam(HttpServletRequest req, String name, HttpServletResponse response)  {
         log.debug(".....debug....");
         log.info(".....info.....");
         log.warn("........warn.......");
