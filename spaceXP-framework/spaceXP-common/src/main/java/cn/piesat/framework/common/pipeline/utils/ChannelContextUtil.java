@@ -1,5 +1,6 @@
 package cn.piesat.framework.common.pipeline.utils;
 
+import cn.piesat.framework.common.pipeline.context.ChannelHandlerContext;
 import com.alibaba.ttl.TransmittableThreadLocal;
 
 /**
@@ -10,19 +11,19 @@ import com.alibaba.ttl.TransmittableThreadLocal;
  * {@code @author}: zhouxp
  */
 public class ChannelContextUtil {
-    private static final TransmittableThreadLocal<ChannelContextUtil> CONTEXT = new TransmittableThreadLocal<>() ;
+    private static final TransmittableThreadLocal<ChannelHandlerContext> CONTEXT = new TransmittableThreadLocal<>() ;
 
     /**
      * 释放上下文资源
      */
-    public void clear() {
+    public static void clear() {
         CONTEXT.remove();
     }
 
     /**
      * 获取当前链路上下文
      */
-    public static ChannelContextUtil getCurrentContext() {
+    public static ChannelHandlerContext get() {
         return CONTEXT.get();
     }
 
@@ -30,7 +31,7 @@ public class ChannelContextUtil {
      * 设置上下文
      *
      */
-    public static void setContext(ChannelContextUtil channelContext) {
+    public static void set(ChannelHandlerContext channelContext) {
         CONTEXT.set(channelContext);
     }
 

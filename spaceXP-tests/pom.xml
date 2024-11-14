@@ -36,6 +36,7 @@
         <module>spaceXP-spring-boot-tests-disruptor</module>
         <module>spaceXP-spring-boot-tests-kafka</module>
         <module>spaceXP-spring-boot-tests-security</module>
+        <module>spaceXP-spring-boot-tests-common</module>
     </modules>
     <dependencies>
         <dependency>
