@@ -62,6 +62,9 @@ public class TemplateDataUtils {
         putStringIfNotEmpty(dataModel, MODULE_NAME, projectDTO.getArtifactId());
         dataModel.put("port", projectDTO.getPort());
         dataModel.put("single", projectDTO.getType());
+        if(!StringUtils.hasText(projectDTO.getDescription())){
+            projectDTO.setDescription("Test");
+        }
         putStringIfNotEmpty(dataModel, "description", projectDTO.getDescription());
         putStringIfNotEmpty(dataModel, PACKAGE, projectDTO.getGroupId());
         putStringIfNotEmpty(dataModel, PACKAGE_PATH, projectDTO.getGroupId().replace(".", File.separator));
