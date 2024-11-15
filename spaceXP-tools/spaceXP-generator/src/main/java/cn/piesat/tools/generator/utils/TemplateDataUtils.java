@@ -13,7 +13,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -185,6 +184,45 @@ public class TemplateDataUtils {
     }
 
     /**
+     * 转换下划线为小驼峰格式
+     */
+    public static String toCamelCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        // 检查输入是否包含非法字符
+        if (!input.matches("[a-zA-Z_]+")) {
+            throw new IllegalArgumentException("Input contains invalid characters. Only letters and underscores are allowed.");
+        }
+
+        try {
+            // 按下划线分割字符串
+            String[] parts = input.split("_");
+
+            StringBuilder camelCaseString = new StringBuilder();
+
+            for (int i = 0; i < parts.length; i++) {
+                if (parts[i].isEmpty()) {
+                    continue; // 跳过空字符串
+                }
+
+                if (i == 0) {
+                    // 第一个单词保持小写
+                    camelCaseString.append(parts[i].toLowerCase());
+                } else {
+                    // 后续单词首字母大写
+                    camelCaseString.append(Character.toUpperCase(parts[i].charAt(0)));
+                    camelCaseString.append(parts[i].substring(1).toLowerCase());
+                }
+            }
+
+            return camelCaseString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while processing the input string: " + e.getMessage(), e);
+        }
+    }
+    /**
      * 用表数据来设置模版数据
      *
      * @param dataModel 模版数据
@@ -227,7 +265,9 @@ public class TemplateDataUtils {
         tableName = StrUtils.underlineToCamel(tableName, false);
 
         putStringIfNotEmpty(dataModel, TABLE_COMMENT, changeNameFirst(table.getTableComment(), tableName));
-        putStringIfNotEmpty(dataModel, CLASS_NAME, changeNameFirst(table.getClassName(), tableName));
+        String className = changeNameFirst(table.getClassName(), tableName);
+
+        putStringIfNotEmpty(dataModel, CLASS_NAME, toCamelCase(className));
         putStringIfNotEmpty(dataModel, FUNCTION_NAME, changeNameFirst(table.getFunctionName(), tableName));
     }
 
