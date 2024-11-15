@@ -59,7 +59,11 @@ public class TemplateDataUtils {
             putStringIfNotEmpty(dataModel, MODEL_PATH, projectDTO.getArtifactId() + "-model");
         }
         putStringIfNotEmpty(dataModel, VERSION, projectDTO.getVersion());
-        putStringIfNotEmpty(dataModel, MODULE_NAME, projectDTO.getArtifactId());
+        String moduleName = projectDTO.getArtifactId().replaceAll("[^a-zA-Z0-9]", "");
+        if (!Character.isLetter(moduleName.charAt(0))) {
+            moduleName = "_" + moduleName.substring(1);
+        }
+        putStringIfNotEmpty(dataModel, MODULE_NAME, moduleName);
         dataModel.put("port", projectDTO.getPort());
         dataModel.put("single", projectDTO.getType());
         if(!StringUtils.hasText(projectDTO.getDescription())){
@@ -190,7 +194,11 @@ public class TemplateDataUtils {
         putStringIfNotEmpty(dataModel, PACKAGE, table.getPackageName());
         putStringIfNotEmpty(dataModel, PACKAGE_PATH, table.getPackageName().replace(PERIOD, File.separator));
         putStringIfNotEmpty(dataModel, VERSION, table.getVersion());
-        putStringIfNotEmpty(dataModel, MODULE_NAME, table.getModuleName());
+        String moduleName = table.getModuleName().replaceAll("[^a-zA-Z0-9]", "");
+        if (!Character.isLetter(moduleName.charAt(0))) {
+            moduleName = "_" + moduleName.substring(1);
+        }
+        putStringIfNotEmpty(dataModel, MODULE_NAME, moduleName);
         putStringIfNotEmpty(dataModel, DB_TYPE, table.getDbType());
         putStringIfNotEmpty(dataModel, AUTHOR, table.getAuthor());
         putStringIfNotEmpty(dataModel, EMAIL, table.getEmail());
