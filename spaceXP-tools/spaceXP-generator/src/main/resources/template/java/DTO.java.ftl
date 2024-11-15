@@ -54,7 +54,7 @@ private static final long serialVersionUID = 1L;
         </#if>
     </#if>
     <#if field.len != 0>
-    @Length(max = ${field.len} , message = "长度必须小于等于${field.len}" ,groups ={AddGroup.class,UpdateGroup.class} )
+    @Length(max = ${field.len?c} , message = "长度必须小于等于${field.len}" ,groups ={AddGroup.class,UpdateGroup.class} )
     </#if>
     <#if field.formRequired == 1>
         <#if field.attrType == 'String'>
