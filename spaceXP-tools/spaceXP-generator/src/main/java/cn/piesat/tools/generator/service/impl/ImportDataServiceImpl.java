@@ -14,6 +14,7 @@ import cn.piesat.tools.generator.service.ImportDataService;
 import cn.piesat.tools.generator.utils.StrUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Service("importDataService")
 @RequiredArgsConstructor
+@Slf4j
 public class ImportDataServiceImpl implements ImportDataService {
 
     private final DynamicDataSource dynamicDataSource;
@@ -47,6 +49,31 @@ public class ImportDataServiceImpl implements ImportDataService {
         return getSqlByTable(databaseDO, importDataSourceDTO);
     }
 
+    /**
+     * 删除代码中的注释、空白字符和换行符
+     *
+     * @param code 需要处理的代码字符串
+     * @return 清理后的代码字符串
+     */
+    public static String cleanCode(String code) {
+        if (StringUtils.isEmpty(code)) {
+            return "";
+        }
+        try {
+            StringBuilder sb = new StringBuilder(code);
+
+            sb = new StringBuilder(sb.toString().replaceAll("//.*?(\r\n|\r|\n|$)", ""));
+
+            sb = new StringBuilder(sb.toString().replaceAll("/\\*[^*]*\\*+([^/*][^*]*\\*+)*/", ""));
+
+            sb = new StringBuilder(sb.toString().replaceAll("\\s+", ""));
+
+            return sb.toString();
+        } catch (Exception e) {
+            log.error("Error cleaning code:{} " , e.getMessage(),e);
+            return code;
+        }
+    }
     @Override
     public List<TableFieldDO> getALlFieldsByDataSourceAndTables(Map<String, FieldTypeDO> map, TableDO table, DatabaseDO databaseDO, DataSourceDO dataSourceDO) {
         String tableFieldsSql = databaseDO.getTableFields();
@@ -73,9 +100,9 @@ public class ImportDataServiceImpl implements ImportDataService {
             }
 
             f.setFieldType(fieldType);
-            String comment = rs.getString("column_comment");
+            String comment = cleanCode(rs.getString("column_comment"));
             if (StringUtils.isNotEmpty(comment)) {
-                f.setFieldComment(comment.replaceAll("\\s+", ""));
+                f.setFieldComment(comment);
             } else {
                 f.setFieldComment(f.getFieldName());
             }
