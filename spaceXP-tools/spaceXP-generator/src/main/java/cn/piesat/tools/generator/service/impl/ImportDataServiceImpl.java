@@ -180,7 +180,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             table.setFunctionName(table.getTableName());
             table.setPackageName(templatesConfig.getProject().getGroupId());
             table.setModuleName(templatesConfig.getProject().getArtifactId());
-            table.setClassName(StrUtils.underlineToCamel(table.getTableName(), true));
+            table.setClassName(table.getTableName());
             table.setFormLayout(1);
             return table;
         });

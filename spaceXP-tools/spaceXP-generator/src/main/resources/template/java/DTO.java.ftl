@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import org.hibernate.validator.constraints.*;
 import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotBlank;
 <#list dtoImportList as i>
 import ${i!};
 </#list>

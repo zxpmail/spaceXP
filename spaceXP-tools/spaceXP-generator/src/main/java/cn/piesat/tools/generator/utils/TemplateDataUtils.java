@@ -262,12 +262,12 @@ public class TemplateDataUtils {
                 }
             }
         }
-        tableName = StrUtils.underlineToCamel(tableName, false);
+
 
         putStringIfNotEmpty(dataModel, TABLE_COMMENT, changeNameFirst(table.getTableComment(), tableName));
-        String className = changeNameFirst(table.getClassName(), tableName);
+        String className = toCamelCase(table.getClassName());
 
-        putStringIfNotEmpty(dataModel, CLASS_NAME, toCamelCase(className));
+        putStringIfNotEmpty(dataModel, CLASS_NAME, className);
         putStringIfNotEmpty(dataModel, FUNCTION_NAME, changeNameFirst(table.getFunctionName(), tableName));
     }
 
