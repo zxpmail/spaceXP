@@ -45,12 +45,12 @@ export const useCrud = (options) => {
 			return
 		}
 		state.dataListLoading = true
-
+		debugger
 		service
 			.post(state.dataListUrl, state.queryForm,{
 				params: {
 					page: state.isPage ? state.page : null,
-					size: state.isPage ? state.size : null,
+					size: state.isPage ? state.limit : null,
 				},
 			})
 			.then((res) => {
