@@ -73,12 +73,13 @@ login:
     - "/admin/user/getLoginPageInfo"
     - "/admin/user/login"
     - "/admin/user/publicKey"
-    - "v3"
-    - "swagger-resources"
-    - "/doc.html"
+    - "/**/v3/**"
+    - "/**/swagger-resources"
+    - "/**/doc.html"
     - "/swagger-ui.html"
     - "/log/log/add"
     - "goview"
-logging:
-  level:
-    root: debug
+  log-enabled: true
+#logging:
+#  level:
+#    root: debug

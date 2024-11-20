@@ -21,12 +21,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableConfigurationProperties({GatewayProperties.class})
 public class GatewayConfig {
-    @Bean
+    //@Bean
     public AuthorizeFilter authorizeFilter(GatewayProperties gatewayProperties){
         return  new AuthorizeFilter(gatewayProperties);
     }
 
-    @ConditionalOnProperty(name = "login.logEnabled", havingValue = "true")
+    @ConditionalOnProperty(name = "login.log-enabled", havingValue = "true")
     @Bean
     public AccessLogFilter accessLogFilter(GatewayProperties gatewayProperties){
         return  new AccessLogFilter(gatewayProperties);
