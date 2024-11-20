@@ -3,6 +3,7 @@ package cn.piesat.tools.gateway.model;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class GatewayLog implements Serializable {
     /**
      * 请求时间
      */
-    private Date requestTime;
+    private LocalDateTime requestTime;
 
     /**
      * 请求参数

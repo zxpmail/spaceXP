@@ -47,11 +47,6 @@ public class GatewayProperties {
      */
     private Boolean enabled = true;
 
-    /**
-     * 忽略的pattern
-     */
-    private List<String> ignoredPatterns;
-
     private ApiAlarmConfiguration fail = new ApiAlarmConfiguration();
 
     private SlowApiAlarmConfiguration slow = new SlowApiAlarmConfiguration();

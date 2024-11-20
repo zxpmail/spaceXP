@@ -11,6 +11,7 @@ import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.tools.gateway.constant.GatewayConstant;
 import cn.piesat.tools.gateway.model.enums.GatewayResponseEnum;
 import cn.piesat.tools.gateway.properties.GatewayProperties;
+import cn.piesat.tools.gateway.utils.GatewayUtil;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +22,6 @@ import org.springframework.core.Ordered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
@@ -32,7 +31,6 @@ import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Objects;
 
 /**
  * @author zhouxp
@@ -43,7 +41,6 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
     private final GatewayProperties gatewayProperties;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
     @Resource
     private RedisService redisService;
 
@@ -60,7 +57,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
         ServerHttpResponse response = exchange.getResponse();
         String uri = request.getURI().getPath();
-        String ip = analysisSourceIp(request);
+        String ip = GatewayUtil.analysisSourceIp(request);
         ServerHttpRequest.Builder header = request.mutate().header(CommonConstants.IP, ip);
         if (!StringUtils.hasText(uri)) {
             return chain.filter(exchange.mutate().request(header.build()).build());
@@ -73,16 +70,12 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         String path = uri.substring(service.length() + 1);
         ServerHttpRequest mutableReq;
         //  检查白名单（配置）
-        if (!CollectionUtils.isEmpty(gatewayProperties.getIgnorePaths())) {
-            for (String ignorePath : gatewayProperties.getIgnorePaths()) {
-                if (PATH_MATCHER.match(ignorePath, uri)) {
-                    mutableReq = header
-                            .header(CommonConstants.URI, path)
-                            .header(CommonConstants.SASS, service)
-                            .build();
-                    return chain.filter(exchange.mutate().request(mutableReq).build());
-                }
-            }
+        if(GatewayUtil.isIgnoredPatterns(exchange,gatewayProperties.getIgnorePaths())){
+            mutableReq = header
+                    .header(CommonConstants.URI, path)
+                    .header(CommonConstants.SASS, service)
+                    .build();
+            return chain.filter(exchange.mutate().request(mutableReq).build());
         }
         String token = request.getHeaders().getFirst(CommonConstants.TOKEN);
         if (!StringUtils.hasText(token)) {
@@ -174,39 +167,4 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
     public int getOrder() {
         return -100;
     }
-
-    /**
-     * 获取客户端真实IP
-     */
-    private String analysisSourceIp(ServerHttpRequest request) {
-        String ip = null;
-        //X-Forwarded-For：Squid 服务代理
-        String ipAddresses = request.getHeaders().getFirst(GatewayConstant.X_FORWARDED_FOR);
-        if (ipAddresses == null || ipAddresses.length() == 0 || GatewayConstant.UNKNOWN.equalsIgnoreCase(ipAddresses)) {
-            //Proxy-Client-IP：apache 服务代理
-            ipAddresses = request.getHeaders().getFirst(GatewayConstant.PROXY_CLIENT_IP);
-        }
-        if (ipAddresses == null || ipAddresses.length() == 0 || GatewayConstant.UNKNOWN.equalsIgnoreCase(ipAddresses)) {
-            //WL-Proxy-Client-IP：weblogic 服务代理
-            ipAddresses = request.getHeaders().getFirst(GatewayConstant.WL_PROXY_CLIENT_IP);
-        }
-        if (ipAddresses == null || ipAddresses.length() == 0 || GatewayConstant.UNKNOWN.equalsIgnoreCase(ipAddresses)) {
-            //HTTP_CLIENT_IP：有些代理服务器
-            ipAddresses = request.getHeaders().getFirst(GatewayConstant.HTTP_CLIENT_IP);
-        }
-        if (ipAddresses == null || ipAddresses.length() == 0 || GatewayConstant.UNKNOWN.equalsIgnoreCase(ipAddresses)) {
-            //X-Real-IP：nginx服务代理
-            ipAddresses = request.getHeaders().getFirst(GatewayConstant.X_REAL_IP);
-        }
-        //有些网络通过多层代理，那么获取到的ip就会有多个，一般都是通过逗号（,）分割开来，并且第一个ip为客户端的真实IP
-        if (ipAddresses != null && ipAddresses.length() != 0) {
-            ip = ipAddresses.split(",")[0];
-        }
-        //通过request.getRemoteAddr()获取IP
-        if (ip == null || ip.length() == 0 || GatewayConstant.UNKNOWN.equalsIgnoreCase(ipAddresses)) {
-            ip = Objects.requireNonNull(request.getRemoteAddress()).getHostString();
-        }
-        return ip;
-    }
-
 }
