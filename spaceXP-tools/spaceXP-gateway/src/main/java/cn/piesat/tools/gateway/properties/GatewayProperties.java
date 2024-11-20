@@ -45,7 +45,7 @@ public class GatewayProperties {
     /**
      * 是否开启日志打印
      */
-    private Boolean enabled = true;
+    private Boolean logEnabled = true;
 
     private ApiAlarmConfiguration fail = new ApiAlarmConfiguration();
 

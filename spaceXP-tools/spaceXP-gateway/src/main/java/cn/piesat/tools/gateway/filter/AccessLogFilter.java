@@ -75,7 +75,7 @@ public class AccessLogFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        if (!gatewayProperties.getIsAuthentication() || !gatewayProperties.getEnabled() || GatewayUtil.isIgnoredPatterns(exchange, gatewayProperties.getIgnorePaths())) {
+        if (!gatewayProperties.getIsAuthentication() || !gatewayProperties.getLogEnabled() || GatewayUtil.isIgnoredPatterns(exchange, gatewayProperties.getIgnorePaths())) {
             return chain.filter(exchange);
         }
         GatewayLog gatewayLog = fillGatewayLogFromExchange(exchange);
