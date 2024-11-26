@@ -14,8 +14,8 @@ import java.util.concurrent.Callable;
  * @author zhouxp
  */
 public class ContextAwareCallable<T> implements Callable<T> {
-    private Callable<T> task;
-    private RequestAttributes context;
+    private final Callable<T> task;
+    private final RequestAttributes context;
 
     public ContextAwareCallable(Callable<T> task, RequestAttributes context) {
         this.task = task;

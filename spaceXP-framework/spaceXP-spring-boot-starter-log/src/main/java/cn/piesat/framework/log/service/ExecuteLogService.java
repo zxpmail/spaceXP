@@ -3,6 +3,7 @@ package cn.piesat.framework.log.service;
 
 import cn.piesat.framework.common.model.entity.OpLogEntity;
 
+
 /**
  * <p/>
  * {@code @description}  :日志服务类
@@ -12,8 +13,5 @@ import cn.piesat.framework.common.model.entity.OpLogEntity;
  * @author zhouxp
  */
 public interface ExecuteLogService {
-
-    default void exec(OpLogEntity opLogEntity){
-        System.out.println(opLogEntity);
-    }
+    void exec(OpLogEntity opLogEntity);
 }
