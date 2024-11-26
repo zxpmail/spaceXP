@@ -12,5 +12,8 @@ import cn.piesat.framework.common.model.entity.OpLogEntity;
  * @author zhouxp
  */
 public interface ExecuteLogService {
-    void exec(OpLogEntity opLogEntity);
+
+    default void exec(OpLogEntity opLogEntity){
+        System.out.println(opLogEntity);
+    }
 }
