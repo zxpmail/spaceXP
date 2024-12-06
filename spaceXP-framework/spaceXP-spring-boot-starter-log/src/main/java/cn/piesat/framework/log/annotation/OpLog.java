@@ -27,4 +27,10 @@ public @interface OpLog {
     BusinessEnum op() default BusinessEnum.OTHER ;
     //操作描述
     String description() default "";
+    /**
+     * 慢日志阈值
+     * 当值小于 0 时，不进行慢日志统计。
+     * 当值大于等于0时，当前值只要大于等于这个值，就进行统计。
+     */
+    long slowThresholdMills() default -1;
 }
