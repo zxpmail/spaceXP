@@ -38,4 +38,6 @@ public interface LogConstants {
     String BROWSER ="client";
 
     String OS ="unknown";
+
+    String SLOW_THRESHOLD_MILLS ="slowThresholdMills";
 }

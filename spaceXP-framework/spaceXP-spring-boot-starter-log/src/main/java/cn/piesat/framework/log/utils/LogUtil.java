@@ -89,6 +89,7 @@ public class LogUtil {
         if (!ObjectUtils.isEmpty(annotation)) {
             map.put(LogConstants.DESCRIPTION, annotation.description());
             map.put(LogConstants.OP, annotation.op());
+            map.put(LogConstants.SLOW_THRESHOLD_MILLS, annotation.slowThresholdMills());
         }
     }
 
@@ -97,6 +98,7 @@ public class LogUtil {
         if (!ObjectUtils.isEmpty(annotation)) {
             map.put(LogConstants.DESCRIPTION, annotation.value());
             map.put(LogConstants.OP, BusinessEnum.OTHER);
+            map.put(LogConstants.SLOW_THRESHOLD_MILLS, -1);
         }
     }
 
