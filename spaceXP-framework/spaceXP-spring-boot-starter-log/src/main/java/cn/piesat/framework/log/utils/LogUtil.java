@@ -15,6 +15,7 @@ import cn.piesat.framework.log.properties.LogProperties;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiOperation;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -32,6 +34,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 
 import java.util.List;
@@ -49,6 +52,7 @@ import static cn.piesat.framework.common.constants.CommonConstants.OS;
  *
  * @author zhouxp
  */
+@Slf4j
 public class LogUtil {
     /***
      * 获取操作信息
@@ -118,7 +122,6 @@ public class LogUtil {
 
     public static void recordLog(ThreadLocal<OpLogEntity> logThreadLocal, JoinPoint joinPoint, LogProperties logProperties, String module) throws Exception {
         OpLogEntity opLogEntity = new OpLogEntity();
-        opLogEntity.setConsumingTime(Instant.now().toEpochMilli());
         opLogEntity.setStartTime(LocalDateTime.now());
 
 
@@ -191,14 +194,13 @@ public class LogUtil {
         opLogEntity.setOp(op1.getOp());
         opLogEntity.setCode(op1.getCode());
         opLogEntity.setDescription(op.get(LogConstants.DESCRIPTION).toString());
+        opLogEntity.setConsumingTime((Long) op.get(LogConstants.SLOW_THRESHOLD_MILLS));
     }
 
     public static void doAfterReturning(ThreadLocal<OpLogEntity> logThreadLocal, Object ret) {
         //得到当前线程的log对象
         OpLogEntity opLogEntity = logThreadLocal.get();
-        opLogEntity.setFinishTime(LocalDateTime.now());
-        long endTime = Instant.now().toEpochMilli();
-        opLogEntity.setConsumingTime(endTime - opLogEntity.getConsumingTime());
+
         // 处理完请求，返回内容
         if (ret instanceof Exception) {
             opLogEntity.setType(LogConstants.error);
@@ -218,9 +220,6 @@ public class LogUtil {
 
     public static void doAfterThrowable(ThreadLocal<OpLogEntity> logThreadLocal, Throwable e) {
         OpLogEntity opLogEntity = logThreadLocal.get();
-        opLogEntity.setFinishTime(LocalDateTime.now());
-        long endTime = Instant.now().toEpochMilli();
-        opLogEntity.setConsumingTime(endTime - opLogEntity.getConsumingTime());
         // 异常
         opLogEntity.setType(LogConstants.error);
         // 异常对象
@@ -231,6 +230,16 @@ public class LogUtil {
 
     public static void doAfter(ThreadLocal<OpLogEntity> logThreadLocal, ApplicationContext applicationContext) throws Exception {
         OpLogEntity opLogEntity = logThreadLocal.get();
+        opLogEntity.setFinishTime(LocalDateTime.now());
+        long endTime = Instant.now().toEpochMilli();
+        long milli = opLogEntity.getStartTime().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        long costTime = endTime - milli;
+
+        Long consumingTime = opLogEntity.getConsumingTime();
+        if ( consumingTime > 0 && consumingTime < costTime){
+            log.warn("{} is slow log, {}ms >= {}ms.", opLogEntity.getActionMethod(), costTime, consumingTime);
+        }
+        opLogEntity.setConsumingTime(costTime);
         HttpServletRequest request = opLogEntity.getRequest();
         String name = request.getHeader(CommonConstants.USERNAME);
         if (StringUtils.hasText(name)) {
