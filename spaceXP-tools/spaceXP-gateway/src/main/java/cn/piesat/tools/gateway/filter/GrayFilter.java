@@ -9,6 +9,12 @@ import org.springframework.core.Ordered;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.net.URI;
+
+import static cn.piesat.tools.gateway.constant.GatewayConstant.GRAY_LB_FLAG;
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_REQUEST_URL_ATTR;
+import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.GATEWAY_SCHEME_PREFIX_ATTR;
+
 /**
  * <p/>
  * {@code @description}: 灰度发布拦截器
@@ -28,6 +34,12 @@ public class GrayFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        URI url = exchange.getAttribute(GATEWAY_REQUEST_URL_ATTR);
+        String schemePrefix = exchange.getAttribute(GATEWAY_SCHEME_PREFIX_ATTR);
+        if (url == null || (!GRAY_LB_FLAG.equals(url.getScheme()) && !GRAY_LB_FLAG.equals(schemePrefix))) {
+            return chain.filter(exchange);
+        }
+
         return null;
     }
 

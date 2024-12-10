@@ -51,4 +51,9 @@ public interface GatewayConstant {
      */
     String FAIL = "fail";
 
+    /**
+     * 灰度发布标志
+     */
+    String GRAY_LB_FLAG = "grayLb";
+
 }
