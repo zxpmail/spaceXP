@@ -47,4 +47,29 @@ public class GatewayProperties {
      */
     private Boolean logEnabled = true;
 
+
+    private Gray gray;
+
+    @Data
+    static class Gray {
+
+        /**
+         * 生产的版本
+         */
+        private String version;
+        /**
+         * 需要灰度的人员列表
+         */
+        private List<String> users;
+
+        /**
+         * 灰度的版本
+         */
+        private String grayVersion;
+
+        /**
+         * 权重
+         */
+        private Double weight;
+    }
 }
