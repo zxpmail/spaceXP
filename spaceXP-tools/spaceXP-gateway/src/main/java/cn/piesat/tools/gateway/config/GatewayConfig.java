@@ -3,6 +3,7 @@ package cn.piesat.tools.gateway.config;
 
 import cn.piesat.tools.gateway.filter.AccessLogFilter;
 import cn.piesat.tools.gateway.filter.AuthorizeFilter;
+import cn.piesat.tools.gateway.filter.GrayFilter;
 import cn.piesat.tools.gateway.properties.GatewayProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,9 +27,15 @@ public class GatewayConfig {
         return  new AuthorizeFilter(gatewayProperties);
     }
 
-    @ConditionalOnProperty(name = "login.log-enabled", havingValue = "true")
+    @ConditionalOnProperty(name = "gateway.log-enabled", havingValue = "true")
     @Bean
     public AccessLogFilter accessLogFilter(GatewayProperties gatewayProperties){
         return  new AccessLogFilter(gatewayProperties);
+    }
+
+    @ConditionalOnProperty(name = "gateway.gray-enabled", havingValue = "true")
+    @Bean
+    public GrayFilter grayFilter(GatewayProperties gatewayProperties){
+        return  new GrayFilter(gatewayProperties.getGray());
     }
 }

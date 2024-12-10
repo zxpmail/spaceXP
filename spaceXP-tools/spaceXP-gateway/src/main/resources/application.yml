@@ -68,18 +68,24 @@ spring:
           filters:
             - StripPrefix=1
             - SwaggerHeaderFilter
-login:
-  ignorePaths:
-    - "/admin/user/getLoginPageInfo"
-    - "/admin/user/login"
-    - "/admin/user/publicKey"
-    - "/**/v3/**"
-    - "/**/swagger-resources"
-    - "/**/doc.html"
-    - "/swagger-ui.html"
-    - "/log/log/add"
-    - "goview"
+gateway:
+  login:
+    ignorePaths:
+      - "/admin/user/getLoginPageInfo"
+      - "/admin/user/login"
+      - "/admin/user/publicKey"
+      - "/**/v3/**"
+      - "/**/swagger-resources"
+      - "/**/doc.html"
+      - "/swagger-ui.html"
+      - "/log/log/add"
+      - "goview"
   log-enabled: true
+  gray-enable: true
+  gray:
+    version: 1
+    grayUsers: aa,bb,cc,dd,ee,ff
+    gray-version: 2
 #logging:
 #  level:
 #    root: debug

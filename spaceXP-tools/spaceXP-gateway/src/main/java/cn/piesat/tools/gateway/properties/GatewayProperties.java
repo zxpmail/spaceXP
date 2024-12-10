@@ -14,44 +14,59 @@ import java.util.List;
  *
  * @author zhouxp
  */
-@ConfigurationProperties(prefix = "login")
+@ConfigurationProperties(prefix = "gateway")
 @Data
 public class GatewayProperties {
 
     /**
-     * 请求租户需要忽略拦截的url路径
+     * 登录信息
      */
-    private List<String> sassIgnorePaths;
-    /**
-     * 忽略拦截的url路径
-     */
-    private List<String> ignorePaths;
-
-    /**
-     * 没有登录是否进行网页重定向
-     */
-    private Boolean isRedirect =false;
-
-    /**
-     * 是否鉴权
-     */
-    private Boolean isAuthentication = true ;
-
-    /**
-     * token配置信息
-     */
-    private TokenProperties tokenProperties =new TokenProperties();
-
+    private Login login;
     /**
      * 是否开启日志打印
      */
     private Boolean logEnabled = true;
 
+    @Data
+    public static class Login {
+        /**
+         * 请求租户需要忽略拦截的url路径
+         */
+        private List<String> sassIgnorePaths;
+        /**
+         * 忽略拦截的url路径
+         */
+        private List<String> ignorePaths;
 
+        /**
+         * 没有登录是否进行网页重定向
+         */
+        private Boolean isRedirect = false;
+
+        /**
+         * 是否鉴权
+         */
+        private Boolean isAuthentication = true;
+
+        /**
+         * token配置信息
+         */
+        private TokenProperties tokenProperties = new TokenProperties();
+    }
+
+
+    /**
+     * 灰度信息
+     */
     private Gray gray;
 
+    /**
+     * 是否启动灰度发布
+     */
+    private Boolean grayEnabled = true;
+
     @Data
-    static class Gray {
+    public static class Gray {
 
         /**
          * 生产的版本
@@ -70,6 +85,6 @@ public class GatewayProperties {
         /**
          * 权重
          */
-        private Double weight;
+        private Integer weight;
     }
 }

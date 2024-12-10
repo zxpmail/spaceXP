@@ -50,7 +50,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        if (!gatewayProperties.getIsAuthentication()) {
+        if (!gatewayProperties.getLogin().getIsAuthentication()) {
             return chain.filter(exchange);
         }
         ServerHttpRequest request = exchange.getRequest();
@@ -70,7 +70,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         String path = uri.substring(service.length() + 1);
         ServerHttpRequest mutableReq;
         //  检查白名单（配置）
-        if(GatewayUtil.isIgnoredPatterns(exchange,gatewayProperties.getIgnorePaths())){
+        if(GatewayUtil.isIgnoredPatterns(exchange,gatewayProperties.getLogin().getIgnorePaths())){
             mutableReq = header
                     .header(CommonConstants.URI, path)
                     .header(CommonConstants.SASS, service)
@@ -84,7 +84,7 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
         if (!StringUtils.hasText(token)) {
             token = request.getHeaders().getFirst(GatewayConstant.WS_TOKEN);
         }
-        if (gatewayProperties.getIsRedirect()) {
+        if (gatewayProperties.getLogin().getIsRedirect()) {
             if (!StringUtils.hasText(token) || "''".equalsIgnoreCase(token)) {
                 log.error("redirect");
                 return getVoidMono(response, GatewayResponseEnum.REDIRECT);
@@ -98,19 +98,19 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
 
         Object userId;
         try {
-            userId = JwtUtils.getValue(token, gatewayProperties.getTokenProperties().getTokenSignKey());
+            userId = JwtUtils.getValue(token, gatewayProperties.getLogin().getTokenProperties().getTokenSignKey());
         } catch (Exception ex) {
             log.error("token转化错误！！");
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
         //保证同一用户登录在不同窗口登录一次
-        String checkToken = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + "_check_" + userId);
+        String checkToken = redisService.getObject(gatewayProperties.getLogin().getTokenProperties().getLoginToken() + "_check_" + userId);
         if (ObjectUtils.isEmpty(checkToken) || !token.equalsIgnoreCase(checkToken)) {
             log.error("{} token is invalid!!!",checkToken);
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
 
-        Object object = redisService.getObject(gatewayProperties.getTokenProperties().getLoginToken() + userId);
+        Object object = redisService.getObject(gatewayProperties.getLogin().getTokenProperties().getLoginToken() + userId);
         JwtUser user;
         try {
             assert object != null;
@@ -120,7 +120,8 @@ public class AuthorizeFilter implements GlobalFilter, Ordered {
             return getVoidMono(response, CommonResponseEnum.TOKEN_INVALID);
         }
 
-        redisService.expire(gatewayProperties.getTokenProperties().getLoginToken() + user.getUserId(), gatewayProperties.getTokenProperties().getExpiration());
+        redisService.expire(gatewayProperties.getLogin().getTokenProperties().getLoginToken() + user.getUserId(), gatewayProperties.getLogin().getTokenProperties().getExpiration());
+
 
         mutableReq = header.header(CommonConstants.USER_ID, user.getUserId().toString())
                 .header(CommonConstants.DEPT_ID, user.getDeptId().toString())
