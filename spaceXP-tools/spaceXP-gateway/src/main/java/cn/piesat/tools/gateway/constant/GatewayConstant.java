@@ -56,4 +56,9 @@ public interface GatewayConstant {
      */
     String GRAY_LB_FLAG = "grayLb";
 
+    /**
+     * 灰度发布版本
+     */
+    String VERSION ="version";
+
 }

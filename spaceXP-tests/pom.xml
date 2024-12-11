@@ -37,6 +37,7 @@
         <module>spaceXP-spring-boot-tests-kafka</module>
         <module>spaceXP-spring-boot-tests-security</module>
         <module>spaceXP-spring-boot-tests-common</module>
+        <module>spaceXP-spring-boot-tests-gray</module>
     </modules>
     <dependencies>
         <dependency>

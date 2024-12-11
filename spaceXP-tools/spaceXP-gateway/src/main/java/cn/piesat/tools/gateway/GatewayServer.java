@@ -6,9 +6,9 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class GatewayApplication {
+public class GatewayServer {
     public static void main(String[] args) {
         //System.setProperty("spring.cloud.bootstrap.enabled","true");
-        SpringApplication.run(GatewayApplication.class, args);
+        SpringApplication.run(GatewayServer.class, args);
     }
 }

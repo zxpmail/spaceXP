@@ -24,6 +24,10 @@ spring:
           enabled: false
           lower-case-service-id: true
       routes:
+        - id: gray
+          uri: grayLb://gray
+          predicates:
+            - Path=/gray/**
         - id: websocket
           uri: lb:ws://websocket
           predicates:
@@ -80,11 +84,11 @@ gateway:
       - "/swagger-ui.html"
       - "/log/log/add"
       - "goview"
-  log-enabled: true
-  gray-enable: true
+  #log-enabled: true
+  gray-enabled: true
   gray:
     version: 1
-    grayUsers: aa,bb,cc,dd,ee,ff
+    users: aa,bb,cc,dd,ee,ff,1
     gray-version: 2
 #logging:
 #  level:

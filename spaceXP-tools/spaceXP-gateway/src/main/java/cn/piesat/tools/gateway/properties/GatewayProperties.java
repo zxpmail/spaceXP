@@ -67,7 +67,6 @@ public class GatewayProperties {
 
     @Data
     public static class Gray {
-
         /**
          * 生产的版本
          */
@@ -81,10 +80,5 @@ public class GatewayProperties {
          * 灰度的版本
          */
         private String grayVersion;
-
-        /**
-         * 权重
-         */
-        private Integer weight;
     }
 }
