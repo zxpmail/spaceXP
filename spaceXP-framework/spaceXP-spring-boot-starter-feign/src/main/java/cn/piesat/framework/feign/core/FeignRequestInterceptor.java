@@ -27,18 +27,23 @@ public class FeignRequestInterceptor implements RequestInterceptor {
             return;
         }
         Enumeration<String> headerNames = request.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String name = headerNames.nextElement();
-                String values = request.getHeader(name);
-                if (name.equals("content-length")) {
-                    continue;
+        try {
+            if (headerNames != null) {
+                while (headerNames.hasMoreElements()) {
+                    String name = headerNames.nextElement();
+                    String values = request.getHeader(name);
+                    if (name.equals("content-length")) {
+                        continue;
+                    }
+                    if (values.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) && template.method().equals("POST")) {
+                        continue;
+                    }
+                    template.header(name, values);
                 }
-                if (values.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) && template.method().equals("POST")) {
-                    continue;
-                }
-                template.header(name, values);
             }
+        }catch (Exception e){
+            log.warn("可以忽略，异步时可能数据为空！",e);
         }
+
     }
 }
