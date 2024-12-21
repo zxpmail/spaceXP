@@ -84,4 +84,37 @@ public interface CommonConstants {
     String SIGNATURE_ARGUMENT ="参数不能为空!";
 
     String COMMA =",";
+
+    /**
+     * 请求url
+     */
+    String REQ_URL = "reqUrl";
+
+    /**
+     * 请求参数
+     */
+    String REQ_PARAMETER = "reqParameter";
+
+    /**
+     * 流程ID
+     */
+    String FLOW_ID = "flowId";
+
+    /**
+     * 操作流程类型
+     */
+
+    String FLOW_TYPE = "flowType";
+
+    /**
+     * 操作流程名称
+     */
+
+    String FLOW_NAME = "flowName";
+
+    /**
+     * 应用名称
+     */
+    String APP_NAME = "appName";
+
 }
