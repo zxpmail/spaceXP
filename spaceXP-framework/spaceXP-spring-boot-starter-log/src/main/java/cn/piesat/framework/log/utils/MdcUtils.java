@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.piesat.framework.common.utils.ArgsUtils;
 import cn.piesat.framework.log.annotation.MdcLog;
-import cn.piesat.framework.log.constants.MdcLogConstants;
 import cn.piesat.framework.log.enums.MdcLogType;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.MDC;
