@@ -1,6 +1,7 @@
 package cn.piesat.framework.log.config;
 
 
+import cn.piesat.framework.log.core.MdcLogMethodInterceptor;
 import cn.piesat.framework.log.core.MdcThreadPoolTaskExecutor;
 import cn.piesat.framework.log.core.OpLogAspect;
 import cn.piesat.framework.log.core.SwaggerLogAspect;
@@ -9,7 +10,9 @@ import cn.piesat.framework.log.external.Log4j2DynamicLoggingConfigurer;
 import cn.piesat.framework.log.external.LogbackDynamicLoggingConfigurer;
 import cn.piesat.framework.log.external.LoggingDynamicLoggingConfigurer;
 import cn.piesat.framework.log.properties.LogProperties;
+import org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -67,10 +70,19 @@ public class LogAutoConfiguration implements WebMvcConfigurer {
         return new LoggingDynamicLoggingConfigurer();
     }
 
+    @Bean("mdcLogPointcutAdvisor")
+    @ConditionalOnProperty(name = "space.log.mdc.enable", havingValue = "true")
+    public AspectJExpressionPointcutAdvisor autoLogPointcutAdvisor(LogProperties logProperties) {
+        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
+        advisor.setExpression(logProperties.getMdc().getPointcutExpression());
+        advisor.setAdvice(new MdcLogMethodInterceptor(logProperties.getMdc().getAppInfo(),logProperties.getMdc().getErrorInfo(),logProperties.getMdc().getLogType(),logProperties.getMdc().getLogTypeCode()));
+        return advisor;
+    }
     /**
      * 声明mdc线程池
      */
     @Bean("mdcExecutor")
+    @ConditionalOnBean(name="mdcLogPointcutAdvisor")
     public Executor asyncExecutor(LogProperties logProperties) {
         final int cpuSize = Runtime.getRuntime().availableProcessors();
         MdcThreadPoolTaskExecutor executor = new MdcThreadPoolTaskExecutor();

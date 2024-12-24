@@ -35,6 +35,7 @@ public class LogProperties {
 
     @Data
     public static class Mdc {
+        private Boolean enable =false;
         /**
          * 贴点表达式
          */
