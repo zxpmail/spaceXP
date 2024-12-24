@@ -1,6 +1,7 @@
 package cn.piesat.framework.log.config;
 
 
+import cn.piesat.framework.log.core.MdcThreadPoolTaskExecutor;
 import cn.piesat.framework.log.core.OpLogAspect;
 import cn.piesat.framework.log.core.SwaggerLogAspect;
 import cn.piesat.framework.log.event.LogListener;
@@ -16,6 +17,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.concurrent.Executor;
 
 /**
  * <p/>
@@ -62,5 +65,21 @@ public class LogAutoConfiguration implements WebMvcConfigurer {
     @ConditionalOnMissingClass({"ch.qos.logback.classic.LoggerContext","org.apache.logging.log4j.core.LoggerContext"})
     public LoggingDynamicLoggingConfigurer loggingDynamicLoggingConfigurer() {
         return new LoggingDynamicLoggingConfigurer();
+    }
+
+    /**
+     * 声明mdc线程池
+     */
+    @Bean("mdcExecutor")
+    public Executor asyncExecutor(LogProperties logProperties) {
+        final int cpuSize = Runtime.getRuntime().availableProcessors();
+        MdcThreadPoolTaskExecutor executor = new MdcThreadPoolTaskExecutor();
+        executor.setCorePoolSize(cpuSize);
+        executor.setMaxPoolSize(2 * cpuSize);
+        executor.setQueueCapacity(logProperties.getMdc().getThreadPoolQueueCapacity());
+        executor.setKeepAliveSeconds(logProperties.getMdc().getThreadAliveSeconds());
+        executor.setThreadNamePrefix("asyncMdc-");
+        executor.initialize();
+        return executor;
     }
 }
