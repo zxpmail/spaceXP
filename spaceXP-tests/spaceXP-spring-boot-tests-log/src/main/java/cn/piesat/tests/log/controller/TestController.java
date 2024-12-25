@@ -3,10 +3,13 @@ package cn.piesat.tests.log.controller;
 
 import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
+import cn.piesat.framework.log.annotation.MdcLog;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.common.model.enums.BusinessEnum;
+import cn.piesat.framework.log.enums.MdcLogType;
 import cn.piesat.framework.log.external.DynamicLoggingConfigurer;
 import cn.piesat.tests.log.service.TestService;
+import cn.piesat.tests.log.service.TestService1;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,41 @@ public class TestController {
         log.info("log 日志2 ");
         throw new BaseException(CommonResponseEnum.ERROR);
     }
+    @Resource
+    private TestService1 testService1;
+    @GetMapping(value = "/mdcLogBiz")
+    @MdcLog(op= MdcLogType.BIZ,appName = "Test")
+    public String mdcLogBiz(String name,Integer age)  {
 
+        log.error("log 日志1");
+        log.info("log 日志2 ");
+        testService1.testMdc();
+        return "hello world!!";
+    }
+    @GetMapping(value = "/mdcLogApp")
+    @MdcLog(op= MdcLogType.APP,appName = "Test")
+    public String mdcLoApp()  {
+        log.error("log 日志1");
+        log.info("log 日志2 ");
+        testService1.hello();
+        return "hello world!!";
+    }
+    @GetMapping(value = "/mdcLogAudit")
+    @MdcLog(op= MdcLogType.AUDIT,appName = "Test")
+    public String mdcLoAudit()  {
+        log.error("log 日志1");
+        log.info("log 日志2 ");
+        testService1.hello1();
+        return "hello world!!";
+    }
+    @GetMapping(value = "/mdcLogException")
+    @MdcLog(op= MdcLogType.BIZ,appName = "Test")
+    public String mdcLogException()  {
+
+        log.error("log 日志1");
+        log.info("log 日志2 ");
+        throw  new BaseException("hello");
+    }
     @GetMapping(value = "/logSwagger")
     @ApiOperation("测试swagger拦截日志")
     public void logSwagger()  {

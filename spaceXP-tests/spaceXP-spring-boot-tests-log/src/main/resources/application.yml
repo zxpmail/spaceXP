@@ -13,6 +13,10 @@ spring:
 space:
   log:
     log-flag: 1
+    mdc:
+      enable: true
 logging:
   level:
     root: info
+  file:
+    path: d:/logs
