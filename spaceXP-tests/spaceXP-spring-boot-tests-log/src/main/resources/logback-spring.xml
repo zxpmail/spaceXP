@@ -19,7 +19,8 @@
         </discriminator>
         <sift>
             <appender name="${logType}" class="ch.qos.logback.core.rolling.RollingFileAppender">
-               <!-- <filter class="cn.piesat.kjyy.test.log.LogTypeFilter" />-->
+                <!--打开此项 不记录unknown内容-->
+               <!-- <filter class="cn.piesat.framework.log.filter.LogTypeFilter" />-->
                 <file>${log.path}/biz-info-${logType}.log</file>
 
                <!-- <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
