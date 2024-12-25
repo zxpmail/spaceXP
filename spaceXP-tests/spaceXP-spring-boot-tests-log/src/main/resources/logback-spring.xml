@@ -36,7 +36,7 @@
                     <!-- 保留文件天数 -->
                     <maxHistory>7</maxHistory>
                 </rollingPolicy>
-                <encoder class ="cn.piesat.kjyy.common.mdc.log.encoder.LogTypePatternLayoutEncoder">
+                <encoder class ="cn.piesat.framework.log.encoder.LogTypePatternLayoutEncoder">
                     <unknown>
                         %d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX} [%thread] ==unknown== %-5level %logger{36} - [%t] %p %logger - %msg%n%xEx
                     </unknown>
