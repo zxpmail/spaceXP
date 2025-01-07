@@ -5,6 +5,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 
 /**
  * <p/>
@@ -21,14 +22,18 @@ public class DataSourceContextHolder {
             return new ArrayDeque<>();
         }
     };
-
+    private DataSourceContextHolder() {
+        throw new RuntimeException("禁止反射创建");
+    }
     /**
      * 获得当前线程数据源
      *
      * @return 数据源名称
      */
     public static String peek() {
-        return DATASOURCE_HOLDER.get().peek();
+        // 修复补丁。因为可能返回null，而ConcurrentHashMap的get方法不能传入null，否则报空指针
+        String peek = DATASOURCE_HOLDER.get().peek();
+        return Objects.isNull(peek) ? "" : peek;
     }
 
     /**
