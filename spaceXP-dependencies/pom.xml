@@ -69,10 +69,16 @@
         <okio.version>3.8.0</okio.version>
         <podam.version>8.0.2.RELEASE</podam.version>
         <log4j-core.version>2.23.0</log4j-core.version>
+        <commons-io.version>2.18.0</commons-io.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-core</artifactId>

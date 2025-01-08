@@ -117,4 +117,13 @@ public interface CommonConstants {
      */
     String APP_NAME = "appName";
 
+    /**
+     * 公钥
+     */
+    String PUBLIC_KEY="publicKey";
+
+    /**
+     * 私钥
+     */
+    String PRIVATE_KEY="privateKey";
 }
