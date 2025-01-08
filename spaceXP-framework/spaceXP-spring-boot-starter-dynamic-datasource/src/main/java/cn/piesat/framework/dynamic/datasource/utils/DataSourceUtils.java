@@ -43,7 +43,7 @@ public class DataSourceUtils {
 
     public static String getDsName(ProceedingJoinPoint point){
         Object[] args = point.getArgs();
-        String dsName="";
+        String dsName;
         if(args!=null){
             for (Object arg : args) {
                 if(arg instanceof DSEntity){
@@ -58,7 +58,7 @@ public class DataSourceUtils {
 
     public static String getDsName(MethodInvocation point){
         Object[] args = point.getArguments();
-        String dsName="";
+        String dsName;
         for (Object arg : args) {
             if(arg instanceof DSEntity){
                 dsName=((DSEntity) arg).getDSName__();
