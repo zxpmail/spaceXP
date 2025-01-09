@@ -71,7 +71,7 @@ public class GeneratorServiceImpl implements GeneratorService {
      */
     private void writeZipByTemplate(Map<String, Object> dataModel, ZipOutputStream zip, Integer must, Integer moduleType) {
         for (TemplateEntity template : templatesConfig.getTemplates()) {
-            if ((must == template.getMust()) && (moduleType >= template.getModuleType())) {
+            if ((must.equals(template.getMust()) ) && (moduleType >= template.getModuleType())) {
                 dataModel.put(TEMPLATE_NAME, template.getName());
                 String content = TemplateUtils.getContent(template.getContent(), dataModel);
                 String path = TemplateUtils.getContent(template.getPath(), dataModel);
