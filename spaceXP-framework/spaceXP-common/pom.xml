@@ -21,6 +21,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-common</artifactId>
+        </dependency>
+        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>

@@ -3,6 +3,8 @@ package cn.piesat.framework.dynamic.datasource.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.security.PrivateKey;
+
 /**
  * <p/>
  * {@code @description}  : 数据源实体
@@ -35,4 +37,9 @@ public class DataSourceEntity {
      * 数据库key，即保存Map中的key
      */
     private String key;
+
+    /**
+     * 私钥
+     */
+    private String privateKey;
 }

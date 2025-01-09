@@ -1,14 +1,21 @@
 package cn.piesat.framework.dynamic.datasource.core;
 
+import cn.piesat.framework.dynamic.datasource.init.DataSourceInit;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import javax.sql.DataSource;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * <p/>
@@ -20,6 +27,9 @@ import java.util.Objects;
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
     private final Map<Object, Object> targetDataSourceMap;
+
+    @Setter(onMethod_ = @Autowired)
+    private List<DataSourceInit> dataSourceInits;
 
     public DynamicDataSource(DataSource defaultDataSource, Map<Object, Object> targetDataSources) {
         super.setDefaultTargetDataSource(defaultDataSource);
@@ -39,7 +49,15 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
      * @param dataSourceEntity 数据源实体
      */
     public DataSource test(DataSourceEntity dataSourceEntity) {
-        return DataSourceUtils.test(dataSourceEntity);
+        List<DataSourceInit> sortedInits = Optional.ofNullable(dataSourceInits)
+                .orElse(Collections.emptyList())
+                .stream()
+                .sorted(Comparator.comparing(DataSourceInit::getOrder))
+                .collect(Collectors.toList());
+        sortedInits.forEach(init -> init.beforeCreate(dataSourceEntity));
+        DataSource dataSource = DataSourceUtils.test(dataSourceEntity);
+        sortedInits.forEach(init -> init.afterCreate(dataSource));
+        return dataSource;
     }
 
     public DataSource getDataSource(String key) {
@@ -49,6 +67,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         }
         return (DataSource) o;
     }
+
     /**
      * 增加数据源
      *
@@ -64,9 +83,11 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         }
         return false;
     }
+
     /**
      * 删除数据源
-     * @param key        数据源保存的key
+     *
+     * @param key 数据源保存的key
      * @return 返回结果，true：增加成功，false：存在
      */
     public Boolean delete(String key) {
@@ -93,20 +114,23 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
         }
         return false;
     }
+
     /**
      * 添加数据源信息
+     *
      * @param dataSources 数据源实体集合
      */
-    public void add(List<DataSourceEntity> dataSources){
+    public void add(List<DataSourceEntity> dataSources) {
         for (DataSourceEntity dataSource : dataSources) {
             try {
                 add(dataSource);
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
 
             }
         }
 
     }
+
     /**
      * 校验数据源是否存在
      *
