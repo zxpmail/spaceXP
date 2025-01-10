@@ -4,7 +4,6 @@ import cn.piesat.framework.common.utils.RsaEncryptUtil;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import org.springframework.util.StringUtils;
 
-import javax.sql.DataSource;
 
 /**
  * <p/>

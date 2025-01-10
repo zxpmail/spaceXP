@@ -42,4 +42,9 @@ public class DataSourceEntity {
      * 私钥
      */
     private String privateKey;
+
+    /**
+     * 事务数据源名称
+     */
+    private String xaDataSourceClassName="com.mysql.cj.jdbc.MysqlXADataSource";
 }
