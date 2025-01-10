@@ -56,7 +56,7 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
                 .collect(Collectors.toList());
         sortedInits.forEach(init -> init.beforeCreate(dataSourceEntity));
         DataSource dataSource = DataSourceUtils.test(dataSourceEntity);
-        sortedInits.forEach(init -> init.afterCreate(dataSource));
+        sortedInits.forEach(init -> init.afterCreate(dataSource,dataSourceEntity));
         return dataSource;
     }
 

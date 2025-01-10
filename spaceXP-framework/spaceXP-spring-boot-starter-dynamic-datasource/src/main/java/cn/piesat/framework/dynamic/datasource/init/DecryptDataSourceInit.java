@@ -30,9 +30,4 @@ public class DecryptDataSourceInit implements DataSourceInit {
             dataSourceEntity.setPassword(decrypt(privateKey, dataSourceEntity.getPassword()));
         }
     }
-
-    @Override
-    public void afterCreate(DataSource dataSource) {
-
-    }
 }

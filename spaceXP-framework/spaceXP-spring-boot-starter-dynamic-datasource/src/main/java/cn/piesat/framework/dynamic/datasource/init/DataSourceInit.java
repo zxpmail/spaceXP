@@ -22,8 +22,8 @@ public interface DataSourceInit {
     /**
      * 数据源创建之后允许做一些事情
      */
-    default void afterCreate(DataSource dataSource) {
-
+    default DataSource afterCreate(DataSource dataSource, DataSourceEntity dataSourceEntity) {
+        return  dataSource;
     }
 
     default int getOrder() {
