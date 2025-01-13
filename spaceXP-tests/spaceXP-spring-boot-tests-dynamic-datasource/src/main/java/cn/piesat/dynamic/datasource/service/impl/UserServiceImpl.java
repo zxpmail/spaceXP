@@ -11,14 +11,17 @@ import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service("userService")
-@DS("slave")
-public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService  {
+//@DS("slave")
+public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements UserService {
 
 
     @Override
@@ -38,6 +41,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         throw new RuntimeException("测试！");
         //return getById(id);
     }
+
     @Override
     public Boolean add(UserDO userDO) {
         return save(userDO);
@@ -45,7 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @Override
     public Boolean update(UserDO userDO) {
-        return updateById(userDO) ;
+        return updateById(userDO);
     }
 
     @Override
@@ -66,7 +70,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         UserDO userDO = new UserDO();
         for (long i = 0; i < 100000; i++) {
             userDO.setId(null);
-            userDO.setName(1+" :master");
+            userDO.setName(1 + " :master");
             save(userDO);
         }
     }
@@ -79,9 +83,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         UserDO userDO = new UserDO();
         for (long i = 0; i < 100000; i++) {
             userDO.setId(null);
-            userDO.setName(1+" :slave");
+            userDO.setName(1 + " :slave");
             save(userDO);
         }
+    }
+
+    @DS("master")
+    @Transactional
+    @Override
+    public void addTestXa1() {
+        UserDO userDO = new UserDO();
+        userDO.setId(null);
+        userDO.setName(1 + " :master");
+        save(userDO);
+    }
+
+    @DS("slave")
+    @Override
+    @Transactional
+    public void addTestXa2() {
+        UserDO userDO = new UserDO();
+        userDO.setId(null);
+        userDO.setName(1 + " :slave");
+        save(userDO);
+    }
+
+    @Lazy
+    @Autowired(required = false)
+    private UserService userService;
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void execXa() {
+        userService.addTestXa1();
+        userService.addTestXa2();
     }
 
 

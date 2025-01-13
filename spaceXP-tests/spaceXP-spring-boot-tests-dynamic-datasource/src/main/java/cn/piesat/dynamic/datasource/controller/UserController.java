@@ -87,4 +87,10 @@ public class UserController {
         new Thread(userService::addTest1).start();
         return "add2";
     }
+
+    @GetMapping("/execXa")
+    public String execXa(){
+        userService.execXa();
+        return "execXa";
+    }
 }

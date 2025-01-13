@@ -34,5 +34,10 @@ public interface UserService extends IService<UserDO> {
 
     void addTest1();
     void addTest2();
+
+    void addTestXa1();
+    void addTestXa2();
+
+    void execXa();
 }
 

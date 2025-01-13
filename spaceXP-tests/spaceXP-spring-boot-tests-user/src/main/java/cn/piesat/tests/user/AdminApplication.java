@@ -12,8 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author zhouxp
  */
 @SpringBootApplication
-public class UserApplication {
+public class AdminApplication {
     public static void main(String[] args) {
-        SpringApplication.run(UserApplication.class,args);
+        SpringApplication.run(AdminApplication.class,args);
     }
 }

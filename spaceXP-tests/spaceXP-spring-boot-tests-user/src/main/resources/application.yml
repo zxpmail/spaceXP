@@ -4,7 +4,7 @@ server:
     context-path: /admin
 spring:
   application:
-    name: user
+    name: admin
   mvc:
     path-match:
       matching-strategy: ANT_PATH_MATCHER
