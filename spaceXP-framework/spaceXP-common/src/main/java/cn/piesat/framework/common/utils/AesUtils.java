@@ -1,7 +1,6 @@
 package cn.piesat.framework.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.Cipher;
@@ -11,7 +10,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 
 /**
  * <p/>
