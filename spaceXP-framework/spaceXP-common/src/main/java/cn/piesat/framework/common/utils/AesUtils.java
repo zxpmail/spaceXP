@@ -24,10 +24,12 @@ import java.security.spec.InvalidKeySpecException;
 public class AesUtils {
     private static final String KEY_AES = "AES";
     private static final int KEY_SIZE = 128;
+
+    private static final String KEY = "123456";
     private static final String DEFAULT_CHARSET = "UTF-8";
     private static SecretKeySpec keySpec;
 
-    public static synchronized void init(String key)  {
+    public static synchronized void init(String key) {
         if (!StringUtils.hasText(key)) {
             log.error("key 不能为空");
             throw new RuntimeException("key 不能为空");
@@ -54,12 +56,16 @@ public class AesUtils {
 
     /**
      * 加解密
+     *
      * @param data 待处理数据
      * @param mode 加解密mode
      */
     private static String doAES(String data, int mode) {
         if (!StringUtils.hasText(data)) {
-            return null;
+            throw new IllegalArgumentException("data is null: ");
+        }
+        if (keySpec == null) {
+            init(KEY);
         }
         // 验证 mode 参数
         if (mode != Cipher.ENCRYPT_MODE && mode != Cipher.DECRYPT_MODE) {
@@ -131,15 +137,19 @@ public class AesUtils {
         }
         return result;
     }
+
     /**
      * 加密
+     *
      * @param data 需要加密的内容
      */
     public static String encrypt(String data) {
-        return doAES(data,  Cipher.ENCRYPT_MODE);
+        return doAES(data, Cipher.ENCRYPT_MODE);
     }
+
     /**
      * 解密
+     *
      * @param data 待解密内容
      */
     public static String decrypt(String data) {
@@ -147,7 +157,6 @@ public class AesUtils {
     }
 
     public static void main(String[] args) {
-        init("123456");
         String encryptIdCard = encrypt("420101196207212033");
         System.out.println(encryptIdCard);
         String decryptIdCard = decrypt(encryptIdCard);
