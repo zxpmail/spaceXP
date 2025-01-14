@@ -34,7 +34,7 @@ public class DecryptionConsumerInterceptor implements ConsumerInterceptor<String
                 // 对每个记录进行解密，并添加到对应分区的列表中
                 List<ConsumerRecord<String, String>> decryptedPartitionRecords = new ArrayList<>();
                 for (ConsumerRecord<String, String> record : partitionRecords) {
-                    String decryptedValue = AesUtils.encrypt(record.value());
+                    String decryptedValue = AesUtils.decrypt(record.value());
                     // 将解密后的记录添加到列表中
                     decryptedPartitionRecords.add(new ConsumerRecord<>(record.topic(), record.partition(),
                             record.offset(), record.timestamp(), record.timestampType(),

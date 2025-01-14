@@ -14,7 +14,7 @@ import java.util.Map;
  * {@code @create}: 2025-01-14 10:05
  * {@code @author}: zhouxp
  */
-public class EncryptionInterceptor implements ProducerInterceptor<String,String> {
+public class EncryptionProducerInterceptor implements ProducerInterceptor<String,String> {
     @Override
     public ProducerRecord<String, String> onSend(ProducerRecord<String, String> record) {
         try {
