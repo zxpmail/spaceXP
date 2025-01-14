@@ -1,4 +1,4 @@
-package cn.piesat.kafka;
+package cn.piesat.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Headers;
@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ import java.util.List;
  * {@code @author}: zhouxp
  */
 
-@Component
+//@Component
 @ConditionalOnProperty(prefix = "spring.kafka.consumer", name = "group-id")
 public class Kafka1Consumer {
 

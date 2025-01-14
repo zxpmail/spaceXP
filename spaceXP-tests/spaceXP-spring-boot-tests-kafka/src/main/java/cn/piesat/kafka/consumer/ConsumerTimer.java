@@ -1,4 +1,4 @@
-package cn.piesat.kafka;
+package cn.piesat.kafka.consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
@@ -18,9 +18,9 @@ import java.util.Set;
  * {@code @create}: 2024-10-21 10:19
  * {@code @author}: zhouxp
  */
-@Component
-@EnableScheduling
-@EnableAsync
+//@Component
+//@EnableScheduling
+//@EnableAsync
 public class ConsumerTimer {
 
     /**

@@ -18,7 +18,7 @@ import java.util.Set;
  * {@code @create}: 2024-10-18 15:28
  * {@code @author}: zhouxp
  */
-@RestController
+//@RestController
 public class KafkaTestController {
 
 

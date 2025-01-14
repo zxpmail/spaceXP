@@ -17,7 +17,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * {@code @author}: zhouxp
  */
 
-@Component
+//@Component
 @Slf4j
 public class KafkaProducer {
 

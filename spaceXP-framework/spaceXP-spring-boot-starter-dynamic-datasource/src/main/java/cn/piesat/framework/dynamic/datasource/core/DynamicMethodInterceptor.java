@@ -27,23 +27,25 @@ public class DynamicMethodInterceptor implements MethodInterceptor {
     public Object invoke(MethodInvocation point) throws Throwable {
 
         // 如果类上有DS注解 而方法上没有DS进行ds处理，方法上又DS就放行
-        DS ds = getClassAnnotation(point, DS.class);
-        if (!Objects.isNull(ds)) {
-            Method targetMethod = point.getMethod();
-            if ( !Objects.isNull(targetMethod.getAnnotation(DS.class))) {
-                return point.proceed();
-            }
-
-            String dsName = DataSourceUtils.getDsName(point);
-            String dsValue = ds.value();
-            if (StringUtils.hasText(dsName)) {
-                DataSourceContextHolder.push(dsName);
-            } else if (StringUtils.hasText(dsValue)) {
-                DataSourceContextHolder.push(dsValue);
-            }
+        String dsName = DataSourceUtils.getDsName(point);
+        if (StringUtils.hasText(dsName)) {
+            DataSourceContextHolder.push(dsName);
         } else {
-            //默认数据源
-            DataSourceContextHolder.push("__master");
+            DS ds = getClassAnnotation(point, DS.class);
+            if (Objects.isNull(ds)) {
+                Method targetMethod = point.getMethod();
+                ds = targetMethod.getAnnotation(DS.class);
+                if (Objects.isNull(ds)) {
+                    return point.proceed();
+                }
+            }
+            String dsValue = ds.value();
+            if (StringUtils.hasText(dsValue)) {
+                DataSourceContextHolder.push(dsValue);
+            } else {
+                //默认数据源
+                DataSourceContextHolder.push("__master");
+            }
         }
         try {
             return point.proceed();
@@ -53,10 +55,9 @@ public class DynamicMethodInterceptor implements MethodInterceptor {
     }
 
 
-
     private <T extends Annotation> T getClassAnnotation(MethodInvocation joinPoint, Class<T> annotationType) {
         Class<?> targetClass = getTargetClass(joinPoint);
-        return targetClass.getAnnotation(annotationType) ;
+        return targetClass.getAnnotation(annotationType);
     }
 
     private Class<?> getTargetClass(MethodInvocation joinPoint) {

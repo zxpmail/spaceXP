@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  * {@code @author}: zhouxp
  */
 
-@RestController
+//@RestController
 public class Kafka1Producer {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaProducer.class);

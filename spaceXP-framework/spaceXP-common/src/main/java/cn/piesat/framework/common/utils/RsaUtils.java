@@ -28,9 +28,9 @@ import java.util.Map;
  * {@code @author}: zhouxp
  */
 @Slf4j
-public class RsaEncryptUtil {
+public class RsaUtils {
 
-    private RsaEncryptUtil() {
+    private RsaUtils() {
     }
 
     public static final String SIGN_TYPE_RSA = "RSA";
@@ -143,7 +143,7 @@ public class RsaEncryptUtil {
 
     private static PublicKey getPublicKeyFromX509(InputStream ins) throws Exception {
 
-        KeyFactory keyFactory = KeyFactory.getInstance(RsaEncryptUtil.SIGN_TYPE_RSA);
+        KeyFactory keyFactory = KeyFactory.getInstance(RsaUtils.SIGN_TYPE_RSA);
 
         byte[] encodedKey = IOUtils.toByteArray(ins);
 
@@ -154,7 +154,7 @@ public class RsaEncryptUtil {
 
     private static PrivateKey getPrivateKeyFromPKCS8(InputStream ins) throws Exception {
 
-        KeyFactory keyFactory = KeyFactory.getInstance(RsaEncryptUtil.SIGN_TYPE_RSA);
+        KeyFactory keyFactory = KeyFactory.getInstance(RsaUtils.SIGN_TYPE_RSA);
 
         byte[] encodedKey = IOUtils.toByteArray(ins);
 

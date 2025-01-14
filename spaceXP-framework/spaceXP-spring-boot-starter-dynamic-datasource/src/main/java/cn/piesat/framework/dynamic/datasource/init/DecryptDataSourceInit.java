@@ -1,6 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.init;
 
-import cn.piesat.framework.common.utils.RsaEncryptUtil;
+import cn.piesat.framework.common.utils.RsaUtils;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +16,7 @@ public class DecryptDataSourceInit implements DataSourceInit {
 
     private String decrypt(String privateKey, String cipherText) {
         if (StringUtils.hasText(cipherText)) {
-            return RsaEncryptUtil.rsaDecrypt(cipherText, privateKey);
+            return RsaUtils.rsaDecrypt(cipherText, privateKey);
         }
         return cipherText;
     }

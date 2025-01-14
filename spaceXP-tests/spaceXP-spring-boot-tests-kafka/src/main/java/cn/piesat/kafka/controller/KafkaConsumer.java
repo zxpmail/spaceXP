@@ -17,7 +17,7 @@ import java.util.Optional;
  * {@code @create}: 2024-10-18 16:37
  * {@code @author}: zhouxp
  */
-@Component
+//@Component
 @Slf4j
 public class KafkaConsumer {
 

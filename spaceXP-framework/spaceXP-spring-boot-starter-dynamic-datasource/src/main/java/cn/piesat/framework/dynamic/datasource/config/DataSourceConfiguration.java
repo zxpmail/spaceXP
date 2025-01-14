@@ -3,6 +3,8 @@ package cn.piesat.framework.dynamic.datasource.config;
 import cn.piesat.framework.dynamic.datasource.core.DSAspect;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.core.DynamicMethodInterceptor;
+import cn.piesat.framework.dynamic.datasource.init.AtomikosDataSourceInit;
+import cn.piesat.framework.dynamic.datasource.init.DecryptDataSourceInit;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperties;
 import cn.piesat.framework.dynamic.datasource.utils.DataSourceUtils;
@@ -69,4 +71,15 @@ public class DataSourceConfiguration {
         return null;
     }
 
+    @Bean("atomikosDataSourceInit")
+    @ConditionalOnProperty(name = "space.datasource.xa.enabled", havingValue = "true")
+    public AtomikosDataSourceInit atomikosDataSourceInit(){
+        return new AtomikosDataSourceInit();
+    }
+
+    @Bean("decryptDataSourceInit")
+    @ConditionalOnProperty(name = "space.log.external.restTemplateEnabled", havingValue = "true")
+    public DecryptDataSourceInit decryptDataSourceInit(){
+        return new DecryptDataSourceInit();
+    }
 }

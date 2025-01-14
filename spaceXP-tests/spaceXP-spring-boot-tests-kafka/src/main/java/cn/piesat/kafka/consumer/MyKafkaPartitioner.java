@@ -1,4 +1,4 @@
-package cn.piesat.kafka;
+package cn.piesat.kafka.consumer;
 
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;

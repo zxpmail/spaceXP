@@ -5,9 +5,9 @@ import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.piesat.framework.common.exception.BaseException;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
+import cn.piesat.framework.common.utils.AesUtils;
 import cn.piesat.framework.security.annotation.EncryptField;
 import cn.piesat.framework.security.annotation.EncryptMethod;
-import cn.piesat.framework.security.utils.AseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
@@ -19,7 +19,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 /**
  * <p/>
@@ -33,10 +32,8 @@ import java.util.Objects;
 @Slf4j
 public class EncryptAspect {
 
-    private final String secretKey;
-
     public EncryptAspect(String secretKey) {
-        this.secretKey = secretKey;
+        AesUtils.init(secretKey);
     }
 
     @Pointcut("@annotation(cn.piesat.framework.security.annotation.EncryptMethod)")
@@ -66,7 +63,7 @@ public class EncryptAspect {
 
 
         // 获取注解的值
-        Integer pos = annotation.argsPos();
+        int pos = annotation.argsPos();
 
         // 如果注解为空，抛出自定义异常
         if (ObjUtil.isNull(jp.getArgs()) || ArrayUtil.isEmpty(jp.getArgs())) {
@@ -92,16 +89,13 @@ public class EncryptAspect {
      * @param requestObj 加密实体
      */
     private void encrypt(Object requestObj) throws IllegalAccessException {
-        if (Objects.isNull(requestObj)) {
-            return;
-        }
         Field[] fields = requestObj.getClass().getDeclaredFields();
         for (Field field : fields) {
             boolean hasSecureField = field.isAnnotationPresent(EncryptField.class);
             if (hasSecureField) {
                 field.setAccessible(true);
                 String plaintextValue = (String) field.get(requestObj);
-                String encryptValue = AseUtils.encrypt(plaintextValue, secretKey);
+                String encryptValue = AesUtils.encrypt(plaintextValue);
                 field.set(requestObj, encryptValue);
             }
         }
@@ -113,10 +107,7 @@ public class EncryptAspect {
      *
      * @param responseObj 解密实体
      */
-    private Object decrypt(Object responseObj) throws IllegalAccessException {
-        if (Objects.isNull(responseObj)) {
-            return null;
-        }
+    private void decrypt(Object responseObj) throws IllegalAccessException {
 
         Field[] fields = responseObj.getClass().getDeclaredFields();
         for (Field field : fields) {
@@ -124,10 +115,9 @@ public class EncryptAspect {
             if (hasSecureField) {
                 field.setAccessible(true);
                 String encryptValue = (String) field.get(responseObj);
-                String plaintextValue = AseUtils.decrypt(encryptValue, secretKey);
+                String plaintextValue = AesUtils.decrypt(encryptValue);
                 field.set(responseObj, plaintextValue);
             }
         }
-        return responseObj;
     }
 }
