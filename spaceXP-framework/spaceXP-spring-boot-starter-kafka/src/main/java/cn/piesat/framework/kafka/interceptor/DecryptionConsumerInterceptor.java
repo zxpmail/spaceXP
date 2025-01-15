@@ -19,6 +19,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static cn.piesat.framework.kafka.constants.KafkaConstant.IGNORE_TOPICS;
+
 /**
  * <p/>
  * {@code @description}: 解密拦截器
@@ -27,7 +29,7 @@ import java.util.stream.Collectors;
  * {@code @author}: zhouxp
  */
 public class DecryptionConsumerInterceptor implements ConsumerInterceptor<String, String> {
-    private static final String IGNORE_TOPICS = "ignoreTopics";
+
 
     private String[] ignoreTopics;
 

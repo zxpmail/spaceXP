@@ -9,6 +9,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
+import static cn.piesat.framework.kafka.constants.KafkaConstant.IGNORE_TOPICS;
+
 /**
  * <p/>
  * {@code @description}: 加密拦截器
@@ -17,7 +19,7 @@ import java.util.Map;
  * {@code @author}: zhouxp
  */
 public class EncryptionProducerInterceptor implements ProducerInterceptor<String, String> {
-    private static final String IGNORE_TOPICS = "ignoreTopics";
+
 
     private String[] ignoreTopics;
 
