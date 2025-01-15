@@ -4,6 +4,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 /**
  * <p/>
@@ -65,12 +66,13 @@ public class AesUtils {
     /**
      * 加密
      */
-    public static byte[] encrypt(String data) {
+    public  static String encrypt(String data) {
         if (encryptCipher == null) {
             init();
         }
         try {
-            return encryptCipher.doFinal(data.getBytes());
+            byte[] bytes = encryptCipher.doFinal(data.getBytes());
+            return Base64.getEncoder().encodeToString(bytes);
         } catch (Exception e) {
             throw new RuntimeException("Encryption failed", e);
         }
@@ -79,12 +81,13 @@ public class AesUtils {
     /**
      * 解密
      */
-    public static String decrypt(byte[] encryptedData) {
+    public  static String decrypt(String encryptedData) {
         if (decryptCipher == null) {
             init();
         }
         try {
-            byte[] original = decryptCipher.doFinal(encryptedData);
+            byte[] decode = Base64.getDecoder().decode(encryptedData);
+            byte[] original = decryptCipher.doFinal(decode);
             return new String(original);
         } catch (Exception e) {
             throw new RuntimeException("Decryption failed", e);
@@ -94,24 +97,7 @@ public class AesUtils {
     /**
      * 辅助方法：将字节数组转换为十六进制字符串表示
      */
-    public static String bytesToHex(byte[] bytes) {
-        if (bytes == null) {
-            return "";
-        }
 
-        // 预定义的十六进制字符数组
-        final char[] hexArray = "0123456789abcdef".toCharArray();
-        StringBuilder sb = new StringBuilder(bytes.length * 2);
-
-        for (byte b : bytes) {
-            // 将每个字节转换为两个十六进制字符
-            int v = b & 0xFF;
-            sb.append(hexArray[v >>> 4]);
-            sb.append(hexArray[v & 0x0F]);
-        }
-
-        return sb.toString();
-    }
 
     public static void main(String[] args) {
         long l = System.currentTimeMillis();
@@ -120,7 +106,7 @@ public class AesUtils {
             String originalData = "Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData";
             //System.out.println("Original Data: " + originalData);
 
-            byte[] encryptedData = AesUtils.encrypt(originalData);
+            String encryptedData = AesUtils.encrypt(originalData);
             //System.out.println("Encrypted Data (as hex): " + bytesToHex(encryptedData));
 
             String decryptedData = AesUtils.decrypt(encryptedData);
