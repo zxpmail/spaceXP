@@ -1,6 +1,5 @@
 package cn.piesat.framework.dynamic.datasource.config;
 
-import cn.piesat.framework.dynamic.datasource.core.DSAspect;
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.core.DynamicMethodInterceptor;
 import cn.piesat.framework.dynamic.datasource.init.AtomikosDataSourceInit;
@@ -53,10 +52,6 @@ public class DataSourceConfiguration {
 
         }
         return new DynamicDataSource(masterDataSource,dataSourceMap);
-    }
-    @Bean
-    public DSAspect dSAspect(){
-        return new DSAspect();
     }
 
     @Bean

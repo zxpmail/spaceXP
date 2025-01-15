@@ -6,6 +6,7 @@ import cn.piesat.dynamic.datasource.service.UserService;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
+import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
 import cn.piesat.framework.mybatis.plus.annotation.DynamicTableName;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -88,8 +90,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         }
     }
 
-    @DS("master")
-    @Transactional
+    @DS
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void addTestXa1() {
         UserDO userDO = new UserDO();
@@ -100,7 +102,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
 
     @DS("slave")
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void addTestXa2() {
         UserDO userDO = new UserDO();
         userDO.setId(null);
@@ -111,7 +113,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Lazy
     @Autowired(required = false)
     private UserService userService;
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class,propagation = Propagation.REQUIRES_NEW)
     @Override
     public void execXa() {
         userService.addTestXa1();
