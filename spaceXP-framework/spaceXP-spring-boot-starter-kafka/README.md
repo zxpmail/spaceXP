@@ -16,6 +16,11 @@ kafka组件
     </dependency>
 
 在项目的配置文件中加入
+增加加解密拦截器 可以配置忽略加解密topic 读配置文件比较麻烦再系统变量中设置 System.setProperty(KafkaConstant.IGNORE_TOPICS, "my*");变量以逗号分隔
+配置加解密拦截器：
+spring.kafka.producer.properties.interceptor.classes=cn.piesat.framework.kafka.interceptor.EncryptionProducerInterceptor
+spring.kafka.consumer.properties.interceptor.classes=cn.piesat.framework.kafka.interceptor.DecryptionConsumerInterceptor
+
 例子参见spaceXP-spring-boot-tests-kafka
 
 
