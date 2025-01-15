@@ -1,168 +1,138 @@
 package cn.piesat.framework.common.utils;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
-
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p/>
- * {@code @description}: Aes加解密工具类
+ * {@code @description}: Aes工具类
  * <p/>
- * {@code @create}: 2025-01-14 8:48
+ * {@code @create}: 2025-01-15 8:54
  * {@code @author}: zhouxp
  */
-@Slf4j
 public class AesUtils {
-    private static final String KEY_AES = "AES";
-    private static final int KEY_SIZE = 128;
-
-    private static final String KEY = "123456";
-    private static final String DEFAULT_CHARSET = "UTF-8";
-    private static SecretKeySpec keySpec;
-
-    public static synchronized void init(String key) {
-        if (!StringUtils.hasText(key)) {
-            log.error("key 不能为空");
-            throw new RuntimeException("key 不能为空");
-        }
-
-        try {
-            //1.构造密钥生成器，指定为AES算法,不区分大小写
-            KeyGenerator kGen = KeyGenerator.getInstance(KEY_AES);
-            //2.根据encode Rules规则初始化密钥生成器
-            SecureRandom random = SecureRandom.getInstanceStrong();
-            random.setSeed(key.getBytes(DEFAULT_CHARSET));
-            kGen.init(KEY_SIZE, random);
-            //3.产生原始对称密钥
-            SecretKey secretKey = kGen.generateKey();
-            //4.获得原始对称密钥的字节数组
-            byte[] enCodeFormat = secretKey.getEncoded();
-            //5.根据字节数组生成AES密钥
-            keySpec = new SecretKeySpec(enCodeFormat, KEY_AES);
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-            log.error("AES 密文处理异常", e);
-            throw new RuntimeException("AES 密文处理异常", e);
-        }
-    }
+    private static final String AES = "AES";
+    /**
+     * 使用CBC模式和PKCS5填充
+     */
+    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
+    /**
+     * 固定的 16 字节密钥
+     */
+    private static final String DEFAULT_KEY = "0123456789abcdef";
+    /**
+     * 固定的 16字节IV
+     */
+    private static final String DEFAULT_IV = "abcdefghijklmnop";
 
     /**
-     * 加解密
-     *
-     * @param data 待处理数据
-     * @param mode 加解密mode
+     * AES-128, for other key lengths adjust accordingly
      */
-    private static String doAES(String data, int mode) {
-        if (!StringUtils.hasText(data)) {
-            throw new IllegalArgumentException("data is null: ");
+    private static final int KEY_LENGTH = 16;
+    private static final int IV_LENGTH = 16;
+    private static Cipher encryptCipher;
+    private static Cipher decryptCipher;
+
+
+    public static void init() {
+        init(DEFAULT_KEY, DEFAULT_IV);
+    }
+
+    public static synchronized void init(String key, String iv) {
+        if (key == null || iv == null) {
+            throw new IllegalArgumentException("Key and IV cannot be null");
         }
-        if (keySpec == null) {
-            init(KEY);
+        if (key.getBytes(StandardCharsets.UTF_8).length != KEY_LENGTH) {
+            throw new IllegalArgumentException("Invalid key length: must be " + KEY_LENGTH + " bytes");
         }
-        // 验证 mode 参数
-        if (mode != Cipher.ENCRYPT_MODE && mode != Cipher.DECRYPT_MODE) {
-            throw new IllegalArgumentException("Invalid mode: " + mode);
+        if (iv.getBytes(StandardCharsets.UTF_8).length != IV_LENGTH) {
+            throw new IllegalArgumentException("Invalid IV length: must be " + IV_LENGTH + " bytes");
         }
-        boolean encrypt = mode == Cipher.ENCRYPT_MODE;
-        //6.根据指定算法AES自成密码器
-        Cipher cipher;
         try {
-            cipher = Cipher.getInstance(KEY_AES);
-            cipher.init(mode, keySpec);
-            byte[] content;
-            if (encrypt) {
-                content = data.getBytes(DEFAULT_CHARSET);
-            } else {
-                content = parseHexStr2Byte(data);
-            }
-            byte[] result = cipher.doFinal(content);
-            if (encrypt) {
-                return parseByte2HexStr(result);
-            } else {
-                return new String(result, DEFAULT_CHARSET);
-            }
+            encryptCipher = Cipher.getInstance(ALGORITHM);
+            decryptCipher = Cipher.getInstance(ALGORITHM);
+            SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), AES);
+            IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
+            encryptCipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
+            decryptCipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * 将二进制转换成16进制
-     */
-    private static String parseByte2HexStr(byte[] buf) {
-        if (buf == null) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder(buf.length * 2);
-        for (byte b : buf) {
-            String hex = Integer.toHexString(b & 0xFF).toUpperCase();
-            if (hex.length() == 1) {
-                sb.append('0');
-            }
-            sb.append(hex);
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 将16进制转换为二进制
-     */
-    private static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr == null || hexStr.isEmpty()) {
-            return new byte[0];
-        }
-
-        if (hexStr.length() % 2 != 0) {
-            throw new IllegalArgumentException("Hex string length must be even");
-        }
-
-        for (char c : hexStr.toCharArray()) {
-            if (!(Character.digit(c, 16) >= 0)) {
-                throw new IllegalArgumentException("Invalid hex character: " + c);
-            }
-        }
-        byte[] result = new byte[hexStr.length() / 2];
-        for (int i = 0; i < hexStr.length() / 2; i++) {
-            int high = Character.digit(hexStr.charAt(i * 2), 16);
-            int low = Character.digit(hexStr.charAt(i * 2 + 1), 16);
-            result[i] = (byte) (high * 16 + low);
-        }
-        return result;
-    }
-
-    /**
      * 加密
-     *
-     * @param data 需要加密的内容
      */
-    public static String encrypt(String data) {
-        return doAES(data, Cipher.ENCRYPT_MODE);
+    public static byte[] encrypt(String data) {
+        if (encryptCipher == null) {
+            init();
+        }
+        try {
+            return encryptCipher.doFinal(data.getBytes());
+        } catch (Exception e) {
+            throw new RuntimeException("Encryption failed", e);
+        }
     }
 
     /**
      * 解密
-     *
-     * @param data 待解密内容
      */
-    public static String decrypt(String data) {
-        return doAES(data, Cipher.DECRYPT_MODE);
+    public static String decrypt(byte[] encryptedData) {
+        if (decryptCipher == null) {
+            init();
+        }
+        try {
+            byte[] original = decryptCipher.doFinal(encryptedData);
+            return new String(original);
+        } catch (Exception e) {
+            throw new RuntimeException("Decryption failed", e);
+        }
+    }
+
+    /**
+     * 辅助方法：将字节数组转换为十六进制字符串表示
+     */
+    public static String bytesToHex(byte[] bytes) {
+        if (bytes == null) {
+            return "";
+        }
+
+        // 预定义的十六进制字符数组
+        final char[] hexArray = "0123456789abcdef".toCharArray();
+        StringBuilder sb = new StringBuilder(bytes.length * 2);
+
+        for (byte b : bytes) {
+            // 将每个字节转换为两个十六进制字符
+            int v = b & 0xFF;
+            sb.append(hexArray[v >>> 4]);
+            sb.append(hexArray[v & 0x0F]);
+        }
+
+        return sb.toString();
     }
 
     public static void main(String[] args) {
-        String encryptIdCard = encrypt("420101196207212033");
-        System.out.println(encryptIdCard);
-        String decryptIdCard = decrypt(encryptIdCard);
-        System.out.println(decryptIdCard);
+        long l = System.currentTimeMillis();
+        System.out.println();
+        for (int i = 0; i < 1000000; i++) {
+            String originalData = "Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData Hello, World! System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData System.out.println(\"Original Data: \" + originalData";
+            //System.out.println("Original Data: " + originalData);
 
-        encryptIdCard = encrypt("1142010119620721203311");
-        System.out.println(encryptIdCard);
-        decryptIdCard = decrypt(encryptIdCard);
-        System.out.println(decryptIdCard);
+            byte[] encryptedData = AesUtils.encrypt(originalData);
+            //System.out.println("Encrypted Data (as hex): " + bytesToHex(encryptedData));
+
+            String decryptedData = AesUtils.decrypt(encryptedData);
+            //System.out.println("Decrypted Data: " + decryptedData);
+
+//            if (originalData.equals(decryptedData)) {
+//                System.out.println("Encryption and decryption were successful.");
+//            } else {
+//                System.out.println("Encryption and decryption failed.");
+//            }
+        }
+        System.out.println(System.currentTimeMillis() - l);
+
     }
 }
