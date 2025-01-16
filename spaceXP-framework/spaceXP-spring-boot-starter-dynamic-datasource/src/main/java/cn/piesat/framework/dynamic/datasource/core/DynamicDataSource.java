@@ -61,11 +61,15 @@ public class DynamicDataSource extends AbstractRoutingDataSource {
     }
 
     public DataSource getDataSource(String key) {
-        Object o = targetDataSourceMap.get(key);
-        if (Objects.isNull(o)) {
-            return null;
+        if (targetDataSourceMap == null) {
+           throw new RuntimeException("数据源集合为空");
         }
-        return (DataSource) o;
+        Object o = targetDataSourceMap.get(key);
+        if (o instanceof DataSource) {
+            return (DataSource) o;
+        } else {
+            throw new RuntimeException("没有数据源！");
+        }
     }
 
     /**
