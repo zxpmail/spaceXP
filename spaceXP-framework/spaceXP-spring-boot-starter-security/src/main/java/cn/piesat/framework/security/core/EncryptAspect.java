@@ -32,8 +32,8 @@ import java.lang.reflect.Method;
 @Slf4j
 public class EncryptAspect {
 
-    public EncryptAspect(String secretKey) {
-        AesUtils.init(secretKey);
+    public EncryptAspect(String key,String iv) {
+        AesUtils.init(key,iv);
     }
 
     @Pointcut("@annotation(cn.piesat.framework.security.annotation.EncryptMethod)")

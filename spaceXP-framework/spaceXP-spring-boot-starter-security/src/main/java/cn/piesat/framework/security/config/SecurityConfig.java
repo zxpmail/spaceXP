@@ -23,7 +23,7 @@ public class SecurityConfig  {
     @Bean
     @ConditionalOnProperty(name = "space.security.enable", havingValue = "true")
     public EncryptAspect encryptAspect(SecurityProperties securityProperties){
-        return new EncryptAspect(securityProperties.getSecretKey());
+        return new EncryptAspect(securityProperties.getSecretKey(),securityProperties.getIv());
     }
 
     @Bean

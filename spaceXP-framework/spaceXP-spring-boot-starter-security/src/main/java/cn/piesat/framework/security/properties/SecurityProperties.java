@@ -15,7 +15,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties(prefix = "space.security")
 public class SecurityProperties {
-    private String secretKey = "123456";
+    private String secretKey = "0123456789abcdef";
+
+    private String iv = "abcdefghijklmnop";
+
     private Boolean enable = false;
 
     private License license;
