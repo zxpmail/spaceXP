@@ -8,7 +8,6 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.util.StringUtils;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -31,8 +30,8 @@ public class DynamicMethodInterceptor implements MethodInterceptor {
         if (StringUtils.hasText(dsName)) {
             DataSourceContextHolder.push(dsName);
         } else {
-            DS ds = getClassAnnotation(point, DS.class);
-            if (Objects.isNull(ds)) {
+            DS ds = getClassAnnotation(point);
+            if (ds == null) {
                 Method targetMethod = point.getMethod();
                 ds = targetMethod.getAnnotation(DS.class);
                 if (Objects.isNull(ds)) {
@@ -55,9 +54,10 @@ public class DynamicMethodInterceptor implements MethodInterceptor {
     }
 
 
-    private <T extends Annotation> T getClassAnnotation(MethodInvocation joinPoint, Class<T> annotationType) {
+
+    private DS getClassAnnotation(MethodInvocation joinPoint) {
         Class<?> targetClass = getTargetClass(joinPoint);
-        return targetClass.getAnnotation(annotationType);
+        return targetClass.getAnnotation(DS.class);
     }
 
     private Class<?> getTargetClass(MethodInvocation joinPoint) {

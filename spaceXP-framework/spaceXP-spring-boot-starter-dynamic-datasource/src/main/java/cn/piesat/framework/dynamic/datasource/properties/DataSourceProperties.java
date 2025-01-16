@@ -20,5 +20,5 @@ import java.util.Map;
 public class DataSourceProperties {
     private Map<String,DataSourceEntity> dss;
 
-    private String pointcut;
+    private String pointcut ="@annotation(cn.piesat.framework.dynamic.datasource.annotation.DS)";
 }

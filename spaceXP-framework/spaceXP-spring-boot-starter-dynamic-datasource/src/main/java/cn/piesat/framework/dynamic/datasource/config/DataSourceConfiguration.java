@@ -53,9 +53,7 @@ public class DataSourceConfiguration {
         }
         return new DynamicDataSource(masterDataSource,dataSourceMap);
     }
-
     @Bean
-    @ConditionalOnProperty(name = "space.datasource.pointcut")
     public AspectJExpressionPointcutAdvisor configurableAdvisor(DataSourceProperties dataSourceProperties) {
         if(StringUtils.hasText(dataSourceProperties.getPointcut())) {
             AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
