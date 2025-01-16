@@ -11,7 +11,6 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
-import org.springframework.lang.Nullable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -64,7 +63,6 @@ public class RedisService {
      * @param timeout 超时时间
      * @return true=设置成功；false=设置失败
      */
-    @Nullable
     public Boolean expire(final String key, final long timeout) {
         return redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
@@ -77,7 +75,6 @@ public class RedisService {
      * @param unit    时间单位
      * @return true=设置成功；false=设置失败
      */
-    @Nullable
     public Boolean expire(final String key, final long timeout, final TimeUnit unit) {
         return redisTemplate.expire(key, timeout, unit);
     }
@@ -88,7 +85,6 @@ public class RedisService {
      * @param key Redis键
      * @return 有效时间
      */
-    @Nullable
     public Long getExpire(final String key) {
         return redisTemplate.getExpire(key);
     }
@@ -99,7 +95,6 @@ public class RedisService {
      * @param key 键
      * @return true 存在 false不存在
      */
-    @Nullable
     public Boolean hasKey(String key) {
         return redisTemplate.hasKey(key);
     }
@@ -110,7 +105,6 @@ public class RedisService {
      * @param key 缓存键值
      * @return 缓存键值对应的数据
      */
-    @Nullable
     public <T> T getObject(final String key) {
         return (T) redisTemplate.opsForValue().get(key);
     }
@@ -118,12 +112,11 @@ public class RedisService {
     /**
      * 删除单个对象
      */
-    @Nullable
     public Boolean delete(final String key) {
         return redisTemplate.delete(key);
     }
 
-    @Nullable
+
     public Long deleteAll(final String key) {
         Set<String> keys = redisTemplate.keys(key + "*");
         if (CollectionUtils.isEmpty(keys) || keys.size() < 1) {
@@ -177,7 +170,6 @@ public class RedisService {
      * @param key 缓存的键值
      * @return 缓存键值对应的数据
      */
-    @Nullable
     public <T> List<T> getList(final String key) {
         return (List<T>) redisTemplate.opsForList().range(key, 0, -1);
     }
@@ -220,7 +212,6 @@ public class RedisService {
     /**
      * 获得缓存的set
      */
-    @Nullable
     public <T> Set<T> getSet(final String key) {
         return (Set<T>) redisTemplate.opsForSet().members(key);
     }
@@ -257,7 +248,6 @@ public class RedisService {
      * @param hKey Hash键
      * @return Hash中的对象
      */
-    @Nullable
     public <K,T> T getMapValue(final String key, final K hKey) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
         return opsForHash.get(key, hKey);
@@ -291,7 +281,6 @@ public class RedisService {
      * @param pattern 字符串前缀
      * @return 对象列表
      */
-    @Nullable
     public Collection<String> keys(final String pattern) {
         return redisTemplate.keys(pattern);
     }
