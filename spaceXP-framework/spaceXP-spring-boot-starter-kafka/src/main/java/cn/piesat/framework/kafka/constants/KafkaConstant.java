@@ -8,5 +8,5 @@ package cn.piesat.framework.kafka.constants;
  * {@code @author}: zhouxp
  */
 public interface KafkaConstant {
-    String IGNORE_TOPICS = "space.kafka.ignoreTopics";
+    String ENCRYPTION_TOPICS = "space.kafka.encryptionTopics";
 }

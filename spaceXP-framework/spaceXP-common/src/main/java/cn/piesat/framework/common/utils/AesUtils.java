@@ -46,10 +46,10 @@ public class AesUtils {
             throw new IllegalArgumentException("Key and IV cannot be null");
         }
         if (key.getBytes(StandardCharsets.UTF_8).length != KEY_LENGTH) {
-            throw new IllegalArgumentException("Invalid key length: must be " + KEY_LENGTH + " bytes");
+            throw new IllegalArgumentException("Invalid key length: must be " + KEY_LENGTH + " chars");
         }
         if (iv.getBytes(StandardCharsets.UTF_8).length != IV_LENGTH) {
-            throw new IllegalArgumentException("Invalid IV length: must be " + IV_LENGTH + " bytes");
+            throw new IllegalArgumentException("Invalid IV length: must be " + IV_LENGTH + " chars");
         }
         try {
             encryptCipher = Cipher.getInstance(ALGORITHM);

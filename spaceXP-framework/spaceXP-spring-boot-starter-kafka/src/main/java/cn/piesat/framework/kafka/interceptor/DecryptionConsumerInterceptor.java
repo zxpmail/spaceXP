@@ -1,6 +1,7 @@
 package cn.piesat.framework.kafka.interceptor;
 
 import cn.piesat.framework.common.utils.AesUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -13,13 +14,16 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static cn.piesat.framework.kafka.constants.KafkaConstant.IGNORE_TOPICS;
+import static cn.piesat.framework.kafka.constants.KafkaConstant.ENCRYPTION_TOPICS;
+
 
 /**
  * <p/>
@@ -28,52 +32,51 @@ import static cn.piesat.framework.kafka.constants.KafkaConstant.IGNORE_TOPICS;
  * {@code @create}: 2025-01-14 10:16
  * {@code @author}: zhouxp
  */
+@Slf4j
 public class DecryptionConsumerInterceptor implements ConsumerInterceptor<String, String> {
 
 
-    private String[] ignoreTopics;
+    private final Set<String> encryptionTopics = new HashSet<>();
 
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
-    @Override
 
+    @Override
     public ConsumerRecords<String, String> onConsume(ConsumerRecords<String, String> records) {
         try {
-            // 处理空记录情况
-            if (records.isEmpty()) {
+            if (records == null) {
+                throw new IllegalArgumentException("Input parameters cannot be null");
+            }
+
+            if (records.isEmpty() || encryptionTopics.isEmpty()) {
                 return records;
             }
-            // 忽略主题的检查
-            if (ignoreTopics != null && ignoreTopics.length > 0) {
-                List<TopicPartition> ignoredPartitions = records.partitions().stream()
-                        .filter(partition -> Arrays.stream(ignoreTopics)
-                                .anyMatch(topic -> antPathMatcher.match(topic, partition.topic())))
-                        .collect(Collectors.toList());
 
-                if (!ignoredPartitions.isEmpty()) {
-                    return records;
-                }
-            }
             Map<TopicPartition, List<ConsumerRecord<String, String>>> decryptedRecords = new LinkedHashMap<>();
             for (TopicPartition partition : records.partitions()) {
-                // 获取该分区的所有记录
                 List<ConsumerRecord<String, String>> partitionRecords = records.records(partition);
 
-                // 对每个记录进行解密，并添加到对应分区的列表中
-                List<ConsumerRecord<String, String>> decryptedPartitionRecords = new ArrayList<>(partitionRecords.size());
-                for (ConsumerRecord<String, String> record : partitionRecords) {
-                    String decryptedValue = AesUtils.decrypt(record.value());
-                    // 将解密后的记录添加到列表中
-                    decryptedPartitionRecords.add(new ConsumerRecord<>(record.topic(), record.partition(),
-                            record.offset(), record.timestamp(), record.timestampType(),
-                            record.serializedKeySize(),
-                            record.serializedValueSize(), record.key(), decryptedValue, new RecordHeaders(), Optional.empty()));
+                boolean shouldDecrypt = encryptionTopics.stream()
+                        .anyMatch(topic -> antPathMatcher.match(topic, partition.topic()));
+
+                if (shouldDecrypt) {
+                    List<ConsumerRecord<String, String>> decryptedPartitionRecords = partitionRecords.stream()
+                            .map(record -> new ConsumerRecord<>(record.topic(), record.partition(),
+                                    record.offset(), record.timestamp(), record.timestampType(),
+                                    record.serializedKeySize(),
+                                    record.serializedValueSize(), record.key(),
+                                    AesUtils.decrypt(record.value()), new RecordHeaders(), Optional.empty()))
+                            .collect(Collectors.toList());
+
+                    decryptedRecords.put(partition, decryptedPartitionRecords);
+                } else {
+                    decryptedRecords.put(partition, partitionRecords);
                 }
-                decryptedRecords.put(partition, decryptedPartitionRecords);
             }
-            // 返回新的ConsumerRecords实例
+
             return new ConsumerRecords<>(decryptedRecords);
         } catch (Exception e) {
-            throw new RuntimeException("Error decrypting message", e);
+            log.error("Error decrypting message", e);
+            throw new RecordDecryptionException("Error decrypting message", e);
         }
     }
 
@@ -89,9 +92,15 @@ public class DecryptionConsumerInterceptor implements ConsumerInterceptor<String
 
     @Override
     public void configure(Map<String, ?> configs) {
-        String topics = System.getProperty(IGNORE_TOPICS);
+        String topics = System.getProperty(ENCRYPTION_TOPICS);
         if (StringUtils.hasText(topics)) {
-            ignoreTopics = topics.split(",");
+            String[] topicsArray = topics.split(",");
+            encryptionTopics.addAll(new HashSet<>(Arrays.asList(topicsArray)));
+        }
+    }
+    private static class RecordDecryptionException extends RuntimeException {
+        public RecordDecryptionException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

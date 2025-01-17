@@ -17,7 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class KafkaApplication {
     public static void main(String[] args) {
-        System.setProperty(KafkaConstant.IGNORE_TOPICS, "my*");
+        System.setProperty(KafkaConstant.ENCRYPTION_TOPICS, "my*");
         AesUtils.init("0123456789abcdef","Abcdefghijklmnop");
         SpringApplication.run(KafkaApplication.class,args);
     }
