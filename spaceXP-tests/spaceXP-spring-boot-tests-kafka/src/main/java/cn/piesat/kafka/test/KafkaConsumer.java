@@ -1,5 +1,6 @@
 package cn.piesat.kafka.test;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class KafkaConsumer {
 
     @KafkaListener(topics = "my-topic", groupId = "my-group")
-    public void listen(String message) {
+    public void listen(ConsumerRecord<String, String> message) {
         System.out.println("Received message: " + message);
     }
 }

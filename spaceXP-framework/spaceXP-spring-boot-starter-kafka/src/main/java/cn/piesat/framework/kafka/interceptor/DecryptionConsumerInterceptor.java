@@ -11,7 +11,6 @@ import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 
 import java.util.Arrays;
 import java.util.HashSet;
