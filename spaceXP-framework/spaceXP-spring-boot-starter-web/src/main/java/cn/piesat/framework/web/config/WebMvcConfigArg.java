@@ -3,12 +3,10 @@ package cn.piesat.framework.web.config;
 
 import cn.piesat.framework.web.core.LoginUserHandlerMethodArgumentResolver;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Collections;
+
 import java.util.List;
 
 /**
