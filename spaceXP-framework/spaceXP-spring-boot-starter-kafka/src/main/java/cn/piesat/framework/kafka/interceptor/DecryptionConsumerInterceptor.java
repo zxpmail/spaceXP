@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -51,22 +52,29 @@ public class DecryptionConsumerInterceptor implements ConsumerInterceptor<String
             }
 
             Map<TopicPartition, List<ConsumerRecord<String, String>>> decryptedRecords = new LinkedHashMap<>();
+            Map<String, Boolean> topicMatchCache = new HashMap<>();
             for (TopicPartition partition : records.partitions()) {
                 List<ConsumerRecord<String, String>> partitionRecords = records.records(partition);
 
-                boolean shouldDecrypt = encryptionTopics.stream()
-                        .anyMatch(topic -> antPathMatcher.match(topic, partition.topic()));
+                boolean shouldDecrypt = topicMatchCache.computeIfAbsent(partition.topic(), topic ->
+                        encryptionTopics.stream()
+                                .anyMatch(encTopic -> antPathMatcher.match(encTopic, topic)));
 
                 if (shouldDecrypt) {
-                    List<ConsumerRecord<String, String>> decryptedPartitionRecords = partitionRecords.stream()
-                            .map(record -> new ConsumerRecord<>(record.topic(), record.partition(),
-                                    record.offset(), record.timestamp(), record.timestampType(),
-                                    record.serializedKeySize(),
-                                    record.serializedValueSize(), record.key(),
-                                    AesUtils.decrypt(record.value()), new RecordHeaders(), Optional.empty()))
-                            .collect(Collectors.toList());
+                    try{
+                        List<ConsumerRecord<String, String>> decryptedPartitionRecords = partitionRecords.stream()
+                                .map(record -> new ConsumerRecord<>(record.topic(), record.partition(),
+                                        record.offset(), record.timestamp(), record.timestampType(),
+                                        record.serializedKeySize(),
+                                        record.serializedValueSize(), record.key(),
+                                        AesUtils.decrypt(record.value()), new RecordHeaders(), Optional.empty()))
+                                .collect(Collectors.toList());
 
-                    decryptedRecords.put(partition, decryptedPartitionRecords);
+                        decryptedRecords.put(partition, decryptedPartitionRecords);
+                    }catch (Exception e){
+                        log.debug("数据解密失败，可能数据有误",e);
+                        decryptedRecords.put(partition, partitionRecords);
+                    }
                 } else {
                     decryptedRecords.put(partition, partitionRecords);
                 }
