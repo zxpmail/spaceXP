@@ -15,7 +15,7 @@ space:
       success-code: 0
     service-validation-enable: true
   web:
-    xssEnable: true
+    #xssEnable: true
     jacksonCustomize: true
 
 #server:

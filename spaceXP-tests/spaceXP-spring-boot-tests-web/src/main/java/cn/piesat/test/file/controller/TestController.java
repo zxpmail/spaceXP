@@ -1,6 +1,7 @@
 package cn.piesat.test.file.controller;
 
 
+import cn.hutool.http.ContentType;
 import cn.piesat.framework.common.annotation.LoginUser;
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.model.dto.JwtUser;
@@ -45,6 +46,10 @@ public class TestController {
     /**
      * 测试根据配置文件修改枚举
      */
+    @PostMapping(value = "/testString")
+    private String testString(@RequestBody String testString) {
+        return testString;
+    }
     @ApiOperation("测试根据配置文件修改枚举")
     @GetMapping("/changeEnum")
     private String changeEnum() {
