@@ -36,13 +36,9 @@ public class RsaUtils {
     public static final String SIGN_TYPE_RSA = "RSA";
 
     /**
-     * RSA最大加密明文大小
+     * RSA最大加密密文大小
      */
-    private static final int MAX_ENCRYPT_BLOCK = 245;
-    /**
-     * RSA最大解密密文大小
-     */
-    private static final int MAX_DECRYPT_BLOCK = 256;
+    private static final int MAX_BLOCK = 256;
 
     private static final int DEFAULT_KEY_SIZE = 2048;
 
@@ -126,14 +122,14 @@ public class RsaUtils {
         int i = 0;
         // 对数据分段加解密
         while (inputLen - offSet > 0) {
-            if (inputLen - offSet > MAX_DECRYPT_BLOCK) {
-                cache = cipher.doFinal(data, offSet, MAX_DECRYPT_BLOCK);
+            if (inputLen - offSet > MAX_BLOCK) {
+                cache = cipher.doFinal(data, offSet, MAX_BLOCK);
             } else {
                 cache = cipher.doFinal(data, offSet, inputLen - offSet);
             }
             out.write(cache, 0, cache.length);
             i++;
-            offSet = i * MAX_DECRYPT_BLOCK;
+            offSet = i * MAX_BLOCK;
         }
     }
 
