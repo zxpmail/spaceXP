@@ -1,10 +1,13 @@
 package cn.piesat.framework.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 /**
  * <p/>
@@ -13,6 +16,7 @@ import java.util.Base64;
  * {@code @create}: 2025-01-15 8:54
  * {@code @author}: zhouxp
  */
+@Slf4j
 public class AesUtils {
     private static final String AES = "AES";
     /**
@@ -36,6 +40,7 @@ public class AesUtils {
     private static Cipher encryptCipher;
     private static Cipher decryptCipher;
 
+    private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/=]*$");
 
     public static void init() {
         init(DEFAULT_KEY, DEFAULT_IV);
@@ -66,32 +71,54 @@ public class AesUtils {
     /**
      * 加密
      */
-    public  static String encrypt(String data) {
+    public static String encrypt(String data) {
+        if (data == null || data.isEmpty()) {
+            return null;
+        }
         if (encryptCipher == null) {
             init();
         }
         try {
             byte[] bytes = encryptCipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(bytes);
-        } catch (Exception e) {
-            throw new RuntimeException("Encryption failed", e);
+        }  catch (Exception e) {
+            log.error("Unexpected encryption error", e);
+            throw new RuntimeException("Unexpected encryption error",e);
         }
+    }
+
+    private static boolean isBase64Valid(String data) {
+        if (!BASE64_PATTERN.matcher(data).matches()) {
+            return false;
+        }
+
+        String trimmedInput = data.trim().replaceAll("=+$", "");
+        int paddingCount = data.length() - trimmedInput.length();
+
+        return paddingCount <= 2 && (trimmedInput.length() % 4 == 0 || paddingCount > 0);
     }
 
     /**
      * 解密
      */
-    public  static String decrypt(String encryptedData) {
+    public static String decrypt(String encryptedData) {
+        if (encryptedData == null || encryptedData.isEmpty()) {
+            throw new IllegalArgumentException("Encrypted data cannot be null or empty");
+        }
         if (decryptCipher == null) {
             init();
+        }
+        if (!isBase64Valid(encryptedData)) {
+            return encryptedData;
         }
         try {
             byte[] decode = Base64.getDecoder().decode(encryptedData);
             byte[] original = decryptCipher.doFinal(decode);
             return new String(original);
         } catch (Exception e) {
-            throw new RuntimeException("Decryption failed", e);
+            log.error("Decryption failed", e);
         }
+        return encryptedData;
     }
 
     /**
