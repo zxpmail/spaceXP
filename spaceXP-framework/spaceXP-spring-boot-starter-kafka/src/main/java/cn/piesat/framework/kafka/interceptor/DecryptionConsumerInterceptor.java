@@ -1,6 +1,8 @@
 package cn.piesat.framework.kafka.interceptor;
 
+import cn.piesat.framework.common.utils.AesContextHolder;
 import cn.piesat.framework.common.utils.AesUtils;
+import cn.piesat.framework.kafka.utils.KafkaInitConfigureUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerInterceptor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -12,6 +14,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 
 
+import javax.crypto.Cipher;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,16 +97,12 @@ public class DecryptionConsumerInterceptor implements ConsumerInterceptor<String
 
     @Override
     public void close() {
-
+        AesContextHolder.clear();
     }
 
     @Override
     public void configure(Map<String, ?> configs) {
-        String topics = System.getProperty(ENCRYPTION_TOPICS);
-        if (StringUtils.hasText(topics)) {
-            String[] topicsArray = topics.split(",");
-            encryptionTopics.addAll(new HashSet<>(Arrays.asList(topicsArray)));
-        }
+        KafkaInitConfigureUtil.initConfigure(encryptionTopics, Cipher.DECRYPT_MODE);
     }
     private static class RecordDecryptionException extends RuntimeException {
         public RecordDecryptionException(String message, Throwable cause) {

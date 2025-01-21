@@ -1,18 +1,17 @@
 package cn.piesat.framework.kafka.interceptor;
 
+import cn.piesat.framework.common.utils.AesContextHolder;
 import cn.piesat.framework.common.utils.AesUtils;
+import cn.piesat.framework.kafka.utils.KafkaInitConfigureUtil;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
+import javax.crypto.Cipher;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static cn.piesat.framework.kafka.constants.KafkaConstant.ENCRYPTION_TOPICS;
 
 
 /**
@@ -59,16 +58,12 @@ public class EncryptionProducerInterceptor implements ProducerInterceptor<String
 
     @Override
     public void close() {
-
+        AesContextHolder.clear();
     }
 
     @Override
     public void configure(Map<String, ?> configs) {
-        String topics = System.getProperty(ENCRYPTION_TOPICS);
-        if (StringUtils.hasText(topics)) {
-            String[] topicsArray = topics.split(",");
-            encryptionTopics.addAll(new HashSet<>(Arrays.asList(topicsArray)));
-        }
+        KafkaInitConfigureUtil.initConfigure(encryptionTopics, Cipher.ENCRYPT_MODE);
     }
     private static class EncryptionException extends RuntimeException {
         public EncryptionException(String message, Throwable cause) {

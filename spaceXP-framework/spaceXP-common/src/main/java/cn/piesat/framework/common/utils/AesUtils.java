@@ -1,6 +1,7 @@
 package cn.piesat.framework.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -37,32 +38,35 @@ public class AesUtils {
      */
     private static final int KEY_LENGTH = 16;
     private static final int IV_LENGTH = 16;
-    private static Cipher encryptCipher;
-    private static Cipher decryptCipher;
 
     private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/=]*$");
 
-    public static void init() {
-        init(DEFAULT_KEY, DEFAULT_IV);
-    }
 
-    public static synchronized void init(String key, String iv) {
-        if (key == null || iv == null) {
-            throw new IllegalArgumentException("Key and IV cannot be null");
+    public static synchronized void deInit(String key, String iv){
+        init(key,iv,Cipher.DECRYPT_MODE);
+    }
+    public static synchronized void enInit(String key, String iv){
+        init(key,iv,Cipher.ENCRYPT_MODE);
+    }
+    public static synchronized void init(String key, String iv,int mode) {
+        if (!StringUtils.hasText(key)){
+            key = DEFAULT_KEY;
+        }
+        if (!StringUtils.hasText(iv)) {
+            iv = DEFAULT_IV;
         }
         if (key.getBytes(StandardCharsets.UTF_8).length != KEY_LENGTH) {
-            throw new IllegalArgumentException("Invalid key length: must be " + KEY_LENGTH + " chars");
+            throw new RuntimeException("Invalid key length: key length must be " + KEY_LENGTH + " bytes");
         }
         if (iv.getBytes(StandardCharsets.UTF_8).length != IV_LENGTH) {
-            throw new IllegalArgumentException("Invalid IV length: must be " + IV_LENGTH + " chars");
+            throw new RuntimeException("Invalid IV length: iv length must be " + IV_LENGTH + " bytes");
         }
         try {
-            encryptCipher = Cipher.getInstance(ALGORITHM);
-            decryptCipher = Cipher.getInstance(ALGORITHM);
             SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), AES);
             IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
-            encryptCipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-            decryptCipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(mode, secretKey, ivSpec);
+            AesContextHolder.push(cipher);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -72,18 +76,21 @@ public class AesUtils {
      * 加密
      */
     public static String encrypt(String data) {
-        if (data == null || data.isEmpty()) {
-            return null;
+        if (!StringUtils.hasText(data)) {
+            return data;
         }
-        if (encryptCipher == null) {
-            init();
+        Cipher cipher = AesContextHolder.get();
+        if (cipher == null) {
+            enInit(DEFAULT_KEY,DEFAULT_IV);
+            cipher = AesContextHolder.get();
         }
         try {
-            byte[] bytes = encryptCipher.doFinal(data.getBytes());
+            assert cipher != null;
+            byte[] bytes = cipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(bytes);
-        }  catch (Exception e) {
+        } catch (Exception e) {
             log.error("Unexpected encryption error", e);
-            throw new RuntimeException("Unexpected encryption error",e);
+            throw new RuntimeException("Unexpected encryption error", e);
         }
     }
 
@@ -102,18 +109,22 @@ public class AesUtils {
      * 解密
      */
     public static String decrypt(String encryptedData) {
-        if (encryptedData == null || encryptedData.isEmpty()) {
-            throw new IllegalArgumentException("Encrypted data cannot be null or empty");
+        if (!StringUtils.hasText(encryptedData)) {
+            return encryptedData;
         }
-        if (decryptCipher == null) {
-            init();
+        Cipher cipher = AesContextHolder.get();
+        if (cipher == null) {
+            enInit(DEFAULT_KEY,DEFAULT_IV);
+            cipher = AesContextHolder.get();
         }
         if (!isBase64Valid(encryptedData)) {
             return encryptedData;
         }
         try {
+
             byte[] decode = Base64.getDecoder().decode(encryptedData);
-            byte[] original = decryptCipher.doFinal(decode);
+            assert cipher != null;
+            byte[] original = cipher.doFinal(decode);
             return new String(original);
         } catch (Exception e) {
             log.error("Decryption failed", e);
@@ -127,25 +138,17 @@ public class AesUtils {
 
 
     public static void main(String[] args) {
-        long l = System.currentTimeMillis();
-        System.out.println();
-        for (int i = 0; i < 1000000; i++) {
-            String originalData = "Hello, World! ";
-            //System.out.println("Original Data: " + originalData);
 
-            String encryptedData = AesUtils.encrypt(originalData);
-            //System.out.println("Encrypted Data (as hex): " + bytesToHex(encryptedData));
 
-            String decryptedData = AesUtils.decrypt(encryptedData);
-            //System.out.println("Decrypted Data: " + decryptedData);
+        String originalData = "Hello, World! ";
+        enInit(DEFAULT_KEY,DEFAULT_IV);
 
-//            if (originalData.equals(decryptedData)) {
-//                System.out.println("Encryption and decryption were successful.");
-//            } else {
-//                System.out.println("Encryption and decryption failed.");
-//            }
-        }
-        System.out.println(System.currentTimeMillis() - l);
+        String encryptedData = AesUtils.encrypt(originalData);
+        //System.out.println("Encrypted Data (as hex): " + bytesToHex(encryptedData));
+        deInit(DEFAULT_KEY,DEFAULT_IV);
+        String decryptedData = AesUtils.decrypt(encryptedData);
+        System.out.println(decryptedData);
+
 
     }
 }
