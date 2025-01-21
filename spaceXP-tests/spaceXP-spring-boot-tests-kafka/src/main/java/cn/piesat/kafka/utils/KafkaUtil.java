@@ -1,6 +1,6 @@
 package cn.piesat.kafka.utils;
 
-import cn.hutool.extra.spring.SpringUtil;
+import cn.piesat.framework.common.utils.SpringBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AlterConfigsOptions;
@@ -19,7 +19,6 @@ import org.springframework.kafka.config.MethodKafkaListenerEndpoint;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.listener.MessageListenerContainer;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -210,7 +209,7 @@ public class KafkaUtil {
         //设置实际处理的方法(包含方法名和参数)
         endpoint.setMethod(processMethod);
         //注册Container并启动，startImmediately表示立马启动
-        kafkaListenerEndpointRegistry.registerListenerContainer(endpoint, SpringUtil.getBean(KafkaListenerContainerFactory.class), true);
+        kafkaListenerEndpointRegistry.registerListenerContainer(endpoint, SpringBeanUtil.getBean(KafkaListenerContainerFactory.class), true);
         log.info("Kafka监听容器操作：ID为{}的容器已【注册】，监听的topics：{}", id, topics);
 
 

@@ -1,11 +1,10 @@
 package cn.piesat.kafka.controller;
 
-import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -34,7 +33,7 @@ public class KafkaProducer {
     public static final String TOPIC_GROUP2 = "topic.group2";
 
     public void send(Object obj) {
-        String obj2String = JSONUtil.toJsonStr(obj);
+        String obj2String = JSON.toJSONString(obj);
         log.info("准备发送消息为：{}", obj2String);
         //发送消息
         ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(TOPIC_TEST, obj);
