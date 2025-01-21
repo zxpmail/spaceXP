@@ -11,11 +11,11 @@ import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.header.internals.RecordHeaders;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.util.StringUtils;
+
 
 
 import javax.crypto.Cipher;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;

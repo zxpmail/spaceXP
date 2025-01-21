@@ -1,7 +1,7 @@
 package cn.piesat.kafka;
 
 
-import cn.piesat.framework.common.utils.AesUtils;
+
 import cn.piesat.framework.kafka.constants.KafkaConstant;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
