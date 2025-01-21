@@ -41,14 +41,12 @@ public class AesUtils {
 
     private static final Pattern BASE64_PATTERN = Pattern.compile("^[A-Za-z0-9+/=]*$");
 
+    private static SecretKeySpec secretKey;
 
-    public static synchronized void deInit(String key, String iv){
-        init(key,iv,Cipher.DECRYPT_MODE);
-    }
-    public static synchronized void enInit(String key, String iv){
-        init(key,iv,Cipher.ENCRYPT_MODE);
-    }
-    public static synchronized void init(String key, String iv,int mode) {
+    private static IvParameterSpec ivSpec;
+
+
+    public static synchronized void init(String key, String iv) {
         if (!StringUtils.hasText(key)){
             key = DEFAULT_KEY;
         }
@@ -62,11 +60,8 @@ public class AesUtils {
             throw new RuntimeException("Invalid IV length: iv length must be " + IV_LENGTH + " bytes");
         }
         try {
-            SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), AES);
-            IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
-            Cipher cipher = Cipher.getInstance(ALGORITHM);
-            cipher.init(mode, secretKey, ivSpec);
-            AesContextHolder.push(cipher);
+            secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), AES);
+            ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -79,13 +74,12 @@ public class AesUtils {
         if (!StringUtils.hasText(data)) {
             return data;
         }
-        Cipher cipher = AesContextHolder.get();
-        if (cipher == null) {
-            enInit(DEFAULT_KEY,DEFAULT_IV);
-            cipher = AesContextHolder.get();
+        if (secretKey == null) {
+            init(DEFAULT_KEY,DEFAULT_IV);
         }
         try {
-            assert cipher != null;
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
             byte[] bytes = cipher.doFinal(data.getBytes());
             return Base64.getEncoder().encodeToString(bytes);
         } catch (Exception e) {
@@ -112,10 +106,8 @@ public class AesUtils {
         if (!StringUtils.hasText(encryptedData)) {
             return encryptedData;
         }
-        Cipher cipher = AesContextHolder.get();
-        if (cipher == null) {
-            enInit(DEFAULT_KEY,DEFAULT_IV);
-            cipher = AesContextHolder.get();
+        if (secretKey == null) {
+            init(DEFAULT_KEY,DEFAULT_IV);
         }
         if (!isBase64Valid(encryptedData)) {
             return encryptedData;
@@ -123,7 +115,8 @@ public class AesUtils {
         try {
 
             byte[] decode = Base64.getDecoder().decode(encryptedData);
-            assert cipher != null;
+            Cipher cipher = Cipher.getInstance(ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, ivSpec);
             byte[] original = cipher.doFinal(decode);
             return new String(original);
         } catch (Exception e) {
@@ -139,13 +132,13 @@ public class AesUtils {
 
     public static void main(String[] args) {
 
-
+        init(DEFAULT_KEY,DEFAULT_IV);
         String originalData = "Hello, World! ";
-        enInit(DEFAULT_KEY,DEFAULT_IV);
+
 
         String encryptedData = AesUtils.encrypt(originalData);
         //System.out.println("Encrypted Data (as hex): " + bytesToHex(encryptedData));
-        deInit(DEFAULT_KEY,DEFAULT_IV);
+
         String decryptedData = AesUtils.decrypt(encryptedData);
         System.out.println(decryptedData);
 

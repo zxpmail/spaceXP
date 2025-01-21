@@ -1,6 +1,5 @@
 package cn.piesat.framework.kafka.interceptor;
 
-import cn.piesat.framework.common.utils.AesContextHolder;
 import cn.piesat.framework.common.utils.AesUtils;
 import cn.piesat.framework.kafka.utils.KafkaInitConfigureUtil;
 import org.apache.kafka.clients.producer.ProducerInterceptor;
@@ -8,7 +7,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.util.AntPathMatcher;
 
-import javax.crypto.Cipher;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -58,12 +56,12 @@ public class EncryptionProducerInterceptor implements ProducerInterceptor<String
 
     @Override
     public void close() {
-        AesContextHolder.clear();
+
     }
 
     @Override
     public void configure(Map<String, ?> configs) {
-        KafkaInitConfigureUtil.initConfigure(encryptionTopics, Cipher.ENCRYPT_MODE);
+        KafkaInitConfigureUtil.initConfigure(encryptionTopics);
     }
     private static class EncryptionException extends RuntimeException {
         public EncryptionException(String message, Throwable cause) {

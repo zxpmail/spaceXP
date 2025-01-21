@@ -23,7 +23,7 @@ import static cn.piesat.framework.kafka.constants.KafkaConstant.ENCRYPTION_TOPIC
 @Slf4j
 public class KafkaInitConfigureUtil {
 
-    public static void initConfigure(Set<String> topicSet,int mode){
+    public static void initConfigure(Set<String> topicSet){
         try {
             // 获取并验证 topics 配置
             String topics = System.getProperty(ENCRYPTION_TOPICS);
@@ -44,7 +44,7 @@ public class KafkaInitConfigureUtil {
                 throw new IllegalArgumentException("Invalid encryption key or IV");
             }
 
-            AesUtils.init(key, iv,mode);
+            AesUtils.init(key, iv);
             log.info("Configuration initialized successfully.");
         } catch (Exception e) {
             log.error("Failed to initialize configuration: {} " , e.getMessage(), e);

@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class KafkaConsumer {
 
-    @KafkaListener(topics = "parse_telemetry_real_time_topic", groupId = "my-group")
+    @KafkaListener(topics = "parse_telemetry_real_time_topic", groupId = "my-group",concurrency = "5")
     public void listen(List<ConsumerRecord<String, String>> messages) {
         for (ConsumerRecord<String, String> message : messages) {
             System.out.println("Received message: " + message.value());
