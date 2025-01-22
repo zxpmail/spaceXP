@@ -208,9 +208,6 @@ public class Kafka1Producer {
      * executeInTransaction：表示执行本地事务，不参与全局事务(如果存在)，即方法内部和外部是分离的，只要内部不
      * 发生异常，消息就会发送，与外部无关，即使外部有 @Transactional 注解也不影响消息发送，此时外围有没有 @Transactional 都一样。
      *
-     * @param topic
-     * @param message
-     * @return
      */
     @PostMapping("kafka/sendMsgTransactional2")
     public Map<String, Object> sendMessageTransactional2(@RequestParam String topic,
