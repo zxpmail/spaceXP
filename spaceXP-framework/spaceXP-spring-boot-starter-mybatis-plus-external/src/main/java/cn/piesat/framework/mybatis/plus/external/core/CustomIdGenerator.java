@@ -5,6 +5,7 @@ import cn.piesat.framework.mybatis.plus.external.properties.MybatisPlusExternalP
 import cn.piesat.framework.redis.core.RedisService;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
 import com.baomidou.mybatisplus.core.toolkit.Sequence;
+import io.lettuce.core.RedisConnectionException;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
@@ -28,6 +29,7 @@ public class CustomIdGenerator implements IdentifierGenerator {
     private final MybatisPlusExternalProperties properties;
     private final Sequence sequence;
 
+
     public CustomIdGenerator(MybatisPlusExternalProperties properties) {
         this.properties = properties;
         if (this.properties.getWorkId() > ExternalConstant.WORK_ID_MAX || this.properties.getWorkId() < ExternalConstant.WORK_ID_MIN) {
@@ -44,20 +46,22 @@ public class CustomIdGenerator implements IdentifierGenerator {
     private RedisService redisService;
 
     @Override
-    public Number nextId(Object entity) {
+    public synchronized Number nextId(Object entity) {
         Number id;
         try {
             long num = redisService.increment(properties.getKeyPrefix() + ":" + entity.getClass().getName(), getEndTime());
             String sid = String.format("%s%02d%0" + properties.getLength() + "d",
                     LocalDate.now().format(DateTimeFormatter.ofPattern(ExternalConstant.FMT)), properties.getWorkId(), num);
             id = Long.valueOf(sid);
-        } catch (Exception e) {
+        }  catch (RedisConnectionException e) {
             id = sequence.nextId();
             log.error("redis connect error! id:{}", id);
+        } catch (NumberFormatException e){
+            log.error("redis number error ", e);
+            id = sequence.nextId();
         }
         return id;
     }
-
     /**
      * 获取当天的结束时间
      */
