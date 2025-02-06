@@ -10,6 +10,9 @@ import org.springframework.util.AntPathMatcher;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static cn.piesat.framework.kafka.constants.KafkaConstant.ENCRYPTION_RATE;
 
 
 /**
@@ -21,14 +24,21 @@ import java.util.Set;
  */
 public class EncryptionProducerInterceptor implements ProducerInterceptor<String, String> {
 
-
+    private static final int MAX_COUNTER = 60000;
     private final Set<String> encryptionTopics = new HashSet<>();
 
+    private final AtomicInteger counter = new AtomicInteger(0);
     private final AntPathMatcher antPathMatcher = new AntPathMatcher();
+
+    private int encryptionRate = 1;
 
     @Override
     public ProducerRecord<String, String> onSend(ProducerRecord<String, String> record) {
-        if (encryptionTopics.isEmpty()) {
+        int currentCounter = counter.incrementAndGet();
+        if (currentCounter > MAX_COUNTER) {
+            counter.set(currentCounter % MAX_COUNTER);
+        }
+        if (encryptionTopics.isEmpty() || (encryptionRate != 1 && currentCounter % encryptionRate != 0)) {
             return record;
         }
 
@@ -62,7 +72,14 @@ public class EncryptionProducerInterceptor implements ProducerInterceptor<String
     @Override
     public void configure(Map<String, ?> configs) {
         KafkaInitConfigureUtil.initConfigure(encryptionTopics);
+        String rate = System.getProperty(ENCRYPTION_RATE);
+        try {
+            encryptionRate = Integer.parseInt(rate);
+        } catch (Exception e) {
+            encryptionRate = 1;
+        }
     }
+
     private static class EncryptionException extends RuntimeException {
         public EncryptionException(String message, Throwable cause) {
             super(message, cause);

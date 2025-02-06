@@ -15,4 +15,9 @@ public interface KafkaConstant {
     String ENCRYPTION_KEY = "space.kafka.key";
 
     String ENCRYPTION_IV = "space.kafka.iv";
+
+    /**
+     * 加密比例 1表示数据全加密 2表示一半 3表示三分之一等
+     */
+    String ENCRYPTION_RATE ="space.kafka.encryptionRate";
 }
