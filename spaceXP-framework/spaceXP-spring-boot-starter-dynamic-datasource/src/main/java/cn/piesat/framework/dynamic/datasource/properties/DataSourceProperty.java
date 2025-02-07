@@ -1,6 +1,9 @@
 package cn.piesat.framework.dynamic.datasource.properties;
 
+import cn.piesat.framework.dynamic.datasource.config.DruidConfig;
+import cn.piesat.framework.dynamic.datasource.config.HikariCpConfig;
 import lombok.Data;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 import javax.sql.DataSource;
 
@@ -36,4 +39,15 @@ public class DataSourceProperty {
      * 解密公匙(如果未设置默认使用全局的)
      */
     private String publicKey;
+
+    /**
+     * Druid参数配置
+     */
+    @NestedConfigurationProperty
+    private DruidConfig druid;
+    /**
+     * HikariCp参数配置
+     */
+    @NestedConfigurationProperty
+    private HikariCpConfig hikari = new HikariCpConfig();
 }
