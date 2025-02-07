@@ -2,6 +2,10 @@ package cn.piesat.framework.dynamic.datasource.config;
 
 import lombok.Data;
 
+import java.lang.reflect.Field;
+import java.util.Optional;
+import java.util.Properties;
+
 /**
  * <p/>
  * {@code @description}: Druid配置类
@@ -38,4 +42,18 @@ public class DruidConfig {
     protected volatile long maxWait = DEFAULT_MAX_WAIT;
 
     protected int notFullTimeoutRetryCount;
+
+    public Properties toProperties() {
+        Properties properties = new Properties();
+        Field[] declaredFields = this.getClass().getDeclaredFields();
+        try {
+            for (Field field: declaredFields) {
+                Optional.ofNullable(field.get(this)).
+                        ifPresent(v -> properties.setProperty(field.getName(), v.toString()));
+            }
+        } catch (Exception e){
+            throw new RuntimeException("DruidConfig toProperties error, e=", e);
+        }
+        return properties;
+    }
 }

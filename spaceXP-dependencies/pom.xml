@@ -70,10 +70,16 @@
         <podam.version>8.0.2.RELEASE</podam.version>
         <log4j-core.version>2.23.0</log4j-core.version>
         <commons-io.version>2.18.0</commons-io.version>
+        <druid.version>1.2.24</druid.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>

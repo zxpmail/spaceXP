@@ -1,7 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.properties;
 
 import cn.piesat.framework.dynamic.datasource.config.DruidConfig;
-import cn.piesat.framework.dynamic.datasource.config.HikariCpConfig;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
@@ -51,5 +50,5 @@ public class DataSourceProperty {
      * HikariCp参数配置
      */
     @NestedConfigurationProperty
-    private HikariConfig hikari ;
+    private HikariConfig hikari;
 }
