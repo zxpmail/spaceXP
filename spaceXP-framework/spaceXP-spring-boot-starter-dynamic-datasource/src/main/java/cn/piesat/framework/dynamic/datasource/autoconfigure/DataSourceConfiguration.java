@@ -2,7 +2,6 @@ package cn.piesat.framework.dynamic.datasource.autoconfigure;
 
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.core.DynamicMethodInterceptor;
-import cn.piesat.framework.dynamic.datasource.init.AtomikosDataSourceInit;
 import cn.piesat.framework.dynamic.datasource.init.DecryptDataSourceInit;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperties;
@@ -62,12 +61,6 @@ public class DataSourceConfiguration {
             return advisor;
         }
         return null;
-    }
-
-    @Bean("atomikosDataSourceInit")
-    @ConditionalOnProperty(name = "space.datasource.xa.enabled", havingValue = "true")
-    public AtomikosDataSourceInit atomikosDataSourceInit(){
-        return new AtomikosDataSourceInit();
     }
 
     @Bean("decryptDataSourceInit")
