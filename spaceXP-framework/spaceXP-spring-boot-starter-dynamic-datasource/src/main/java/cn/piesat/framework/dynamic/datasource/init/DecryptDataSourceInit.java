@@ -2,6 +2,7 @@ package cn.piesat.framework.dynamic.datasource.init;
 
 import cn.piesat.framework.common.utils.RsaUtils;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
+import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
 import org.springframework.util.StringUtils;
 
 
@@ -14,19 +15,24 @@ import org.springframework.util.StringUtils;
  */
 public class DecryptDataSourceInit implements DataSourceInit {
 
+    @Override
+    public void beforeCreate(DataSourceProperty dataSourceProperty) {
+        String privateKey = dataSourceProperty.getPrivateKey();
+        if (StringUtils.hasText(privateKey)) {
+            dataSourceProperty.setUsername(decrypt(privateKey, dataSourceProperty.getUsername()));
+            dataSourceProperty.setPassword(decrypt(privateKey, dataSourceProperty.getPassword()));
+        }
+    }
+
+    @Override
+    public void afterCreate(DataSourceProperty dataSourceProperty) {
+
+    }
+
     private String decrypt(String privateKey, String cipherText) {
         if (StringUtils.hasText(cipherText)) {
             return RsaUtils.rsaDecrypt(cipherText, privateKey);
         }
         return cipherText;
-    }
-
-    @Override
-    public void beforeCreate(DataSourceEntity dataSourceEntity) {
-        String privateKey = dataSourceEntity.getPrivateKey();
-        if (StringUtils.hasText(privateKey)) {
-            dataSourceEntity.setUsername(decrypt(privateKey, dataSourceEntity.getUsername()));
-            dataSourceEntity.setPassword(decrypt(privateKey, dataSourceEntity.getPassword()));
-        }
     }
 }

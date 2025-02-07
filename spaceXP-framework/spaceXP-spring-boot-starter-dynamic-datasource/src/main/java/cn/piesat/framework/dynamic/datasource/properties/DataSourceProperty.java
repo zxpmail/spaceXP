@@ -36,9 +36,9 @@ public class DataSourceProperty {
     private String password;
 
     /**
-     * 解密公匙(如果未设置默认使用全局的)
+     * 用私钥进行解密
      */
-    private String publicKey;
+    private String privateKey;
 
     /**
      * Druid参数配置

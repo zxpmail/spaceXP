@@ -1,8 +1,7 @@
 package cn.piesat.framework.dynamic.datasource.init;
 
-import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
+import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
 
-import javax.sql.DataSource;
 
 /**
  * <p/>
@@ -15,16 +14,12 @@ public interface DataSourceInit {
     /**
      * 创建之前允许做一些事情，比如用户名密码进行解密
      */
-    default void beforeCreate(DataSourceEntity dataSourceEntity) {
-
-    }
+    void beforeCreate(DataSourceProperty dataSourceProperty);
 
     /**
      * 数据源创建之后允许做一些事情
      */
-    default DataSource afterCreate(DataSource dataSource, DataSourceEntity dataSourceEntity) {
-        return dataSource;
-    }
+    void afterCreate(DataSourceProperty dataSourceProperty);
 
     default int getOrder() {
         return 0;
