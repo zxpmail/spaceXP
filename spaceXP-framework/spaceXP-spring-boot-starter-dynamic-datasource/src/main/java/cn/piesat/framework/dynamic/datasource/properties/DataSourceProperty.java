@@ -2,6 +2,7 @@ package cn.piesat.framework.dynamic.datasource.properties;
 
 import cn.piesat.framework.dynamic.datasource.config.DruidConfig;
 import cn.piesat.framework.dynamic.datasource.config.HikariCpConfig;
+import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
@@ -35,6 +36,7 @@ public class DataSourceProperty {
      */
     private String password;
 
+    private String poolName;
     /**
      * 用私钥进行解密
      */
@@ -49,5 +51,5 @@ public class DataSourceProperty {
      * HikariCp参数配置
      */
     @NestedConfigurationProperty
-    private HikariCpConfig hikari = new HikariCpConfig();
+    private HikariConfig hikari ;
 }
