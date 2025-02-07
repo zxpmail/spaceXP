@@ -1,4 +1,4 @@
-package cn.piesat.framework.dynamic.datasource.config;
+package cn.piesat.framework.dynamic.datasource.autoconfigure;
 
 import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.core.DynamicMethodInterceptor;
