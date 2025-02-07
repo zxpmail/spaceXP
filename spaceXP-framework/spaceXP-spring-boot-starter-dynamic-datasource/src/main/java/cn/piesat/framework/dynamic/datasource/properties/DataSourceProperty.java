@@ -18,6 +18,9 @@ import javax.sql.DataSource;
 @Data
 public class DataSourceProperty {
 
+    /**
+     * 数据源类型
+     */
     private Class<? extends DataSource> type;
     /**
      * JDBC driver
@@ -36,6 +39,9 @@ public class DataSourceProperty {
      */
     private String password;
 
+    /**
+     * 连接池名称
+     */
     private String poolName;
     /**
      * 用私钥进行解密
@@ -52,9 +58,8 @@ public class DataSourceProperty {
      */
     @NestedConfigurationProperty
     private HikariConfig hikari;
-
     /**
-     * HikariCp参数配置
+     * Atomikos参数配置
      */
     @NestedConfigurationProperty
     private AtomikosConfig atomikos;
