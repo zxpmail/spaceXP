@@ -25,4 +25,9 @@ public interface DataSourceConstant {
      */
     String HIKARI_DATASOURCE = "com.zaxxer.hikari.HikariDataSource";
 
+    /**
+     * Atomikos数据源
+     */
+    String ATOMIKOS_DATASOURCE = "com.atomikos.jdbc.AtomikosDataSourceBean";
+
 }

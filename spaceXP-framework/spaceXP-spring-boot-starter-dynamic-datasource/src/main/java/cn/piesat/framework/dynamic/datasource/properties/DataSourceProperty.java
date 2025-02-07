@@ -1,5 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.properties;
 
+import cn.piesat.framework.dynamic.datasource.config.AtomikosConfig;
 import cn.piesat.framework.dynamic.datasource.config.DruidConfig;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.Data;
@@ -51,4 +52,10 @@ public class DataSourceProperty {
      */
     @NestedConfigurationProperty
     private HikariConfig hikari;
+
+    /**
+     * HikariCp参数配置
+     */
+    @NestedConfigurationProperty
+    private AtomikosConfig atomikos;
 }
