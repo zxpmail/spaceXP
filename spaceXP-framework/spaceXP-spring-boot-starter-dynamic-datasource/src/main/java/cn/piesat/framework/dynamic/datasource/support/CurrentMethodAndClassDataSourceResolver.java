@@ -21,8 +21,13 @@ public class CurrentMethodAndClassDataSourceResolver extends AbstractDataSourceC
         Class<?> targetObjectClass = targetObject.getClass();
 
         MethodClassKey methodClassKey = new MethodClassKey(method, targetObjectClass);
-        String dsName = findDataSourceAttribute(method, DS.class);
+        String dsName = getCache(methodClassKey);
         if (StringUtils.hasText(dsName)) {
+            return dsName;
+        }
+        dsName = findDataSourceAttribute(method, DS.class);
+        if (StringUtils.hasText(dsName)) {
+            putCache(methodClassKey, dsName);
             return dsName;
         }
 
@@ -30,6 +35,7 @@ public class CurrentMethodAndClassDataSourceResolver extends AbstractDataSourceC
         Class<?> userClass = ClassUtils.getUserClass(targetObjectClass);
         dsName = findDataSourceAttribute(userClass, DS.class);
         if (StringUtils.hasText(dsName) && ClassUtils.isUserLevelMethod(method)) {
+            putCache(methodClassKey, dsName);
             return dsName;
         }
         return null;

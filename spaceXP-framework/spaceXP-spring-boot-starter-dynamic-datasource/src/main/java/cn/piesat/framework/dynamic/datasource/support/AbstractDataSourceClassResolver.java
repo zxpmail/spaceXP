@@ -33,7 +33,7 @@ public abstract class AbstractDataSourceClassResolver implements DataSourceClass
         return DS_CACHE.get(cacheKey);
     }
 
-    protected void putCache(Object cacheKey, String ddsValue) {
-        this.DS_CACHE.put(cacheKey, ddsValue);
+    protected void putCache(Object cacheKey, String dsName) {
+        this.DS_CACHE.put(cacheKey, dsName);
     }
 }
