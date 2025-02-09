@@ -5,6 +5,8 @@ import org.springframework.core.annotation.AnnotationAttributes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p/>
@@ -14,6 +16,8 @@ import java.lang.reflect.AnnotatedElement;
  * {@code @author}: zhouxp
  */
 public abstract class AbstractDataSourceClassResolver implements DataSourceClassResolver{
+
+    private final Map<Object, String> DS_CACHE = new ConcurrentHashMap<>();
     /**
      * 查找对应节点上的注解信息
      */
@@ -23,5 +27,13 @@ public abstract class AbstractDataSourceClassResolver implements DataSourceClass
             return attributes.getString("value");
         }
         return null;
+    }
+
+    protected String getCache(Object cacheKey) {
+        return DS_CACHE.get(cacheKey);
+    }
+
+    protected void putCache(Object cacheKey, String ddsValue) {
+        this.DS_CACHE.put(cacheKey, ddsValue);
     }
 }
