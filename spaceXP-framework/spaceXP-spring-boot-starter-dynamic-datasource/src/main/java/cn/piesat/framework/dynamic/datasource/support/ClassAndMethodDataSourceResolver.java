@@ -9,12 +9,12 @@ import java.lang.reflect.Method;
 
 /**
  * <p/>
- * {@code @description}: 当前类及方法上面查找注解
+ * {@code @description}: 类及方法上面查找注解
  * <p/>
  * {@code @create}: 2025-02-09 18:32
  * {@code @author}: zhouxp
  */
-public class CurrentMethodAndClassDataSourceResolver extends AbstractDataSourceClassResolver{
+public class ClassAndMethodDataSourceResolver extends AbstractDataSourceClassResolver{
     @Override
     public String findKey(Method method, Object targetObject) {
         //获取目标类
