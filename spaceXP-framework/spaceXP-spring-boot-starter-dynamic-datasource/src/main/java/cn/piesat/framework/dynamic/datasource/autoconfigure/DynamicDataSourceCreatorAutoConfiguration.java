@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.transaction.jta.TransactionFactory;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class DynamicDataSourceCreatorAutoConfiguration {
     @Configuration
     static class DruidDataSourceCreatorConfiguration {
         @Order(DRUID_ORDER)
-        @Bean
+        @Bean("DruidDataSourceCreator")
         public DruidDataSourceCreator dataSourceCreator() {
             return new DruidDataSourceCreator();
         }
@@ -47,17 +48,17 @@ public class DynamicDataSourceCreatorAutoConfiguration {
     @Configuration
     static class HikariDataSourceCreatorConfiguration {
         @Order(HIKARI_ORDER)
-        @Bean
+        @Bean("HikariDataSourceCreator")
         public HikariDataSourceCreator dataSourceCreator() {
             return new HikariDataSourceCreator();
         }
     }
 
-    @ConditionalOnClass(AtomikosDataSourceBean.class)
+    @ConditionalOnClass({AtomikosDataSourceBean.class, TransactionFactory.class})
     @Configuration
     static class AtomikosDataSourceBeanCreatorConfiguration {
         @Order(ATOMIKOS_ORDER)
-        @Bean
+        @Bean("AtomikosDataSourceCreator")
         public AtomikosDataSourceCreator dataSourceCreator() {
             return new AtomikosDataSourceCreator();
         }

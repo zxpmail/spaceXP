@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -75,12 +74,6 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         }
     }
 
-    @Override
-    protected Object determineCurrentLookupKey() {
-        String currentDataSource = DynamicDataSourceContextHolder.getCurrentDataSource();
-        return getDataSource(currentDataSource);
-    }
-
     private DataSource getDataSource(String dataSource) {
         if (StringUtils.hasText(dataSource)) {
             return allDataSources.get(dataSource);
@@ -118,4 +111,9 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     }
 
 
+    @Override
+    protected DataSource determineDataSource() {
+        String currentDataSource = DynamicDataSourceContextHolder.getCurrentDataSource();
+        return getDataSource(currentDataSource);
+    }
 }
