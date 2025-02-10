@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  cn.piesat.framework.dynamic.datasource.autoconfigure.DataSourceConfiguration
+  cn.piesat.framework.dynamic.datasource.autoconfigure.DynamicDataSourceAutoConfiguration
