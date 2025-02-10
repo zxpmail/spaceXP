@@ -114,6 +114,16 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
     @Override
     protected DataSource determineDataSource() {
         String currentDataSource = DynamicDataSourceContextHolder.getCurrentDataSource();
-        return getDataSource(currentDataSource);
+
+        if (!StringUtils.hasText(currentDataSource)) {
+            log.warn("当前数据源为空！, 使用默认数据源: {}", primary);
+            currentDataSource = primary;
+        }
+        DataSource dataSource = getDataSource(currentDataSource);
+        if (dataSource == null) {
+            log.error("{}：数据源为空",currentDataSource);
+            throw new RuntimeException(currentDataSource+": 数据源为空");
+        }
+        return dataSource;
     }
 }
