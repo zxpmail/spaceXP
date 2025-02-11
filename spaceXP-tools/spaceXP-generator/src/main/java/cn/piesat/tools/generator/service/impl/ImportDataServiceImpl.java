@@ -1,6 +1,6 @@
 package cn.piesat.tools.generator.service.impl;
 
-import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.datasource.DynamicDataSource;
 import cn.piesat.tools.generator.config.TemplatesConfig;
 import cn.piesat.tools.generator.model.dto.ImportDataSourceDTO;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;

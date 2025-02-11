@@ -47,10 +47,12 @@ public class DynamicDataSource {
         dataSources.forEach((key, value) -> add(value, key));
     }
 
-    private Boolean existsDataSource(String key) {
+    public Boolean existsDataSource(String key) {
         return Objects.nonNull(dynamicRoutingDataSource.getDataSource(key));
     }
-
+    public DataSource getDataSource(String key) {
+        return dynamicRoutingDataSource.getDataSource(key);
+    }
     public void delete(String key) {
         dynamicRoutingDataSource.close(key);
     }

@@ -6,7 +6,7 @@ import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
 import cn.piesat.framework.dynamic.datasource.datasource.DynamicDataSource;
-import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
+import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
 import cn.piesat.tools.generator.model.dto.DataSourceDTO;
@@ -18,8 +18,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -134,7 +137,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
     }
 
 
-    @Resource
+    @Setter(onMethod_ =@Autowired)
     private DynamicDataSource dynamicDataSource;
 
 
@@ -158,11 +161,10 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
     }
 
     private void datasourceTest(DataSourceDTO dataSourceDTO) {
-        DataSourceEntity copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceEntity::new);
+        DataSourceProperty copy = CopyBeanUtils.copy(dataSourceDTO, DataSourceProperty::new);
         if(Objects.isNull(copy)){
             return;
         }
-        copy.setKey(dataSourceDTO.getConnName());
         DataSource test = dynamicDataSource.test(copy);
         dynamicDataSource.add(test,dataSourceDTO.getConnName());
 

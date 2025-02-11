@@ -1,8 +1,8 @@
 package cn.piesat.tools.generator.utils;
 
 
-import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
-import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
+import cn.piesat.framework.dynamic.datasource.datasource.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
 import cn.piesat.tools.generator.config.TemplatesConfig;
 import cn.piesat.tools.generator.model.entity.DataSourceDO;
 import cn.piesat.tools.generator.model.entity.TemplateEntity;
@@ -19,7 +19,6 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 import static cn.piesat.tools.generator.constants.Constants.TEMPLATE_DIRECTORY;
@@ -47,14 +46,11 @@ public class DataSourceRunner implements ApplicationRunner {
         templatesConfig.getTemplates().forEach(this::LoadContent);
         List<DataSourceDO> list = dataSourceService.list();
         if (CollectionUtils.isNotEmpty(list)) {
-            List<DataSourceEntity> ds = new ArrayList<>();
             for (DataSourceDO dataSourceDO : list) {
-                DataSourceEntity sourceEntity = new DataSourceEntity();
-                BeanUtils.copyProperties(dataSourceDO,sourceEntity);
-                sourceEntity.setKey(dataSourceDO.getConnName());
-                ds.add(sourceEntity);
+                DataSourceProperty dataSourceProperty = new DataSourceProperty();
+                BeanUtils.copyProperties(dataSourceDO,dataSourceProperty);
+                dynamicDataSource.add(dataSourceProperty,dataSourceDO.getConnName());
             }
-            dynamicDataSource.add(ds);
         }
     }
     private void LoadContent(TemplateEntity templateEntity) {

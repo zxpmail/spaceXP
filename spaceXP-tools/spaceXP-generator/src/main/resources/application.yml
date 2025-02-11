@@ -9,13 +9,19 @@ spring:
   jackson:
     default-property-inclusion: non_null
   datasource:
-    driver-class-name: org.sqlite.JDBC
-    jdbcUrl: jdbc:sqlite:db/xp-generator.db
-    # MySQL
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    jdbcUrl: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
-#    username: root
-#    password: 123456
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      dataSource:
+        master:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:sqlite:db/xp-generator.db
+          driver-class-name: org.sqlite.JDBC
+        slave:
+          type: com.zaxxer.hikari.HikariDataSource
+          url: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+          username: root
+          password: 123456
+          driver-class-name: com.mysql.cj.jdbc.Driver
   freemarker:
     check-template-location: false
   profiles:
