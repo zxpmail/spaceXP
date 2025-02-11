@@ -41,10 +41,6 @@ public class DataSourceProperty {
     private String password;
 
     /**
-     * 连接池名称
-     */
-    private String poolName;
-    /**
      * 用私钥进行解密
      */
     private String privateKey;

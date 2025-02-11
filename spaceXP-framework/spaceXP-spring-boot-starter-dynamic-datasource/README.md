@@ -16,7 +16,6 @@
     </dependency>
 
 在项目的配置文件中加入
-space.datasource 为Map<String,DataSourceEntity> 类型配置数据源map，自动增加数据源用@DS进行注解分不同数据源
 例子参见spaceXP-spring-boot-tests-dynamic-datasource
 
 

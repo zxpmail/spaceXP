@@ -21,16 +21,18 @@ public interface UserService extends IService<UserDO> {
 
     PageResult list(PageBean pageBean, UserDO userDO);
 
-    UserDO info(Long id);
+    @DS
+    Boolean addMaster(UserDO userDO) ;
 
-    Boolean add(UserDO userDO);
 
-    Boolean update(UserDO userDO);
+    @DS("slave")
+    Boolean addSlave(UserDO userDO);
 
-    Boolean delete(List<Long> asList);
 
-    Boolean delete(Long id);
+    @DS("slave")
+    Boolean addNested(UserDO userDO);
 
+    Boolean addTrans(UserDO userDO);
 
     void addTest1();
     void addTest2();

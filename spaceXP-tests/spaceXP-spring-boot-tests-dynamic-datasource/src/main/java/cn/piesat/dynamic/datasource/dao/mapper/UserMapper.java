@@ -23,7 +23,7 @@ import java.util.List;
 public interface UserMapper extends BaseMapper<UserDO> {
 
     @Select("select * from user")
-    @DS(value = "master")
+    @DS
     List<UserDO> queryAllWithMaster();
 
     @Select("select * from user")

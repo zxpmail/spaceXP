@@ -30,7 +30,6 @@ public class HikariDataSourceCreator extends AbstractDataSourceCreator{
         config.setUsername(dataSourceProperty.getUsername());
         config.setPassword(dataSourceProperty.getPassword());
         config.setJdbcUrl(dataSourceProperty.getUrl());
-        config.setPoolName(dataSourceProperty.getPoolName());
         String driverClassName = dataSourceProperty.getDriverClassName();
         if (StringUtils.hasText(driverClassName)) {
             config.setDriverClassName(driverClassName);

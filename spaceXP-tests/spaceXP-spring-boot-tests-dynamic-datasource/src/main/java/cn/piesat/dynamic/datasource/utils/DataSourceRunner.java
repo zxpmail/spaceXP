@@ -2,9 +2,10 @@ package cn.piesat.dynamic.datasource.utils;
 
 import cn.piesat.dynamic.datasource.dao.mapper.DbInfoMapper;
 import cn.piesat.dynamic.datasource.model.entity.DbInfo;
-import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.datasource.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 
+import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.ApplicationArguments;
@@ -29,20 +30,15 @@ public class DataSourceRunner implements ApplicationRunner {
     private DynamicDataSource dynamicDataSource;
     @Resource
     private DbInfoMapper dbInfoMapper;
-
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<DbInfo> dbInfos = dbInfoMapper.selectList(null);
         if (CollectionUtils.isNotEmpty(dbInfos)) {
-            List<DataSourceEntity> ds = new ArrayList<>();
             for (DbInfo dbInfo : dbInfos) {
-                DataSourceEntity sourceEntity = new DataSourceEntity();
-                BeanUtils.copyProperties(dbInfo,sourceEntity);
-                sourceEntity.setKey(dbInfo.getName());
-                ds.add(sourceEntity);
+                DataSourceProperty dataSourceProperty = new DataSourceProperty();
+                BeanUtils.copyProperties(dbInfo,dataSourceProperty);
+                dynamicDataSource.add(dataSourceProperty,dbInfo.getName());
             }
-            dynamicDataSource.add(ds);
         }
     }
 }

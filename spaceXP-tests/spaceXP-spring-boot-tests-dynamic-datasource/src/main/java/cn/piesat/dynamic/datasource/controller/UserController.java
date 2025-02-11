@@ -43,19 +43,31 @@ public class UserController {
     @ApiOperation("分页查询")
     @PostMapping("/list")
     @DS
-    public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO, DSEntity dsEntity){
+    public PageResult list(@DS("user_test") PageBean pageBean, @RequestBody(required = false) UserDO userDO){
         return userService.list(pageBean,userDO);
 
     }
-    /**
-     * 信息
-     */
-    @ApiOperation("根据id查询")
-    @GetMapping("/info/{id}")
-    public UserDO info(@PathVariable("id") Long id){
-        return userService.info(id);
+
+    @PostMapping("/addMaster")
+    public void addMaster(@RequestBody UserDO userDO){
+        userService.addMaster(userDO);
     }
 
+    @PostMapping("/addSalve")
+    public void addSalve(@RequestBody UserDO userDO){
+        userService.addSlave(userDO);
+    }
+
+
+    @PostMapping("/addNested")
+    public void addNested(@RequestBody UserDO userDO){
+        userService.addNested(userDO);
+    }
+
+    @PostMapping("/addTrans")
+    public void addTrans(@RequestBody UserDO userDO){
+        userService.addTrans(userDO) ;
+    }
     @Resource
     private UserMapper userMapper;
 

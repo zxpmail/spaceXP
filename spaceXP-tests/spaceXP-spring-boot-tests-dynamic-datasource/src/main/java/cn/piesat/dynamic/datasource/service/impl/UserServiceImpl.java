@@ -6,7 +6,6 @@ import cn.piesat.dynamic.datasource.service.UserService;
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
-import cn.piesat.framework.dynamic.datasource.utils.DataSourceContextHolder;
 import cn.piesat.framework.mybatis.plus.annotation.DynamicTableName;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service("userService")
 //@DS("slave")
@@ -36,32 +34,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         return new PageResult(page.getTotal(), page.getRecords());
     }
 
-    @Override
-    @DS
-    @DynamicTableName
-    public UserDO info(Long id) {
-        throw new RuntimeException("测试！");
-        //return getById(id);
-    }
 
     @Override
-    public Boolean add(UserDO userDO) {
+    public Boolean addMaster(UserDO userDO) {
         return save(userDO);
     }
 
     @Override
-    public Boolean update(UserDO userDO) {
-        return updateById(userDO);
+    public Boolean addSlave(UserDO userDO) {
+        return save(userDO);
     }
 
     @Override
-    public Boolean delete(List<Long> asList) {
-        return removeBatchByIds(asList);
+    public Boolean addNested(UserDO userDO) {
+        save(userDO);
+        return userService.addMaster(userDO);
     }
 
+    @Transactional
     @Override
-    public Boolean delete(Long id) {
-        return removeById(id);
+    public Boolean addTrans(UserDO userDO) {
+        userService.addMaster(userDO);
+        userService.addSlave(userDO);
+        return true;
     }
 
 
