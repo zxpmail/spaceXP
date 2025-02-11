@@ -2,6 +2,7 @@ package cn.piesat.framework.dynamic.datasource.autoconfigure;
 
 import cn.piesat.framework.dynamic.datasource.advisor.DynamicDataSourceAdvisor;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
+import cn.piesat.framework.dynamic.datasource.datasource.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.datasource.DynamicRoutingDataSource;
 import cn.piesat.framework.dynamic.datasource.init.DataSourceInit;
 import cn.piesat.framework.dynamic.datasource.init.DecryptDataSourceInit;
@@ -69,5 +70,10 @@ public class DynamicDataSourceAutoConfiguration {
     public Advisor dynamicDataSourceAnnotationAdvisor(List<DataSourceClassResolver> resolvers) {
         DynamicDataSourceInterceptor advice = new DynamicDataSourceInterceptor(resolvers);
         return new DynamicDataSourceAdvisor(advice, DS.class);
+    }
+
+    @Bean
+    public DynamicDataSource dynamicDataSource() {
+        return new DynamicDataSource();
     }
 }
