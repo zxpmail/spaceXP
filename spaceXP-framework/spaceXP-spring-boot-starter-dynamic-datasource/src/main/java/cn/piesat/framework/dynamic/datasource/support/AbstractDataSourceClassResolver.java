@@ -2,9 +2,12 @@ package cn.piesat.framework.dynamic.datasource.support;
 
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAttributes;
+import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,6 +28,16 @@ public abstract class AbstractDataSourceClassResolver implements DataSourceClass
         AnnotationAttributes attributes = AnnotatedElementUtils.getMergedAnnotationAttributes(element, annotation);
         if (attributes != null) {
             return attributes.getString("value");
+        }
+        return null;
+    }
+    protected String findMethodParameters(Method method, Class<? extends Annotation> annotation) {
+        Parameter[] parameters = method.getParameters();
+        for (Parameter parameter : parameters) {
+            String dsName = findDataSourceAttribute(parameter, annotation);
+            if(StringUtils.hasText(dsName)){
+                return dsName;
+            }
         }
         return null;
     }
