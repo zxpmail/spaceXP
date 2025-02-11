@@ -2,11 +2,13 @@ package cn.piesat.framework.dynamic.datasource.creator;
 
 import cn.piesat.framework.dynamic.datasource.constants.DataSourceConstant;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
+import cn.piesat.framework.dynamic.datasource.utils.ClassField2PropertiesUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 /**
  * <p/>
@@ -18,7 +20,13 @@ import javax.sql.DataSource;
 public class HikariDataSourceCreator extends AbstractDataSourceCreator{
     @Override
     protected DataSource doCreateDataSource(DataSourceProperty dataSourceProperty) {
-        HikariConfig config = dataSourceProperty.getHikari();
+        Properties properties = ClassField2PropertiesUtils.toProperties( dataSourceProperty.getHikari());
+        HikariConfig config;
+        if(properties.size()==0){
+            config = new  HikariConfig();
+        }else{
+            config = new  HikariConfig(properties);
+        }
         config.setUsername(dataSourceProperty.getUsername());
         config.setPassword(dataSourceProperty.getPassword());
         config.setJdbcUrl(dataSourceProperty.getUrl());

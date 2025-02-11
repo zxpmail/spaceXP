@@ -3,6 +3,7 @@ package cn.piesat.framework.dynamic.datasource.creator;
 import cn.piesat.framework.dynamic.datasource.config.DruidConfig;
 import cn.piesat.framework.dynamic.datasource.constants.DataSourceConstant;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
+import cn.piesat.framework.dynamic.datasource.utils.ClassField2PropertiesUtils;
 import com.alibaba.druid.pool.DruidDataSource;
 
 import javax.sql.DataSource;
@@ -25,7 +26,8 @@ public class DruidDataSourceCreator extends AbstractDataSourceCreator{
         dataSource.setDriverClassName(dataSourceProperty.getDriverClassName());
         DruidConfig druidConfig = dataSourceProperty.getDruid();
         if (Objects.nonNull(druidConfig)) {
-            dataSource.configFromPropeties(druidConfig.toProperties());
+            dataSource.configFromPropeties(ClassField2PropertiesUtils.toProperties(druidConfig));
+
         }
         try {
             dataSource.init();
