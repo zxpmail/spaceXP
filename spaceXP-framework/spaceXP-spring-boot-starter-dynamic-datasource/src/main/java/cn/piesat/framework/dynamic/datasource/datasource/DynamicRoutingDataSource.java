@@ -48,6 +48,10 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         }
     }
 
+    public void close(String dsName){
+        DataSource ds = allDataSources.remove(dsName);
+        closeDataSource(dsName,ds);
+    }
     private void closeDataSource(String ds, DataSource dataSource) {
         if (dataSource == null) {
             log.warn("数据源 {} 为空，无需关闭", ds);
@@ -74,11 +78,11 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         }
     }
 
-    private DataSource getDataSource(String dataSource) {
+    public DataSource getDataSource(String dataSource) {
         if (StringUtils.hasText(dataSource)) {
             return allDataSources.get(dataSource);
         }
-        return getDefaultDataSource();
+        return null;
     }
 
     private DataSource getDefaultDataSource() {
@@ -106,6 +110,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         log.info("添加数据源 {} 成功", ds);
     }
 
+
     public void setPrimary(String primary) {
         this.primary = primary;
     }
@@ -121,8 +126,11 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         }
         DataSource dataSource = getDataSource(currentDataSource);
         if (dataSource == null) {
-            log.error("{}：数据源为空",currentDataSource);
-            throw new RuntimeException(currentDataSource+": 数据源为空");
+            dataSource = getDefaultDataSource();
+            if(dataSource == null) {
+                log.error("{}：数据源为空", currentDataSource);
+                throw new RuntimeException(currentDataSource + ": 数据源为空");
+            }
         }
         return dataSource;
     }
