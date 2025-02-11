@@ -8,7 +8,6 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.dynamic.datasource.service.UserService;
 import cn.piesat.dynamic.datasource.model.entity.UserDO;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
-import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

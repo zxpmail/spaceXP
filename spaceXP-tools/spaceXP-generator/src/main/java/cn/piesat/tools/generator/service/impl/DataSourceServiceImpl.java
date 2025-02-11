@@ -5,7 +5,7 @@ import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.common.utils.CopyBeanUtils;
-import cn.piesat.framework.dynamic.datasource.core.DynamicDataSource;
+import cn.piesat.framework.dynamic.datasource.datasource.DynamicDataSource;
 import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.mybatis.plus.utils.QueryUtils;
 import cn.piesat.tools.generator.mapper.DataSourceMapper;
@@ -135,7 +135,7 @@ public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSou
 
 
     @Resource
-    private  DynamicDataSource dynamicDataSource;
+    private DynamicDataSource dynamicDataSource;
 
 
     @Override

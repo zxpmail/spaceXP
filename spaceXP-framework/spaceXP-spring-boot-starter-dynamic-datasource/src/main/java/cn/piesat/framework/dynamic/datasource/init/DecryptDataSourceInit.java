@@ -1,7 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.init;
 
 import cn.piesat.framework.common.utils.RsaUtils;
-import cn.piesat.framework.dynamic.datasource.model.DataSourceEntity;
 import cn.piesat.framework.dynamic.datasource.properties.DataSourceProperty;
 import org.springframework.util.StringUtils;
 
