@@ -1,5 +1,6 @@
 package cn.piesat.framework.dynamic.datasource.interceptor;
 
+import cn.piesat.framework.dynamic.datasource.model.DSEntity;
 import cn.piesat.framework.dynamic.datasource.support.DataSourceClassResolver;
 import cn.piesat.framework.dynamic.datasource.utils.DynamicDataSourceContextHolder;
 import lombok.extern.slf4j.Slf4j;
@@ -36,18 +37,33 @@ public class DynamicDataSourceInterceptor implements MethodInterceptor {
     }
 
     private String determineDataSourceKey(MethodInvocation invocation) {
-        for (DataSourceClassResolver resolver : this.dataSourceClassResolvers) {
-            try {
-                String key = resolver.findKey(invocation.getMethod(), invocation.getThis());
-                if (StringUtils.hasText(key)) {
-                    return key;
+        Object[] arguments = invocation.getArguments();
+        if (arguments.length > 0) {
+            for (Object argument : invocation.getArguments()) {
+                if (argument instanceof DSEntity) {
+                    DSEntity ds = (DSEntity) argument;
+                    String dsName = ds.getDsName();
+                    if (StringUtils.hasText(dsName)) {
+                        return dsName;
+                    }
                 }
-            } catch (Exception e) {
-                log.error("Error while finding data source key with resolver: " + resolver.getClass().getName(), e);
             }
         }
-
-        log.warn("No data source key found for method: " + invocation.getMethod().getName());
+        if (this.dataSourceClassResolvers.isEmpty()) {
+            log.warn("No data source class resolvers configured");
+        } else {
+            for (DataSourceClassResolver resolver : this.dataSourceClassResolvers) {
+                try {
+                    String key = resolver.findKey(invocation.getMethod(), invocation.getThis());
+                    if (StringUtils.hasText(key)) {
+                        return key;
+                    }
+                } catch (Exception e) {
+                    log.error("Error while finding data source key with resolver: " + resolver.getClass().getName(), e);
+                }
+            }
+            log.warn("No data source key found for method: " + invocation.getMethod().getName());
+        }
         return "";
     }
 }

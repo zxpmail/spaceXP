@@ -25,11 +25,6 @@ public class ClassAndMethodDataSourceResolver extends AbstractDataSourceClassRes
         if (StringUtils.hasText(dsName)) {
             return dsName;
         }
-        dsName = findMethodParameters(method, DS.class);
-        if (StringUtils.hasText(dsName)) {
-            putCache(methodClassKey, dsName);
-            return dsName;
-        }
         dsName = findDataSourceAttribute(method, DS.class);
         if (StringUtils.hasText(dsName)) {
             putCache(methodClassKey, dsName);
