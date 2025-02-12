@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  *
  * @author zhouxp
  */
-@Target({ElementType.METHOD,ElementType.TYPE,ElementType.PARAMETER})
+@Target({ElementType.METHOD,ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
