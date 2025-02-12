@@ -12,6 +12,8 @@ import lombok.Data;
 @Data
 public class AtomikosConfig {
 
+    private String resourceName;
+
     private int minPoolSize = 1;
 
     private int maxPoolSize = 10;
