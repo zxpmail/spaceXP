@@ -8,6 +8,8 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.dynamic.datasource.service.UserService;
 import cn.piesat.dynamic.datasource.model.entity.UserDO;
 import cn.piesat.framework.dynamic.datasource.annotation.DS;
+import cn.piesat.framework.dynamic.datasource.model.DSEntity;
+import cn.piesat.framework.dynamic.datasource.utils.DynamicDataSourceContextHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +44,22 @@ public class UserController {
     @ApiOperation("分页查询")
     @PostMapping("/list")
     @DS
-    public PageResult list(@DS("user_test") PageBean pageBean, @RequestBody(required = false) UserDO userDO){
+    public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO, DSEntity dsEntity){
         return userService.list(pageBean,userDO);
 
     }
 
+    @PostMapping("/list1")
+    public PageResult list(PageBean pageBean, @RequestBody(required = false) UserDO userDO){
+        DynamicDataSourceContextHolder.addDataSource("slave");
+        try {
+            return userService.list(pageBean,userDO);
+        }finally {
+            DynamicDataSourceContextHolder.removeCurrentDataSource();
+        }
+
+
+    }
     @PostMapping("/addMaster")
     public void addMaster(@RequestBody UserDO userDO){
         userService.addMaster(userDO);
