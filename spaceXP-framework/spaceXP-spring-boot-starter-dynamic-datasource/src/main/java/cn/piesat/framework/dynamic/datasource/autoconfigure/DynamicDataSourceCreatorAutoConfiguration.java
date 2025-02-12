@@ -1,22 +1,18 @@
 package cn.piesat.framework.dynamic.datasource.autoconfigure;
 
-import cn.piesat.framework.dynamic.datasource.creator.AtomikosDataSourceCreator;
 import cn.piesat.framework.dynamic.datasource.creator.DataSourceCreator;
 import cn.piesat.framework.dynamic.datasource.creator.DruidDataSourceCreator;
 import cn.piesat.framework.dynamic.datasource.creator.HikariDataSourceCreator;
 import cn.piesat.framework.dynamic.datasource.creator.LoadDataSourceCreator;
 import com.alibaba.druid.pool.DruidDataSource;
-import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.transaction.jta.TransactionFactory;
 
 import java.util.List;
 
-import static cn.piesat.framework.dynamic.datasource.constants.DataSourceConstant.ATOMIKOS_ORDER;
 import static cn.piesat.framework.dynamic.datasource.constants.DataSourceConstant.DRUID_ORDER;
 import static cn.piesat.framework.dynamic.datasource.constants.DataSourceConstant.HIKARI_ORDER;
 
@@ -51,16 +47,6 @@ public class DynamicDataSourceCreatorAutoConfiguration {
         @Bean("HikariDataSourceCreator")
         public HikariDataSourceCreator dataSourceCreator() {
             return new HikariDataSourceCreator();
-        }
-    }
-
-    @ConditionalOnClass({AtomikosDataSourceBean.class, TransactionFactory.class})
-    @Configuration
-    static class AtomikosDataSourceBeanCreatorConfiguration {
-        @Order(ATOMIKOS_ORDER)
-        @Bean("AtomikosDataSourceCreator")
-        public AtomikosDataSourceCreator dataSourceCreator() {
-            return new AtomikosDataSourceCreator();
         }
     }
 }

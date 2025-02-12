@@ -8,7 +8,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -62,9 +61,7 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
                 ((DruidDataSource) dataSource).close();
             } else if (dataSource instanceof HikariDataSource) {
                 ((HikariDataSource) dataSource).close();
-            } else if (dataSource instanceof AtomikosDataSourceBean) {
-                ((AtomikosDataSourceBean) dataSource).close();
-            } else if (dataSource instanceof AutoCloseable) {
+            }  else if (dataSource instanceof AutoCloseable) {
                 ((AutoCloseable) dataSource).close();
             } else {
                 Method close = ReflectionUtils.findMethod(dataSource.getClass(), "close");

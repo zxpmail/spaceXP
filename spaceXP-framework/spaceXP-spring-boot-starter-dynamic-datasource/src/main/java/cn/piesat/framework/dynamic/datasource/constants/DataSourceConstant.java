@@ -34,14 +34,5 @@ public interface DataSourceConstant {
      * HIKARI数据源顺序
      */
     int HIKARI_ORDER = 400;
-    /**
-     * Atomikos数据源
-     */
-    String ATOMIKOS_DATASOURCE = "com.atomikos.jdbc.AtomikosDataSourceBean";
-
-    /**
-     * HIKARI数据源顺序
-     */
-    int ATOMIKOS_ORDER = 600;
 
 }
