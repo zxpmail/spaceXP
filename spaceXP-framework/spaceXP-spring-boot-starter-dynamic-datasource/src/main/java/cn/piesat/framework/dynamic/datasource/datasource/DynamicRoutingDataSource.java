@@ -131,4 +131,9 @@ public class DynamicRoutingDataSource extends AbstractRoutingDataSource implemen
         }
         return dataSource;
     }
+
+    @Override
+    protected String getPrimary() {
+        return primary;
+    }
 }

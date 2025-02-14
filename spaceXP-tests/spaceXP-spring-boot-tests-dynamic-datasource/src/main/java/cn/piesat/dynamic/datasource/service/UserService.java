@@ -8,8 +8,6 @@ import cn.piesat.framework.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
-import java.util.List;
-
 /**
  * 用户信息Service接口
  *
@@ -21,7 +19,7 @@ public interface UserService extends IService<UserDO> {
 
     PageResult list(PageBean pageBean, UserDO userDO);
 
-    @DS
+    @DS("master")
     Boolean addMaster(UserDO userDO) ;
 
 
@@ -34,12 +32,5 @@ public interface UserService extends IService<UserDO> {
 
     Boolean addTrans(UserDO userDO);
 
-    void addTest1();
-    void addTest2();
-
-    void addTestXa1();
-    void addTestXa2();
-
-    void execXa();
 }
 

@@ -8,7 +8,7 @@ import cn.piesat.framework.dynamic.datasource.datasource.DynamicRoutingDataSourc
 import cn.piesat.framework.dynamic.datasource.init.DataSourceInit;
 import cn.piesat.framework.dynamic.datasource.init.DecryptDataSourceInit;
 import cn.piesat.framework.dynamic.datasource.interceptor.DynamicDataSourceInterceptor;
-import cn.piesat.framework.dynamic.datasource.interceptor.DynamicTransactionalInterceptor;
+import cn.piesat.framework.dynamic.datasource.interceptor.DynamicLocalTransactionInterceptor;
 import cn.piesat.framework.dynamic.datasource.properties.DynamicDataSourceProperties;
 import cn.piesat.framework.dynamic.datasource.provider.DynamicDataSourceProvider;
 import cn.piesat.framework.dynamic.datasource.provider.YamlDynamicDataSourceProvider;
@@ -77,8 +77,10 @@ public class DynamicDataSourceAutoConfiguration {
     @Role(BeanDefinition.ROLE_INFRASTRUCTURE)
     @Bean
     public Advisor dynamicTransactionalDataSourceAnnotationAdvisor() {
-        DynamicTransactionalInterceptor advice = new DynamicTransactionalInterceptor();
-        return new DynamicDataSourceAdvisor(advice, DSTransactional.class);
+//        DynamicTransactionalInterceptor advice = new DynamicTransactionalInterceptor();
+//        return new DynamicDataSourceAdvisor(advice, DSTransactional.class);
+        DynamicLocalTransactionInterceptor interceptor = new DynamicLocalTransactionInterceptor(false);
+        return new DynamicDataSourceAdvisor(interceptor, DSTransactional.class);
     }
     @Bean
     public DynamicDataSource dynamicDataSource() {
