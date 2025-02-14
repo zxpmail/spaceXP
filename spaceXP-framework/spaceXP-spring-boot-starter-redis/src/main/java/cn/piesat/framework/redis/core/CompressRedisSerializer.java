@@ -21,7 +21,7 @@ public class CompressRedisSerializer<T> implements RedisSerializer<T> {
 
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     public CompressRedisSerializer(Class<T> clazz) {
         super();
