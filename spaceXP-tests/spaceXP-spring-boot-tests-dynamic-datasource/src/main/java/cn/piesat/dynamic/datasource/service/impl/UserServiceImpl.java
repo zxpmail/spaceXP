@@ -52,10 +52,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
         return userService.addMaster(userDO);
     }
 
-    @DSTransactional
+    //@DSTransactional
     @Override
     public Boolean addTrans(UserDO userDO) {
         userService.addMaster(userDO);
+        int i= 1/0;
         userService.addSlave(userDO);
         return true;
     }
