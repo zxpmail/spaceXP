@@ -15,14 +15,11 @@ import javax.validation.constraints.NotNull;
  * {@code @create}: 2024-08-09 11:15
  * {@code @author}: zhouxp
  */
-@Service
-public class TestService {
+
+public interface TestService {
 
 
+    String testDeferredResult();
 
-    @ServiceValidation
-    public Student testStu( @ServiceValidation Student stu ,@NotNull(message = "参数不能为空") Integer i){
-
-        return null;
-    }
+    Student testStu( @ServiceValidation Student stu ,@NotNull(message = "参数不能为空") Integer i);
 }

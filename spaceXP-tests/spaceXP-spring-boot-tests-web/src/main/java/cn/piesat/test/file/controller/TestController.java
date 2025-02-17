@@ -1,7 +1,6 @@
 package cn.piesat.test.file.controller;
 
 
-import cn.hutool.http.ContentType;
 import cn.piesat.framework.common.annotation.LoginUser;
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.model.dto.JwtUser;
@@ -13,7 +12,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
