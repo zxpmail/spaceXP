@@ -18,7 +18,6 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -65,7 +64,7 @@ public class RedisService {
      * @return true=设置成功；false=设置失败
      */
     public Boolean expire(final String key, final long timeout) {
-        return Objects.requireNonNull(redisTemplate.expire(key, timeout, TimeUnit.SECONDS));
+        return redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
 
     /**
@@ -77,7 +76,7 @@ public class RedisService {
      * @return true=设置成功；false=设置失败
      */
     public Boolean expire(final String key, final long timeout, final TimeUnit unit) {
-        return Objects.requireNonNull(redisTemplate.expire(key, timeout, unit));
+        return redisTemplate.expire(key, timeout, unit);
     }
 
     /**
@@ -87,7 +86,7 @@ public class RedisService {
      * @return 有效时间
      */
     public Long getExpire(final String key) {
-        return Objects.requireNonNull(redisTemplate.getExpire(key));
+        return redisTemplate.getExpire(key);
     }
 
     /**
@@ -97,7 +96,7 @@ public class RedisService {
      * @return true 存在 false不存在
      */
     public Boolean hasKey(String key) {
-        return Objects.requireNonNull(redisTemplate.hasKey(key));
+        return redisTemplate.hasKey(key);
     }
 
     /**
@@ -107,14 +106,14 @@ public class RedisService {
      * @return 缓存键值对应的数据
      */
     public <T> T getObject(final String key) {
-        return (T) Objects.requireNonNull(redisTemplate.opsForValue().get(key));
+        return (T) redisTemplate.opsForValue().get(key);
     }
 
     /**
      * 删除单个对象
      */
     public Boolean delete(final String key) {
-        return Objects.requireNonNull(redisTemplate.delete(key));
+        return redisTemplate.delete(key);
     }
 
 
@@ -123,7 +122,7 @@ public class RedisService {
         if (CollectionUtils.isEmpty(keys) || keys.size() < 1) {
             return 0L;
         }
-        return Objects.requireNonNull(redisTemplate.delete(keys));
+        return redisTemplate.delete(keys);
     }
 
     /**
@@ -172,7 +171,7 @@ public class RedisService {
      * @return 缓存键值对应的数据
      */
     public <T> List<T> getList(final String key) {
-        return (List<T>) Objects.requireNonNull(redisTemplate.opsForList().range(key, 0, -1));
+        return (List<T>) redisTemplate.opsForList().range(key, 0, -1);
     }
 
     /**
@@ -214,7 +213,7 @@ public class RedisService {
      * 获得缓存的set
      */
     public <T> Set<T> getSet(final String key) {
-        return (Set<T>) Objects.requireNonNull(redisTemplate.opsForSet().members(key));
+        return (Set<T>) redisTemplate.opsForSet().members(key);
     }
 
     /**
@@ -251,7 +250,7 @@ public class RedisService {
      */
     public <K,T> T getMapValue(final String key, final K hKey) {
         HashOperations<String, String, T> opsForHash = redisTemplate.opsForHash();
-        return Objects.requireNonNull(opsForHash.get(key, hKey));
+        return opsForHash.get(key, hKey);
     }
 
     /**
@@ -283,7 +282,7 @@ public class RedisService {
      * @return 对象列表
      */
     public Collection<String> keys(final String pattern) {
-        return Objects.requireNonNull(redisTemplate.keys(pattern));
+        return redisTemplate.keys(pattern);
     }
 
     /**
