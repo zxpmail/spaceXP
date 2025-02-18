@@ -29,6 +29,8 @@ import java.lang.reflect.Type;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 
@@ -44,6 +46,8 @@ import java.util.zip.GZIPInputStream;
 @Slf4j
 public class ResultDecoder implements Decoder {
     private final Decoder decoder;
+
+    private static final  Integer OK_CODE=200;
     private final Boolean apiMapResultEnable;
 
     /**
@@ -129,7 +133,13 @@ public class ResultDecoder implements Decoder {
                     String s = JSON.toJSONString(o);
                     return JSON.parseObject(s, type);
                 } else if (decode instanceof ApiResult) {
-                    return ((ApiResult<?>) decode).getData();
+                    ApiResult<?> apiResult = (ApiResult<?>) decode;
+                    if(apiResult.getCode().equals(OK_CODE)){
+                        return apiResult.getData();
+                    }else{
+                        log.error("code: {} message: {} ",apiResult.getCode(),apiResult.getMessage());
+                        return null;
+                    }
                 }
             } catch (Exception e) {
                 log.error("Error decoding response", e);
