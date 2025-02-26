@@ -9,9 +9,7 @@ import java.lang.annotation.*;
  * {@code @create}: 2025-02-26 16:16:34
  * {@code @author}: zhouxp
  */
-@Target(ElementType.FIELD)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
+@Repeatable(Annotations.class)
 public @interface ConditionalValidateField {
 
     /**
