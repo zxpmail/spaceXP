@@ -27,15 +27,11 @@ public  abstract class  BatchQueryQueueService <T,R> {
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
                 List<WrapRequest<T, R>> list = new ArrayList<>();
-                // 使用 drainTo 方法批量取出元素，避免部分任务被丢弃
                 QUEUE.drainTo(list, MAX_TASK_NUM);
-
                 if (list.isEmpty()) {
                     return;
                 }
-
                 log.info("合并了 {} 个请求", list.size());
-
                 // 拿到我们需要去数据库查询的特征,保存为集合
                 Map<String, R> response = fun.apply(list);
                 for (WrapRequest<T, R> req : list) {

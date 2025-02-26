@@ -3,12 +3,14 @@ package cn.piesat.tests.mybaits.plus.service;
 
 import cn.piesat.framework.common.model.dto.PageBean;
 import cn.piesat.framework.common.model.vo.PageResult;
+import cn.piesat.framework.mybatis.plus.external.core.WrapRequest;
 import cn.piesat.framework.mybatis.plus.model.TableNameEntity;
 import cn.piesat.tests.mybaits.plus.model.entity.UserDO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -33,5 +35,7 @@ public interface UserService extends IService<UserDO> {
     UserDO dynamicInfo(TableNameEntity tableName, Long id);
 
     UserDO getUserByName(String name);
+
+    Map<String, UserDO> queryUserByIdBatch(List<WrapRequest<Long, UserDO>> userReqs);
 }
 
