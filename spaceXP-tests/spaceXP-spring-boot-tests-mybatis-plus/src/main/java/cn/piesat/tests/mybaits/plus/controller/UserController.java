@@ -8,7 +8,8 @@ import cn.piesat.framework.common.model.vo.PageResult;
 import cn.piesat.framework.mybatis.plus.model.TableNameEntity;
 import cn.piesat.tests.mybaits.plus.model.entity.UserDO;
 import cn.piesat.tests.mybaits.plus.service.UserService;
-import cn.piesat.tests.mybaits.plus.service.impl.UserBatchQueryQueueService;
+import cn.piesat.tests.mybaits.plus.service.impl.UserByIdBatchQueryQueueService;
+import cn.piesat.tests.mybaits.plus.service.impl.UserByUserBatchQueryQueueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -111,11 +112,18 @@ public class UserController {
 
 
     @Setter(onMethod_ = @Autowired)
-    private UserBatchQueryQueueService userBatchQueryQueueService;
+    private UserByIdBatchQueryQueueService userBatchQueryQueueService;
 
     @GetMapping("/merge")
     public Callable<UserDO> merge(Long userId) {
-        return () -> userBatchQueryQueueService.queryUser(userId);
+        return () -> userBatchQueryQueueService.getByIdUser(userId);
+    }
+
+    @Setter(onMethod_ = @Autowired)
+    private UserByUserBatchQueryQueueService userByUserBatchQueryQueueService;
+    @PostMapping("/postMerge")
+    public Callable<UserDO> postMerge(@RequestBody  UserDO userDO ) {
+        return () -> userByUserBatchQueryQueueService.getByIdUser(userDO);
     }
 
 }

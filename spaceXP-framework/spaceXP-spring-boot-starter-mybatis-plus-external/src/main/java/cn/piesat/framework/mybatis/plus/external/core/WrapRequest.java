@@ -16,13 +16,13 @@ public final class WrapRequest<T,R> {
     /**
      * 标识ID
      */
-    String id;
+    String requestId;
     /**
-     * 数据域ID
+     * 请求参数
      */
-    T dataId;
+    T params;
     /**
-     * 数据结果域
+     * 相应结果
      */
-    LinkedBlockingQueue<R> resultQueue;
+    LinkedBlockingQueue<R> response;
 }

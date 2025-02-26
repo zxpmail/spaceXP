@@ -37,5 +37,8 @@ public interface UserService extends IService<UserDO> {
     UserDO getUserByName(String name);
 
     Map<String, UserDO> queryUserByIdBatch(List<WrapRequest<Long, UserDO>> userReqs);
+
+    Map<String, UserDO> queryUserByUserBatch(List<WrapRequest<UserDO, UserDO>> wrapRequests);
+
 }
 

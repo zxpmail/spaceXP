@@ -79,22 +79,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDO> implements 
     @Override
     public Map<String, UserDO> queryUserByIdBatch(List<WrapRequest<Long, UserDO>> userReqs) {
         // 全部参数
-        List<Long> userIds = userReqs.stream().map(WrapRequest::getDataId).collect(Collectors.toList());
+        List<Long> userIds = userReqs.stream().map(WrapRequest::getParams).collect(Collectors.toList());
         QueryWrapper<UserDO> queryWrapper = new QueryWrapper<>();
         // 用in语句合并成一条SQL，避免多次请求数据库的IO
         queryWrapper.in("id", userIds);
         List<UserDO> users = list(queryWrapper);
         Map<Long, List<UserDO>> userGroup = users.stream().collect(Collectors.groupingBy(UserDO::getId));
         HashMap<String, UserDO> result = new HashMap<>();
-        userReqs.forEach(val -> {
-            List<UserDO> usersList = userGroup.get(val.getDataId());
+        for (WrapRequest<Long, UserDO> val : userReqs) {
+            List<UserDO> usersList = userGroup.get(val.getParams());
             if (!CollectionUtils.isEmpty(usersList)) {
-                result.put(val.getId(), usersList.get(0));
+                result.put(val.getRequestId(), usersList.get(0));
             } else {
                 // 表示没数据
-                result.put(val.getId(), null);
+                result.put(val.getRequestId(), null);
             }
-        });
+        }
+        return result;
+    }
+
+    @Override
+    public Map<String, UserDO> queryUserByUserBatch(List<WrapRequest<UserDO, UserDO>> userReqs) {
+        // 全部参数
+        List<Long> userIds = userReqs.stream().map(WrapRequest::getParams).map(UserDO::getId).collect(Collectors.toList());
+        QueryWrapper<UserDO> queryWrapper = new QueryWrapper<>();
+        // 用in语句合并成一条SQL，避免多次请求数据库的IO
+        queryWrapper.in("id", userIds);
+        List<UserDO> users = list(queryWrapper);
+        Map<Long, List<UserDO>> userGroup = users.stream().collect(Collectors.groupingBy(UserDO::getId));
+        HashMap<String, UserDO> result = new HashMap<>();
+        for (WrapRequest<UserDO, UserDO> val : userReqs) {
+            List<UserDO> usersList = userGroup.get(val.getParams().getId());
+            if (!CollectionUtils.isEmpty(usersList)) {
+                result.put(val.getRequestId(), usersList.get(0));
+            } else {
+                // 表示没数据
+                result.put(val.getRequestId(), null);
+            }
+        }
         return result;
     }
 

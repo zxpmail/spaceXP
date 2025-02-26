@@ -15,11 +15,11 @@ import javax.annotation.PostConstruct;
  * {@code @author}: zhouxp
  */
 @Service
-public class UserBatchQueryQueueService extends BatchQueryQueueService<Long, UserDO> {
+public class UserByIdBatchQueryQueueService extends BatchQueryQueueService<Long, UserDO> {
 
     private final UserService userService;
 
-    public UserBatchQueryQueueService(UserService userService) {
+    public UserByIdBatchQueryQueueService(UserService userService) {
         this.userService = userService;
     }
 
@@ -28,7 +28,7 @@ public class UserBatchQueryQueueService extends BatchQueryQueueService<Long, Use
         super.init(userService::queryUserByIdBatch);
     }
 
-    public UserDO queryUser(Long id) {
+    public UserDO getByIdUser(Long id) {
         return super.queryResult(id);
     }
 }

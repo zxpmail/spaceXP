@@ -2,6 +2,7 @@ package cn.piesat.framework.mybatis.plus.external.core;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 import java.util.concurrent.Executors;
@@ -18,16 +19,25 @@ import java.util.function.Function;
  * {@code @author}: zhouxp
  */
 @Slf4j
-public  abstract class  BatchQueryQueueService <T,R> {
-
-    private static final int MAX_TASK_NUM = 100;
-    private final ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+public abstract class BatchQueryQueueService<T, R> {
+    @Value("${space.db.external.max-task-num:100}")
+    private Integer maxTaskNum;
+    @Value("${space.db.external.core_pool_size:1}")
+    private Integer corePoolSize;
+    @Value("${space.db.external.time_out:3000}")
+    private Integer timeOut;
+    @Value("${space.db.external.init_delay:100}")
+    private Integer initDelay  ;
+    @Value("${space.db.external.period:10}")
+    private Integer period ;
     private final LinkedBlockingQueue<WrapRequest<T, R>> QUEUE = new LinkedBlockingQueue<>();
+
     protected void init(Function<List<WrapRequest<T, R>>, Map<String, R>> fun) {
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(corePoolSize);
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
                 List<WrapRequest<T, R>> list = new ArrayList<>();
-                QUEUE.drainTo(list, MAX_TASK_NUM);
+                QUEUE.drainTo(list, maxTaskNum);
                 if (list.isEmpty()) {
                     return;
                 }
@@ -36,35 +46,35 @@ public  abstract class  BatchQueryQueueService <T,R> {
                 Map<String, R> response = fun.apply(list);
                 for (WrapRequest<T, R> req : list) {
                     // 这里再把结果放到队列里
-                    R r = response.get(req.getId());
+                    R r = response.get(req.requestId);
                     if (r != null) {
-                        req.resultQueue.offer(r);
+                        req.response.offer(r);
                     } else {
-                        log.info("未找到请求 {} 的结果", req.getId());
+                        log.info("未找到请求 {} 的结果", req.getRequestId());
                     }
                 }
             } catch (Exception e) {
                 log.error("定时任务执行失败: " + e.getMessage(), e);
             }
-        }, 100, 10, TimeUnit.MILLISECONDS);
+        }, initDelay, period, TimeUnit.MILLISECONDS);
     }
 
 
-    protected R queryResult(T id) {
+    protected R queryResult(T params) {
         WrapRequest<T, R> request = new WrapRequest<>();
         // 这里用UUID做请求id
-        request.id = UUID.randomUUID().toString().replace("-", "");
-        request.dataId = id;
+        request.requestId = UUID.randomUUID().toString().replace("-", "");
+        request.params = params;
         LinkedBlockingQueue<R> resultQueue = new LinkedBlockingQueue<>();
-        request.resultQueue = resultQueue;
+        request.response = resultQueue;
         // 将对象传入队列
         QUEUE.offer(request);
         try {
             // 取出元素时，如果队列为空，给定阻塞多少毫秒再队列取值，这里是3秒
-            return resultQueue.poll(3000, TimeUnit.MILLISECONDS);
+            return resultQueue.poll(timeOut, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // 恢复中断状态
-            log.error("查询超时 " ,e);
+            log.error("查询超时 ", e);
         }
         return null;
     }
