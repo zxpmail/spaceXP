@@ -1,11 +1,9 @@
 package cn.piesat.framework.web.config;
 
 import cn.piesat.framework.common.properties.CommonProperties;
-import cn.piesat.framework.web.core.LoginUserHandlerMethodArgumentResolver;
-import cn.piesat.framework.web.core.UniformApiResultWrapper;
+import cn.piesat.framework.web.core.*;
 
-import cn.piesat.framework.web.core.TimeCostBeanPostProcessor;
-import cn.piesat.framework.web.core.WebExceptionHandler;
+import cn.piesat.framework.web.core.impl.RelationFieldNotNullHandleImpl;
 import cn.piesat.framework.web.properties.WebProperties;
 import cn.piesat.framework.web.xss.XssFilter;
 import cn.piesat.framework.web.xss.XssStringJsonSerializer;
@@ -171,6 +169,15 @@ public class WebAutoConfiguration implements WebMvcConfigurer {
             builder.serializerByType(BigDecimal.class, ToStringSerializer.instance);
 
         };
+    }
+
+    @Bean
+    public ValidateHandle getValidateHandle() {
+        return new RelationFieldNotNullHandleImpl();
+    }
+    @Bean
+    public ConditionalValidateAspect getConditionalValidateAspect() {
+        return new ConditionalValidateAspect();
     }
 
 }
