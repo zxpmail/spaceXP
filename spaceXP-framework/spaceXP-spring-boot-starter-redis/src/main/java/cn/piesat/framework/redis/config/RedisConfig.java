@@ -125,6 +125,7 @@ public class RedisConfig {
     }
 
     @Bean
+    @ConditionalOnProperty(name = "space.redis.delaying-queue-enable", havingValue = "true")
     public DelayingQueueService delayingQueueService(){
         return new DelayingQueueService();
     }
