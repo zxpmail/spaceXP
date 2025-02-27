@@ -16,10 +16,11 @@ public interface RedisQueueHandleService {
     ApiResult<Object>  doHandler(RedisQueueMessage redisQueueMessage);
 
     @Transactional(rollbackFor = Exception.class)
-    default void handler(RedisQueueMessage redisQueueMessage) {
+    default ApiResult<Object>  handler(RedisQueueMessage redisQueueMessage) {
         before(redisQueueMessage);
         ApiResult<Object> result = doHandler(redisQueueMessage);
         after(redisQueueMessage,result);
+        return result;
     }
 
     default void after(RedisQueueMessage redisQueueMessage, ApiResult<Object> result){
