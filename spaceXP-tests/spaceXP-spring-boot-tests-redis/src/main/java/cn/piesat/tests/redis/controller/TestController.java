@@ -12,7 +12,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -146,7 +148,7 @@ public class TestController {
 
     private static final String beanName = "sampleRedisQueueHandleService";
 
-    @Resource
+    @Setter(onMethod_ = @Autowired(required = false))
     private DelayingQueueService delayingQueueService;
 
     /**
