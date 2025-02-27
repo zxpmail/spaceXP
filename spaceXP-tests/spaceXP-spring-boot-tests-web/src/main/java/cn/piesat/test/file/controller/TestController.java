@@ -5,7 +5,9 @@ import cn.piesat.framework.common.annotation.LoginUser;
 import cn.piesat.framework.common.annotation.NoApiResult;
 import cn.piesat.framework.common.model.dto.JwtUser;
 import cn.piesat.framework.common.utils.ValidationUtils;
+import cn.piesat.framework.web.annotation.ConditionalValidate;
 import cn.piesat.test.file.model.entity.Student;
+import cn.piesat.test.file.model.entity.TestValidate;
 import cn.piesat.test.file.service.TestService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,13 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -192,5 +189,12 @@ public class TestController {
        String reqID;
        String result;
        String satID;
+    }
+
+    @PostMapping("/testValidate")
+    @ConditionalValidate
+    public String testValidate(@RequestBody @Validated TestValidate testValidate) {
+        System.out.println(testValidate);
+        return "success";
     }
 }

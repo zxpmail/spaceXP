@@ -10,6 +10,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -78,12 +79,18 @@ public class ConditionalValidateAspect implements InitializingBean {
 
                 // 缓存字段和注解信息
                 Map<String, Class<?>> fieldClzMap = new HashMap<>();
-                List<ConditionalValidateFieldInfo> validateFieldList = findAnnotationFieldAndClass(allFields, fieldClzMap);
+                // 把要校验的找到
+                List<ConditionalValidateFieldInfo> validateFieldList = new ArrayList<>();
+                // 字段类型
+                findAnnotationFieldAndClass(allFields, fieldClzMap, validateFieldList);
 
-                // 执行校验动作
+
+                // 执行校验动作，这块要分很多种情况处理
                 validateFieldList.forEach(conditionalValidateFieldInfo -> {
-                    ConditionalValidateField conditionalValidateField = conditionalValidateFieldInfo.getConditionalValidateField();
-                    doValidate(conditionalValidateField, fieldClzMap, parser, conditionalValidateFieldInfo, context, paramsName);
+                    if (Objects.nonNull(conditionalValidateFieldInfo)) {
+                        ConditionalValidateField conditionalValidateField = conditionalValidateFieldInfo.getConditionalValidateField();
+                        doValidate(conditionalValidateField, fieldClzMap, parser, conditionalValidateFieldInfo, context, paramsName);
+                    }
                 });
             }
         } catch (Exception e) {
@@ -99,16 +106,17 @@ public class ConditionalValidateAspect implements InitializingBean {
     }
 
 
-    private List<ConditionalValidateFieldInfo> findAnnotationFieldAndClass(List<Field> fields, Map<String, Class<?>> fieldClzMap) {
-        List<ConditionalValidateFieldInfo> validateFieldList = new ArrayList<>();
-        for (Field field : fields) {
-            ConditionalValidateField annotation = field.getAnnotation(ConditionalValidateField.class);
-            if (annotation != null) {
-                fieldClzMap.put(field.getName(), field.getType());
-                validateFieldList.add(new ConditionalValidateFieldInfo(field.getName(),annotation));
+    private void findAnnotationFieldAndClass(List<Field> allFields, Map<String, Class<?>> fieldClzMap, List<ConditionalValidateFieldInfo> validateFieldList) {
+        allFields.forEach(field -> {
+            Set<ConditionalValidateField> conditionalValidateFields = AnnotationUtils.getRepeatableAnnotations(field,ConditionalValidateField.class);
+            String fieldName = field.getName();
+            for (ConditionalValidateField conditionalValidateField : conditionalValidateFields) {
+                if (Objects.nonNull(conditionalValidateField)) {
+                    validateFieldList.add(new ConditionalValidateFieldInfo(fieldName, conditionalValidateField));
+                }
             }
-        }
-        return validateFieldList;
+            fieldClzMap.put(fieldName, field.getType());
+        });
     }
 
     public static List<Field> getAllFields(Object object) {

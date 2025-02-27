@@ -47,7 +47,7 @@ public class RelationFieldNotNullHandleImpl implements ValidateHandle {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Error during validation for field " + fieldName, e);
+            throw new RuntimeException("条件验证失败: " + e.getMessage(), e);
         }
     }
 
@@ -63,7 +63,7 @@ public class RelationFieldNotNullHandleImpl implements ValidateHandle {
         Expression relationExpression = parser.parseExpression("#" + paramsName[0] + "." + relationField);
         Object value = relationExpression.getValue(context, relationClz);
 
-        Assert.isTrue(StringUtils.hasText(String.valueOf(value)), conditionalValidateField.message());
+        Assert.isTrue(Objects.nonNull(value), conditionalValidateField.message());
     }
 
     private Object convertToType(Class<?> clz, String value) {
