@@ -1,11 +1,7 @@
 package cn.piesat.framework.redis.config;
 
 
-import cn.piesat.framework.redis.core.AccessLimitInterceptor;
-import cn.piesat.framework.redis.core.CompressRedisSerializer;
-import cn.piesat.framework.redis.core.PreventReplayAspect;
-import cn.piesat.framework.redis.core.RedisMessageListener;
-import cn.piesat.framework.redis.core.RedisService;
+import cn.piesat.framework.redis.core.*;
 import cn.piesat.framework.redis.properties.RedisProperties;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -126,5 +122,10 @@ public class RedisConfig {
     @ConditionalOnBean(AccessLimitInterceptor.class)
     public RedisWebConfiguration idempotentWebConfiguration(AccessLimitInterceptor accessLimitInterceptor){
         return new RedisWebConfiguration(accessLimitInterceptor);
+    }
+
+    @Bean
+    public DelayingQueueService delayingQueueService(){
+        return new DelayingQueueService();
     }
 }

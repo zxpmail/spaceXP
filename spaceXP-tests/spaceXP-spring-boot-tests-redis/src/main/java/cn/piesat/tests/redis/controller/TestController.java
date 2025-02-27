@@ -1,30 +1,26 @@
 package cn.piesat.tests.redis.controller;
 
 
+import cn.piesat.framework.common.model.entity.MessageEntity;
 import cn.piesat.framework.redis.annotation.AccessLimit;
 import cn.piesat.framework.redis.annotation.PreventReplay;
+import cn.piesat.framework.redis.bean.RedisQueueMessage;
+import cn.piesat.framework.redis.core.DelayingQueueService;
 import cn.piesat.framework.redis.core.RedisService;
 import cn.piesat.framework.redis.external.annotation.DLock;
-import cn.piesat.framework.common.model.entity.MessageEntity;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.*;
 
 
 /**
@@ -146,5 +142,37 @@ public class TestController {
     public void testLock()  {
         testService.testLock();
 
+    }
+
+    private static final String beanName = "sampleRedisQueueHandleService";
+
+    @Resource
+    private DelayingQueueService delayingQueueService;
+
+    /**
+     * 发送消息
+     *
+     * @param msg
+     */
+    @GetMapping("/sendDelayingMessage")
+    public String sendDelayingMessage(String msg, long delay) {
+        try {
+            if (msg != null) {
+                String seqId = UUID.randomUUID().toString();
+                RedisQueueMessage redisQueueMessage = new RedisQueueMessage();
+                //时间戳默认为毫秒 延迟5s即为 5*1000
+                long time = System.currentTimeMillis();
+                LocalDateTime dateTime = Instant.ofEpochMilli(time).atZone(ZoneOffset.ofHours(8)).toLocalDateTime();
+                redisQueueMessage.setDelayTime(time +  (delay * 1000));
+                redisQueueMessage.setCreateTime(dateTime);
+                redisQueueMessage.setBody(msg);
+                redisQueueMessage.setId(seqId);
+                redisQueueMessage.setBeanName(beanName);
+                delayingQueueService.push(redisQueueMessage);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "success";
     }
 }

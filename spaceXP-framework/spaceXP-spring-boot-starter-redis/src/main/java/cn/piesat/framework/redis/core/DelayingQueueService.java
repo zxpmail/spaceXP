@@ -123,14 +123,16 @@ public class DelayingQueueService implements InitializingBean {
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Thread thread = new Thread(() -> {
             int selectCnt = 0;
             while (!Thread.currentThread().isInterrupted() && !destroyFlag) {
                 long startTimeNanos = System.nanoTime();
                 try {
                     RedisQueueMessage redisQueueMessage = pop();
-                    log.info("拉取的数据 {}", redisQueueMessage);
+                    if(Objects.nonNull(redisQueueMessage)) {
+                        log.info("拉取的数据 {}", redisQueueMessage);
+                    }
                     if (Objects.nonNull(redisQueueMessage)) {
                         RedisQueueHandleService redisQueueProcessService = adapterHandler(redisQueueMessage.getBeanName());
                         invokeHandler(redisQueueMessage, redisQueueProcessService);
@@ -196,7 +198,7 @@ public class DelayingQueueService implements InitializingBean {
 
 
     @PreDestroy
-    public void destroy() throws Exception {
+    public void destroy() {
         log.info("应用程序已关闭..........");
         this.destroyFlag = true;
     }

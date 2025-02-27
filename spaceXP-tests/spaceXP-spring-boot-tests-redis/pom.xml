@@ -32,6 +32,15 @@
             <version>2.0.0</version>
         </dependency>
         <dependency>
+            <groupId>cn.piesat.space</groupId>
+            <artifactId>spaceXP-spring-boot-starter-mybatis-plus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
