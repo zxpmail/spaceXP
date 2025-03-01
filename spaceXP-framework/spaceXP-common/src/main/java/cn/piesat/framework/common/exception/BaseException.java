@@ -56,9 +56,20 @@ public class BaseException extends RuntimeException{
     }
 
     public static void errorResponse(IBaseResponse iBaseResponse) {
+            throw (BaseException) exception(iBaseResponse);
+
+    }
+    public static Exception exception(IBaseResponse iBaseResponse) {
         if (iBaseResponse == null) {
-            throw new IllegalArgumentException("iBaseResponse cannot be null");
+            return new IllegalArgumentException("iBaseResponse cannot be null");
         }
-        throw new BaseException(iBaseResponse);
+        return new BaseException( iBaseResponse);
+    }
+    public static Exception throwResponse(IBaseResponse iBaseResponse) {
+        Exception exception = exception(iBaseResponse);
+        if (exception instanceof BaseException) {
+            throw (BaseException) exception;
+        }
+        return exception;
     }
 }
