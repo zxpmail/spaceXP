@@ -1,17 +1,14 @@
 package cn.piesat.test.common.controller;
 
 
-
+import cn.piesat.framework.common.exception.BaseException;
+import cn.piesat.framework.common.model.enums.CommonResponseEnum;
 import cn.piesat.test.common.model.User;
 import cn.piesat.test.common.service.UserService;
 import com.github.javafaker.Faker;
-
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
-
 
 import javax.annotation.Resource;
 import java.util.Locale;
@@ -41,5 +38,11 @@ public class PipelineController {
                 .password("123456").build();
         userService.save(user);
         return user;
+    }
+
+    @GetMapping("error")
+    public String error() {
+        BaseException.errorResponse(CommonResponseEnum.SYS_ERROR);
+        return "ok";
     }
 }
