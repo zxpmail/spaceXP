@@ -9,4 +9,11 @@ package cn.zhouxp.framework.id.generate.service;
  * @author zhouxp
  */
 public interface IdGenerateService {
+    /**
+     * 生成id
+     *
+     * @param biz 业务标识
+     * @return id 生成的id
+     */
+    Long generateId(String biz);
 }

@@ -19,4 +19,8 @@ public class IdGenerateServiceImpl implements IdGenerateService {
     @Setter(onMethod_ = @Autowired)
     private IdGenerateMapper idGenerateMapper;
 
+    @Override
+    public Long generateId(String biz) {
+        return 0L;
+    }
 }
