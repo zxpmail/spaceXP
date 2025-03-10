@@ -1,6 +1,7 @@
 # spaceXP
 
 #### 介绍
+本架构组件基于大量企业实践
 积木组件:积沙成塔，结合springboot如：url权限、数据权限、文件上传、数据访问等等组件进行分离、包装等可以独立引用
 分为：2.0.0版本和3.0.0版本
 2.0.0基于springboot2.x版本 开发基于springboot2.7.18 java8
@@ -42,6 +43,7 @@ spaceXP-tools 工具集合
 19. spaceXP-spring-boot-starter-test 实现test组件
 20. spaceXP-spring-boot-starter-sse 实现sse消息发送以及心跳功能
 21. spaceXP-spring-boot-starter-netty 实现netty工具
+22. spaceXP-spring-boot-starter-id-generate 根据号段生成Id
 ## 工具说明
 1. spaceXP-gateway 网关工具 实现网关鉴权
 2. spaceXP-generator 低代码工具
@@ -68,9 +70,9 @@ spaceXP-tools 工具集合
 18. spaceXP-spring-boot-tests-netty 测试netty组件
 19. spaceXP-spring-boot-tests-disruptor测试disruptor
 20. spaceXP-spring-boot-tests-security安全组件测试
+21. spaceXP-spring-boot-tests-id-generate测试id生成组件
 #### 鸣谢
-本软件从一些软件借鉴而来如：renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
-非常感谢众多软件和作者
+renren、ruoyi、yudao、pig、guns、jeecg、maku等等软件和作者
 
 
 
