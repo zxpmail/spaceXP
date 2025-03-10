@@ -16,16 +16,11 @@ import java.time.LocalDateTime;
  * @author zhouxp
  */
 @Data
-@TableName("t_id_generate")
+@TableName("sys_id_generate")
 public class IdGeneratePO {
 
     @TableId(type = IdType.AUTO)
-    private Integer id;
-
-    /**
-     * 初始化值
-     */
-    private long initNum;
+    private Long id;
 
     /**
      * 步长
@@ -33,24 +28,24 @@ public class IdGeneratePO {
     private int step;
 
     /**
-     * 是否是有序的id
+     * 1 有序 0无序
      */
-    private int isSeq;
+    private int ordered;
 
     /**
      * 当前id所在阶段的开始值
      */
-    private long currentStart;
+    private long start;
 
     /**
-     * 当前id所在阶段的阈值
+     * 当前id所在阶段结束值
      */
-    private long nextThreshold;
+    private long end;
 
     /**
-     * 业务代码前缀
+     * 业务
      */
-    private String idPrefix;
+    private String biz;
 
     /**
      * id备注描述

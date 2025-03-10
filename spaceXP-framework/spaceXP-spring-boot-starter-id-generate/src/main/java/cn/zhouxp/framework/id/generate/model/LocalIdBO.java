@@ -15,11 +15,20 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Data
 public class LocalIdBO {
+    /**
+     * id
+     */
+    private Long id;
+    /**
+     * 业务标识
+     */
+    private String biz;
 
+    private Integer ordered;
     /**
      * 无顺序队列中Id
      */
-    private ConcurrentLinkedQueue<Long> unorderedIdQueue;
+    private ConcurrentLinkedQueue<Long> unorderedIdQueue = new ConcurrentLinkedQueue<>();
     /**
      * 当前有序id的值
      */

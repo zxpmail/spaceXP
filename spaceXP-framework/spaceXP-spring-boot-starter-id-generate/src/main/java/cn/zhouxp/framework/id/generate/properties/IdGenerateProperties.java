@@ -16,4 +16,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class IdGenerateProperties {
     public static final String PREFIX = "space.id.generate";
     ThreadPoolProperty thread;
+
+    private Integer retryTimes = 3;
 }
