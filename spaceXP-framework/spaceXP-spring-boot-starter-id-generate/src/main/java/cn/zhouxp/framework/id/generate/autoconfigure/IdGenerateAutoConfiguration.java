@@ -3,6 +3,7 @@ package cn.zhouxp.framework.id.generate.autoconfigure;
 import cn.zhouxp.framework.id.generate.properties.IdGenerateProperties;
 import cn.zhouxp.framework.id.generate.service.IdGenerateService;
 import cn.zhouxp.framework.id.generate.service.impl.IdGenerateServiceImpl;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableConfigurationProperties(value = IdGenerateProperties.class)
+@MapperScan("cn.zhouxp.framework.id.generate.dao.mapper")
 public class IdGenerateAutoConfiguration {
     @Bean
     public IdGenerateService idGenerateService(IdGenerateProperties idGenerateProperties) {

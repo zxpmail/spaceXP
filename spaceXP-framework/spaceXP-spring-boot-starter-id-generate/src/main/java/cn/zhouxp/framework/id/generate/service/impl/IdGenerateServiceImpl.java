@@ -162,6 +162,7 @@ public class IdGenerateServiceImpl implements IdGenerateService, InitializingBea
         localIdBO.setStart(start);
         localIdBO.setEnd(end);
         localIdBO.setBiz(idGenerate.getBiz());
+        localIdBO.setOrdered(idGenerate.getOrdered());
         if (idGenerate.getOrdered() == ORDERED) {
             val atomicLong = new AtomicLong(start);
             localIdBO.setCurrentOrderId(atomicLong);

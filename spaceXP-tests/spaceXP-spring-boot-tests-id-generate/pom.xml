@@ -20,6 +20,10 @@
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-id-generate</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
