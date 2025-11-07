@@ -75,6 +75,8 @@ public enum CommonResponseEnum implements IBaseResponse {
     PARAM_ERROR(CommonProperties.ResponseCode.paramErrorCode, CommonProperties.ResponseCode.paramErrorValue),
 
     BUSINESS_ERROR(CommonProperties.ResponseCode.businessErrorCode,CommonProperties.ResponseCode.businessErrorValue),
+
+    RECORD_NOT_EXIST(517,"此记录不存在"),
     ;
 
     /**

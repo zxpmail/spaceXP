@@ -132,7 +132,7 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
         return CopyBeanUtils.copy(getById(id),${className?cap_first}VO::new);
     }
 <#if repeatList?? && (repeatList?size > 0) >
-    void repeat(${className?cap_first}DTO ${className}DTO,Boolean isAdd) {
+    void repeat(${className?cap_first}DTO ${className}DTO) {
         LambdaQueryWrapper<${className?cap_first}DO> wrapper = new LambdaQueryWrapper<>();
         <#list repeatList as field>
         <#if field.attrType=='String'>
@@ -141,9 +141,7 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
         wrapper.eq(!Objects.isNull(${className}DTO.get${field.attrName?cap_first}()), ${className?cap_first}DO::get${field.attrName?cap_first}, ${className}DTO.get${field.attrName?cap_first}());
         </#if>
         </#list>
-        if(!isAdd) {
-            wrapper.ne(${className?cap_first}DO::get${pk?cap_first},${className}DTO.get${pk?cap_first}());
-        }else if(CollectionUtils.isEmpty(wrapper.getExpression().getNormal())){
+        if(CollectionUtils.isEmpty(wrapper.getExpression().getNormal())){
             return;
         }
         if (count(wrapper) > 0) {
@@ -154,7 +152,7 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
     @Override
     public Boolean save(${className?cap_first}DTO ${className}DTO) {
         <#if repeatList?? && (repeatList?size > 0) >
-        repeat(${className}DTO,true);
+        repeat(${className}DTO);
         </#if>
         ${className?cap_first}DO ${className}DO = CopyBeanUtils.copy(${className}DTO, ${className?cap_first}DO::new);
         return save(${className}DO);
@@ -162,10 +160,10 @@ public class ${className?cap_first}ServiceImpl extends ServiceImpl<${className?c
 
     @Override
     public Boolean update(${className?cap_first}DTO ${className}DTO) {
-        <#if repeatList?? && (repeatList?size > 0) >
-        repeat(${className}DTO,false);
-        </#if>
         ${className?cap_first}DO ${className}DO = this.getById(${className}DTO.get${pk?cap_first}());
+        if(Objects.isNull(${className}DO)){
+            throw new BaseException(CommonResponseEnum.RECORD_NOT_EXIST);
+        }
         BeanUtils.copyProperties(${className}DTO, ${className}DO,CopyBeanUtils.getNullPropertyNames(${className}DTO));
         return updateById(${className}DO);
     }
