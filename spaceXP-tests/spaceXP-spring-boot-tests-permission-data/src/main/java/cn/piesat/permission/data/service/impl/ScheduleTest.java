@@ -3,7 +3,6 @@ package cn.piesat.permission.data.service.impl;
 import cn.piesat.permission.data.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -15,7 +14,7 @@ import javax.annotation.Resource;
  *
  * @author zhouxp
  */
-@Service
+//@Service
 @Slf4j
 public class ScheduleTest {
     @Resource

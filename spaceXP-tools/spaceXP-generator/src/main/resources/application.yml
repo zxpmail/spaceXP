@@ -16,12 +16,12 @@ spring:
           type: com.zaxxer.hikari.HikariDataSource
           url: jdbc:sqlite:db/xp-generator.db
           driver-class-name: org.sqlite.JDBC
-        slave:
-          type: com.zaxxer.hikari.HikariDataSource
-          url: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
-          username: root
-          password: 123456
-          driver-class-name: com.mysql.cj.jdbc.Driver
+#        slave:
+#          type: com.zaxxer.hikari.HikariDataSource
+#          url: jdbc:mysql://localhost:3306/xp_generator?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+#          username: root
+#          password: 123456
+#          driver-class-name: com.mysql.cj.jdbc.Driver
   freemarker:
     check-template-location: false
   profiles:

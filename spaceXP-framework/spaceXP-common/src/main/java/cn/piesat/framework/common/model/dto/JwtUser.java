@@ -36,4 +36,10 @@ public class JwtUser {
      * 多租户ID信息
      */
     private Long tenantId;
+
+    /**
+     * 数据权限范围
+     */
+    private Integer dataScope;
+
 }
