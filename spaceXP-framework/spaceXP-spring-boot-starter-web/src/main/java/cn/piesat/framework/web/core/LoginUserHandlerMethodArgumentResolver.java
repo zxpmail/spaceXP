@@ -50,11 +50,12 @@ public class LoginUserHandlerMethodArgumentResolver implements HandlerMethodArgu
             String deptTemp =request.getHeader(CommonConstants.DEPT_ID);
             String username =request.getHeader(CommonConstants.USERNAME);
             String tenantTemp =request.getHeader(CommonConstants.TENANT_ID);
+            String dataScopeTemp =request.getHeader(CommonConstants.DATA_SCOPE);
             Long deptLong= Objects.nonNull(deptTemp)?Long.parseLong(deptTemp):0L;
             Long tenantLong= Objects.nonNull(tenantTemp)?Long.parseLong(tenantTemp):0L;
             String deptName= request.getHeader(CommonConstants.DEPT_NAME);
-
-            result = new JwtUser(Long.parseLong(userId), deptLong, username,deptName,tenantLong);
+            Integer dataScope= Objects.nonNull(dataScopeTemp)?Integer.parseInt(dataScopeTemp):1;
+            result = new JwtUser(Long.parseLong(userId), deptLong, username,deptName,tenantLong,dataScope);
         }
         return result;
     }

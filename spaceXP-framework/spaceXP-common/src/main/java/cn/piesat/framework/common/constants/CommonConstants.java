@@ -50,6 +50,7 @@ public interface CommonConstants {
      */
     String USERNAME = "userName";
 
+    String DATA_SCOPE = "dataScope";
     /**
      * token user
      */
