@@ -20,7 +20,7 @@ import java.util.HashSet;
 public class UserDataPermissionServiceImpl implements UserDataPermissionService {
     @Override
     public UserDataPermission getDataPermission(Long userid) {
-        ServletUtils.getHeader(ServletUtils.getRequest(), "userId")
+        ServletUtils.getHeader(ServletUtils.getRequest(), "userId");
         UserDataPermission userDataPermission = new UserDataPermission();
         userDataPermission.setDataScope(DataPermissionEnum.SELF_SCOPE.getCode());
         userDataPermission.setUserId(userid);
