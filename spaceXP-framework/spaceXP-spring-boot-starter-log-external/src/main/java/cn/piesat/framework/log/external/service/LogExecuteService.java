@@ -3,8 +3,8 @@ package cn.piesat.framework.log.external.service;
 
 import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.common.model.vo.ApiResult;
-import cn.piesat.framework.log.external.properties.LogExternalProperties;
 import cn.piesat.framework.log.external.client.LogFeignClient;
+import cn.piesat.framework.log.external.properties.LogExternalProperties;
 import cn.piesat.framework.log.service.ExecuteLogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,6 @@ public class LogExecuteService implements ExecuteLogService {
     private final LogExternalProperties logExternalProperties;
     @Autowired(required = false)
     private  RestTemplate restTemplate;
-
     @Autowired(required = false)
     private LogFeignClient logFeignClient;
     @Override

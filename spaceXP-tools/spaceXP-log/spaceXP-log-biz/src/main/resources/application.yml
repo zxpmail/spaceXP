@@ -13,7 +13,3 @@ spring:
     url: jdbc:mysql://125.122.39.199:3306/manager?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: zhice10905
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848

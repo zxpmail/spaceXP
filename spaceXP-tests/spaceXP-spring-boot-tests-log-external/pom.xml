@@ -21,10 +21,7 @@
             <artifactId>spaceXP-spring-boot-starter-web</artifactId>
             <version>2.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>cn.piesat.space</groupId>
             <artifactId>spaceXP-spring-boot-starter-log-external</artifactId>

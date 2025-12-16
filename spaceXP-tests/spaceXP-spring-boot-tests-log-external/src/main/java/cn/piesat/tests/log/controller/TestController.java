@@ -7,6 +7,7 @@ import cn.piesat.framework.common.model.enums.BusinessEnum;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,12 @@ public class TestController {
     @GetMapping(value = "/log")
     @OpLog(op = BusinessEnum.CLEAN,description = "测试")
     public Object log()  {
+        return "ok";
+    }
+
+    @DeleteMapping(value = "/delete")
+    @OpLog(op = BusinessEnum.DELETE,description = "delete")
+    public Object delete()  {
         return "ok";
     }
 }
