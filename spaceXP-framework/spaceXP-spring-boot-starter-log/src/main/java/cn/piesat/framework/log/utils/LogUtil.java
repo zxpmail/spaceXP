@@ -5,18 +5,18 @@ import cn.hutool.core.util.URLUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.piesat.framework.common.constants.CommonConstants;
+import cn.piesat.framework.common.model.entity.OpLogEntity;
+import cn.piesat.framework.common.model.enums.BusinessEnum;
 import cn.piesat.framework.common.utils.ArgsUtils;
 import cn.piesat.framework.log.annotation.OpLog;
 import cn.piesat.framework.log.constants.LogConstants;
-import cn.piesat.framework.common.model.enums.BusinessEnum;
 import cn.piesat.framework.log.event.LogEvent;
-import cn.piesat.framework.common.model.entity.OpLogEntity;
 import cn.piesat.framework.log.properties.LogProperties;
 import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiOperation;
-
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -28,7 +28,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -36,13 +35,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
 
-import static cn.piesat.framework.common.constants.CommonConstants.BROWSER;
-import static cn.piesat.framework.common.constants.CommonConstants.IP;
-import static cn.piesat.framework.common.constants.CommonConstants.OS;
+import static cn.piesat.framework.common.constants.CommonConstants.*;
 
 /**
  * <p/>
@@ -61,30 +57,22 @@ public class LogUtil {
      */
     public static Map<String, Object> getControllerMethodOp(JoinPoint point, Integer logType) throws Exception {
         Map<String, Object> map = new HashMap<>();
-        // 获取连接点目标类名
-        String targetName = point.getTarget().getClass().getName();
-        // 获取连接点签名的方法名
-        String methodName = point.getSignature().getName();
-        //获取连接点参数
-        Object[] args = point.getArgs();
-        //根据连接点类的名字获取指定类
-        Class<?> targetClass = Class.forName(targetName);
-        //获取类里面的方法
-        Method[] methods = targetClass.getMethods();
-        for (Method method : methods) {
-            if (method.getName().equals(methodName)) {
-                Class<?>[] clazz = method.getParameterTypes();
-                if (clazz.length == args.length) {
-                    if (logType.equals(LogConstants.LOG_TYPE)) {
-                        opLog(map, method);
-                    } else {
-                        swaggerLog(map, method);
-                    }
 
-                    break;
-                }
-            }
+        // 获取方法签名
+        MethodSignature signature = (MethodSignature) point.getSignature();
+        Method method = signature.getMethod();
+
+        // 如果是代理类（如 JDK 动态代理），method 可能来自接口，需从目标类重新获取
+        if (method.getDeclaringClass().isInterface()) {
+            method = point.getTarget().getClass().getMethod(method.getName(), method.getParameterTypes());
         }
+
+        if (logType.equals(LogConstants.LOG_TYPE)) {
+            opLog(map, method);
+        } else {
+            swaggerLog(map, method);
+        }
+
         return map;
     }
 
