@@ -1,14 +1,13 @@
 package cn.piesat.framework.common.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * <p/>
@@ -153,4 +152,14 @@ public class OpLogEntity implements Serializable {
 
     @JsonIgnore
     private HttpServletRequest request;
+    /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
+     * 租户id
+     */
+    private Long tenantId;
+
 }
