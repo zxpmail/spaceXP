@@ -237,6 +237,14 @@ public class LogUtil {
         if (StringUtils.hasText(deptId)) {
             opLogEntity.setDeptId(deptId);
         }
+        String userId = request.getHeader(USER_ID);
+        if (StringUtils.hasText(userId)) {
+            opLogEntity.setUserId(Long.parseLong(userId));
+        }
+        String tenantId = request.getHeader(TENANT_ID);
+        if (StringUtils.hasText(tenantId)) {
+            opLogEntity.setTenantId(Long.parseLong(tenantId));
+        }
         String deptName = request.getHeader(CommonConstants.DEPT_NAME);
         if (StringUtils.hasText(deptId)) {
             opLogEntity.setDeptName(URLDecoder.decode(deptName, StandardCharsets.UTF_8.toString()));
